@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine.Assertions;
@@ -114,7 +116,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// WARNING: Current limitation is that the random choosing only works if the List count is less than 256
+		///
 		/// </summary>
 		/// <param name="collection"></param>
 		/// <typeparam name="T"></typeparam>
@@ -158,7 +160,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// WARNING: Current limitation is that the random choosing only works if the List count is less than 256
+		///
 		/// </summary>
 		/// <param name="collection"></param>
 		/// <typeparam name="T"></typeparam>

@@ -1,4 +1,6 @@
-﻿// use this to add debug log messages when a pool is used/freed,
+﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
+// use this to add debug log messages when a pool is used/freed,
 // or when something is waiting for a pool to be freed
 //#define DLD_IOC_DEBUG_POOL_MUTUAL_EXCLUSION
 

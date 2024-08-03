@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;

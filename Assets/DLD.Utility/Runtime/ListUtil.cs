@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System;
 using System.Collections.Generic;
 

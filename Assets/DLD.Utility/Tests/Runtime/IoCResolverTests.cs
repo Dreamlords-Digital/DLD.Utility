@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
+using NUnit.Framework;
 
 namespace DLD.Utility.Tests
 {
