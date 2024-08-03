@@ -139,7 +139,7 @@ namespace DLD.Utility.Tests
 			Assert.AreNotSame(IoC.GetCurrentResolver(), _originalResolver);
 		}
 
-		[Test]
+		[Test(Description = "Ensure the sum code in our test DLD.Utility.Tests.IoCPoolTests.Sum class works as expected.")]
 		public void Add_ComesFromPool_CurrentSumIsCorrect()
 		{
 			var fromPool1 = IoC.GetFromPool<Sum>();
@@ -152,7 +152,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, fromPool1.CurrentSum);
 		}
 
-		[Test]
+		[Test(Description = "Ensure that IoC.GetFromPool called from multiple threads all return unique instances.")]
 		public void GetFromPool_UsedInThreads_AreUniqueInstances()
 		{
 			var thread1 = new Thread(UsePoolableOwnerCounter);
@@ -253,7 +253,7 @@ namespace DLD.Utility.Tests
 			instanceGotWhileInThread.ReleaseToPool();
 		}
 
-		[Test]
+		[Test(Description = "Ensure that a thread that calls IoC.GetFromPool has sole control of the instance returned.")]
 		public void GetFromPool_UsedInThreads_IsMutuallyExclusive()
 		{
 			var instanceFromMainThread = IoC.GetFromPool<Sum>();
@@ -395,7 +395,8 @@ namespace DLD.Utility.Tests
 		{
 			var argAsString = (string)arg;
 
-			Thread.Sleep(RandomUtil.Range(0, 10));
+			var random = new System.Random();
+			Thread.Sleep(random.Next(0, 10));
 
 			// Since there's mutual exclusivity, this thread,
 			// if it reaches this point while another thread hasn't finished,
@@ -416,7 +417,7 @@ namespace DLD.Utility.Tests
 			instanceGotWhileInThread.ReleaseToPool();
 		}
 
-		[Test]
+		[Test(Description = "Ensure that IPooled.IsUnused returns the correct value before and after calling IPooled.ReleaseToPool.")]
 		public void IsUnused_WhenUsingFromPool_IsCorrect()
 		{
 			// { used }

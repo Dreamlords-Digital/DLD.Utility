@@ -9,7 +9,7 @@ namespace DLD.Utility.Tests
 	{
 		// ===============================================================================
 
-		[Test]
+		[Test(Description = "Ensure that a reused PooledList<T> starts out empty even though it had contents in its previous use.")]
 		public void PooledList_WhenReusedFromPool_EmptyAtStart()
 		{
 			var intList = IoC.GetFromPool<PooledList<int>>();
@@ -46,7 +46,7 @@ namespace DLD.Utility.Tests
 
 		// ===============================================================================
 
-		[Test]
+		[Test(Description = "Ensure that a reused PooledStack<T> starts out empty even though it had contents in its previous use.")]
 		public void PooledStack_WhenReusedFromPool_EmptyAtStart()
 		{
 			var intStack = IoC.GetFromPool<PooledStack<int>>();
@@ -83,7 +83,7 @@ namespace DLD.Utility.Tests
 
 		// ===============================================================================
 
-		[Test]
+		[Test(Description = "Ensure that a reused PooledQueue<T> starts out empty even though it had contents in its previous use.")]
 		public void PooledQueue_WhenReusedFromPool_EmptyAtStart()
 		{
 			var intQueue = IoC.GetFromPool<PooledQueue<int>>();
@@ -120,7 +120,7 @@ namespace DLD.Utility.Tests
 
 		// ===============================================================================
 
-		[Test]
+		[Test(Description = "Ensure that a reused PooledHashSet<T> starts out empty even though it had contents in its previous use.")]
 		public void PooledHashSet_WhenReusedFromPool_EmptyAtStart()
 		{
 			var intHashSet = IoC.GetFromPool<PooledHashSet<int>>();
@@ -157,7 +157,7 @@ namespace DLD.Utility.Tests
 
 		// ===============================================================================
 
-		[Test]
+		[Test(Description = "Ensure that a reused PooledDictionary<T> starts out empty even though it had contents in its previous use.")]
 		public void PooledDictionary_WhenReusedFromPool_EmptyAtStart()
 		{
 			var stringIntDictionary = IoC.GetFromPool<PooledDictionary<string, int>>();
@@ -194,7 +194,7 @@ namespace DLD.Utility.Tests
 
 		// ===============================================================================
 
-		[Test]
+		[Test(Description = "Ensure that IoC.GetFromPool<PooledList<T>> will return a new instance if all current instances are used.")]
 		public void GetFromPool_WhenNoUnusedIsAvailable_ShouldReturnNewInstance()
 		{
 			var intList = IoC.GetFromPool<PooledList<int>>();
