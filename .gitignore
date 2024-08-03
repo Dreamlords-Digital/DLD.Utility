@@ -42,12 +42,6 @@ ehthumbs.db.meta
 *.apk
 *.unitypackage
 
-# Package
-Assets/DLD.Utility/CHANGELOG.md.meta
-Assets/DLD.Utility/LICENSE.md.meta
-Assets/DLD.Utility/package.json.meta
-Assets/DLD.Utility/README.md.meta
-
 # auto-generated IDE project files
 /.vs/
 /.vsconfig
