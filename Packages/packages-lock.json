@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.dreamlordsdigital.jsonfx": {
+      "version": "https://github.com/AnomalousUnderdog/DLD.JsonFx.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3a622b0869ca2fcbe3cd8ecc6a213b55d03e48eb"
+    },
     "com.unity.collab-proxy": {
       "version": "2.4.4",
       "depth": 0,

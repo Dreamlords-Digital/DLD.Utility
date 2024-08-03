@@ -1,0 +1,21 @@
+{
+  "name": "com.dreamlordsdigital.serializer",
+  "version": "0.0.1",
+  "displayName": "DLD Serializer",
+  "description": "Abstracts away the specific implementation of the serializer so you can easily switch to a specific json library.",
+  "unity": "2017.4",
+  "dependencies": {
+    "com.dreamlordsdigital.utility": "0.0.1",
+    "com.dreamlordsdigital.jsonfx": "0.1.0"
+  },
+  "keywords": [
+    "utility",
+    "library",
+    "serialization",
+    "json"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}

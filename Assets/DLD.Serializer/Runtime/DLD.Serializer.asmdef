@@ -1,0 +1,17 @@
+{
+    "name": "DLD.Serializer",
+    "rootNamespace": "",
+    "references": [
+        "GUID:66f2238b44c6bbd40bd54d768bb19bbe",
+        "GUID:f8314c58c0b768b419973ab5ee9a4619"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

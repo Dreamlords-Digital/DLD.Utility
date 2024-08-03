@@ -1,0 +1,15 @@
+{
+    "name": "DLD.Serializer.Tests",
+    "references": [
+        "GUID:9445f3982f5655948988c97be1b8cd5a",
+        "GUID:f8314c58c0b768b419973ab5ee9a4619",
+        "GUID:66f2238b44c6bbd40bd54d768bb19bbe"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
