@@ -1,0 +1,15 @@
+{
+  "name": "com.dreamlordsdigital.utility",
+  "version": "0.0.1",
+  "displayName": "DLD Utility",
+  "description": "Collection of utility C# code for convenience",
+  "unity": "2017.4",
+  "keywords": [
+    "utility",
+    "library"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}
