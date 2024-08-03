@@ -87,5 +87,12 @@ namespace DLD.Utility.Tests
 			string text = "C:/speech/test/proj/Assets/Scripts/Something.cs";
 			Assert.AreEqual(text, text.RemoveFromStart("NOT"));
 		}
+
+		[Test]
+		public void ConvertBackToForwardSlash_Works()
+		{
+			string text = "C:\\speech/test/proj\\Assets/Scripts\\Something.cs";
+			Assert.AreEqual("C:/speech/test/proj/Assets/Scripts/Something.cs", text.ConvertBackToForwardSlash());
+		}
 	}
 }

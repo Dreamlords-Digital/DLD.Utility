@@ -129,5 +129,10 @@ namespace DLD.Utility
 			}
 			return text[foundIdx..];
 		}
+
+		public static string ConvertBackToForwardSlash(this string text)
+		{
+			return text.Replace("\\", "/");
+		}
 	}
 }
