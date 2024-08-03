@@ -81,15 +81,17 @@ namespace DLD.Utility
 				return string.Empty;
 			}
 
-			StringBuilder newText = new StringBuilder(text.Length*2);
+			StringBuilder newText = new StringBuilder(text.Length * 2);
 			newText.Append(text[0]);
 			for (int i = 1; i < text.Length; i++)
 			{
 				if (char.IsUpper(text[i]))
 				{
 					if ((text[i - 1] != ' ' && !char.IsUpper(text[i - 1])) ||
-					    (preserveAcronyms && char.IsUpper(text[i - 1]) &&
-					     i < text.Length - 1 && !char.IsUpper(text[i + 1])))
+					    (preserveAcronyms &&
+					     char.IsUpper(text[i - 1]) &&
+					     i < text.Length - 1 &&
+					     !char.IsUpper(text[i + 1])))
 					{
 						newText.Append(' ');
 					}
@@ -97,7 +99,35 @@ namespace DLD.Utility
 
 				newText.Append(text[i]);
 			}
+
 			return newText.ToString();
+		}
+
+		/// <summary>
+		/// Remove the starting parts of a string.
+		/// </summary>
+		/// <param name="text">String that will be edited.</param>
+		/// <param name="subStringToSearch">Substring that will be searched for.
+		///	Everything in the text that came before this substring will be removed.
+		///	The substring itself will not be removed.</param>
+		/// <param name="idxAdjust">Offset to the text that will be removed.
+		///	Use this to partially remove parts of the substring itself from the result.
+		///	If you specify endTextToRemove.Length, then this will remove the substring as well from the result.</param>
+		/// <returns>The new edited string.</returns>
+		public static string RemoveFromStart(this string text, string subStringToSearch, int idxAdjust = 0)
+		{
+			int foundIdx = text.IndexOf(subStringToSearch, StringComparison.Ordinal);
+			if (foundIdx < 0)
+			{
+				// substring was not found
+				return text;
+			}
+
+			if (foundIdx + idxAdjust >= 0 && foundIdx + idxAdjust < text.Length)
+			{
+				foundIdx += idxAdjust;
+			}
+			return text[foundIdx..];
 		}
 	}
 }
