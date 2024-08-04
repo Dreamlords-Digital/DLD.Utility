@@ -1,0 +1,15 @@
+{
+  "name": "com.dreamlordsdigital.easing",
+  "version": "0.0.1",
+  "displayName": "Easing Equations",
+  "description": "Animates the value of a float property between two target values using Robert Penner's easing equations.",
+  "unity": "2017.4",
+  "keywords": [
+    "utility",
+    "library"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}
