@@ -1,0 +1,15 @@
+{
+  "name": "com.dreamlordsdigital.fuzzystring",
+  "version": "0.0.1",
+  "displayName": "FuzzyString",
+  "description": "Approximate String Comparision in C#. Repackaged as a Unity Package.",
+  "unity": "2017.4",
+  "keywords": [
+    "utility",
+    "library"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}
