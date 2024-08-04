@@ -145,6 +145,28 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
+		/// If passed string is path to a file, this will remove the file part of the string.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static string GetFolderPath(string path)
+		{
+			if (!string.IsNullOrEmpty(path))
+			{
+				if (File.Exists(path))
+				{
+					return Path.GetDirectoryName(path);
+				}
+				else // already a path to a folder
+				{
+					return path;
+				}
+			}
+
+			return path;
+		}
+
+		/// <summary>
 		/// Removes any non-existent folders from the path. Requires an absolute path.
 		/// </summary>
 		/// <returns>True if the path was fixed (now points to a folder that exists). False if not.</returns>
