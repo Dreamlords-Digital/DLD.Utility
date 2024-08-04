@@ -136,5 +136,57 @@ namespace DLD.Utility
 		{
 			return text.Replace("\\", "/");
 		}
+
+		/// <summary>
+		/// If text is all 1234567890ABCDEF (or abcdef, the check is not case-sensitive)
+		/// </summary>
+		/// <param name="text">The string to check.</param>
+		/// <param name="startIdx">Start checking from this character index. Starts at 0. Leave at 0 for default.</param>
+		/// <param name="endIdx">End checking at this char. Leave at -1 to check until last char of string (text.Length - 1).</param>
+		/// <returns></returns>
+		public static bool IsAllHexadecimals(this string text, int startIdx = 0, int endIdx = -1)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+			{
+				return false;
+			}
+
+			if (text.Length == 1)
+			{
+				return (text[0] >= '0' && text[0] <= '9') ||
+				       (text[0] >= 'a' && text[0] <= 'f') ||
+				       (text[0] >= 'A' && text[0] <= 'F');
+			}
+
+			if (startIdx < 0)
+			{
+				startIdx = 0;
+			}
+			if (endIdx < 0 || endIdx >= text.Length)
+			{
+				endIdx = text.Length - 1;
+			}
+			if (startIdx >= endIdx)
+			{
+				startIdx = endIdx - 1;
+			}
+
+			//BetterDebug.Log(
+			//	$"IsAllHexadecimals: {text} (from {startIdx.ToString()} '{text[startIdx].ToString()}' to {endIdx.ToString()} '{text[endIdx].ToString()}')");
+
+			for (int n = startIdx; n <= endIdx; ++n)
+			{
+				char c = text[n];
+				if ((c < '0' || c > '9') &&
+				    (c < 'a' || c > 'f') &&
+				    (c < 'A' || c > 'F'))
+				{
+					// not a hexadecimal
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 }
