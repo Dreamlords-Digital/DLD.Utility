@@ -208,8 +208,13 @@ namespace DLD.IMGUI
 
 #if UNITY_EDITOR
 		const string UNITY_EDITOR_AUDIO_UTIL_CLASS = "UnityEditor.AudioUtil";
+#if UNITY_2020_2_OR_NEWER
+		const string UNITY_EDITOR_AUDIO_UTIL_PLAY_CLIP_METHOD = "PlayPreviewClip";
+		const string UNITY_EDITOR_AUDIO_UTIL_STOP_ALL_CLIPS_METHOD = "StopAllPreviewClips";
+#else
 		const string UNITY_EDITOR_AUDIO_UTIL_PLAY_CLIP_METHOD = "PlayClip";
 		const string UNITY_EDITOR_AUDIO_UTIL_STOP_ALL_CLIPS_METHOD = "StopAllClips";
+#endif
 
 		static MethodInfo _playClipMethod;
 		static MethodInfo _stopAllClipsMethod;
@@ -290,7 +295,7 @@ namespace DLD.IMGUI
 			if (_stopAllClipsMethod == null)
 			{
 				Debug.LogErrorFormat("AudioLibrary.PlayClip: Could not find {0}.{1}", UNITY_EDITOR_AUDIO_UTIL_CLASS,
-					UNITY_EDITOR_AUDIO_UTIL_PLAY_CLIP_METHOD);
+					UNITY_EDITOR_AUDIO_UTIL_STOP_ALL_CLIPS_METHOD);
 				return;
 			}
 
