@@ -283,6 +283,60 @@ namespace DLD.IMGUI
 
 			return rectToAdjust;
 		}
-	}
 
+		public static bool IsRepaint(this Event e)
+		{
+			return (e.type == EventType.Repaint);
+		}
+
+		public static bool IsLeftMouseButtonUsed(this Event e)
+		{
+			return (e.button == 0);
+		}
+
+		public static bool IsRightMouseButtonUsed(this Event e)
+		{
+			return (e.button == 1);
+		}
+
+		public static bool IsLeftMouseUp(this Event e)
+		{
+			return (e.type == EventType.MouseUp) && (e.button == 0);
+		}
+
+		public static bool IsRightMouseUp(this Event e)
+		{
+			return (e.type == EventType.MouseUp) && (e.button == 1);
+		}
+
+		public static bool IsLeftMouseDown(this Event e)
+		{
+			return (e.type == EventType.MouseDown) && (e.button == 0);
+		}
+
+		public static bool IsRightMouseDown(this Event e)
+		{
+			return (e.type == EventType.MouseDown) && (e.button == 1);
+		}
+
+		public static bool IsLeftMouseClick(this Event e)
+		{
+			return (e.type == EventType.MouseUp) && (e.button == 0) && (e.clickCount == 1);
+		}
+
+		public static bool IsRightMouseClick(this Event e)
+		{
+			return (e.type == EventType.MouseUp) && (e.button == 1) && (e.clickCount == 1);
+		}
+
+		public static bool IsLeftMouseDoubleClick(this Event e)
+		{
+			return (e.type == EventType.MouseUp) && (e.button == 0) && (e.clickCount == 2);
+		}
+
+		public static bool IsRightMouseDoubleClick(this Event e)
+		{
+			return (e.type == EventType.MouseUp) && (e.button == 1) && (e.clickCount == 2);
+		}
+	}
 }
