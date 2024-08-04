@@ -189,6 +189,27 @@ namespace DLD.Utility
 			return true;
 		}
 
+		public static int GetLineCount(this string text)
+		{
+			int count = 1;
+			for (int i = 0; i < text.Length; i++)
+			{
+				if (text[i] == '\n') ++count;
+			}
+
+			return count;
+		}
+
+		public static string ToPlural(this int me, string singular, string plural)
+		{
+			if (me == 1)
+			{
+				return singular;
+			}
+
+			return plural;
+		}
+
 		public static string ComputeMD5Hash(string input)
 		{
 			// Use input string to calculate MD5 hash
