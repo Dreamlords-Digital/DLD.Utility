@@ -1,0 +1,1394 @@
+﻿{
+  "__hint": "DLD.Utility.Resource.GuiSkinFontSize, Assembly-CSharp",
+  "Entries": 
+    [
+      {
+        "StyleName": "box",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "button",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "toggle",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "label",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "textfield",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "textarea",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "window",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "OverlayRect",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TagInput.Bg.Normal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TextField.Hidden",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TagInput.Bg.Focused",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TagInput.EnteredTag",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SimpleBox",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "DebugInfoBox",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "PathLayout",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "FolderRootButton",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "FolderButton",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "FolderWithIconButton",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "PropertyCheckbox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "HelpfulMessage",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "PropertyLabel",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "PropertyLabelWarn",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "DropDownBoxLabel",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "DropDownBoxButton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "AssetEntryThumbnail",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "AssetEntryButton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "MenuButton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "GenericTable.Header",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "GenericTable.Label",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "GenericTable.Label.Centered",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "GenericTable.Label.Big",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "GenericTable.Label.Big.Highlighted",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "GenericTable.RowHeader",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "GenericTable.RowHeader.Highlighted",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SkillTable.ExpandButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "SkillTable.Specialization",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "SkillTable.NonPath.Unused",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SkillTable.NonPath.Used",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SkillTable.Path.Unused",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SkillTable.Path.Used",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SkillTable.InvalidSkill",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "GenericTable.AltEntry",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "CharacterName",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "BigLabel",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "BigLabel.Bg",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "TinyLabel",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TinyLabel-Warn",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Label.Info",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "DrawIcon",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HelpMessage.Simple",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "FormulaBox",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "GenericTable.TextField",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "GenericTable.TextField.Highlighted",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TextField-Highlighted",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SearchTextField",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SearchClearButton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ScrollViewBg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TextField-Warn",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TextField-Error",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TextFieldSingleLine",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TextFieldMultiLine",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TileTypeButton.Landscape",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "DropDownBox.MiniButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "MiniButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "MiniButton.ForTextFields",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "MiniButton.WithText",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "MiniButton.WithText.Center",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "ExpandCollapseButton",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "TileTypeButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "OpenBehaviourTreeButton",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "PlusMinusButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "GenericTable.PlusMinusButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "LeftBar",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "RightBar",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "BottomBar",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "LeftBar-Header1",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "RightBar-Header1",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "No-Header",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "Header2",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "FloatingBox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Tooltip",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "PopupBoxHidden",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "PopupBox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModalWindowTitle",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ModalWindowDescription",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModalWindowBox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModalWindowButton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ModalWindowLeftBarBg",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "CommandHistoryBox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "CommandHistoryEntry",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "CommandHistoryEntryActive",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TextInfo",
+        "FontSize": 16
+      },
+      {
+        "StyleName": "TinyHelp",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "DiceRollLabel",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Text",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "Tag.TagName",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "TextBold",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ToolbarBg.Left",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "ToolbarBg.Right",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "ToolbarLeft",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "ToolbarMiddle",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ToolbarMiddle.V",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ToolbarVertical",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TagPicker.ParentTag",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TagPicker.ParentTagButton",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TagPicker.Tag.Label",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TagPicker.Box",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TagPicker.Tag",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TagPicker.Tag.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "TagPicker.Button",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "TagPicker.Button.Cancel",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ToolbarRight",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "TabLeft",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SmallTabLeft",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "TabMiddle",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SmallTabMiddle",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "TabRight",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "SmallTabRight",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "StatusBarLabel",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "TopBarBg",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "TopBarLabel",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "TopBarButton",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "TopBarPopup",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "ListColumnHeader",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListColumnHeader-Asc",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListColumnHeader-Desc",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "FileDlg.ImageItem",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Bg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Bg.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Bg.Pressed",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Bg.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Bg.Selected.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Title",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ListItem.Title.Hovered",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ListItem.Title.Selected",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ListItem.Text",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Text.Button",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListItem.Large",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "List",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListNormal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ListAlt",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ListAltNormal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ListAltSelected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModPackage.Entry.Bg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModPackage.Entry.Name",
+        "FontSize": 14
+      },
+      {
+        "StyleName": "ModPackage.Entry.Version",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModPackage.Entry.Author",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ModPackage.Entry.Description",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "ModPackage.Entry.SaveLocation",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "CharacterDebug.Overlay.Bg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "FactionList.Name",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetList.ForExport",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetList.ForExport.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetList.ForExport.Highlighted",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "FactionList.Name.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Faction.Relations.Name",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Faction.Relations.Label",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Faction.Relations.Button",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "ThickButton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "AbilityList.Entry.Bg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Bg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Bg.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "CharacterBrowser.Entry.Bg.Spawning",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.Bg.Error",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.Bg.Error.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.Bg.Selected",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Bg.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.FolderName",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.FolderName.Disabled",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.Name",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Min.Name",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Min.Text",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Min.Text.Bigger",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Min.Qty",
+        "FontSize": 14
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Min.Type",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Type",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "AbilityList.Entry.Name.Disabled",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "AbilityList.Entry.Level",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "AbilityList.Entry.Cost",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "AbilityList.Entry.Effect",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "AbilityList.Entry.ShortDescription",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "AssetBrowser.Entry.Icon",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "Character.Attack.Label",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "Character.Attack.Layout",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "Character.Weapon.Layout",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "PopupEntrySeparator",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "PopupEntryDisabled",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "PopupEntry",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "PopupEntrySelected",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TagInput.Suggestion.Entry",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "PopupTooltip",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Popup",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TinyScrollbar.Horizontal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TinyScrollbar.Horizontalthumb",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TinyScrollbar.Horizontalleftbutton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "TinyScrollbar.Horizontalrightbutton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HiddenScrollbar",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HiddenScrollbarthumb",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HiddenScrollbarupbutton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HiddenScrollbardownbutton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HiddenScrollbarleftbutton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HiddenScrollbarrightbutton",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "WindowResizer",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "IntLord.Node.Folder",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "IntLord.Node.Entry",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.EditorBg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.HelpBox",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "IntLord.SmallButton",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "IntLord.ExpandCollapseButton",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Tooltip",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Line",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.DropdownEntry",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.ClassName",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Title",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Remarks",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Property.Label",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Property.Bg",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Root",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Root.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Decorator",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Decorator.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Query",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Query.Dragged",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Action",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Action.Dragged",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Sequence",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Sequence.Dragged",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Sequence.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Sequence.Title",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "IntLord.Node.Sequence.Remarks",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Sequence.InsertIndicator",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "IntLord.Node.Selector",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Selector.Dragged",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Selector.Hovered",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Selector.Title",
+        "FontSize": 12
+      },
+      {
+        "StyleName": "IntLord.Node.Selector.Remarks",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "IntLord.Node.Selector.InsertIndicator",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Section",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Preferences",
+        "FontSize": 16
+      },
+      {
+        "StyleName": "Icon.Explorer",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.OpenEditor",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.NewFile",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.OpenFile",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.SaveFile",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.SaveFileAs",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Cut",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Copy",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Paste",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Export",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Delete",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Cancel",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Minus",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Plus",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Refresh",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ResizeGrid",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Dice",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ShowDebug",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Formula",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Folder.Character",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Folder.Level",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Info",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Error",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Readme",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ModPackageWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.CharacterWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ExperienceTableWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.CharacterRulesWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RaceWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FactionWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.PathWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.SkillWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.AbilityWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ConditionWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ItemWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.MapWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Grid",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ScenarioWindow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.MakeAllies",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Allies",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.MakeEnemies",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Enemies",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.MakeNeutral",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Neutral",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.SpawnCharacter",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceNorth",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceNortheast",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceEast",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceSoutheast",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceSouth",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceSouthwest",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceWest",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.FaceNorthwest",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.AlwaysShowCharacterTooltips",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Objectives",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Warning",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RightArrow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.AbilityList.Add",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.AbilityList.Remove",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.TagPicker.GoBack",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.TagPicker.GoInto",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.NodeLibrary",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Home",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.ChangeColor",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ColorPicker.Icon.ColorCrosshair",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ColorPicker.Icon.HueLevel",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Traversals",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.PlayTraversal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.PauseTraversal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.StopTraversal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RecordTraversal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.TraversalCursor",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RunStateVisiting",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RunStateSuccess",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RunStateFailure",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.RunStateRunning",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.Tag",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Icon.TagChildArrow",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Back",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Forward",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Jump",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.EditPath",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Root",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Desktop",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.UserHome",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.MyDocs",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Drive",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.ToParentFolder",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.UnityProjectFolder",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.Folder",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.SpecialFolder",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.File",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.MatchedFile",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.JumpToList",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "FileDlg.JumpToList.Header",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "ColorPicker.Swatch",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Node.Line",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Node.Line.Vertical",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Node.Line.Horizontal",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "HorizontalRule",
+        "FontSize": 13
+      },
+      {
+        "StyleName": "Tag.DefaultBox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Tag.SelectedBox",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Tag.DragDestination",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Tag.Insert.Horizontal",
+        "FontSize": 11
+      },
+      {
+        "StyleName": "Tag.Emblem",
+        "FontSize": 10
+      },
+      {
+        "StyleName": "Tag.Emblem.Small",
+        "FontSize": 9
+      },
+      {
+        "StyleName": "Icon.Reel",
+        "FontSize": 11
+      }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "name": "DLD.IMGUI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f8314c58c0b768b419973ab5ee9a4619",
+        "GUID:9445f3982f5655948988c97be1b8cd5a",
+        "GUID:66f2238b44c6bbd40bd54d768bb19bbe",
+        "GUID:c520ecedf7a83e94c845999ad4235138",
+        "GUID:478a2357cc57436488a56e564b08d223"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

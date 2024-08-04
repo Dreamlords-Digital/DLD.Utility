@@ -1,0 +1,13 @@
+Examples of how to provide attribution in your work.
+* Places
+* Footer
+* “About” page
+* “About…” dialog
+* README file
+etc.
+
+Words
+* Some icons by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/). Licensed under a Creative Commons Attribution 3.0 License (http://creativecommons.org/licenses/by/3.0/).
+* Some icons by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/).
+* Icons (http://p.yusukekamiyamane.com/)
+etc.
