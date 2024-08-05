@@ -1,7 +1,6 @@
 ﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using System;
-using DLD.JsonFx;
 
 namespace DLD.Serializer
 {
@@ -11,10 +10,13 @@ namespace DLD.Serializer
 	}
 
 	[AttributeUsage(AttributeTargets.All)]
-	public sealed class SerializedNameAttribute : JsonNameAttribute
+	public sealed class SerializedNameAttribute : Attribute
 	{
-		public SerializedNameAttribute(string serializedName) : base(serializedName)
+		public SerializedNameAttribute(string serializedName)
 		{
+			Name = serializedName;
 		}
+
+		public string Name { get; private set; }
 	}
 }

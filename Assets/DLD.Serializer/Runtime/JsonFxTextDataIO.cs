@@ -17,9 +17,16 @@ namespace DLD.Serializer
 			return File.ReadAllText(filePath);
 		}
 
-		readonly FieldSerializationRuleType _rule = type =>
+		static readonly FieldSerializationRuleType Rule = type =>
 			(type.IsPublic && type.GetCustomAttributes(typeof(NonSerializedAttribute), true).Length == 0) ||
 			(!type.IsPublic && type.GetCustomAttributes(typeof(SerializedAttribute), true).Length > 0);
+
+		static readonly FieldSerializedNameType Name = memberInfo =>
+		{
+			var attribute =
+				Attribute.GetCustomAttribute(memberInfo, typeof(SerializedNameAttribute)) as SerializedNameAttribute;
+			return attribute?.Name;
+		};
 
 		readonly JsonReaderSettings _readerSettings = new JsonReaderSettings();
 		readonly JsonWriterSettings _writerSettings = new JsonWriterSettings();
@@ -41,7 +48,8 @@ namespace DLD.Serializer
 			readerSettings.AllowNullValueTypes = true;
 			readerSettings.AllowUnquotedObjectKeys = true;
 			readerSettings.TypeHintName = TYPE_HINT_NAME;
-			readerSettings.SetFieldSerializationRule(_rule);
+			readerSettings.SetFieldSerializationRule(Rule);
+			readerSettings.SetFieldSerializedName(Name);
 			AdditionalReaderInitialization(readerSettings);
 		}
 
@@ -57,7 +65,8 @@ namespace DLD.Serializer
 				_writerSettings.Tab = "  ";
 				_writerSettings.TypeHintName = TYPE_HINT_NAME;
 				_writerSettings.TypeHintsOnlyWhenNeeded = true;
-				_writerSettings.SetFieldSerializationRule(_rule);
+				_writerSettings.SetFieldSerializationRule(Rule);
+				_writerSettings.SetFieldSerializedName(Name);
 
 				_writerInitialized = true;
 			}
