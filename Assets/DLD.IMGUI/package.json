@@ -8,6 +8,7 @@
     "com.dreamlordsdigital.utility": "0.0.1",
     "com.dreamlordsdigital.serializer": "0.0.1",
     "com.dreamlordsdigital.jsonfx": "0.1.0",
+    "com.dreamlordsdigital.fuzzystring": "0.0.1",
     "com.unity.editorcoroutines": "1.0.0"
   },
   "keywords": [
