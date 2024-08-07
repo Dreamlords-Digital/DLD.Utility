@@ -24,7 +24,7 @@ namespace DLD.Serializer
 		static readonly FieldSerializedNameType Name = memberInfo =>
 		{
 			var attribute =
-				Attribute.GetCustomAttribute(memberInfo, typeof(SerializedNameAttribute)) as SerializedNameAttribute;
+				Attribute.GetCustomAttribute(memberInfo, typeof(SerializedAttribute)) as SerializedAttribute;
 			return attribute?.Name;
 		};
 

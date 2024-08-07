@@ -7,16 +7,15 @@ namespace DLD.Serializer
 	[AttributeUsage(AttributeTargets.All)]
 	public sealed class SerializedAttribute : Attribute
 	{
-	}
+		public readonly string Name;
 
-	[AttributeUsage(AttributeTargets.All)]
-	public sealed class SerializedNameAttribute : Attribute
-	{
-		public SerializedNameAttribute(string serializedName)
+		public SerializedAttribute()
 		{
-			Name = serializedName;
 		}
 
-		public string Name { get; private set; }
+		public SerializedAttribute(string name)
+		{
+			Name = name;
+		}
 	}
 }

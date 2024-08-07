@@ -15,8 +15,7 @@ namespace DLD.Serializer.Tests
 
 		// -----------------------------
 
-		[Serialized]
-		[SerializedName("ID")]
+		[Serialized("ID")]
 		string _id;
 
 		public string ID
@@ -52,8 +51,7 @@ namespace DLD.Serializer.Tests
 
 		// -----------------------------
 
-		[Serialized]
-		[SerializedName("MyField")]
+		[Serialized("MyField")]
 		int _derived1Field;
 
 		public int MyField
@@ -94,8 +92,7 @@ namespace DLD.Serializer.Tests
 	{
 		// -----------------------------
 
-		[Serialized]
-		[SerializedName("List")]
+		[Serialized("List")]
 		readonly List<BaseClass> _list = new List<BaseClass>();
 
 		public int Count

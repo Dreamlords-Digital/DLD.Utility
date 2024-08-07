@@ -9,8 +9,7 @@ namespace DLD.IMGUI
 {
 	public class RecentlyUsedFolders : ITextData
 	{
-		[Serialized]
-		[SerializedName("Folders")]
+		[Serialized("Folders")]
 		List<string> _folders;
 
 

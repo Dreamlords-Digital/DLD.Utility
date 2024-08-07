@@ -15,8 +15,7 @@ namespace DLD.Serializer.Tests.TreeGraph
 
 		// -----------------------------
 
-		[Serialized]
-		[SerializedName("ID")]
+		[Serialized("ID")]
 		string _id;
 
 		public string ID
@@ -31,8 +30,7 @@ namespace DLD.Serializer.Tests.TreeGraph
 
 		// -----------------------------
 
-		[Serialized]
-		[SerializedName("Children")]
+		[Serialized("Children")]
 		List<BaseNode> _children = new List<BaseNode>();
 
 		public int Count

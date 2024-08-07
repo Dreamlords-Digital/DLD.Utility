@@ -9,8 +9,7 @@ namespace DLD.Serializer.Tests
 	{
 		// -----------------------------
 
-		[Serialized]
-		[SerializedName("TestString")]
+		[Serialized("TestString")]
 		string _serializedPrivateString;
 
 		public string SerializedPrivateString

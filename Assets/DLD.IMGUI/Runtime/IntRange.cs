@@ -22,15 +22,13 @@ namespace DLD.Utility
 		/// <summary>
 		/// The inclusive lower limit to the range.
 		/// </summary>
-		[Serialized]
-		[SerializedName("LowerLimit")]
+		[Serialized("LowerLimit")]
 		int _lowerLimit;
 
 		/// <summary>
 		/// The inclusive upper limit to the range.
 		/// </summary>
-		[Serialized]
-		[SerializedName("UpperLimit")]
+		[Serialized("UpperLimit")]
 		int _upperLimit;
 
 		public IntRange(int lowerLimit, int upperLimit, bool allowSameValues = false)
