@@ -281,21 +281,63 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Like <see cref="Path.Combine(string, string)"/>, except this always uses forward slashes.
+		/// Combines the strings like <see cref="Path.Combine(string,string)"/>, but always uses forward slash.
 		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="pathToAppend"></param>
+		/// <param name="path1"></param>
+		/// <param name="path2"></param>
 		/// <returns></returns>
-		public static string NormalizedCombinePath(string path, string pathToAppend)
+		public static string CombinePath(string path1, string path2)
 		{
-			path = path.ConvertBackToForwardSlash();
+			path1 = path1.ConvertBackToForwardSlash();
+			path2 = path2.ConvertBackToForwardSlash();
 
-			if (path.EndsWith('/'))
+			if (string.IsNullOrEmpty(path2))
 			{
-				return $"{path}{pathToAppend.ConvertBackToForwardSlash()}";
+				return path1;
 			}
 
-			return $"{path}/{pathToAppend.ConvertBackToForwardSlash()}";
+			if (string.IsNullOrEmpty(path1))
+			{
+				return path2;
+			}
+
+			char path1End = path1[^1];
+			if (path1End != '/')
+			{
+				return $"{path1}/{path2}";
+			}
+
+			return $"{path1}{path2}";
+		}
+
+		public static string CombinePath(string path1, string path2, string path3)
+		{
+			return CombinePath(CombinePath(path1, path2), path3);
+		}
+
+		public static string CombinePath(string path1, string path2, string path3, string path4)
+		{
+			return CombinePath(CombinePath(path1, path2), CombinePath(path3, path4));
+		}
+
+		public static string CombinePath(string path1, string path2, string path3, string path4, string path5)
+		{
+			return CombinePath(CombinePath(path1, path2), CombinePath(path3, path4), path5);
+		}
+
+		public static string CombinePath(string path1, string path2, string path3, string path4, string path5, string path6)
+		{
+			return CombinePath(CombinePath(path1, path2), CombinePath(path3, path4), CombinePath(path5, path6));
+		}
+
+		public static string CombinePath(string path1, string path2, string path3, string path4, string path5, string path6, string path7)
+		{
+			return CombinePath(CombinePath(path1, path2), CombinePath(path3, path4), CombinePath(path5, path6), path7);
+		}
+
+		public static string CombinePath(string path1, string path2, string path3, string path4, string path5, string path6, string path7, string path8)
+		{
+			return CombinePath(CombinePath(path1, path2), CombinePath(path3, path4), CombinePath(path5, path6), CombinePath(path7, path8));
 		}
 
 		/// <summary>

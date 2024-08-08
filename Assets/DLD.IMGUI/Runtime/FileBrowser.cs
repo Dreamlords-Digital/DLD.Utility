@@ -1284,7 +1284,7 @@ namespace DLD.IMGUI
 								// fbx to "open" is in a Resources folder
 
 								var resourcesPathOfFbxFile =
-									FileUtil.GetResourcesPathOfFile(Path.Combine(newPathToRead, virtualFolder));
+									FileUtil.GetResourcesPathOfFile(FileUtil.CombinePath(newPathToRead, virtualFolder));
 
 								var anims = Resources.LoadAll<AnimationClip>(resourcesPathOfFbxFile);
 
@@ -1298,7 +1298,7 @@ namespace DLD.IMGUI
 								// fbx to "open" is not in a Resources folder
 
 #if UNITY_EDITOR
-								var fbxAbsPath = Path.Combine(newPathToRead, virtualFolder);
+								var fbxAbsPath = FileUtil.CombinePath(newPathToRead, virtualFolder);
 								var fbxAssetsPath = FileUtil.GetPathRelativeToAssets(fbxAbsPath);
 
 								Object[] subAssets =
@@ -1565,7 +1565,7 @@ namespace DLD.IMGUI
 					continue;
 				}
 
-				var fileAbsolutePath = FileUtil.NormalizedCombinePath(_currentPath, _files[i]);
+				var fileAbsolutePath = FileUtil.CombinePath(_currentPath, _files[i]);
 				if (!File.Exists(fileAbsolutePath))
 				{
 					continue;
@@ -3262,7 +3262,7 @@ Screen.height: {
 						// fbx to "open" is in a Resources folder
 
 						string resourcesPathOfFbxFile =
-							FileUtil.GetResourcesPathOfFile(Path.Combine(_currentPath, _files[idxOfSelectedItem]));
+							FileUtil.GetResourcesPathOfFile(FileUtil.CombinePath(_currentPath, _files[idxOfSelectedItem]));
 
 						var anims = Resources.LoadAll<AnimationClip>(resourcesPathOfFbxFile);
 
@@ -3282,7 +3282,7 @@ Screen.height: {
 						{
 							Debug.LogFormat("going inside fbx file: {0}", label);
 
-							SwitchCurrentPath(FileUtil.NormalizedCombinePath(_currentPath, _files[idxOfSelectedItem]));
+							SwitchCurrentPath(FileUtil.CombinePath(_currentPath, _files[idxOfSelectedItem]));
 						}
 						// else: anims.Length == 0. no animations in this fbx file. don't do anything then.
 					}
@@ -3291,7 +3291,7 @@ Screen.height: {
 						// fbx to "open" is not in a Resources folder
 
 #if UNITY_EDITOR
-						var fbxAbsPath = Path.Combine(_currentPath, _files[idxOfSelectedItem]);
+						var fbxAbsPath = FileUtil.CombinePath(_currentPath, _files[idxOfSelectedItem]);
 						var fbxAssetsPath = FileUtil.GetPathRelativeToAssets(fbxAbsPath);
 
 						Object[] subAssets =
@@ -3337,7 +3337,7 @@ Screen.height: {
 						{
 							Debug.LogFormat("going inside fbx file: {0}", label);
 
-							SwitchCurrentPath(FileUtil.NormalizedCombinePath(_currentPath, _files[idxOfSelectedItem]));
+							SwitchCurrentPath(FileUtil.CombinePath(_currentPath, _files[idxOfSelectedItem]));
 						}
 						// else: animCount == 0. no animations in this fbx file. don't do anything then.
 					}
@@ -3358,11 +3358,11 @@ Screen.height: {
 			string finalFileValue;
 			if (!string.IsNullOrEmpty(virtualFolder))
 			{
-				finalFileValue = FileUtil.NormalizedCombinePath(realPath, virtualFolder);
+				finalFileValue = FileUtil.CombinePath(realPath, virtualFolder);
 
 				if (!string.IsNullOrEmpty(virtualPath))
 				{
-					finalFileValue = $"{finalFileValue}:{FileUtil.NormalizedCombinePath(virtualPath, file)}";
+					finalFileValue = $"{finalFileValue}:{FileUtil.CombinePath(virtualPath, file)}";
 				}
 				else
 				{
@@ -3371,7 +3371,7 @@ Screen.height: {
 			}
 			else
 			{
-				finalFileValue = FileUtil.NormalizedCombinePath(realPath, file);
+				finalFileValue = FileUtil.CombinePath(realPath, file);
 			}
 
 			return finalFileValue;
@@ -3426,7 +3426,7 @@ Screen.height: {
 			else
 			{
 				//Debug.LogFormat("folder to go to: {0}", subfolderToGoTo);
-				SwitchCurrentPath(FileUtil.NormalizedCombinePath(_currentPath, subfolderToGoTo));
+				SwitchCurrentPath(FileUtil.CombinePath(_currentPath, subfolderToGoTo));
 			}
 		}
 
