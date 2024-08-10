@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using DLD.JsonFx;
 using DLD.Utility;
@@ -17,11 +18,48 @@ namespace DLD.Serializer
 			return File.ReadAllText(filePath);
 		}
 
-		static readonly FieldSerializationRuleType Rule = type =>
-			(type.IsPublic && type.GetCustomAttributes(typeof(NonSerializedAttribute), true).Length == 0) ||
-			(!type.IsPublic && type.GetCustomAttributes(typeof(SerializedAttribute), true).Length > 0);
+		static readonly SerializationRuleType Rule = type =>
+		{
+			switch (type)
+			{
+				case FieldInfo field:
+				{
+					// To be serialized, either:
+					// 1. public field that doesn't have [NotSerialized]
+					// 2. private/protected field that has [Serialized]
+					return (field.IsPublic && type.GetCustomAttributes(typeof(NotSerializedAttribute), true).Length == 0) ||
+					       (!field.IsPublic && type.GetCustomAttributes(typeof(SerializedAttribute), true).Length > 0);
+				}
+				case PropertyInfo { CanRead: true, CanWrite: true } property:
+				{
+					// To be serialized, either:
+					// 1. property whose get and set are both public, and doesn't have [NotSerialized]
+					// 2. property whose get and/or set are private/protected, and has [Serialized]
 
-		static readonly FieldSerializedNameType Name = memberInfo =>
+					if (property.GetMethod.IsPublic && property.SetMethod.IsPublic)
+					{
+						// must not have the NotSerializedAttribute
+						return type.GetCustomAttributes(typeof(NotSerializedAttribute), true).Length == 0;
+					}
+					else
+					{
+						// We reached here because either:
+						// 1. get is private/protected, while set is public
+						// 2. get is public, while set is private/protected
+						// 3. both get and set are private/protected
+						//
+						// must have the SerializedAttribute
+						return type.GetCustomAttributes(typeof(SerializedAttribute), true).Length > 0;
+					}
+				}
+				default:
+					// This delegate only gets called on fields and properties.
+					// That means if we reached here, this is probably a property that is read-only or write-only.
+					return false;
+			}
+		};
+
+		static readonly SerializedNameType Name = memberInfo =>
 		{
 			var attribute =
 				Attribute.GetCustomAttribute(memberInfo, typeof(SerializedAttribute)) as SerializedAttribute;

@@ -18,4 +18,12 @@ namespace DLD.Serializer
 			Name = name;
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.All)]
+	public sealed class NotSerializedAttribute : Attribute
+	{
+		public NotSerializedAttribute()
+		{
+		}
+	}
 }

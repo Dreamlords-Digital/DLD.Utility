@@ -32,7 +32,7 @@ namespace DLD.Serializer.Tests
 
 		// -----------------------------
 
-		[NonSerialized]
+		[NotSerialized]
 		string _nonSerializedPrivateString;
 
 		public string NonSerializedPrivateString
@@ -47,7 +47,7 @@ namespace DLD.Serializer.Tests
 
 		// -----------------------------
 
-		[NonSerialized]
+		[NotSerialized]
 		public string NonSerializedPublicString;
 
 		// -----------------------------
