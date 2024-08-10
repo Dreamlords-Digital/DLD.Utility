@@ -1,11 +1,50 @@
 {
   "dependencies": {
+    "com.dreamlordsdigital.easing": {
+      "version": "file:Easing",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.dreamlordsdigital.fuzzystring": {
+      "version": "file:FuzzyString",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.dreamlordsdigital.imgui": {
+      "version": "file:DLD.IMGUI",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.dreamlordsdigital.utility": "0.0.1",
+        "com.dreamlordsdigital.serializer": "0.0.1",
+        "com.dreamlordsdigital.jsonfx": "0.1.0",
+        "com.dreamlordsdigital.fuzzystring": "0.0.1",
+        "com.unity.editorcoroutines": "1.0.0"
+      }
+    },
     "com.dreamlordsdigital.jsonfx": {
       "version": "https://github.com/AnomalousUnderdog/DLD.JsonFx.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3a622b0869ca2fcbe3cd8ecc6a213b55d03e48eb"
+      "hash": "34a6efdf9b750c49904d4d8d7ec2333a8a3682e6"
+    },
+    "com.dreamlordsdigital.serializer": {
+      "version": "file:DLD.Serializer",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.dreamlordsdigital.utility": "0.0.1",
+        "com.dreamlordsdigital.jsonfx": "0.1.0"
+      }
+    },
+    "com.dreamlordsdigital.utility": {
+      "version": "file:DLD.Utility",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.collab-proxy": {
       "version": "2.4.4",

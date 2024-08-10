@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "com.dreamlordsdigital.easing": "file:./Easing",
+    "com.dreamlordsdigital.fuzzystring": "file:./FuzzyString",
+    "com.dreamlordsdigital.imgui": "file:./DLD.IMGUI",
+    "com.dreamlordsdigital.serializer": "file:./DLD.Serializer",
+    "com.dreamlordsdigital.utility": "file:./DLD.Utility",
     "com.dreamlordsdigital.jsonfx": "https://github.com/AnomalousUnderdog/DLD.JsonFx.git",
     "com.unity.collab-proxy": "2.4.4",
     "com.unity.feature.development": "1.0.1",
