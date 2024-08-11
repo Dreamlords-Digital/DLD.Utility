@@ -276,6 +276,7 @@ namespace DLD.Serializer
 		/// <returns></returns>
 		protected override string GetObjectHash<T>(T data, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM)
 		{
+			InitializeWriterIfNeeded();
 			var hashGenerator = new HashGenerator(_writerSettings, hashAlgorithmName);
 			hashGenerator.Write(data);
 
