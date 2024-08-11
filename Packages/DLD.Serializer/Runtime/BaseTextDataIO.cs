@@ -308,7 +308,7 @@ namespace DLD.Serializer
 
 				if (string.IsNullOrEmpty(loadedText.text))
 				{
-					Debug.LogWarningFormat("TextAsset \"{0}\" has no data inside. Skipping it.", loadedText.name);
+					Debug.LogWarning($"TextAsset \"{loadedText.name}\" has no data inside. Skipping it.");
 					continue;
 				}
 
@@ -316,7 +316,7 @@ namespace DLD.Serializer
 
 				if (tempLoaded == null)
 				{
-					Debug.LogWarningFormat("TextAsset \"{0}\" has invalid data. Skipping it.", loadedText.name);
+					Debug.LogWarning($"TextAsset \"{loadedText.name}\" has invalid data. Skipping it.");
 					continue;
 				}
 
@@ -337,7 +337,7 @@ namespace DLD.Serializer
 			string fileText = textAsset.text;
 			if (string.IsNullOrWhiteSpace(fileText))
 			{
-				Debug.LogWarningFormat($"TextAsset \"{textAsset.name}\" has no data inside. Skipping it.");
+				Debug.LogWarning($"TextAsset \"{textAsset.name}\" has no data inside. Skipping it.");
 				return (LoadResult.FileIsEmpty, null);
 			}
 

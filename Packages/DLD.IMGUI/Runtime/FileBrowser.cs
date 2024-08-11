@@ -130,7 +130,7 @@ namespace DLD.IMGUI
 
 			var saveFilePath = RecentlyUsedFoldersFile;
 			DefaultSerializer.Instance.SaveToLocal(saveFilePath, _recentlyUsedFoldersData);
-			Debug.LogFormat("Saved recent folders to {0}", saveFilePath);
+			Debug.Log($"Saved recent folders to {saveFilePath}");
 		}
 
 		void LoadRecentlyUsedFoldersData()
@@ -463,7 +463,7 @@ namespace DLD.IMGUI
 			{
 				var folderName = FileUtil.GetLastFolder(path);
 				_recentlyUsed.Add(new GUIContent(folderName, _specialFolderImage, path));
-				Debug.LogFormat("Added {0} to recently used path. Folder: {1}", path, folderName);
+				Debug.Log($"Added {path} to recently used path. Folder: {folderName}");
 
 				SaveRecentlyUsedFoldersData();
 			}
@@ -599,7 +599,7 @@ namespace DLD.IMGUI
 
 			if (!accessible)
 			{
-				Debug.LogWarningFormat("Can't access path: {0}", pathToSwitchTo);
+				Debug.LogWarning($"Can't access path: {pathToSwitchTo}");
 				return false;
 			}
 
@@ -641,7 +641,7 @@ namespace DLD.IMGUI
 
 			if (AlreadyAtLockPathIfApplicable)
 			{
-				Debug.LogFormat("already at lock path: {0}", _lockPath);
+				Debug.Log($"already at lock path: {_lockPath}");
 				return;
 			}
 
@@ -822,12 +822,7 @@ namespace DLD.IMGUI
 						// the real (absolute) path but only folders, not including the fbx filename or anything after that
 						fullPath = fullPath.Substring(0, lastFolderIdx);
 
-						Debug.LogFormat("FileBrowser.SwitchCurrentPath(): going inside fbx file.\n" +
-						                "pathToSwitchTo: {0}\n" +
-						                "virtualFolderSpecified: {1}\n" +
-						                "virtualFileSpecified: {2}\n" +
-						                "virtualFolderSpecifiedAbsPath: {3}",
-							fullPath, virtualFolderSpecified, virtualFileSpecified, virtualFolderSpecifiedAbsPath);
+						Debug.Log($"FileBrowser.SwitchCurrentPath(): going inside fbx file.\npathToSwitchTo: {fullPath}\nvirtualFolderSpecified: {virtualFolderSpecified}\nvirtualFileSpecified: {virtualFileSpecified}\nvirtualFolderSpecifiedAbsPath: {virtualFolderSpecifiedAbsPath}");
 
 						if (IsAnimationVirtualFolderAnFbxFile(fullPath, virtualFolderSpecified))
 						{
@@ -849,9 +844,7 @@ namespace DLD.IMGUI
 								virtualFileSpecified = null;
 								virtualFolderSpecifiedAbsPath = null;
 
-								Debug.LogFormat(
-									"FileBrowser.SwitchCurrentPath(): not going inside fbx file anymore since only 1 animation inside it.\npathToSwitchTo: {0}\nfileSpecified: {1}",
-									fullPath, fileSpecified);
+								Debug.Log($"FileBrowser.SwitchCurrentPath(): not going inside fbx file anymore since only 1 animation inside it.\npathToSwitchTo: {fullPath}\nfileSpecified: {fileSpecified}");
 							}
 						}
 						else
@@ -911,9 +904,7 @@ namespace DLD.IMGUI
 							virtualFileSpecified = null;
 							virtualFolderSpecifiedAbsPath = null;
 
-							Debug.LogFormat(
-								"FileBrowser.SwitchCurrentPath(): not going inside fbx file anymore since only 1 animation inside it.\nfullPath: {0}\nfileSpecified: {1}",
-								fullPath, fileSpecified);
+							Debug.Log($"FileBrowser.SwitchCurrentPath(): not going inside fbx file anymore since only 1 animation inside it.\nfullPath: {fullPath}\nfileSpecified: {fileSpecified}");
 						}
 						else
 						{
@@ -926,9 +917,7 @@ namespace DLD.IMGUI
 							// the absolute path of only the folders, no filename
 							fullPath = Path.GetDirectoryName(fullPath);
 
-							Debug.LogFormat(
-								"FileBrowser.SwitchCurrentPath(): going inside fbx file.\npathToSwitchTo: {0}\nvirtualFolderSpecified: {1}\nvirtualFolderSpecifiedAbsPath: {2}",
-								fullPath, virtualFolderSpecified, virtualFolderSpecifiedAbsPath);
+							Debug.Log($"FileBrowser.SwitchCurrentPath(): going inside fbx file.\npathToSwitchTo: {fullPath}\nvirtualFolderSpecified: {virtualFolderSpecified}\nvirtualFolderSpecifiedAbsPath: {virtualFolderSpecifiedAbsPath}");
 						}
 					}
 					else
@@ -1056,9 +1045,7 @@ namespace DLD.IMGUI
 			// since we are inserting a new entry to the history
 			if (_pathHistory.Count > 1 && (_pathHistoryIdx != _pathHistory.Count - 1))
 			{
-				Debug.LogFormat("removing starting from {0}, count {1}. total count {2}.",
-					(_pathHistoryIdx + 1).ToString(), (_pathHistory.Count - _pathHistoryIdx - 1).ToString(),
-					_pathHistory.Count.ToString());
+				Debug.Log($"removing starting from {_pathHistoryIdx + 1}, count {_pathHistory.Count - _pathHistoryIdx - 1}. total count {_pathHistory.Count}.");
 
 				_pathHistory.RemoveRange(_pathHistoryIdx + 1, _pathHistory.Count - _pathHistoryIdx - 1);
 			}
@@ -1236,7 +1223,7 @@ namespace DLD.IMGUI
 					folders = GetFolderEntries(newPathToRead);
 					if (HasLockPath)
 					{
-						Debug.LogFormat("lockpath\n{0}\ncurrent path\n{1}", _lockPath, newPathToRead);
+						Debug.Log($"lockPath\n{_lockPath}\ncurrent path\n{newPathToRead}");
 						if (!AlreadyAtLockPathIfApplicable)
 						{
 							folders.Insert(0, UP_FOLDER_LABEL);
@@ -3280,7 +3267,7 @@ Screen.height: {
 						}
 						else if (anims.Length > 1)
 						{
-							Debug.LogFormat("going inside fbx file: {0}", label);
+							Debug.Log($"going inside fbx file: {label}");
 
 							SwitchCurrentPath(FileUtil.CombinePath(_currentPath, _files[idxOfSelectedItem]));
 						}
@@ -3335,7 +3322,7 @@ Screen.height: {
 						}
 						else if (animCount > 1)
 						{
-							Debug.LogFormat("going inside fbx file: {0}", label);
+							Debug.Log($"going inside fbx file: {label}");
 
 							SwitchCurrentPath(FileUtil.CombinePath(_currentPath, _files[idxOfSelectedItem]));
 						}

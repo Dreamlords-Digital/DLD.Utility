@@ -238,7 +238,7 @@ namespace DLD.IMGUI
 
 				if (audioUtilClass == null)
 				{
-					Debug.LogErrorFormat("AudioLibrary.PlayClip: Could not find class {0}", UNITY_EDITOR_AUDIO_UTIL_CLASS);
+					Debug.LogError("AudioLibrary.PlayClip: Could not find class " + UNITY_EDITOR_AUDIO_UTIL_CLASS);
 					return;
 				}
 
@@ -251,8 +251,7 @@ namespace DLD.IMGUI
 
 			if (_playClipMethod == null)
 			{
-				Debug.LogErrorFormat("AudioLibrary.PlayClip: Could not find {0}.{1}", UNITY_EDITOR_AUDIO_UTIL_CLASS,
-					UNITY_EDITOR_AUDIO_UTIL_PLAY_CLIP_METHOD);
+				Debug.LogError("AudioLibrary.PlayClip: Could not find " + UNITY_EDITOR_AUDIO_UTIL_CLASS + "." + UNITY_EDITOR_AUDIO_UTIL_PLAY_CLIP_METHOD);
 				return;
 			}
 
@@ -281,7 +280,7 @@ namespace DLD.IMGUI
 
 				if (audioUtilClass == null)
 				{
-					Debug.LogErrorFormat("AudioLibrary.PlayClip: Could not find class {0}", UNITY_EDITOR_AUDIO_UTIL_CLASS);
+					Debug.LogError("AudioLibrary.PlayClip: Could not find class " + UNITY_EDITOR_AUDIO_UTIL_CLASS);
 					return;
 				}
 
@@ -294,8 +293,7 @@ namespace DLD.IMGUI
 
 			if (_stopAllClipsMethod == null)
 			{
-				Debug.LogErrorFormat("AudioLibrary.PlayClip: Could not find {0}.{1}", UNITY_EDITOR_AUDIO_UTIL_CLASS,
-					UNITY_EDITOR_AUDIO_UTIL_STOP_ALL_CLIPS_METHOD);
+				Debug.LogError("AudioLibrary.PlayClip: Could not find " + UNITY_EDITOR_AUDIO_UTIL_CLASS + "." + UNITY_EDITOR_AUDIO_UTIL_STOP_ALL_CLIPS_METHOD);
 				return;
 			}
 
