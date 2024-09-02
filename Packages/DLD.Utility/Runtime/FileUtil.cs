@@ -35,7 +35,6 @@ namespace DLD.Utility
 
 		public static string GetBytesReadable(long bytes)
 		{
-			//return UnityEditor.EditorUtility.FormatBytes(bytes);
 			return MyFileSizeReadable(bytes);
 		}
 
@@ -94,6 +93,100 @@ namespace DLD.Utility
 			}
 
 			return fileIsAllNull;
+		}
+
+		public static bool IsInvalidFileNameChar(this char c)
+		{
+			var invalidChars = Path.GetInvalidFileNameChars();
+			for (int i = 0; i < invalidChars.Length; i++)
+			{
+				if (c == invalidChars[i])
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+		/// <summary>
+		/// Does string end in an image file type that Unity supports?
+		/// (psd, jpg, gif, png, tif, tga, bmp, dds, exr, iff, pict)
+		/// </summary>
+		/// <param name="file"></param>
+		/// <returns></returns>
+		public static bool IsImageFile(this string file)
+		{
+			return file.IsFileOfType(".psd") ||
+			       file.IsFileOfType(".jpeg") ||
+			       file.IsFileOfType(".jpg") ||
+			       file.IsFileOfType(".gif") ||
+			       file.IsFileOfType(".png") ||
+			       file.IsFileOfType(".tiff") ||
+			       file.IsFileOfType(".tif") ||
+			       file.IsFileOfType(".tga") ||
+			       file.IsFileOfType(".bmp") ||
+			       file.IsFileOfType(".dds") ||
+			       file.IsFileOfType(".exr") ||
+			       file.IsFileOfType(".iff") ||
+			       file.IsFileOfType(".pict");
+		}
+
+		/// <summary>
+		/// Does string end in a sound file type that Unity supports?
+		/// (wav, mp3, ogg, aif, xm, mod, it, s3m)
+		/// </summary>
+		/// <param name="file"></param>
+		/// <returns></returns>
+		public static bool IsSoundFile(this string file)
+		{
+			return file.IsFileOfType(".wav") ||
+			       file.IsFileOfType(".mp3") ||
+			       file.IsFileOfType(".ogg") ||
+			       file.IsFileOfType(".aif") ||
+			       file.IsFileOfType(".xm") ||
+			       file.IsFileOfType(".mod") ||
+			       file.IsFileOfType(".it") ||
+			       file.IsFileOfType(".s3m");
+		}
+
+		/// <summary>
+		/// Does string end in a video file type that Unity supports?
+		/// </summary>
+		public static bool IsVideoFile(this string file)
+		{
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				return file.IsFileOfType(".ogv") ||
+				       file.IsFileOfType(".vp8") ||
+				       file.IsFileOfType(".webm");
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				return file.IsFileOfType(".ogv") || // linux supported
+				       file.IsFileOfType(".vp8") ||
+				       file.IsFileOfType(".webm") ||
+				       file.IsFileOfType(".dv") || // mac supported
+				       file.IsFileOfType(".m4v") ||
+				       file.IsFileOfType(".mov") ||
+				       file.IsFileOfType(".mp4") ||
+				       file.IsFileOfType(".mpg") ||
+				       file.IsFileOfType(".mpeg");
+			}
+			else // assume Windows
+			{
+				return file.IsFileOfType(".ogv") || // linux supported
+				       file.IsFileOfType(".vp8") ||
+				       file.IsFileOfType(".webm") ||
+				       file.IsFileOfType(".dv") || // mac supported
+				       file.IsFileOfType(".m4v") ||
+				       file.IsFileOfType(".mov") ||
+				       file.IsFileOfType(".mp4") ||
+				       file.IsFileOfType(".mpg") ||
+				       file.IsFileOfType(".mpeg") ||
+				       file.IsFileOfType(".asf") || // windows supported
+				       file.IsFileOfType(".avi") ||
+				       file.IsFileOfType(".wmv");
+			}
 		}
 
 		public static bool IsFileOfType(this string filepath, string typeExtenstion)
@@ -422,6 +515,95 @@ namespace DLD.Utility
 				folderToMoveTo = Path.GetDirectoryName(folderToMoveTo);
 			}
 			return folderToMoveTo;
+		}
+
+		public static string GetShortFolderName(this string path)
+		{
+			if (path.IsPathRoot())
+			{
+				// "C:/" or "/"
+				return path;
+			}
+			else
+			{
+				return Path.GetFileName(path);
+			}
+		}
+
+		/// <summary>
+		/// Whether the specified path is the root of the file system ("C:/" or "/")
+		/// </summary>
+		public static bool IsPathRoot(this string path)
+		{
+			// Path.GetDirectoryName returns null if path does not have a parent directory.
+			// That only happens if the specified path is the root already.
+			return string.IsNullOrEmpty(Path.GetDirectoryName(path));
+		}
+
+		public static bool IsPathValid(this string path)
+		{
+			if (path.Contains(':') && (path.Length < 2 || path[0] == ':' || path[1] != ':' || path.Count(':') > 1))
+			{
+				// if there is a colon, it must be only one, and as the 2nd char in the string
+				return false;
+			}
+
+			try
+			{
+				// if path is invalid somehow, this will throw an exception
+				string unused = Path.GetFullPath(path);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"In path: \"{path}\" {e}");
+				return false;
+			}
+
+			return true;
+		}
+
+		public static (bool success, string modifiedPath) NormalizePath(this string path)
+		{
+			// ensure drive letter is capitalized
+			if (path.Length >= 2 && char.IsLower(path[0]) && path[1] == ':')
+			{
+				path = char.ToUpper(path[0]) + path[1..];
+			}
+
+			path = path.ConvertBackToForwardSlash();
+
+			// Remove trailing slash if present,
+			// this is to make the path values consistent.
+			// Only time we don't do this is for root "C:/" or "/"
+			if (!path.IsPathRoot() && path[^1] == '/')
+			{
+				path = path[..^1];
+			}
+			else if (path.Length == 2 && char.IsLetter(path[0]) && path[1] == ':')
+			{
+				// change "C:" to "C:/"
+				path += "/";
+			}
+
+			// if folder doesn't exist, keep trying the parent folder until we find one that exists
+			if (!Directory.Exists(path))
+			{
+				string tryPath = path;
+				do
+				{
+					tryPath = Path.GetDirectoryName(tryPath);
+				} while (!string.IsNullOrEmpty(tryPath) && !Directory.Exists(tryPath));
+
+				if (string.IsNullOrEmpty(tryPath) || !Directory.Exists(tryPath))
+				{
+					// no folder in the path exists
+					return (false, null);
+				}
+
+				path = tryPath;
+			}
+
+			return (true, path);
 		}
 
 		/// <summary>

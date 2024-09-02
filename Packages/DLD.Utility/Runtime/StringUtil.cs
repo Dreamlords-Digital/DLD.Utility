@@ -132,6 +132,26 @@ namespace DLD.Utility
 			return text[foundIdx..];
 		}
 
+		public static string RemoveFromEnd(this string text, string subStringToSearch)
+		{
+			if (text.EndsWith(subStringToSearch))
+			{
+				return text[..^subStringToSearch.Length];
+			}
+
+			return text;
+		}
+
+		public static string ReplaceFromEnd(this string text, string subStringToSearch, string stringToReplace)
+		{
+			if (!text.EndsWith(subStringToSearch))
+			{
+				return text;
+			}
+
+			return text[..^subStringToSearch.Length] + stringToReplace;
+		}
+
 		public static string ConvertBackToForwardSlash(this string text)
 		{
 			return text.Replace("\\", "/");
@@ -189,15 +209,63 @@ namespace DLD.Utility
 			return true;
 		}
 
-		public static int GetLineCount(this string text)
+		public static bool IsAll(this string text, char charToCheck, int startIdx = 0, int endIdx = -1)
 		{
-			int count = 1;
-			for (int i = 0; i < text.Length; i++)
+			if (string.IsNullOrWhiteSpace(text))
 			{
-				if (text[i] == '\n') ++count;
+				return false;
+			}
+
+			if (text.Length == 1)
+			{
+				return text[0] == charToCheck;
+			}
+
+			if (startIdx < 0)
+			{
+				startIdx = 0;
+			}
+			if (endIdx < 0 || endIdx >= text.Length)
+			{
+				endIdx = text.Length - 1;
+			}
+			if (startIdx >= endIdx)
+			{
+				startIdx = endIdx - 1;
+			}
+
+			for (int n = startIdx; n <= endIdx; ++n)
+			{
+				if (text[n] != charToCheck)
+				{
+					// not the char we're looking for
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public static int Count(this string text, char charToCount)
+		{
+			int count = 0;
+
+			foreach (char c in text)
+			{
+				if (c == charToCount)
+				{
+					++count;
+				}
 			}
 
 			return count;
+		}
+
+		public static int GetLineCount(this string text)
+		{
+			// +1 since a newline creates two lines by itself,
+			// so the +1 is for the last line.
+			return text.Count('\n') + 1;
 		}
 
 		public static string ToPlural(this int me, string singular, string plural)

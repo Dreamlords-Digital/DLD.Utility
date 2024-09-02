@@ -400,5 +400,61 @@ namespace DLD.Utility
 
 			return true;
 		}
+
+		public static string Debug<T>(this IList<T> me) where T : class
+		{
+			if (me == null)
+			{
+				return null;
+			}
+
+			var sb = new System.Text.StringBuilder();
+			sb.Append("Count: ");
+			sb.AppendLine(me.Count.ToString());
+			for (int n = 0, len = me.Count; n < len; ++n)
+			{
+				sb.Append("[");
+				sb.Append(n);
+				sb.Append("]: ");
+				if (me[n] != null)
+				{
+					sb.AppendLine(me[n].ToString());
+				}
+				else
+				{
+					sb.AppendLine("null");
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		public static string Debug<T>(this IList<T> me, Func<T, string> func)
+		{
+			if (me == null)
+			{
+				return null;
+			}
+
+			var sb = new System.Text.StringBuilder();
+			sb.Append("Count: ");
+			sb.AppendLine(me.Count.ToString());
+			for (int n = 0, len = me.Count; n < len; ++n)
+			{
+				sb.Append("[");
+				sb.Append(n);
+				sb.Append("]: ");
+				if (me[n] != null)
+				{
+					sb.AppendLine(func(me[n]));
+				}
+				else
+				{
+					sb.AppendLine("null");
+				}
+			}
+
+			return sb.ToString();
+		}
 	}
 }
