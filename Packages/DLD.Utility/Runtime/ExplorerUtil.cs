@@ -1,6 +1,7 @@
 ﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using System.IO;
+using UnityEngine;
 
 public static class ExplorerUtil
 {
@@ -74,6 +75,11 @@ public static class ExplorerUtil
 			// we currently have no platform define for the current OS we are in, so we resort to this
 			e.HelpLink = ""; // do anything with this variable to silence warning about not using it
 		}
+	}
+
+	public static void OpenWithDefaultProgram(string path)
+	{
+		System.Diagnostics.Process.Start(path);
 	}
 
 	public static void OpenInFileBrowser(string path)

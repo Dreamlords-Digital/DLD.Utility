@@ -96,5 +96,220 @@ namespace DLD.Utility.Tests
 			string text = "C:\\speech/test/proj\\Assets/Scripts\\Something.cs";
 			Assert.AreEqual("C:/speech/test/proj/Assets/Scripts/Something.cs", text.ConvertBackToForwardSlash());
 		}
+
+		// ----------------------------------------------------
+
+		[Test]
+		public void PreviousWordHasLetters_HasLetters1stWord_ReturnsTrue()
+		{
+			string text = "Placeholder 2 Test Game";
+			Assert.AreEqual(' ', text[11]);
+			Assert.AreEqual(true, text.PreviousWordHasLetters(11));
+		}
+
+		[Test]
+		public void PreviousWordHasLetters_HasLetters3rdWord_ReturnsTrue()
+		{
+			string text = "Placeholder 2 Test Game";
+			Assert.AreEqual(' ', text[18]);
+			Assert.AreEqual(true, text.PreviousWordHasLetters(18));
+		}
+
+		[Test]
+		public void PreviousWordHasLetters_NoLetters1stWord_ReturnsFalse()
+		{
+			string text = "123123 2 Test Game";
+			Assert.AreEqual(' ', text[6]);
+			Assert.AreEqual(false, text.PreviousWordHasLetters(6));
+		}
+
+		[Test]
+		public void PreviousWordHasLetters_NoLetters2ndWord_ReturnsFalse()
+		{
+			string text = "Placeholder 2 Test Game";
+			Assert.AreEqual(' ', text[13]);
+			Assert.AreEqual(false, text.PreviousWordHasLetters(13));
+		}
+
+		[Test]
+		public void NextWordHasLetters_NoLetters_ReturnsFalse()
+		{
+			string text = "Placeholder 2 Test Game";
+			Assert.AreEqual(' ', text[11]);
+			Assert.AreEqual(false, text.NextWordHasLetters(11));
+		}
+
+		[Test]
+		public void NextWordHasLetters_HasLetters_ReturnsTrue()
+		{
+			string text = "Placeholder 2 Test Game";
+			Assert.AreEqual(' ', text[13]);
+			Assert.AreEqual(true, text.NextWordHasLetters(13));
+		}
+
+		[Test]
+		public void NextWordHasLetters_HasLettersFinalIdx_ReturnsTrue()
+		{
+			string text = "Placeholder 2 Test Game";
+			Assert.AreEqual(' ', text[18]);
+			Assert.AreEqual(true, text.NextWordHasLetters(18));
+		}
+
+		[Test]
+		public void NextWordHasLetters_NoLettersFinalIdx_ReturnsFalse()
+		{
+			string text = "Placeholder 2";
+			Assert.AreEqual(' ', text[11]);
+			Assert.AreEqual(false, text.NextWordHasLetters(11));
+		}
+
+		[Test]
+		public void GetNewlineCountUntilNextWord_WithNewlines_Works()
+		{
+			string text = "Placeholder 2\n\nTest Game";
+
+			Assert.AreEqual(2, text.GetNewlineCountUntilNextWord(13));
+		}
+
+		[Test]
+		public void GetWords_WithNumbers_ShouldNotSeparate()
+		{
+			string text = "Placeholder 2";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(1, words.Count);
+			Assert.AreEqual("Placeholder 2", words[0].word);
+			Assert.AreEqual(0, words[0].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithNumbers_Works()
+		{
+			string text = "Placeholder 2 Test Game";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(3, words.Count);
+
+			Assert.AreEqual("Placeholder 2", words[0].word);
+			Assert.AreEqual("Test", words[1].word);
+			Assert.AreEqual("Game", words[2].word);
+
+			Assert.AreEqual(0, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithNewlines_Works()
+		{
+			string text = "Placeholder 2\n\nTest Game";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(3, words.Count);
+
+			Assert.AreEqual("Placeholder 2", words[0].word);
+			Assert.AreEqual("Test", words[1].word);
+			Assert.AreEqual("Game", words[2].word);
+
+			Assert.AreEqual(2, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithNewline_Works()
+		{
+			string text = "Placeholder 3\n2nd Line";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(3, words.Count);
+
+			Assert.AreEqual("Placeholder 3", words[0].word);
+			Assert.AreEqual("2nd", words[1].word);
+			Assert.AreEqual("Line", words[2].word);
+
+			Assert.AreEqual(1, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithNumbersWhiteSpaceAtEnd_Works()
+		{
+			string text = "Placeholder 2 Test Game     ";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(3, words.Count);
+
+			Assert.AreEqual("Placeholder 2", words[0].word);
+			Assert.AreEqual("Test", words[1].word);
+			Assert.AreEqual("Game", words[2].word);
+
+			Assert.AreEqual(0, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithNumbersWhiteSpaceAtStart_Works()
+		{
+			string text = "         Placeholder 2 Test Game";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(3, words.Count);
+
+			Assert.AreEqual("Placeholder 2", words[0].word);
+			Assert.AreEqual("Test", words[1].word);
+			Assert.AreEqual("Game", words[2].word);
+
+			Assert.AreEqual(0, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithNumbersWhiteSpace_Works()
+		{
+			string text = "         Placeholder      2   Test  Game    ";
+
+			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(3, words.Count);
+
+			Assert.AreEqual("Placeholder 2", words[0].word);
+			Assert.AreEqual("Test", words[1].word);
+			Assert.AreEqual("Game", words[2].word);
+
+			Assert.AreEqual(0, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+
+			words.ReleaseToPool();
+		}
 	}
 }

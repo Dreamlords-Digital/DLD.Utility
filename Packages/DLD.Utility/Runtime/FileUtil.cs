@@ -108,6 +108,7 @@ namespace DLD.Utility
 
 			return false;
 		}
+
 		/// <summary>
 		/// Does string end in an image file type that Unity supports?
 		/// (psd, jpg, gif, png, tif, tga, bmp, dds, exr, iff, pict)

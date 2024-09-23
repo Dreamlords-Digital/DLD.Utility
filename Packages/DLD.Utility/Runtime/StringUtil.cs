@@ -1,8 +1,10 @@
 // COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using UnityEngine;
 
 namespace DLD.Utility
 {
@@ -244,6 +246,163 @@ namespace DLD.Utility
 			}
 
 			return true;
+		}
+
+		static readonly char[] Letters =
+		{
+			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+		};
+
+		static readonly char[] WhiteSpace = { ' ', '\t' };
+		static readonly char[] WhiteSpaceWithNewline = { ' ', '\t', '\n', '\r' };
+		static readonly char[] Newline = { '\n', '\r' };
+
+		public static bool HasWhiteSpace(this string text)
+		{
+			return text.IndexOfAny(WhiteSpace) > -1;
+		}
+
+		public static bool PreviousWordHasLetters(this string text, int idx)
+		{
+			int startIdx = 0;
+
+			int foundStartingSpaceIdx = 0;
+			while (startIdx < idx)
+			{
+				int tryFoundStartingSpaceIdx = text.IndexOfAny(WhiteSpace, startIdx);
+				if (tryFoundStartingSpaceIdx < idx)
+				{
+					foundStartingSpaceIdx = tryFoundStartingSpaceIdx;
+				}
+				else
+				{
+					break;
+				}
+				startIdx = foundStartingSpaceIdx + 1;
+			}
+
+			if (foundStartingSpaceIdx >= idx)
+			{
+				foundStartingSpaceIdx = 0;
+			}
+
+			int foundLetterIdx = text.IndexOfAny(Letters, foundStartingSpaceIdx);
+			return foundLetterIdx != -1 && foundLetterIdx < idx;
+		}
+
+		public static bool NextWordHasLetters(this string text, int idx)
+		{
+			while (char.IsWhiteSpace(text[idx]) &&
+			       idx + 1 < text.Length)
+			{
+				idx += 1;
+			}
+
+			int nextSpaceIdx = text.IndexOfAny(WhiteSpaceWithNewline, idx+1);
+			if (nextSpaceIdx == -1)
+			{
+				return text.IndexOfAny(Letters, idx) != -1;
+			}
+
+			int foundLetterIdx = text.IndexOfAny(Letters, idx);
+			return foundLetterIdx != -1 && foundLetterIdx < nextSpaceIdx;
+		}
+
+		public static bool NoMoreWordsAfter(this string text, int idx)
+		{
+			int i = idx + 1;
+			while (i < text.Length && char.IsWhiteSpace(text[i]))
+			{
+				i += 1;
+			}
+
+			return i >= text.Length;
+		}
+
+		public static ushort GetNewlineCountUntilNextWord(this string text, int idx)
+		{
+			ushort newlines = 0;
+			for (int i = idx; i < text.Length; ++i)
+			{
+				if (text[i] == '\n')
+				{
+					++newlines;
+				}
+				else if (!char.IsWhiteSpace(text[i]))
+				{
+					break;
+				}
+			}
+
+			return newlines;
+		}
+
+		public static void GetWords(this string text, IList<(string word, ushort newlines)> outputWords)
+		{
+			int idx = 0;
+			int startIdx = 0;
+			int lastWordStartIdx = -1;
+			while (idx < text.Length)
+			{
+				// jump to the first non-whitespace
+				while (idx < text.Length && char.IsWhiteSpace(text[idx]))
+				{
+					idx += 1;
+				}
+
+				int nextSpaceIdx = text.IndexOfAny(WhiteSpaceWithNewline, idx);
+				if (nextSpaceIdx == -1)
+				{
+					break;
+				}
+
+				if (startIdx == lastWordStartIdx && lastWordStartIdx >= 0)
+				{
+					startIdx = idx;
+				}
+				while (startIdx < text.Length && char.IsWhiteSpace(text[startIdx]))
+				{
+					startIdx += 1;
+				}
+
+				bool nextWordHasLetters = text.NextWordHasLetters(nextSpaceIdx);
+				bool noMoreWordsAfter = text.NoMoreWordsAfter(nextSpaceIdx);
+				if (nextWordHasLetters || noMoreWordsAfter)
+				{
+					string nextWord = text.Substring(startIdx, nextSpaceIdx - startIdx);
+
+					var chars = new StringBuilder(nextWord.Length);
+					for (int i = 0; i < nextWord.Length; ++i)
+					{
+						if (i > 0 && char.IsWhiteSpace(nextWord[i - 1]) && char.IsWhiteSpace(nextWord[i]))
+						{
+							continue;
+						}
+						chars.Append(nextWord[i]);
+					}
+
+					// from nextSpaceIdx to the next non-whitespace character, count how many newlines there are
+					ushort newlines = text.GetNewlineCountUntilNextWord(nextSpaceIdx);
+
+					string newProperNextWord = chars.ToString();
+					outputWords.Add((newProperNextWord, newlines));
+					startIdx = nextSpaceIdx + 1;
+					lastWordStartIdx = startIdx;
+				}
+				idx = nextSpaceIdx + 1;
+			}
+
+			if (startIdx < text.Length)
+			{
+				string finalWord = text.Substring(startIdx).Trim();
+				if (!string.IsNullOrWhiteSpace(finalWord))
+				{
+					outputWords.Add((finalWord, 0));
+				}
+			}
 		}
 
 		public static int Count(this string text, char charToCount)
