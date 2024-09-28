@@ -176,7 +176,7 @@ namespace DLD.Utility.Tests
 		{
 			string text = "Placeholder 2";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(1, words.Count);
@@ -191,7 +191,7 @@ namespace DLD.Utility.Tests
 		{
 			string text = "Placeholder 2 Test Game";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(3, words.Count);
@@ -208,11 +208,92 @@ namespace DLD.Utility.Tests
 		}
 
 		[Test]
+		public void GetWords_WithTwoLetterWord_Works()
+		{
+			string text = "Wait between 15 to 30 seconds";
+
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(4, words.Count);
+
+			Assert.AreEqual("Wait", words[0].word);
+			Assert.AreEqual("between 15", words[1].word);
+			Assert.AreEqual("to 30", words[2].word);
+			Assert.AreEqual("seconds", words[3].word);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithTwoLetterWord2_Works()
+		{
+			string text = "Move to random spot within 2 tiles";
+
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(6, words.Count);
+
+			Assert.AreEqual("Move", words[0].word);
+			Assert.AreEqual("to", words[1].word);
+			Assert.AreEqual("random", words[2].word);
+			Assert.AreEqual("spot", words[3].word);
+			Assert.AreEqual("within 2", words[4].word);
+			Assert.AreEqual("tiles", words[5].word);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
+		public void GetWords_WithAmpersand_Works()
+		{
+			string text = "Is near & has line-of-sight to a living player character by 15 tiles or less?";
+
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
+			text.GetWords(words);
+
+			Assert.AreEqual(14, words.Count);
+
+			Assert.AreEqual("Is", words[0].word);
+			Assert.AreEqual("near", words[1].word);
+			Assert.AreEqual("&", words[2].word);
+			Assert.AreEqual("has", words[3].word);
+			Assert.AreEqual("line-of-sight", words[4].word);
+			Assert.AreEqual("to", words[5].word);
+			Assert.AreEqual("a", words[6].word);
+			Assert.AreEqual("living", words[7].word);
+			Assert.AreEqual("player", words[8].word);
+			Assert.AreEqual("character", words[9].word);
+			Assert.AreEqual("by 15", words[10].word);
+			Assert.AreEqual("tiles", words[11].word);
+			Assert.AreEqual("or", words[12].word);
+			Assert.AreEqual("less?", words[13].word);
+
+			Assert.AreEqual(0, words[0].newlines);
+			Assert.AreEqual(0, words[1].newlines);
+			Assert.AreEqual(0, words[2].newlines);
+			Assert.AreEqual(0, words[3].newlines);
+			Assert.AreEqual(0, words[4].newlines);
+			Assert.AreEqual(0, words[5].newlines);
+			Assert.AreEqual(0, words[6].newlines);
+			Assert.AreEqual(0, words[7].newlines);
+			Assert.AreEqual(0, words[8].newlines);
+			Assert.AreEqual(0, words[9].newlines);
+			Assert.AreEqual(0, words[10].newlines);
+			Assert.AreEqual(0, words[11].newlines);
+			Assert.AreEqual(0, words[12].newlines);
+			Assert.AreEqual(0, words[13].newlines);
+
+			words.ReleaseToPool();
+		}
+
+		[Test]
 		public void GetWords_WithNewlines_Works()
 		{
 			string text = "Placeholder 2\n\nTest Game";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(3, words.Count);
@@ -233,7 +314,7 @@ namespace DLD.Utility.Tests
 		{
 			string text = "Placeholder 3\n2nd Line";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(3, words.Count);
@@ -254,7 +335,7 @@ namespace DLD.Utility.Tests
 		{
 			string text = "Placeholder 2 Test Game     ";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(3, words.Count);
@@ -275,7 +356,7 @@ namespace DLD.Utility.Tests
 		{
 			string text = "         Placeholder 2 Test Game";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(3, words.Count);
@@ -296,7 +377,7 @@ namespace DLD.Utility.Tests
 		{
 			string text = "         Placeholder      2   Test  Game    ";
 
-			var words = IoC.GetFromPool<PooledList<(string word, ushort newlines)>>();
+			var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
 			text.GetWords(words);
 
 			Assert.AreEqual(3, words.Count);

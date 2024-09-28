@@ -256,10 +256,15 @@ namespace DLD.Utility
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 		};
 
+		// Note: We purposefully do not include newlines here.
 		static readonly char[] WhiteSpace = { ' ', '\t' };
+
 		static readonly char[] WhiteSpaceWithNewline = { ' ', '\t', '\n', '\r' };
 		static readonly char[] Newline = { '\n', '\r' };
 
+		/// <summary>
+		/// If string has spaces or tabs. Does not count newlines as whitespace.
+		/// </summary>
 		public static bool HasWhiteSpace(this string text)
 		{
 			return text.IndexOfAny(WhiteSpace) > -1;
@@ -307,8 +312,15 @@ namespace DLD.Utility
 				return text.IndexOfAny(Letters, idx) != -1;
 			}
 
-			int foundLetterIdx = text.IndexOfAny(Letters, idx);
-			return foundLetterIdx != -1 && foundLetterIdx < nextSpaceIdx;
+			for (int i = idx; i < nextSpaceIdx; ++i)
+			{
+				if (!char.IsDigit(text[i]))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public static bool NoMoreWordsAfter(this string text, int idx)
@@ -322,9 +334,9 @@ namespace DLD.Utility
 			return i >= text.Length;
 		}
 
-		public static ushort GetNewlineCountUntilNextWord(this string text, int idx)
+		public static byte GetNewlineCountUntilNextWord(this string text, int idx)
 		{
-			ushort newlines = 0;
+			byte newlines = 0;
 			for (int i = idx; i < text.Length; ++i)
 			{
 				if (text[i] == '\n')
@@ -340,7 +352,7 @@ namespace DLD.Utility
 			return newlines;
 		}
 
-		public static void GetWords(this string text, IList<(string word, ushort newlines)> outputWords)
+		public static void GetWords(this string text, IList<(string word, byte newlines)> outputWords, string leadingIndent = null)
 		{
 			int idx = 0;
 			int startIdx = 0;
@@ -359,7 +371,7 @@ namespace DLD.Utility
 					break;
 				}
 
-				if (startIdx == lastWordStartIdx && lastWordStartIdx >= 0)
+				if (startIdx != lastWordStartIdx && lastWordStartIdx >= 0)
 				{
 					startIdx = idx;
 				}
@@ -370,6 +382,7 @@ namespace DLD.Utility
 
 				bool nextWordHasLetters = text.NextWordHasLetters(nextSpaceIdx);
 				bool noMoreWordsAfter = text.NoMoreWordsAfter(nextSpaceIdx);
+
 				if (nextWordHasLetters || noMoreWordsAfter)
 				{
 					string nextWord = text.Substring(startIdx, nextSpaceIdx - startIdx);
@@ -385,9 +398,13 @@ namespace DLD.Utility
 					}
 
 					// from nextSpaceIdx to the next non-whitespace character, count how many newlines there are
-					ushort newlines = text.GetNewlineCountUntilNextWord(nextSpaceIdx);
+					byte newlines = text.GetNewlineCountUntilNextWord(nextSpaceIdx);
 
 					string newProperNextWord = chars.ToString();
+					if (outputWords.Count == 0 && !string.IsNullOrEmpty(leadingIndent))
+					{
+						newProperNextWord = newProperNextWord.Insert(0, leadingIndent);
+					}
 					outputWords.Add((newProperNextWord, newlines));
 					startIdx = nextSpaceIdx + 1;
 					lastWordStartIdx = startIdx;
