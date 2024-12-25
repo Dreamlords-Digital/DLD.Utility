@@ -243,22 +243,17 @@ namespace DLD.Utility.Tests
 
 		static void UsePoolableOwnerCounter()
 		{
-			var instance1GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
+			using var instance1GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instance1GotWhileInThread.CurrentOwnerCount);
 
-			var instance2GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
+			using var instance2GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instance2GotWhileInThread.CurrentOwnerCount);
 
-			var instance3GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
+			using var instance3GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instance3GotWhileInThread.CurrentOwnerCount);
 
-			var instance4GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
+			using var instance4GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instance4GotWhileInThread.CurrentOwnerCount);
-
-			instance1GotWhileInThread.Dispose();
-			instance2GotWhileInThread.Dispose();
-			instance3GotWhileInThread.Dispose();
-			instance4GotWhileInThread.Dispose();
 		}
 
 		static void UsePoolableOwnerCounter2()
