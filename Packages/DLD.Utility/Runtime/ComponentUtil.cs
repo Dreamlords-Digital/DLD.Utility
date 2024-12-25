@@ -96,7 +96,8 @@ namespace DLD.Utility
 
 		public static void SetLayer(this IReadOnlyList<Collider> colliders, LayerMask newLayer)
 		{
-			int layerIntValue = newLayer.value.FindBitPosition();
+			// Note: despite passing in a LayerMask, we're only interested in the first layer assigned in the mask
+			int layerIntValue = newLayer.value.FindBitIndex();
 			for (int n = 0, len = colliders.Count; n < len; ++n)
 			{
 				colliders[n].gameObject.layer = layerIntValue;

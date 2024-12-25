@@ -8,18 +8,21 @@ namespace DLD.Utility
 		/// Given an int that represents a bitmask, find the position of the first bit that is set to 1.
 		/// </summary>
 		/// <param name="n">int value that we're checking.</param>
-		/// <returns>A value from 0 to 31.</returns>
+		/// <returns>
+		/// A value from 0 to 31. 0 means 1st bit.
+		/// If no bits are set to 1 (passed value is 0), this returns -1.
+		/// </returns>
 		/// <remarks>
 		/// If specified int is not power-of-two, we'll end up returning
-		/// the position of the first bit that is set,
+		/// the position of the first (lowest value) bit that is set,
 		/// ignoring the rest.
 		/// </remarks>
-		public static int FindBitPosition(this int n)
+		public static int FindBitIndex(this int n)
 		{
 			if (n == 0)
 			{
 				// value of 0, no bits set
-				return 0;
+				return -1;
 			}
 
 			int tryValue = 1;
@@ -51,6 +54,40 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void SetFlag(this ref int intToChange, int index, bool value)
+		{
+			if (index < 0 || index > 31)
+			{
+				return;
+			}
+
+			if (value)
+			{
+				intToChange = (intToChange | (1 << index));
+			}
+			else
+			{
+				intToChange = (intToChange & ~(1 << index));
+			}
+		}
+
+		public static void SetFlag(this ref uint intToChange, int index, bool value)
+		{
+			if (index < 0 || index > 31)
+			{
+				return;
+			}
+
+			if (value)
+			{
+				intToChange = (intToChange | (uint)(1 << index));
+			}
+			else
+			{
+				intToChange = (intToChange & (uint)~(1 << index));
+			}
+		}
+
 		public static bool GetFlag(this byte byteToGet, int index)
 		{
 			if (index < 0 || index > 7)
@@ -59,6 +96,16 @@ namespace DLD.Utility
 			}
 
 			return ((byteToGet & (1 << index)) != 0);
+		}
+
+		public static bool GetFlag(this int intToGet, int index)
+		{
+			if (index < 0 || index > 31)
+			{
+				return false;
+			}
+
+			return ((intToGet & (1 << index)) != 0);
 		}
 
 		static char GetHexValue(int i) => i < 10 ? (char) (i + 48) : (char) (i - 10 + 65);
