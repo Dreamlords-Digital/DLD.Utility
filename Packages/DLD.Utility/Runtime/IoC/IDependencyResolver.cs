@@ -158,8 +158,8 @@ namespace DLD.Utility
 		/// <para>The instance returned is either something that was created before
 		/// and re-used, or a newly created one (via the parameter-less constructor).</para>
 		/// <para>This method is thread-safe. Provided the rest of your code follows the rules
-		/// (call <see cref="IPooled.ReleaseToPool"/> on an <see cref="IPooled"/> object once finished using it, and
-		/// do not keep using it after calling <see cref="IPooled.ReleaseToPool"/>),
+		/// (call <see cref="IPooled.Dispose"/> on an <see cref="IPooled"/> object once finished using it, and
+		/// do not keep using it after calling <see cref="IPooled.Dispose"/>),
 		/// it's guaranteed that you are the only user of the instance you receive from this method.</para>
 		/// </summary>
 		/// <typeparam name="T">data type of the instance to get</typeparam>
@@ -174,8 +174,8 @@ namespace DLD.Utility
 		/// <para>The instance returned is either something that was created before
 		/// and re-used, or a newly created one (via the default constructor).</para>
 		/// <para>This method is thread-safe. Provided the rest of your code follows the rules
-		/// (call <see cref="IPooled.ReleaseToPool"/> on an <see cref="IPooled"/> object once finished using it, and
-		/// do not keep using it after calling <see cref="IPooled.ReleaseToPool"/>), it's guaranteed
+		/// (call <see cref="IPooled.Dispose"/> on an <see cref="IPooled"/> object once finished using it, and
+		/// do not keep using it after calling <see cref="IPooled.Dispose"/>), it's guaranteed
 		/// that you are the only user of the instance you receive from this method.</para>
 		/// </summary>
 		/// <param name="id">ID of the pool to get from. Use this to create separate pools for
@@ -196,8 +196,8 @@ namespace DLD.Utility
 		/// created via the supplied <see cref="System.Func{T}"/> callback.</para>
 		///
 		/// <para>This method is thread-safe. Provided the rest of your code follows the rules
-		/// (call <see cref="IPooled.ReleaseToPool"/> on an <see cref="IPooled"/> object once finished using it, and
-		/// do not keep using it after calling <see cref="IPooled.ReleaseToPool"/>), it's guaranteed
+		/// (call <see cref="IPooled.Dispose"/> on an <see cref="IPooled"/> object once finished using it, and
+		/// do not keep using it after calling <see cref="IPooled.Dispose"/>), it's guaranteed
 		/// that you are the only user of the instance you receive from this method.</para>
 		/// </summary>
 		/// <param name="constructor">should return a new instance of the object</param>
@@ -218,8 +218,8 @@ namespace DLD.Utility
 		/// created via the supplied <see cref="System.Func{T}"/> callback.</para>
 		///
 		/// <para>This method is thread-safe. Provided the rest of your code follows the rules
-		/// (call <see cref="IPooled.ReleaseToPool"/> on an <see cref="IPooled"/> object once finished using it, and
-		/// do not keep using it after calling <see cref="IPooled.ReleaseToPool"/>), it's guaranteed
+		/// (call <see cref="IPooled.Dispose"/> on an <see cref="IPooled"/> object once finished using it, and
+		/// do not keep using it after calling <see cref="IPooled.Dispose"/>), it's guaranteed
 		/// that you are the only user of the instance you receive from this method.</para>
 		/// </summary>
 		/// <param name="id">ID of the pool to get from. Use this to create separate pools for
@@ -239,8 +239,8 @@ namespace DLD.Utility
 		/// or you want to instantiate a concrete type,
 		/// but get an interface in return.</para>
 		/// <para>This method is thread-safe. Provided the rest of your code follows the rules
-		/// (call <see cref="IPooled.ReleaseToPool"/> on an <see cref="IPooled"/> object once finished using it, and
-		/// do not keep using it after calling <see cref="IPooled.ReleaseToPool"/>), it's guaranteed
+		/// (call <see cref="IPooled.Dispose"/> on an <see cref="IPooled"/> object once finished using it, and
+		/// do not keep using it after calling <see cref="IPooled.Dispose"/>), it's guaranteed
 		/// that you are the only user of the instance you receive from this method.</para>
 		/// </summary>
 		/// <param name="typeToGet">data type of the instance to get</param>

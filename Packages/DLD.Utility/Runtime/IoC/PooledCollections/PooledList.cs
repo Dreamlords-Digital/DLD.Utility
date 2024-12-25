@@ -29,7 +29,7 @@ namespace DLD.Utility
 			get { return !_used; }
 		}
 
-		public void ReleaseToPool()
+		public void Dispose()
 		{
 			_used = false;
 		}
@@ -55,7 +55,7 @@ namespace DLD.Utility
 			get { return !_used; }
 		}
 
-		public void ReleaseToPool()
+		public void Dispose()
 		{
 			Clear();
 			_used = false;
@@ -71,7 +71,7 @@ namespace DLD.Utility
 		{
 			for (int n = 0, count = Count; n < count; ++n)
 			{
-				this[n]?.ReleaseToPool();
+				this[n]?.Dispose();
 			}
 
 			base.Clear();
@@ -86,7 +86,7 @@ namespace DLD.Utility
 
 			if (releaseToPool)
 			{
-				this[index]?.ReleaseToPool();
+				this[index]?.Dispose();
 			}
 
 			base.RemoveAt(index);
@@ -122,7 +122,7 @@ namespace DLD.Utility
 			{
 				for (int n = index; n < index + count; ++n)
 				{
-					this[n]?.ReleaseToPool();
+					this[n]?.Dispose();
 				}
 			}
 

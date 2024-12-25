@@ -30,7 +30,7 @@ namespace DLD.Utility
 			get { return !_used; }
 		}
 
-		public void ReleaseToPool()
+		public void Dispose()
 		{
 			_used = false;
 		}

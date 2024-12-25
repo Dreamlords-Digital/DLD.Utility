@@ -26,12 +26,12 @@ namespace DLD.Utility.Tests
 
 			// this will mark the instance as usable again
 			// the next time IoC.GetFromPool<>() is called
-			intList.ReleaseToPool();
+			intList.Dispose();
 
 			// -------------------------------------------------------
 
 			// the instance we get should be same as the earlier one
-			// since ReleaseToPool() was called
+			// since Dispose() was called
 			var otherIntList = IoC.GetFromPool<PooledList<int>>();
 
 			Assert.AreSame(intList, otherIntList);
@@ -63,12 +63,12 @@ namespace DLD.Utility.Tests
 
 			// this will mark the instance as usable again
 			// the next time IoC.GetFromPool<>() is called
-			intStack.ReleaseToPool();
+			intStack.Dispose();
 
 			// -------------------------------------------------------
 
 			// the instance we get should be same as the earlier one
-			// since ReleaseToPool() was called
+			// since Dispose() was called
 			var otherIntStack = IoC.GetFromPool<PooledStack<int>>();
 
 			Assert.AreSame(intStack, otherIntStack);
@@ -100,12 +100,12 @@ namespace DLD.Utility.Tests
 
 			// this will mark the instance as usable again
 			// the next time IoC.GetFromPool<>() is called
-			intQueue.ReleaseToPool();
+			intQueue.Dispose();
 
 			// -------------------------------------------------------
 
 			// the instance we get should be same as the earlier one
-			// since ReleaseToPool() was called
+			// since Dispose() was called
 			var otherIntQueue = IoC.GetFromPool<PooledQueue<int>>();
 
 			Assert.AreSame(intQueue, otherIntQueue);
@@ -137,12 +137,12 @@ namespace DLD.Utility.Tests
 
 			// this will mark the instance as usable again
 			// the next time IoC.GetFromPool<>() is called
-			intHashSet.ReleaseToPool();
+			intHashSet.Dispose();
 
 			// -------------------------------------------------------
 
 			// the instance we get should be same as the earlier one
-			// since ReleaseToPool() was called
+			// since Dispose() was called
 			var otherIntHashSet = IoC.GetFromPool<PooledHashSet<int>>();
 
 			Assert.AreSame(intHashSet, otherIntHashSet);
@@ -174,12 +174,12 @@ namespace DLD.Utility.Tests
 
 			// this will mark the instance as usable again
 			// the next time IoC.GetFromPool<>() is called
-			stringIntDictionary.ReleaseToPool();
+			stringIntDictionary.Dispose();
 
 			// -------------------------------------------------------
 
 			// the instance we get should be same as the earlier one
-			// since ReleaseToPool() was called
+			// since Dispose() was called
 			var otherStringIntDictionary = IoC.GetFromPool<PooledDictionary<string, int>>();
 
 			Assert.AreSame(stringIntDictionary, otherStringIntDictionary);

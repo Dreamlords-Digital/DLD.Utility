@@ -183,7 +183,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual("Placeholder 2", words[0].word);
 			Assert.AreEqual(0, words[0].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -204,7 +204,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -222,7 +222,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual("to 30", words[2].word);
 			Assert.AreEqual("seconds", words[3].word);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -242,7 +242,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual("within 2", words[4].word);
 			Assert.AreEqual("tiles", words[5].word);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -285,7 +285,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[12].newlines);
 			Assert.AreEqual(0, words[13].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -306,7 +306,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -327,7 +327,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -348,7 +348,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -369,7 +369,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 
 		[Test]
@@ -390,7 +390,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 
-			words.ReleaseToPool();
+			words.Dispose();
 		}
 	}
 }

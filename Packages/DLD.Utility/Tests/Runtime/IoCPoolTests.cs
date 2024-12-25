@@ -1,5 +1,6 @@
 ﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -40,7 +41,7 @@ namespace DLD.Utility.Tests
 
 			public bool IsUnused => !_isUsed;
 
-			public void ReleaseToPool()
+			public void Dispose()
 			{
 				_isUsed = false;
 			}
@@ -60,7 +61,9 @@ namespace DLD.Utility.Tests
 
 			public int CurrentOwnerCount => _currentOwnerCount;
 
-			public void ReleaseToPool()
+			public Guid Id { get; } = Guid.NewGuid();
+
+			public void Dispose()
 			{
 				_currentOwnerCount -= 1;
 				Assert.AreEqual(0, _currentOwnerCount);
@@ -81,7 +84,7 @@ namespace DLD.Utility.Tests
 
 			public bool IsUnused => !_isUsed;
 
-			public void ReleaseToPool()
+			public void Dispose()
 			{
 				_isUsed = false;
 			}
@@ -139,6 +142,42 @@ namespace DLD.Utility.Tests
 			Assert.AreNotSame(IoC.GetCurrentResolver(), _originalResolver);
 		}
 
+		[Test(Description = "Ensure that Dispose is called automatically when using statement is used and variable is out-of-scope.")]
+		public void Dispose_ForPooled_GetsCalledInUsingStatement()
+		{
+			Guid firstId;
+			Guid secondId;
+			{
+				using var fromPool1 = IoC.GetFromPool<PoolableOwnerCounter>();
+				Assert.AreNotEqual(new Guid(), fromPool1.Id); // ensure it isn't just a blank guid value
+
+				firstId = fromPool1.Id;
+				Assert.AreEqual(1, fromPool1.CurrentOwnerCount);
+			}
+			{
+				using var fromPool2 = IoC.GetFromPool<PoolableOwnerCounter>();
+				Assert.AreEqual(1, fromPool2.CurrentOwnerCount);
+				Assert.AreEqual(firstId, fromPool2.Id); // we should get the original one
+
+				// this should be a new instance now
+				using var fromPool3 = IoC.GetFromPool<PoolableOwnerCounter>();
+				secondId = fromPool3.Id;
+				Assert.AreEqual(1, fromPool3.CurrentOwnerCount);
+				Assert.AreNotEqual(firstId, fromPool3.Id);
+			}
+			{
+				using var fromPool4 = IoC.GetFromPool<PoolableOwnerCounter>();
+				Assert.AreEqual(1, fromPool4.CurrentOwnerCount);
+				Assert.AreEqual(firstId, fromPool4.Id);
+				Assert.AreNotEqual(secondId, fromPool4.Id);
+
+				using var fromPool5 = IoC.GetFromPool<PoolableOwnerCounter>();
+				Assert.AreEqual(1, fromPool5.CurrentOwnerCount);
+				Assert.AreNotEqual(firstId, fromPool5.Id);
+				Assert.AreEqual(secondId, fromPool5.Id);
+			}
+		}
+
 		[Test(Description = "Ensure the sum code in our test DLD.Utility.Tests.IoCPoolTests.Sum class works as expected.")]
 		public void Add_ComesFromPool_CurrentSumIsCorrect()
 		{
@@ -147,7 +186,7 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(2, fromPool1.CurrentSum);
 			fromPool1.Add(7);
 			Assert.AreEqual(9, fromPool1.CurrentSum);
-			fromPool1.ReleaseToPool();
+			fromPool1.Dispose();
 			fromPool1.Clear();
 			Assert.AreEqual(0, fromPool1.CurrentSum);
 		}
@@ -173,11 +212,11 @@ namespace DLD.Utility.Tests
 
 			var instanceInMainThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceInMainThread.CurrentOwnerCount);
-			instanceInMainThread.ReleaseToPool();
+			instanceInMainThread.Dispose();
 
 			instanceInMainThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceInMainThread.CurrentOwnerCount);
-			instanceInMainThread.ReleaseToPool();
+			instanceInMainThread.Dispose();
 
 			// let the threads run
 			// 1 second should be more than enough
@@ -185,7 +224,7 @@ namespace DLD.Utility.Tests
 
 			instanceInMainThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceInMainThread.CurrentOwnerCount);
-			instanceInMainThread.ReleaseToPool();
+			instanceInMainThread.Dispose();
 
 			// ensure all threads are finished
 			thread1.Join();
@@ -197,7 +236,7 @@ namespace DLD.Utility.Tests
 
 			instanceInMainThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceInMainThread.CurrentOwnerCount);
-			instanceInMainThread.ReleaseToPool();
+			instanceInMainThread.Dispose();
 
 			Debug.Log(_unitTestResolver.ToString());
 		}
@@ -216,41 +255,41 @@ namespace DLD.Utility.Tests
 			var instance4GotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instance4GotWhileInThread.CurrentOwnerCount);
 
-			instance1GotWhileInThread.ReleaseToPool();
-			instance2GotWhileInThread.ReleaseToPool();
-			instance3GotWhileInThread.ReleaseToPool();
-			instance4GotWhileInThread.ReleaseToPool();
+			instance1GotWhileInThread.Dispose();
+			instance2GotWhileInThread.Dispose();
+			instance3GotWhileInThread.Dispose();
+			instance4GotWhileInThread.Dispose();
 		}
 
 		static void UsePoolableOwnerCounter2()
 		{
 			var instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 
 			instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 
 			instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 
 			instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 
 			instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 
 			instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 
 			instanceGotWhileInThread = IoC.GetFromPool<PoolableOwnerCounter>();
 			Assert.AreEqual(1, instanceGotWhileInThread.CurrentOwnerCount);
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 		}
 
 		[Test(Description = "Ensure that a thread that calls IoC.GetFromPool has sole control of the instance returned.")]
@@ -260,7 +299,7 @@ namespace DLD.Utility.Tests
 			instanceFromMainThread.Add(100);
 			Assert.AreEqual(100, instanceFromMainThread.CurrentSum);
 			instanceFromMainThread.Clear();
-			instanceFromMainThread.ReleaseToPool(); // allow instance to be reused, it will be used by one of the threads
+			instanceFromMainThread.Dispose(); // allow instance to be reused, it will be used by one of the threads
 
 			// we expect these threads to get different pooled objects
 			// or they use the same pooled object, but one at a time
@@ -414,10 +453,10 @@ namespace DLD.Utility.Tests
 			instanceGotWhileInThread.Append(argAsString);
 			instanceGotWhileInThread.Append(argAsString);
 
-			instanceGotWhileInThread.ReleaseToPool();
+			instanceGotWhileInThread.Dispose();
 		}
 
-		[Test(Description = "Ensure that IPooled.IsUnused returns the correct value before and after calling IPooled.ReleaseToPool.")]
+		[Test(Description = "Ensure that IPooled.IsUnused returns the correct value before and after calling IPooled.Dispose.")]
 		public void IsUnused_WhenUsingFromPool_IsCorrect()
 		{
 			// { used }
@@ -434,7 +473,7 @@ namespace DLD.Utility.Tests
 			// ---------------------------
 
 			// {1:unused} {2: used }
-			fromPool1.ReleaseToPool();
+			fromPool1.Dispose();
 			Assert.IsTrue(fromPool1.IsUnused);
 
 			// {1: used } {2: used }
@@ -465,7 +504,7 @@ namespace DLD.Utility.Tests
 			// ---------------------------
 
 			// {1: used } {2: used } {3:unused}
-			fromPool4.ReleaseToPool();
+			fromPool4.Dispose();
 			Assert.IsTrue(fromPool4.IsUnused);
 
 			Assert.IsFalse(fromPool1.IsUnused);
@@ -491,7 +530,7 @@ namespace DLD.Utility.Tests
 			// ---------------------------
 
 			// {1: used } {2:unused} {3: used }
-			fromPool2.ReleaseToPool();
+			fromPool2.Dispose();
 
 			Assert.IsFalse(fromPool1.IsUnused);
 			Assert.IsTrue(fromPool2.IsUnused);
@@ -502,11 +541,11 @@ namespace DLD.Utility.Tests
 			// ---------------------------
 
 			// {1:unused} {2:unused} {3:unused}
-			fromPool1.ReleaseToPool();
-			fromPool2.ReleaseToPool();
-			fromPool3.ReleaseToPool();
-			fromPool4.ReleaseToPool();
-			fromPool5.ReleaseToPool();
+			fromPool1.Dispose();
+			fromPool2.Dispose();
+			fromPool3.Dispose();
+			fromPool4.Dispose();
+			fromPool5.Dispose();
 
 			Assert.IsTrue(fromPool1.IsUnused);
 			Assert.IsTrue(fromPool2.IsUnused);
