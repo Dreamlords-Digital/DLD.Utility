@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.dreamlordsdigital.buildinfoutil": {
+      "version": "file:DLD.BuildInfoUtil",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.dreamlordsdigital.utility": "0.0.1"
+      }
+    },
     "com.dreamlordsdigital.easing": {
       "version": "file:Easing",
       "depth": 0,

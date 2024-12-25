@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.dreamlordsdigital.buildinfoutil": "file:./DLD.BuildInfoUtil",
     "com.dreamlordsdigital.easing": "file:./Easing",
     "com.dreamlordsdigital.fuzzystring": "file:./FuzzyString",
     "com.dreamlordsdigital.imgui": "file:./DLD.IMGUI",

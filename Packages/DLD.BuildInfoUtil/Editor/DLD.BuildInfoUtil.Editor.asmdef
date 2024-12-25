@@ -1,0 +1,19 @@
+{
+    "name": "DLD.BuildInfoUtil.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f8314c58c0b768b419973ab5ee9a4619",
+        "GUID:bdaa1646cd5e8664eb26430a8c4fdb43"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

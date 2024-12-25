@@ -1,0 +1,19 @@
+{
+  "name": "com.dreamlordsdigital.buildinfoutil",
+  "version": "0.0.1",
+  "displayName": "DLD Build Info Utility",
+  "description": "Allows you to show the build timestamp and the git commit hash (upon time of building) in the runtime GUI.",
+  "unity": "2018.1",
+  "dependencies": {
+    "com.dreamlordsdigital.utility": "0.0.1"
+  },
+  "keywords": [
+    "utility",
+    "library",
+    "git"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}
