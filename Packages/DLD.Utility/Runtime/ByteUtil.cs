@@ -4,6 +4,36 @@ namespace DLD.Utility
 {
 	public static class ByteUtil
 	{
+		/// <summary>
+		/// Given an int that represents a bitmask, find the position of the first bit that is set to 1.
+		/// </summary>
+		/// <param name="n">int value that we're checking.</param>
+		/// <returns>A value from 0 to 31.</returns>
+		/// <remarks>
+		/// If specified int is not power-of-two, we'll end up returning
+		/// the position of the first bit that is set,
+		/// ignoring the rest.
+		/// </remarks>
+		public static int FindBitPosition(this int n)
+		{
+			if (n == 0)
+			{
+				// value of 0, no bits set
+				return 0;
+			}
+
+			int tryValue = 1;
+			int position = 1;
+
+			while ((tryValue & n) == 0 && position <= 32)
+			{
+				// try next power-of-two value
+				tryValue = 1 << position++;
+			}
+
+			return position - 1;
+		}
+
 		public static void SetFlag(this ref byte byteToChange, int index, bool value)
 		{
 			if (index < 0 || index > 7)
