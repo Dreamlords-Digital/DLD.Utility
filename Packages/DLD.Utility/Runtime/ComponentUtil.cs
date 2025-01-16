@@ -44,7 +44,7 @@ namespace DLD.Utility
 			}
 		}
 
-		public static bool IsActiveSelf(this IReadOnlyList<Component> c)
+		public static bool AreAllActiveSelf(this IReadOnlyList<Component> c)
 		{
 			for (int n = 0, len = c.Count; n < len; ++n)
 			{
@@ -60,6 +60,75 @@ namespace DLD.Utility
 			}
 
 			return true;
+		}
+
+		public static bool IsAnyActiveSelf(this IReadOnlyList<Component> c)
+		{
+			for (int n = 0, len = c.Count; n < len; ++n)
+			{
+				if (c[n] == null)
+				{
+					continue;
+				}
+
+				if (c[n].gameObject.activeSelf)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static void SetEnabled(this IReadOnlyList<MonoBehaviour> b, bool enabled)
+		{
+			for (int n = 0, len = b.Count; n < len; ++n)
+			{
+				if (b[n] == null)
+				{
+#if UNITY_EDITOR
+					Debug.LogWarning($"Can't SetEnabled MonoBehaviour #{n+1}, null");
+#endif
+					continue;
+				}
+				b[n].enabled = enabled;
+			}
+		}
+
+		public static bool AreAllEnabled(this IReadOnlyList<MonoBehaviour> b)
+		{
+			for (int n = 0, len = b.Count; n < len; ++n)
+			{
+				if (b[n] == null)
+				{
+					continue;
+				}
+
+				if (!b[n].enabled)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public static bool IsAnyEnabled(this IReadOnlyList<MonoBehaviour> b)
+		{
+			for (int n = 0, len = b.Count; n < len; ++n)
+			{
+				if (b[n] == null)
+				{
+					continue;
+				}
+
+				if (b[n].enabled)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		/// <summary>
