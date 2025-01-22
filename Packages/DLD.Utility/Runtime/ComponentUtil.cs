@@ -80,14 +80,14 @@ namespace DLD.Utility
 			return false;
 		}
 
-		public static void SetEnabled(this IReadOnlyList<MonoBehaviour> b, bool enabled)
+		public static void SetEnabled(this IReadOnlyList<Behaviour> b, bool enabled)
 		{
 			for (int n = 0, len = b.Count; n < len; ++n)
 			{
 				if (b[n] == null)
 				{
 #if UNITY_EDITOR
-					Debug.LogWarning($"Can't SetEnabled MonoBehaviour #{n+1}, null");
+					Debug.LogWarning($"Can't SetEnabled Behaviour #{n+1}, null");
 #endif
 					continue;
 				}
@@ -95,7 +95,7 @@ namespace DLD.Utility
 			}
 		}
 
-		public static bool AreAllEnabled(this IReadOnlyList<MonoBehaviour> b)
+		public static bool AreAllEnabled(this IReadOnlyList<Behaviour> b)
 		{
 			for (int n = 0, len = b.Count; n < len; ++n)
 			{
@@ -113,7 +113,7 @@ namespace DLD.Utility
 			return true;
 		}
 
-		public static bool IsAnyEnabled(this IReadOnlyList<MonoBehaviour> b)
+		public static bool IsAnyEnabled(this IReadOnlyList<Behaviour> b)
 		{
 			for (int n = 0, len = b.Count; n < len; ++n)
 			{
