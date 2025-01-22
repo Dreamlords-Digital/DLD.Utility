@@ -15,6 +15,22 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void SetPosition(this IReadOnlyList<RectTransform> r, Vector3 newPos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				r[n].position = newPos;
+			}
+		}
+
+		public static void SetPosition(this IReadOnlyList<Transform> r, Vector3 newPos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				r[n].position = newPos;
+			}
+		}
+
 		public static void SetXPercent(this RectTransform r, float x)
 		{
 			var anchorMin = r.anchorMin;
