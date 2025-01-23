@@ -61,6 +61,14 @@ namespace DLD.Utility
 			r.anchoredPosition = anchoredPosition;
 		}
 
+		public static void SetColor(this IReadOnlyList<UnityEngine.UI.Graphic> g, Color newColor)
+		{
+			for (int n = 0, len = g.Count; n < len; ++n)
+			{
+				g[n].color = newColor;
+			}
+		}
+
 		/// <summary>
 		/// Change the image's alpha, but keep its current rgb color value same.
 		/// </summary>
