@@ -69,6 +69,30 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void SetAlpha(this IReadOnlyList<CanvasGroup> c, float a)
+		{
+			for (int n = 0, len = c.Count; n < len; ++n)
+			{
+				c[n].alpha = a;
+			}
+		}
+
+		public static void SetInteractable(this IReadOnlyList<CanvasGroup> c, bool b)
+		{
+			for (int n = 0, len = c.Count; n < len; ++n)
+			{
+				c[n].interactable = b;
+			}
+		}
+
+		public static void SetBlocksRaycasts(this IReadOnlyList<CanvasGroup> c, bool b)
+		{
+			for (int n = 0, len = c.Count; n < len; ++n)
+			{
+				c[n].blocksRaycasts = b;
+			}
+		}
+
 		/// <summary>
 		/// Change the image's alpha, but keep its current rgb color value same.
 		/// </summary>
