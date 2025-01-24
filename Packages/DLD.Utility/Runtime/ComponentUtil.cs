@@ -131,6 +131,72 @@ namespace DLD.Utility
 			return false;
 		}
 
+		public static void SetPositionXY(this IReadOnlyList<Transform> r, Vector3 pos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				var newPos = r[n].position;
+				newPos.x = pos.x;
+				newPos.y = pos.y;
+				r[n].position = newPos;
+			}
+		}
+
+		public static void SetPositionXZ(this IReadOnlyList<Transform> r, Vector3 pos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				var newPos = r[n].position;
+				newPos.x = pos.x;
+				newPos.z = pos.z;
+				r[n].position = newPos;
+			}
+		}
+
+		public static void SetPositionYZ(this IReadOnlyList<Transform> r, Vector3 pos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				var newPos = r[n].position;
+				newPos.y = pos.y;
+				newPos.z = pos.z;
+				r[n].position = newPos;
+			}
+		}
+
+		public static void SetLocalPositionXY(this IReadOnlyList<Transform> r, Vector3 pos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				var newPos = r[n].localPosition;
+				newPos.x = pos.x;
+				newPos.y = pos.y;
+				r[n].localPosition = newPos;
+			}
+		}
+
+		public static void SetLocalPositionXZ(this IReadOnlyList<Transform> r, Vector3 pos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				var newPos = r[n].localPosition;
+				newPos.x = pos.x;
+				newPos.z = pos.z;
+				r[n].localPosition = newPos;
+			}
+		}
+
+		public static void SetLocalPositionYZ(this IReadOnlyList<Transform> r, Vector3 pos)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				var newPos = r[n].localPosition;
+				newPos.y = pos.y;
+				newPos.z = pos.z;
+				r[n].localPosition = newPos;
+			}
+		}
+
 		/// <summary>
 		/// Is GameObject tagged with any of the tags in the list?
 		/// </summary>
