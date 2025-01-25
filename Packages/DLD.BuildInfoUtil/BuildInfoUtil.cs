@@ -2,6 +2,7 @@
 
 #if !UNITY_EDITOR
 using System.IO;
+using UnityEngine;
 #endif
 
 namespace DLD.Utility
@@ -22,16 +23,14 @@ namespace DLD.Utility
 
 			if (string.IsNullOrEmpty(streamingAssetsPath))
 			{
-				Debug.LogWarning($"BuildInfoDisplay: Can't determine StreamingAssets path. Aborting. (platform: {Application.platform})", this);
-				enabled = false;
-				return;
+				Debug.LogWarning($"BuildInfoDisplay: Can't determine StreamingAssets path. Aborting. (platform: {Application.platform})");
+				return (null, null);
 			}
 
 			if (!Directory.Exists(streamingAssetsPath))
 			{
-				Debug.LogWarning($"BuildInfoDisplay: StreamingAssets directory not found: {streamingAssetsPath}", this);
-				enabled = false;
-				return;
+				Debug.LogWarning($"BuildInfoDisplay: StreamingAssets directory not found: {streamingAssetsPath}");
+				return (null, null);
 			}
 
 			string buildDateTimeFilePath = Path.Combine(streamingAssetsPath, BUILD_DATE_TIME_FILENAME);
