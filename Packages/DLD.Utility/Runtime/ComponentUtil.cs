@@ -262,11 +262,51 @@ namespace DLD.Utility
 			return layerMask.value == (layerMask.value | (1 << layerIdx));
 		}
 
+		/// <summary>
+		/// Get the filename out of the scenePath without the extension type.
+		/// </summary>
+		/// <remarks>
+		/// Given "Assets/Scenes/Others/Scene1.unity", this will return "Scene1".
+		/// </remarks>
 		public static string GetSceneNameFromPath(this string scenePath)
 		{
-			var begin = scenePath.LastIndexOf("/", StringComparison.Ordinal) + 1;
-			var end = scenePath.LastIndexOf(".", StringComparison.Ordinal);
+			int begin = scenePath.LastIndexOf("/", StringComparison.Ordinal) + 1;
+			int end = scenePath.LastIndexOf(".", StringComparison.Ordinal);
+
+			if (begin == -1)
+			{
+				begin = 0;
+			}
+
+			if (end == -1)
+			{
+				end = scenePath.Length;
+			}
+
 			return scenePath.Substring(begin, end - begin);
+		}
+
+		/// <summary>
+		/// Get the scene path that is suitable for use with <see cref="UnityEngine.SceneManagement.SceneManager.GetSceneByName"/>.
+		/// It will remove any "Assets/" in the beginning, and ".unity" at the end.
+		/// </summary>
+		/// <remarks>
+		/// Given "Assets/Scenes/Others/Scene1.unity", this will return "Scenes/Others/Scene1".
+		/// </remarks>
+		public static string GetScenePartialNameFromPath(this string scenePath)
+		{
+			if (scenePath.StartsWith("Assets/"))
+			{
+				int assetsLength = "Assets/".Length;
+				scenePath = scenePath.Substring(assetsLength);
+			}
+			if (scenePath.EndsWith(".unity"))
+			{
+				int extensionTypeLength = ".unity".Length;
+				scenePath = scenePath.Substring(0, scenePath.Length - extensionTypeLength);
+			}
+
+			return scenePath;
 		}
 	}
 }

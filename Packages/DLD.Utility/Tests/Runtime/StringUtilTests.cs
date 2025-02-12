@@ -372,5 +372,95 @@ namespace DLD.Utility.Tests
 			Assert.AreEqual(0, words[1].newlines);
 			Assert.AreEqual(0, words[2].newlines);
 		}
+
+		[Test]
+		public void GetSceneNameFromPath_Works()
+		{
+			string scenePath = "Assets/Scenes/Others/Scene1.unity";
+
+			string sceneName = scenePath.GetSceneNameFromPath();
+
+			Assert.AreEqual("Scene1", sceneName);
+		}
+
+		[Test]
+		public void GetSceneNameFromPath_AlreadyNoFileType_Works()
+		{
+			string scenePath = "Assets/Scenes/Others/Scene1";
+
+			string sceneName = scenePath.GetSceneNameFromPath();
+
+			Assert.AreEqual("Scene1", sceneName);
+		}
+
+		[Test]
+		public void GetSceneNameFromPath_AlreadyNoFolder_Works()
+		{
+			string scenePath = "Scene1.unity";
+
+			string sceneName = scenePath.GetSceneNameFromPath();
+
+			Assert.AreEqual("Scene1", sceneName);
+		}
+
+		[Test]
+		public void GetSceneNameFromPath_EndingWithDot_Works()
+		{
+			string scenePath = "Scene1.";
+
+			string sceneName = scenePath.GetSceneNameFromPath();
+
+			Assert.AreEqual("Scene1", sceneName);
+		}
+
+		[Test]
+		public void GetSceneNameFromPath_AlreadySceneName_Works()
+		{
+			string scenePath = "Scene1";
+
+			string sceneName = scenePath.GetSceneNameFromPath();
+
+			Assert.AreEqual("Scene1", sceneName);
+		}
+
+		[Test]
+		public void GetScenePartialNameFromPath_Works()
+		{
+			string scenePath = "Assets/Scenes/Others/Scene1.unity";
+
+			string partialScenePath = scenePath.GetScenePartialNameFromPath();
+
+			Assert.AreEqual("Scenes/Others/Scene1", partialScenePath);
+		}
+
+		[Test]
+		public void GetScenePartialNameFromPath_AlreadyNoAssets_Works()
+		{
+			string scenePath = "Scenes/Others/Scene1.unity";
+
+			string partialScenePath = scenePath.GetScenePartialNameFromPath();
+
+			Assert.AreEqual("Scenes/Others/Scene1", partialScenePath);
+		}
+
+		[Test]
+		public void GetScenePartialNameFromPath_AlreadyNoFileType_Works()
+		{
+			string scenePath = "Assets/Scenes/Others/Scene1";
+
+			string partialScenePath = scenePath.GetScenePartialNameFromPath();
+
+			Assert.AreEqual("Scenes/Others/Scene1", partialScenePath);
+		}
+
+		[Test]
+		public void GetScenePartialNameFromPath_AlreadyAssetsNoFileType_Works()
+		{
+			string scenePath = "Scenes/Others/Scene1";
+
+			string partialScenePath = scenePath.GetScenePartialNameFromPath();
+
+			Assert.AreEqual("Scenes/Others/Scene1", partialScenePath);
+		}
 	}
 }
