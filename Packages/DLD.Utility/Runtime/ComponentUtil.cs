@@ -95,6 +95,21 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void SetEnabled(this IReadOnlyList<Renderer> r, bool enabled)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				if (r[n] == null)
+				{
+#if UNITY_EDITOR
+					Debug.LogWarning($"Can't SetEnabled Renderer #{n+1}, null");
+#endif
+					continue;
+				}
+				r[n].enabled = enabled;
+			}
+		}
+
 		public static bool AreAllEnabled(this IReadOnlyList<Behaviour> b)
 		{
 			for (int n = 0, len = b.Count; n < len; ++n)
@@ -113,6 +128,24 @@ namespace DLD.Utility
 			return true;
 		}
 
+		public static bool AreAllEnabled(this IReadOnlyList<Renderer> r)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				if (r[n] == null)
+				{
+					continue;
+				}
+
+				if (!r[n].enabled)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		public static bool IsAnyEnabled(this IReadOnlyList<Behaviour> b)
 		{
 			for (int n = 0, len = b.Count; n < len; ++n)
@@ -123,6 +156,24 @@ namespace DLD.Utility
 				}
 
 				if (b[n].enabled)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static bool IsAnyEnabled(this IReadOnlyList<Renderer> r)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				if (r[n] == null)
+				{
+					continue;
+				}
+
+				if (r[n].enabled)
 				{
 					return true;
 				}
