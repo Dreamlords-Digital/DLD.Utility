@@ -110,6 +110,21 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void SetEnabled(this IReadOnlyList<LODGroup> l, bool enabled)
+		{
+			for (int n = 0, len = l.Count; n < len; ++n)
+			{
+				if (l[n] == null)
+				{
+#if UNITY_EDITOR
+					Debug.LogWarning($"Can't SetEnabled LODGroup #{n+1}, null");
+#endif
+					continue;
+				}
+				l[n].enabled = enabled;
+			}
+		}
+
 		public static bool AreAllEnabled(this IReadOnlyList<Behaviour> b)
 		{
 			for (int n = 0, len = b.Count; n < len; ++n)
