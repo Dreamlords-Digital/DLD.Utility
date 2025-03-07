@@ -197,6 +197,21 @@ namespace DLD.Utility
 			return false;
 		}
 
+		public static void SetKinematic(this IReadOnlyList<Rigidbody> r, bool isKinematic)
+		{
+			for (int n = 0, len = r.Count; n < len; ++n)
+			{
+				if (r[n] == null)
+				{
+#if UNITY_EDITOR
+					Debug.LogWarning($"Can't SetKinematic Rigidbody #{n+1}, null");
+#endif
+					continue;
+				}
+				r[n].isKinematic = isKinematic;
+			}
+		}
+
 		public static void SetPositionXY(this IReadOnlyList<Transform> r, Vector3 pos)
 		{
 			for (int n = 0, len = r.Count; n < len; ++n)
