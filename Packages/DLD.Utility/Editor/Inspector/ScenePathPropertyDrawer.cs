@@ -14,6 +14,8 @@ namespace DLD.Utility.Inspector.Editor
 		const float ERROR_MESSAGE_SPACING = 1;
 		const float ERROR_MESSAGE_HEIGHT = 25;
 
+		ScenePathAttribute _scenePathAttribute;
+
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			float baseHeight = base.GetPropertyHeight(property, label);
@@ -29,12 +31,17 @@ namespace DLD.Utility.Inspector.Editor
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
+			_scenePathAttribute ??= attribute as ScenePathAttribute;
+			bool showErrorIfUnassigned = _scenePathAttribute?.ShowErrorIfUnassigned ?? true;
+
+			bool unassigned = string.IsNullOrEmpty(property.stringValue);
 			var oldScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(property.stringValue);
 
-			bool sceneNotFound = oldScene == null;
+			bool sceneNotFound = !unassigned && oldScene == null;
+			bool showError = sceneNotFound || (unassigned && showErrorIfUnassigned);
 
 			var prevColor = GUI.color;
-			if (sceneNotFound)
+			if (showError)
 			{
 				GUI.color = Color.red;
 			}
@@ -45,7 +52,7 @@ namespace DLD.Utility.Inspector.Editor
 			fieldRect.height = base.GetPropertyHeight(property, label);
 			var newScene = EditorGUI.ObjectField(fieldRect, label, oldScene, typeof(SceneAsset), false) as SceneAsset;
 
-			if (sceneNotFound)
+			if (showError)
 			{
 				GUI.color = prevColor;
 
@@ -53,7 +60,17 @@ namespace DLD.Utility.Inspector.Editor
 				errorMessageRect.y += fieldRect.height + ERROR_MESSAGE_SPACING;
 				errorMessageRect.height = ERROR_MESSAGE_HEIGHT;
 				errorMessageRect.xMin += EditorGUIUtility.labelWidth;
-				EditorGUI.HelpBox(errorMessageRect, $"Not found: \"{property.stringValue}\"", MessageType.Error);
+
+				string message;
+				if (sceneNotFound)
+				{
+					message = $"Not found: \"{property.stringValue}\"";
+				}
+				else
+				{
+					message = $"No assigned scene";
+				}
+				EditorGUI.HelpBox(errorMessageRect, message, MessageType.Error);
 			}
 
 			if (EditorGUI.EndChangeCheck())

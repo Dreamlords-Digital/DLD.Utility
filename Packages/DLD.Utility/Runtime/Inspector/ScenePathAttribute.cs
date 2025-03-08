@@ -11,5 +11,11 @@ namespace DLD.Utility.Inspector
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
 	public class ScenePathAttribute : PropertyAttribute
 	{
+		public readonly bool ShowErrorIfUnassigned;
+
+		public ScenePathAttribute(bool showErrorIfUnassigned = false)
+		{
+			ShowErrorIfUnassigned = showErrorIfUnassigned;
+		}
 	}
 }
