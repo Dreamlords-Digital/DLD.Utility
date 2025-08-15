@@ -278,6 +278,13 @@ namespace DLD.Utility
 		/// Formula from: https://forum.unity.com/threads/terminal-velocity.34667/#post-1053927
 		/// </remarks>
 		/// <returns>Speed in meters per second (multiply by 3.6 to get kilometers per hour).</returns>
-		public static float GetSpeed(float force, Rigidbody rigidbody) => ((force / rigidbody.drag) - Time.fixedDeltaTime * force) / rigidbody.mass;
+		public static float GetSpeed(float force, Rigidbody rigidbody)
+		{
+#if UNITY_6000
+			return ((force / rigidbody.linearDamping) - Time.fixedDeltaTime * force) / rigidbody.mass;
+#else
+			return ((force / rigidbody.drag) - Time.fixedDeltaTime * force) / rigidbody.mass;
+#endif
+		}
 	}
 }
