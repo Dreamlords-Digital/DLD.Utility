@@ -1,0 +1,2 @@
+http://tango.freedesktop.org/releases/tango-icon-theme-0.8.90.tar.gz
+https://github.com/Distrotech/tango-icon-theme
