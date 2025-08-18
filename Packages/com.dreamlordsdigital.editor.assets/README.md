@@ -12,3 +12,7 @@ Mouse Cursors:
 
 1. OpenZone: MIT licensed, © 2009-2012 Davorin Učakar
 2. Plain, Custom: by Dreamlords Digital
+
+GUI:
+
+1. Dark: by Dreamlords Digital
