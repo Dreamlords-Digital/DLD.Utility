@@ -1,0 +1,20 @@
+{
+  "name": "com.dreamlordsdigital.uitoolkit",
+  "version": "0.0.1",
+  "displayName": "DLD UI Toolkit Utility",
+  "description": "Custom UI Toolkit controls (File Browser, Context Menu, Tabs, etc.).",
+  "unity": "6000.2",
+  "dependencies": {
+    "com.dreamlordsdigital.utility": "0.0.1",
+    "com.dreamlordsdigital.editor.assets": "0.0.1"
+  },
+  "keywords": [
+    "UI",
+    "Toolkit",
+    "widget"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}

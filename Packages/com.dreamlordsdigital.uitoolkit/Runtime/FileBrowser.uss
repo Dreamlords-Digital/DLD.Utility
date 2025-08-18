@@ -1,0 +1,42 @@
+#FileSystemEntries {
+    flex-grow: 1;
+    border-top-width: 1px;
+    border-top-color: rgb(35, 35, 35);
+    margin-right: -1px;
+}
+
+.dld-file-entry__name-group {
+    flex-direction: row;
+    padding-left: 2px;
+    overflow: hidden;
+}
+
+.dld-file-entry__icon {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+.dld-file-entry__filename {
+    color: rgb(202, 202, 202);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    padding-top: 2px;
+}
+
+.dld-file-entry__size {
+    flex-grow: 1;
+    -unity-text-align: middle-right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 3px;
+}
+
+.unity-multi-column-view__row-container:checked .dld-file-entry__filename {
+    color: rgb(255, 255, 255);
+}

@@ -1,0 +1,75 @@
+#ContextMenu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    flex-grow: 1;
+}
+
+#ContextMenuBg {
+    left: 0;
+    top: 0;
+    position: absolute;
+    background-color: rgb(55, 55, 55);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(72, 72, 72);
+    border-right-color: rgb(72, 72, 72);
+    border-top-color: rgb(72, 72, 72);
+    border-bottom-color: rgb(72, 72, 72);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    margin-left: 8px;
+}
+
+#ContextMenuBg > Button {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    height: 20px;
+    -unity-text-align: middle-left;
+    flex-direction: row;
+    padding-top: 0;
+    padding-right: 3px;
+    padding-bottom: 0;
+    padding-left: 3px;
+    color: rgb(190, 190, 190);
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+#ContextMenuBg > Button:hover {
+    background-color: rgb(44, 93, 135);
+    color: rgb(238, 238, 238);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#ContextMenuBg > Button:focus {
+    background-color: rgb(44, 93, 135);
+    color: rgb(238, 238, 238);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#ContextMenuBg > Button:active {
+    background-color: rgb(28, 60, 87);
+    color: rgb(238, 238, 238);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}

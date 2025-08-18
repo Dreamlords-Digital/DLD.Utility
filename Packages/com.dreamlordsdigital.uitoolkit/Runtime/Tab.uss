@@ -1,0 +1,166 @@
+.dld-tab-container {
+    height: 20px;
+    align-items: stretch;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-direction: row;
+    align-self: flex-start;
+    justify-content: flex-start;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.dld-tab-container__background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    border-left-color: rgb(12, 12, 12);
+    border-right-color: rgb(12, 12, 12);
+    border-top-color: rgb(12, 12, 12);
+    border-bottom-color: rgb(12, 12, 12);
+    border-bottom-width: 1px;
+}
+
+.dld-tab {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-White.png?fileID=2800000&guid=7217a5b20ce8d13488bec54363b2edb9&type=3#Tab-White");
+    -unity-slice-left: 4;
+    -unity-slice-right: 4;
+    -unity-slice-top: 4;
+    padding-left: 6px;
+    padding-right: 6px;
+    -unity-background-image-tint-color: rgb(8, 26, 41);
+    margin-top: 2px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    align-self: stretch;
+    padding-bottom: 1px;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.dld-tab > .unity-radio-button__label {
+    font-size: 12px;
+    color: rgb(166, 166, 166);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    align-self: flex-end;
+    align-items: stretch;
+    min-width: auto;
+    flex-direction: row;
+}
+
+.dld-tab:hover {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-White-Hover.png?fileID=2800000&guid=1b9a5331e7967a44eaf982861f6bf665&type=3#Tab-White-Hover");
+}
+
+.dld-tab:hover > .unity-radio-button__label {
+    color: rgb(229, 229, 229);
+}
+
+.dld-tab:checked {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-White-Selected.png?fileID=2800000&guid=4d9e799649ed9914bb0972fd928ace1b&type=3#Tab-White-Selected");
+    padding-bottom: 2px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.dld-tab:checked > .unity-radio-button__label {
+    font-size: 12px;
+    color: rgb(229, 229, 229);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    align-self: flex-end;
+    align-items: stretch;
+    min-width: auto;
+}
+
+.dld-tab > .unity-radio-button__input {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.dld-tab .unity-radio-button__checkmark-background {
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    width: 0;
+    height: 0;
+}
+
+.dld-tab #unity-checkmark {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 0;
+    height: 0;
+}
+
+.dld-tab__outline {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Outline-Selected.png?fileID=2800000&guid=fdd8b3223198baa4da533f34446561ac&type=3#Tab-Outline-Selected");
+    -unity-slice-left: 4;
+    -unity-slice-top: 4;
+    -unity-slice-right: 4;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -unity-background-image-tint-color: rgb(28, 121, 255);
+    visibility: hidden;
+}
+
+.dld-tab:checked > .dld-tab__outline {
+    visibility: visible;
+}
+
+.dld-tab__modified-indication {
+    width: 16px;
+    height: 16px;
+    margin-left: -3px;
+    margin-right: -5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.dld-tab__body {
+    flex-grow: 1;
+}

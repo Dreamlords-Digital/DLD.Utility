@@ -1,0 +1,18 @@
+.dld-mouse-cursor--normal-drag {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/Normal-Move.png") 2 1;
+}
+
+.dld-mouse-cursor--pan {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Grab-Open.png") 12 11;
+}
+
+.dld-mouse-cursor--pan-drag {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Grab-Close.png") 12 11;
+}
+
+.dld-mouse-cursor--zoom-in {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/Zoom-In-2.png") 11 11;
+}
+.dld-mouse-cursor--zoom-out {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/Zoom-Out-2.png") 11 11;
+}

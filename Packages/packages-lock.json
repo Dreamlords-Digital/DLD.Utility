@@ -54,6 +54,15 @@
         "com.dreamlordsdigital.jsonfx": "0.1.0"
       }
     },
+    "com.dreamlordsdigital.uitoolkit": {
+      "version": "file:com.dreamlordsdigital.uitoolkit",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.dreamlordsdigital.utility": "0.0.1",
+        "com.dreamlordsdigital.editor.assets": "0.0.1"
+      }
+    },
     "com.dreamlordsdigital.utility": {
       "version": "file:DLD.Utility",
       "depth": 0,

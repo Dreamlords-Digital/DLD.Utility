@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ContextMenu.uss?fileID=7433441132597879392&amp;guid=d361fad82a1c12b4bb842ae745558602&amp;type=3#ContextMenu" />
+    <ui:VisualElement name="ContextMenu">
+        <ui:VisualElement name="ContextMenuBg" />
+    </ui:VisualElement>
+</ui:UXML>

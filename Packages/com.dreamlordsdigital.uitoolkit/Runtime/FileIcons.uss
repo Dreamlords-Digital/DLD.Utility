@@ -1,0 +1,47 @@
+.dld-icon--file-entry--folder-generic {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/folder.png?fileID=2800000&guid=a50e717e62e8e4b48be46970737ea5b7&type=3#folder");
+}
+
+.dld-icon--file-entry--folder-parent {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/folder-to-parent.png?fileID=2800000&guid=4609f51498e0fa441884e8796ee4b8d3&type=3#folder-to-parent");
+}
+
+.dld-icon--file-entry--folder-home {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/user-home.png?fileID=2800000&guid=fda7c4e83abd71c4b82fd1346defe54c&type=3#user-home");
+}
+
+.dld-icon--file-entry--folder-desktop {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/user-desktop.png?fileID=2800000&guid=799fe3348a3d0244b8a6c7231d37f1ae&type=3#user-desktop");
+}
+
+.dld-icon--file-entry--folder-system {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/computer.png?fileID=2800000&guid=66f7e83ea9c1a5c4fbadabee670e2abf&type=3#computer");
+}
+
+.dld-icon--file-entry--folder-favorites {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/folder-special.png?fileID=2800000&guid=cb5b58a399b7aa8488b895b539cd26cc&type=3#folder-special");
+}
+
+.dld-icon--file-entry--folder-recent {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/folder.png?fileID=2800000&guid=a50e717e62e8e4b48be46970737ea5b7&type=3#folder");
+}
+
+.dld-icon--file-entry--folder-unity-project {
+    background-image: resource('d_SceneAsset Icon');
+}
+
+.dld-icon--file-entry--file-generic {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/text-x-generic.png?fileID=2800000&guid=242b3e4811d3e7241bffd1c7e3489eed&type=3#text-x-generic");
+}
+
+.dld-icon--file-entry--file-image {
+    background-image: resource('d_RawImage Icon');
+}
+
+.dld-icon--file-entry--file-unity {
+    background-image: resource('d_SceneAsset Icon');
+}
+
+.dld-icon--file-entry--file-prefab {
+    background-image: resource('d_Prefab Icon');
+}

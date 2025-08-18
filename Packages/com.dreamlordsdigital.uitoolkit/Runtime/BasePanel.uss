@@ -1,0 +1,234 @@
+#TitleBar {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Header2.psd?fileID=2800000&guid=fe2f6f2bcca0e514b99afc875f01f240&type=3#Header2");
+    -unity-slice-top: 6;
+    -unity-slice-right: 7;
+    -unity-slice-bottom: 10;
+    margin-right: -4px;
+    flex-direction: row;
+    margin-bottom: -5px;
+    padding-bottom: 7px;
+    justify-content: center;
+    padding-top: 2px;
+    align-items: center;
+}
+
+#Title {
+    color: rgb(19, 19, 19);
+    -unity-text-align: upper-center;
+    font-size: 12px;
+}
+
+#Toolbar {
+    height: 40px;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Mid-Normal.png?fileID=2800000&guid=06fdbb959fdc16a429a60fdc1b891d6a&type=3#Tab-Mid-Normal");
+    -unity-slice-left: 2;
+    -unity-slice-top: 2;
+    -unity-slice-right: 2;
+    -unity-slice-bottom: 2;
+    flex-direction: row;
+    border-bottom-color: rgb(48, 48, 48);
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    border-top-color: rgb(89, 89, 89);
+}
+
+.dld-toolbar-button {
+    margin-top: -1px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    height: 40px;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Mid-Normal.png?fileID=2800000&guid=06fdbb959fdc16a429a60fdc1b891d6a&type=3#Tab-Mid-Normal");
+    -unity-slice-left: 2;
+    -unity-slice-top: 2;
+    -unity-slice-right: 2;
+    -unity-slice-bottom: 2;
+    justify-content: center;
+    flex-direction: column;
+    min-width: 38px;
+    width: initial;
+    border-bottom-color: rgb(48, 48, 48);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.dld-toolbar-button:active {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Mid-Active.png?fileID=2800000&guid=dd2206eb6339fb84490319fede1250fa&type=3#Tab-Mid-Active");
+}
+
+.dld-toolbar-button:checked {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Mid-Active.png?fileID=2800000&guid=dd2206eb6339fb84490319fede1250fa&type=3#Tab-Mid-Active");
+}
+
+.dld-toolbar-button:checked:active {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Mid-OnActive.png?fileID=2800000&guid=950c8f6862de1894985c9deeccb44b1c&type=3#Tab-Mid-OnActive");
+}
+
+.dld-toolbar-button--pressed {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tab-Mid-Active.png?fileID=2800000&guid=dd2206eb6339fb84490319fede1250fa&type=3#Tab-Mid-Active");
+}
+
+.dld-toolbar-button > .unity-label {
+    font-size: 10px;
+    color: rgb(212, 212, 212);
+    padding-top: 0;
+    padding-right: 4px;
+    padding-bottom: 0;
+    padding-left: 4px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    align-self: center;
+}
+
+.dld-toolbar-button > .unity-toggle__input {
+    display: none;
+}
+
+.dld-toolbar-button > .unity-toggle__label {
+    min-width: auto;
+}
+
+.dld-toolbar-button--mini {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Button-Normal.png?fileID=2800000&guid=9e644f611032dfe438662bf693b63531&type=3#Button-Normal");
+    -unity-slice-left: 3;
+    -unity-slice-top: 3;
+    -unity-slice-right: 3;
+    -unity-slice-bottom: 3;
+    background-color: rgba(0, 0, 0, 0);
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 0;
+    margin-right: 5px;
+    margin-bottom: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.dld-toolbar-button--mini:hover {
+}
+
+.dld-toolbar-button--mini:active {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Button-Pressed.png?fileID=2800000&guid=4e3a67ec9e85b1a4394acede318d9039&type=3#Button-Pressed");
+}
+
+.dld-toolbar-button--mini:checked {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Button-Depressed-Pressed.png?fileID=2800000&guid=5e2c2fc9f318f504d8486e23c2996945&type=3#Button-Depressed-Pressed");
+}
+
+.dld-toolbar-button--mini.unity-toggle {
+    margin-top: 0;
+    margin-right: 5px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dld-toolbar-button--mini > .unity-toggle__input {
+    display: none;
+}
+
+.dld-toolbar-button--mini > .unity-toggle__input > #unity-checkmark {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    width: auto;
+    height: auto;
+    display: none;
+}
+
+.dld-toolbar-button--mini > .unity-radio-button__input {
+    display: none;
+}
+
+.dld-toolbar-button--mini > .unity-radio-button__input > .unity-radio-button__checkmark-background {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    display: none;
+}
+
+.dld-panel__horizontal-resize-handle {
+    position: absolute;
+    right: 0;
+    flex-grow: 1;
+    width: 4px;
+    top: 0;
+    bottom: 0;
+}
+
+.dld-panel__horizontal-resize-handle--right {
+    left: 0;
+}
+
+.dld-panel__horizontal-resize-handle:hover {
+    cursor: resize-horizontal;
+}
+
+#Body {
+    flex-grow: 1;
+}
+
+#ConfirmPanel {
+    flex-direction: column;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-top-width: 1px;
+    border-top-color: rgb(48, 48, 48);
+}
+
+.dld-button--operation {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.dld-button-row {
+    flex-direction: row-reverse;
+}
+
+.dld-button-row > VisualElement {
+    flex-direction: row;
+}

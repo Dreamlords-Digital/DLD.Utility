@@ -1,0 +1,127 @@
+.dld-text-field {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+}
+
+.dld-text-field > #unity-text-input {
+    padding-top: 1px;
+    padding-right: 2px;
+    padding-bottom: 1px;
+    padding-left: 2px;
+    background-color: rgb(42, 42, 42);
+    border-left-color: rgb(33, 33, 33);
+    border-right-color: rgb(33, 33, 33);
+    border-top-color: rgb(13, 13, 13);
+    border-bottom-color: rgb(33, 33, 33);
+}
+
+.dld-text-field:hover > #unity-text-input {
+    cursor: text;
+    border-left-color: rgb(101, 101, 101);
+    border-right-color: rgb(101, 101, 101);
+    border-top-color: rgb(101, 101, 101);
+    border-bottom-color: rgb(101, 101, 101);
+}
+
+.dld-text-field:hover > #unity-text-input > TextElement {
+    cursor: text;
+}
+
+.dld-text-field > #unity-text-input > TextElement {
+    color: rgb(185, 185, 185);
+    padding-top: 0;
+}
+
+.dld-text-field:focus > #unity-text-input {
+    border-left-color: rgb(44, 93, 135);
+    border-right-color: rgb(44, 93, 135);
+    border-top-color: rgb(44, 93, 135);
+    border-bottom-color: rgb(44, 93, 135);
+}
+
+.dld-label--filename {
+    color: rgb(207, 207, 207);
+}
+
+.dld-label--filename-extension {
+    color: rgb(119, 119, 119);
+}
+
+FilenameTextField > #unity-text-input > TextElement {
+    flex-grow: 0;
+    flex-shrink: 1;
+    padding-right: 0;
+}
+
+FilenameTextField > #unity-text-input > Label {
+    padding-left: 0;
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+.dld-icon {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+}
+
+.dld-modal-dialog-outside {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.dld-popup-menu__bg {
+    min-height: 16px;
+    background-color: rgb(84, 84, 84);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(41, 41, 41);
+    border-right-color: rgb(41, 41, 41);
+    border-top-color: rgb(41, 41, 41);
+    border-bottom-color: rgb(41, 41, 41);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    height: initial;
+    flex-grow: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-left: -1px;
+}
+
+.dld-popup-menu__bg > TreeView {
+    flex-grow: 1;
+    max-height: none;
+}
+
+.dld-popup-menu__bg > ListView {
+    max-height: 100%;
+    flex-grow: 1;
+}
+
+.dld-popup-menu__bg > ListView .unity-list-view__empty-label {
+    display: none;
+}
+
+.dld-list-view-entry-group {
+    flex-direction: row;
+    padding-left: 2px;
+    padding-right: 4px;
+}
+
+.unity-multi-column-header__column--sortable {
+    flex-direction: row;
+}
