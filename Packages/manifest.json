@@ -2,6 +2,7 @@
   "dependencies": {
     "com.dreamlordsdigital.buildinfoutil": "file:./DLD.BuildInfoUtil",
     "com.dreamlordsdigital.easing": "file:./Easing",
+    "com.dreamlordsdigital.editor.assets": "file:./com.dreamlordsdigital.editor.assets",
     "com.dreamlordsdigital.fuzzystring": "file:./FuzzyString",
     "com.dreamlordsdigital.imgui": "file:./DLD.IMGUI",
     "com.dreamlordsdigital.serializer": "file:./DLD.Serializer",

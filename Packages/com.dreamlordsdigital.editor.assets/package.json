@@ -1,0 +1,18 @@
+{
+  "name": "com.dreamlordsdigital.editor.assets",
+  "version": "0.0.1",
+  "displayName": "DLD Editor Assets",
+  "description": "Free icons and mouse cursor themes meant for editor tools. For use with UI Toolkit (or IMGUI).",
+  "unity": "2017.4",
+  "dependencies": {
+  },
+  "keywords": [
+    "icon",
+    "mouse",
+    "cursor"
+  ],
+  "author": {
+    "name": "Dreamlords Digital",
+    "url": "https://www.dreamlordsdigital.com"
+  }
+}

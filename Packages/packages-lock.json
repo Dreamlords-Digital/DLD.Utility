@@ -14,6 +14,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.dreamlordsdigital.editor.assets": {
+      "version": "file:com.dreamlordsdigital.editor.assets",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.dreamlordsdigital.fuzzystring": {
       "version": "file:FuzzyString",
       "depth": 0,

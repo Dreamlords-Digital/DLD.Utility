@@ -3,6 +3,7 @@ Silk icon set 1.3
 _________________________________________
 Mark James
 http://www.famfamfam.com/lab/icons/silk/
+https://github.com/legacy-icons/famfamfam-silk
 _________________________________________
 
 This work is licensed under a
