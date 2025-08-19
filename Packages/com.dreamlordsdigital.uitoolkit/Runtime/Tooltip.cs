@@ -58,6 +58,8 @@ namespace DLD.UIToolkit
 
 			clonedRoot.RemoveFromHierarchy();
 
+			// -----------------------------------
+
 			style.display = DisplayStyle.None; // hide at first
 
 			_onPointerMove = OnPointerMove;

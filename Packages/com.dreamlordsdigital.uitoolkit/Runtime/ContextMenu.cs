@@ -17,6 +17,7 @@ namespace DLD.UIToolkit
 		{
 			var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
 			asset.CloneTree(this);
+
 			_root = this.Q<VisualElement>("ContextMenu");
 			_root.style.display = DisplayStyle.None;
 
