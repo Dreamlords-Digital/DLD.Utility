@@ -112,7 +112,9 @@ namespace DLD.UIToolkit
 		/// </remarks>
 		VisualElement _mouseCursorDisplay;
 
-		ITooltip _tooltip;
+		Vector2 _lastKnownMousePos;
+
+		protected ITooltip _tooltip;
 
 		readonly EventCallback<FocusOutEvent> _onFocusOut;
 		readonly EventCallback<KeyDownEvent> _onKeyDown;
@@ -262,7 +264,7 @@ namespace DLD.UIToolkit
 
 			if (changeDetected)
 			{
-				RefreshMouseCursor();
+				RefreshMouseCursor(_lastKnownMousePos);
 			}
 		}
 
@@ -291,7 +293,7 @@ namespace DLD.UIToolkit
 					break;
 			}
 
-			RefreshMouseCursor();
+			RefreshMouseCursor(_lastKnownMousePos);
 		}
 
 		void OnPointerDown(PointerDownEvent e)
@@ -323,12 +325,12 @@ namespace DLD.UIToolkit
 			if (!e.ctrlKey && _ctrl)
 			{
 				_ctrl = false;
-				RefreshMouseCursor();
+				RefreshMouseCursor(e.position);
 			}
 			if (!e.altKey && _alt)
 			{
 				_alt = false;
-				RefreshMouseCursor();
+				RefreshMouseCursor(e.position);
 			}
 
 			if (_ctrl && _spacebarHeld)
@@ -355,7 +357,7 @@ namespace DLD.UIToolkit
 				target.CapturePointer(e.pointerId);
 				e.StopPropagation();
 
-				RefreshMouseCursor();
+				RefreshMouseCursor(e.position);
 			}
 		}
 
@@ -378,7 +380,7 @@ namespace DLD.UIToolkit
 			_draggingPointerId = e.pointerId;
 		}
 
-		void CommitToDragging()
+		void CommitToDragging(PointerMoveEvent e)
 		{
 			var gotClonedDragElement = OnStartedDrag();
 			if (gotClonedDragElement != null)
@@ -410,11 +412,13 @@ namespace DLD.UIToolkit
 			_draggedElement.BringToFront();
 
 			_isDragging = true;
-			RefreshMouseCursor();
+			RefreshMouseCursor(e.position);
 		}
 
 		void OnPointerMove(PointerMoveEvent e)
 		{
+			_lastKnownMousePos = e.position;
+
 			if (_isPanning && !target.HasPointerCapture(e.pointerId))
 			{
 				// This isn't the pointer that initiated the panning, so we're not interested in this pointer-move event.
@@ -440,7 +444,7 @@ namespace DLD.UIToolkit
 				if (!_draggedElementHasBeenMoved)
 				{
 					_draggedElementHasBeenMoved = true;
-					CommitToDragging();
+					CommitToDragging(e);
 				}
 				if (_isDragging && !_spacebarHeld)
 				{
@@ -490,7 +494,7 @@ namespace DLD.UIToolkit
 				_draggedElement = null;
 				_isDragging = false;
 
-				RefreshMouseCursor();
+				RefreshMouseCursor(e.position);
 			}
 
 			if (_isPanning && target.HasPointerCapture(e.pointerId))
@@ -562,7 +566,7 @@ namespace DLD.UIToolkit
 			_isDragging = false;
 		}
 
-		void RefreshMouseCursor()
+		void RefreshMouseCursor(Vector2 mousePos)
 		{
 			if (_isPanning)
 			{

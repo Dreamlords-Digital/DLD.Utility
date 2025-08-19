@@ -6,6 +6,7 @@ namespace DLD.UIToolkit
 	public interface ITooltip
 	{
 		void ShowTooltipAtMouse(string text, string iconClassName = null);
+		void ShowTooltipAtMouse(string text, string iconClassName, Vector2 mousePos);
 		void HideTooltip();
 	}
 
@@ -99,6 +100,12 @@ namespace DLD.UIToolkit
 			_showType = ShowType.FollowMouseCursor;
 			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.Flex;
+		}
+
+		public void ShowAtMouseCursor(string text, string iconClassName, Vector2 mousePos)
+		{
+			ShowAtMouseCursor(text, iconClassName);
+			this.SetPosition(mousePos);
 		}
 
 		public void Hide()
