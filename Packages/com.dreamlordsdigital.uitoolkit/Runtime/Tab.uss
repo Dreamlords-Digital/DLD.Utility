@@ -164,3 +164,25 @@
 .dld-tab__body {
     flex-grow: 1;
 }
+
+.dld-pane {
+    flex-grow: 1;
+}
+
+.dld-tab-body-container {
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: rgb(8, 26, 41);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(12, 12, 12);
+    border-right-color: rgb(12, 12, 12);
+    border-top-color: rgb(12, 12, 12);
+    border-bottom-color: rgb(12, 12, 12);
+}
+
+.dld-pane-container {
+    flex-grow: 1;
+}

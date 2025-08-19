@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/Tab.uss?fileID=7433441132597879392&amp;guid=2b3fb9c15fd60d54d986eea1c6020602&amp;type=3#Tab" />
+    <ui:VisualElement name="Pane" class="dld-pane">
+        <ui:VisualElement name="TabsBg" class="dld-tab-container dld-tab-container__background" />
+        <ui:GroupBox name="Tabs" class="dld-tab-container" />
+        <ui:VisualElement name="TabBodyContainer" class="dld-tab-body-container" style="border-top-width: 0;" />
+    </ui:VisualElement>
+</ui:UXML>
