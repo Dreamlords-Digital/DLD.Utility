@@ -202,15 +202,7 @@ namespace DLD.UIToolkit
 			// If drag-and-drop was happening, cancel it.
 			if (_draggingPointerId != -1)
 			{
-				OnCanceledDrag();
-				if (_isDraggingClonedElement)
-				{
-					_draggedElement.RemoveFromHierarchy();
-				}
-
-				_draggingPointerId = -1;
-				_draggedElement = null;
-				_isDragging = false;
+				CancelDrag();
 			}
 		}
 
@@ -241,15 +233,7 @@ namespace DLD.UIToolkit
 				// Interpret this as a cancel to the drag-and-drop operation.
 				// Abort it, even if the pointer is still held down.
 
-				OnCanceledDrag();
-				if (_isDraggingClonedElement)
-				{
-					_draggedElement.RemoveFromHierarchy();
-				}
-
-				_draggingPointerId = -1;
-				_draggedElement = null;
-				_isDragging = false;
+				CancelDrag();
 			}
 
 			// We check this way instead of checking the keyCode because these are the latest values
@@ -443,16 +427,7 @@ namespace DLD.UIToolkit
 					// In that way, we won't receive a pointer-up event,
 					// even though user has released the mouse button.
 					// Treat this as a cancel for the drag-and-drop operation.
-
-					OnCanceledDrag();
-					if (_isDraggingClonedElement)
-					{
-						_draggedElement.RemoveFromHierarchy();
-					}
-
-					_draggingPointerId = -1;
-					_draggedElement = null;
-					_isDragging = false;
+					CancelDrag();
 					return;
 				}
 
@@ -565,6 +540,19 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================================
+
+		void CancelDrag()
+		{
+			OnCanceledDrag();
+			if (_isDraggingClonedElement)
+			{
+				_draggedElement.RemoveFromHierarchy();
+			}
+
+			_draggingPointerId = -1;
+			_draggedElement = null;
+			_isDragging = false;
+		}
 
 		void RefreshMouseCursor()
 		{

@@ -64,6 +64,14 @@ namespace DLD.UIToolkit
 			ve?.UnregisterCallback(OnPointerLeaveBypass);
 		}
 
+		public static void AddStyleSheetsFrom(this VisualElement destination, VisualElement source)
+		{
+			for (int n = 0; n < source.styleSheets.count; ++n)
+			{
+				destination.styleSheets.Add(source.styleSheets[n]);
+			}
+		}
+
 		public static void SetPosition(this VisualElement visualElement, Vector2 newPos)
 		{
 			visualElement.style.translate = newPos;
