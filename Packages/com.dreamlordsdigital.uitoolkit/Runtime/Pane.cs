@@ -80,13 +80,13 @@ namespace DLD.UIToolkit
 		/// </summary>
 		readonly VisualElement _tabBodyContainer;
 
-		ContextMenu _contextMenu;
+		IContextMenu _contextMenu;
 
 		readonly EventCallback<ChangeEvent<bool>> _onPressTab;
-		readonly EventCallback<ContextClickEvent> _onPressTabContext;
+		readonly EventCallback<PointerDownEvent> _onPressTabContext;
 
 		System.Action<T> _onTabShown;
-		System.Action<ContextMenu, T> _onTabContext;
+		System.Action<IContextMenu, T> _onTabContext;
 
 		// =====================================================================
 
@@ -132,7 +132,7 @@ namespace DLD.UIToolkit
 
 		// =====================================================================
 
-		public void SetContextMenu(ContextMenu contextMenu)
+		public void SetContextMenu(IContextMenu contextMenu)
 		{
 			_contextMenu = contextMenu;
 		}
@@ -142,7 +142,7 @@ namespace DLD.UIToolkit
 			_onTabShown = onTabShown;
 		}
 
-		public void SetOnTabContext(Action<ContextMenu, T> onTabContext)
+		public void SetOnTabContext(Action<IContextMenu, T> onTabContext)
 		{
 			_onTabContext = onTabContext;
 		}
@@ -226,7 +226,7 @@ namespace DLD.UIToolkit
 			}
 		}
 
-		void OnPressTabContext(ContextClickEvent e)
+		void OnPressTabContext(PointerDownEvent e)
 		{
 			if (e.target is not RadioButton { userData: T clickedTabContent })
 			{
@@ -234,9 +234,9 @@ namespace DLD.UIToolkit
 			}
 
 			_contextMenu.ClearMenu();
-			_contextMenu.AddMenu("Close", () => CloseTab(clickedTabContent));
-			_contextMenu.AddMenu("Close Other Tabs", () => throw new NotImplementedException());
-			_contextMenu.AddMenu("Close All Tabs", () => throw new NotImplementedException());
+			_contextMenu.AddMenu("Close", BaseIcons.CLOSE, () => CloseTab(clickedTabContent));
+			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE, () => throw new NotImplementedException());
+			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE, () => throw new NotImplementedException());
 			_onTabContext?.Invoke(_contextMenu, clickedTabContent);
 			_contextMenu.Show(e);
 		}

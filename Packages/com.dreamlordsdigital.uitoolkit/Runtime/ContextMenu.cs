@@ -1,40 +1,77 @@
+using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DLD.UIToolkit
 {
-	public class ContextMenu : VisualElement
+	public interface IContextMenu
+	{
+		VisualElement Root { get; }
+
+		void ClearMenu();
+
+		VisualElement AddMenu(string label, System.Action callback);
+		void AddMenu(string label, string iconClassStyle, System.Action callback);
+
+		void Show(Vector2 position);
+		void Show(ContextClickEvent e);
+		void Show(PointerDownEvent e);
+	}
+
+	public class ContextMenu : VisualElement, IContextMenu
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenu";
+		const string ENTRY_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntry";
 		const string MENU_NAME = "ContextMenuBg";
 
-		readonly VisualElement _root;
+		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
+
 		readonly VisualElement _menu;
 
-		public VisualElement Root => _root;
+		readonly System.Action _delayedFocus;
+
+		readonly VisualTreeAsset _entryAsset;
+
+		bool _mouseMovedDuringMouseDown;
+
+		public VisualElement Root => this;
 
 		public ContextMenu()
 		{
+			_delayedFocus = DelayedFocus;
+
+			_entryAsset = Resources.Load<VisualTreeAsset>(ENTRY_TEMPLATE_RESOURCES_PATH);
+
+			// -----------------------------------
+
 			var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
 			asset.CloneTree(this);
 
-			_root = this.Q<VisualElement>("ContextMenu");
-			_root.style.display = DisplayStyle.None;
+			var clonedRoot = this.Q<VisualElement>("ContextMenu");
+			foreach (string rootStyleClass in clonedRoot.GetClasses())
+			{
+				AddToClassList(rootStyleClass);
+			}
 
-			_root.RegisterCallback<MouseDownEvent, VisualElement>(OnPressOutside, _root);
+			for (int n = clonedRoot.childCount - 1; n >= 0; --n)
+			{
+				Insert(0, clonedRoot[n]);
+			}
+
+			clonedRoot.RemoveFromHierarchy();
+
+			// -----------------------------------
+
+			style.display = DisplayStyle.None;
+
+			RegisterCallback<MouseDownEvent, ContextMenu>((e, c) => c.OnPressOutside(e), this);
+			RegisterCallback<MouseMoveEvent, ContextMenu>((e, c) => c.OnMouseMove(e), this);
+			RegisterCallback<MouseUpEvent, ContextMenu>((e, c) => c.OnMouseUpOutside(e), this);
 
 			_menu = this.Q<VisualElement>(MENU_NAME);
-			_menu.RegisterCallback<MouseDownEvent>(OnPressInside);
+			_menu.RegisterCallback<MouseDownEvent>(e => e.StopPropagation());
 
-			_root.RegisterCallback<KeyDownEvent, VisualElement>(OnPressKey, _root);
-			_root.focusable = true;
-		}
-
-		~ContextMenu()
-		{
-			_root.UnregisterCallback<MouseDownEvent, VisualElement>(OnPressOutside);
-			_menu.UnregisterCallback<MouseDownEvent>(OnPressInside);
-			_root.UnregisterCallback<KeyDownEvent, VisualElement>(OnPressKey);
+			RegisterCallback<KeyDownEvent, ContextMenu>((e, c) => c.OnPressKey(e), this);
 		}
 
 		public void ClearMenu()
@@ -42,60 +79,101 @@ namespace DLD.UIToolkit
 			_menu.Clear();
 		}
 
-		public void AddMenu(string label, System.Action callback)
+		public VisualElement AddMenu(string label, System.Action callback)
 		{
-			var newButton = new Button
-			{
-				userData = callback,
-				text = label
-			};
+			var createdEntry = _entryAsset.Instantiate();
 
-			newButton.RegisterCallback<ClickEvent, VisualElement>((click, root) =>
+			var entryContainer = createdEntry.Q<VisualElement>("Entry");
+			entryContainer.userData = callback;
+
+			var entryLabel = entryContainer.Q<Label>();
+			entryLabel.text = label;
+
+			entryContainer.RegisterCallback<PointerDownEvent, ContextMenu>((e, contextMenu) =>
 			{
-				if (click.currentTarget is VisualElement { userData: System.Action userCallback })
+				if (e.currentTarget is VisualElement v)
 				{
+					v.AddToClassList(PRESSED_ENTRY_CLASS_NAME);
+				}
+			}, this);
+
+			entryContainer.RegisterCallback<PointerUpEvent, ContextMenu>((e, contextMenu) =>
+			{
+				if (e.currentTarget is VisualElement { userData: System.Action userCallback } v)
+				{
+					v.Focus();
 					userCallback();
 				}
-				root.style.display = DisplayStyle.None;
-			}, _root);
+				contextMenu.style.display = DisplayStyle.None;
+			}, this);
 
-			_menu.Add(newButton);
+			_menu.Add(entryContainer);
+			return entryContainer;
+		}
+
+		public void AddMenu(string label, string iconClassStyle, System.Action callback)
+		{
+			var entryContainer = AddMenu(label, callback);
+
+			var entryIcon = entryContainer.Q<VisualElement>("Icon");
+			entryIcon.AddToClassList(iconClassStyle);
 		}
 
 		public void Show(Vector2 position)
 		{
-			_menu.style.left = position.x;
-			_menu.style.top = position.y;
-			_root.style.display = DisplayStyle.Flex;
-			_root.Focus();
+			_menu.SetPosition(position);
+			style.display = DisplayStyle.Flex;
+			focusable = true;
+			_mouseMovedDuringMouseDown = false;
+
+			schedule.Execute(_delayedFocus).ExecuteLater(0);
 		}
 
 		public void Show(ContextClickEvent e)
 		{
-			var contextMenuMousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(_root, e.localMousePosition);
+			var contextMenuMousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(this, e.localMousePosition);
 			Show(contextMenuMousePos);
+		}
+
+		public void Show(PointerDownEvent e)
+		{
+			var mousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(this, e.localPosition);
+			Show(mousePos);
 		}
 
 		public void Hide()
 		{
-			_root.style.display = DisplayStyle.None;
+			style.display = DisplayStyle.None;
 		}
 
-		static void OnPressOutside(MouseDownEvent e, VisualElement root)
+		void DelayedFocus()
 		{
-			root.style.display = DisplayStyle.None;
+			Focus();
+		}
+
+		void OnMouseMove(MouseMoveEvent e)
+		{
+			_mouseMovedDuringMouseDown = true;
+		}
+
+		void OnMouseUpOutside(MouseUpEvent e)
+		{
+			if (style.display == DisplayStyle.Flex && _mouseMovedDuringMouseDown)
+			{
+				style.display = DisplayStyle.None;
+			}
+		}
+
+		void OnPressOutside(MouseDownEvent e)
+		{
+			style.display = DisplayStyle.None;
 			e.StopPropagation();
-			root.Blur();
+			Blur();
 		}
 
-		static void OnPressInside(MouseDownEvent e)
+		void OnPressKey(KeyDownEvent e)
 		{
-			e.StopPropagation();
-		}
-
-		static void OnPressKey(KeyDownEvent e, VisualElement root)
-		{
-			if (root.style.display == DisplayStyle.None)
+			if (style.display == DisplayStyle.None)
 			{
 				return;
 			}
@@ -106,43 +184,39 @@ namespace DLD.UIToolkit
 				{
 					// Pressing Escape is considered a cancel.
 					// Do the same thing as OnPressOutside.
-					root.style.display = DisplayStyle.None;
+					style.display = DisplayStyle.None;
 					e.StopPropagation();
-					root.Blur();
+					Blur();
 					break;
 				}
 				case KeyCode.DownArrow:
 				{
-					var menu = root.Q<VisualElement>(MENU_NAME);
-
-					int focusedMenuIdx = GetFocusedMenuIdx(menu);
-					if (focusedMenuIdx == -1 || focusedMenuIdx == menu.childCount - 1)
+					int focusedMenuIdx = GetFocusedMenuIdx(_menu);
+					if (focusedMenuIdx == -1 || focusedMenuIdx == _menu.childCount - 1)
 					{
 						// wrap around and go to first menu entry
-						menu[0].Focus();
+						_menu[0].Focus();
 					}
 					else
 					{
 						// select menu entry below
-						menu[focusedMenuIdx+1].Focus();
+						_menu[focusedMenuIdx+1].Focus();
 					}
 
 					break;
 				}
 				case KeyCode.UpArrow:
 				{
-					var menu = root.Q<VisualElement>(MENU_NAME);
-
-					int focusedMenuIdx = GetFocusedMenuIdx(menu);
+					int focusedMenuIdx = GetFocusedMenuIdx(_menu);
 					if (focusedMenuIdx <= 0)
 					{
 						// wrap around and go to final menu entry
-						menu[menu.childCount - 1].Focus();
+						_menu[_menu.childCount - 1].Focus();
 					}
 					else
 					{
 						// select menu entry above
-						menu[focusedMenuIdx-1].Focus();
+						_menu[focusedMenuIdx-1].Focus();
 					}
 
 					break;
@@ -150,7 +224,7 @@ namespace DLD.UIToolkit
 				case KeyCode.Return:
 				case KeyCode.KeypadEnter:
 				{
-					var menu = root.Q<VisualElement>(MENU_NAME);
+					var menu = this.Q<VisualElement>(MENU_NAME);
 
 					int focusedMenuIdx = GetFocusedMenuIdx(menu);
 					if (focusedMenuIdx != -1)
@@ -159,7 +233,7 @@ namespace DLD.UIToolkit
 						if (menu[focusedMenuIdx].userData is System.Action userCallback)
 						{
 							userCallback();
-							root.style.display = DisplayStyle.None;
+							style.display = DisplayStyle.None;
 						}
 					}
 					break;

@@ -1,4 +1,4 @@
-#ContextMenu {
+.dld-context__outside {
     position: absolute;
     left: 0;
     top: 0;
@@ -8,26 +8,23 @@
 }
 
 #ContextMenuBg {
-    left: 0;
-    top: 0;
+    left: -3px;
+    top: -3px;
     position: absolute;
-    background-color: rgb(55, 55, 55);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-left-color: rgb(72, 72, 72);
-    border-right-color: rgb(72, 72, 72);
-    border-top-color: rgb(72, 72, 72);
-    border-bottom-color: rgb(72, 72, 72);
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
+    background-color: rgba(255, 255, 255, 0);
     margin-left: 8px;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/ContextMenuBg.psd?fileID=2800000&guid=98b932785ab5a9542a414d156df0d36b&type=3#ContextMenuBg");
+    -unity-slice-left: 8;
+    -unity-slice-top: 8;
+    -unity-slice-right: 8;
+    -unity-slice-bottom: 8;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
 }
 
-#ContextMenuBg > Button {
+.dld-context-menu-entry-container {
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -47,29 +44,61 @@
     border-left-width: 0;
 }
 
-#ContextMenuBg > Button:hover {
-    background-color: rgb(44, 93, 135);
-    color: rgb(238, 238, 238);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+.dld-context-menu-entry-container > #Icon {
+    padding-right: 3px;
 }
 
-#ContextMenuBg > Button:focus {
-    background-color: rgb(44, 93, 135);
-    color: rgb(238, 238, 238);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+.dld-context-menu-entry-container > Label {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    -unity-text-align: middle-left;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    color: rgb(190, 190, 190);
+    font-size: 12px;
 }
 
-#ContextMenuBg > Button:active {
-    background-color: rgb(28, 60, 87);
-    color: rgb(238, 238, 238);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+.dld-context-menu-entry-container:hover {
+    background-color: rgba(70, 149, 215, 0.5);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.dld-context-menu-entry-container:hover > Label {
+    color: rgb(255, 255, 255);
+}
+
+.dld-context-menu-entry-container:focus {
+    background-color: rgba(70, 149, 215, 0.5);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(28, 60, 87);
+    border-right-color: rgb(28, 60, 87);
+    border-top-color: rgb(28, 60, 87);
+    border-bottom-color: rgb(28, 60, 87);
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+}
+
+.dld-context-menu-entry-container:focus > Label {
+    color: rgb(255, 255, 255);
+}
+
+.dld-context-menu-entry-container--active:focus {
+    background-color: rgba(28, 60, 87, 0.8);
+    color: rgb(245, 245, 245);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
 }

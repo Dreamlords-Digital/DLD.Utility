@@ -518,7 +518,7 @@ namespace DLD.UIToolkit
 			{
 				_draggingPointerId = -1;
 				_draggedElement = null;
-				OnAbortedPotentialDrag();
+				OnAbortedPotentialDrag(e);
 				Debug.Assert(!_isDragging);
 			}
 			else if (_isDragging && e.pointerId == _draggingPointerId)
@@ -576,7 +576,7 @@ namespace DLD.UIToolkit
 		/// <summary>
 		/// This method is called when the user releases left mouse button on a node without moving the mouse.
 		/// </summary>
-		protected virtual void OnAbortedPotentialDrag()
+		protected virtual void OnAbortedPotentialDrag(PointerUpEvent e)
 		{
 		}
 

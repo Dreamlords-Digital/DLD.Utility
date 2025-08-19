@@ -1,3 +1,7 @@
+.unity-label {
+    color: rgb(238, 238, 238);
+}
+
 .dld-text-field {
     padding-top: 0;
     padding-right: 0;
@@ -43,6 +47,10 @@
     border-right-color: rgb(44, 93, 135);
     border-top-color: rgb(44, 93, 135);
     border-bottom-color: rgb(44, 93, 135);
+}
+
+.dld-text-field:focus > Label {
+    color: rgb(121, 166, 233);
 }
 
 .dld-label--filename {

@@ -119,7 +119,7 @@ namespace DLD.UIToolkit
 		readonly FilenameTextField _filenameTextField;
 		readonly Button _confirmButton;
 
-		ContextMenu _contextMenu;
+		IContextMenu _contextMenu;
 
 		// -----------------------------------------
 
@@ -418,7 +418,7 @@ namespace DLD.UIToolkit
 				if (jumpMenuEntryId > USER_FAVORITES_ID_START && jumpMenuEntryId < RECENT_ENTRIES_ID_START)
 				{
 					// add Context Menu to allow user to remove this Favorite Entry
-					visualElement.RegisterCallback((ContextClickEvent e, ContextMenu c) =>
+					visualElement.RegisterCallback((ContextClickEvent e, IContextMenu c) =>
 					{
 						c.ClearMenu();
 						c.AddMenu("Remove from Favorites", () =>
@@ -561,7 +561,7 @@ namespace DLD.UIToolkit
 			_title.text = newTitle;
 		}
 
-		public void SetContextMenu(ContextMenu contextMenu)
+		public void SetContextMenu(IContextMenu contextMenu)
 		{
 			_contextMenu = contextMenu;
 		}
