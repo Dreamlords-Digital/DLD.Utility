@@ -1,0 +1,42 @@
+.dld-tooltip__bg {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/Tooltip.psd?fileID=2800000&guid=b5e02c1ede2c2fe418fad3951884e80d&type=3#Tooltip");
+    -unity-slice-left: 8;
+    -unity-slice-top: 8;
+    -unity-slice-right: 8;
+    -unity-slice-bottom: 8;
+    padding-left: 8px;
+    padding-right: 8px;
+    align-self: flex-start;
+    flex-direction: row;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    position: absolute;
+}
+
+.dld-tooltip__bg--follow-mouse {
+    top: -20px;
+    left: 10px;
+}
+
+.dld-tooltip__icon {
+    width: 16px;
+    height: 16px;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/information-button.png?fileID=2800000&guid=80ff433ea366017449f71d8fb341f590&type=3#information-button");
+    margin-right: 2px;
+    margin-left: -2px;
+    display: none;
+}
+
+.dld-tooltip__text {
+    color: rgb(238, 238, 238);
+    font-size: 12px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: lower-left;
+}

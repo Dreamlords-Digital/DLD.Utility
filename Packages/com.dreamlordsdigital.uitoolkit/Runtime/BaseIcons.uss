@@ -3,61 +3,65 @@
 }
 
 .dld-icon--title--save {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save.png?fileID=2800000&guid=d109f09c2127a684b817cc52bafdaf33&type=3#document-save');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save.png?fileID=2800000&guid=d109f09c2127a684b817cc52bafdaf33&type=3#document-save");
 }
 
 .dld-icon--new-file {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-new.png?fileID=2800000&guid=2b7d4e806a032654496e5381d4186986&type=3#document-new');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-new.png?fileID=2800000&guid=2b7d4e806a032654496e5381d4186986&type=3#document-new");
 }
 
 .dld-icon--open-file {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-open.png?fileID=2800000&guid=90405d42254c3184ab0ca42604a84b91&type=3#document-open');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-open.png?fileID=2800000&guid=90405d42254c3184ab0ca42604a84b91&type=3#document-open");
 }
 
 .dld-icon--save-file-as {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save-as.png?fileID=2800000&guid=a78ad42b59c5f1f4aa47a18d394323c5&type=3#document-save-as');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save-as.png?fileID=2800000&guid=a78ad42b59c5f1f4aa47a18d394323c5&type=3#document-save-as");
 }
 
 .dld-icon--save-file {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save.png?fileID=2800000&guid=d109f09c2127a684b817cc52bafdaf33&type=3#document-save');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save.png?fileID=2800000&guid=d109f09c2127a684b817cc52bafdaf33&type=3#document-save");
 }
 
 .dld-icon--reset-view {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-fit.png?fileID=2800000&guid=9d2daa06e31bcc240a42f7b7cfdd7779&type=3#magnifier-zoom-fit');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-fit.png?fileID=2800000&guid=9d2daa06e31bcc240a42f7b7cfdd7779&type=3#magnifier-zoom-fit");
 }
 
 .dld-icon--zoom-in {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-in.png?fileID=2800000&guid=12b7c107f4a4c814c91a8bd713577064&type=3#magnifier-zoom-in');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-in.png?fileID=2800000&guid=12b7c107f4a4c814c91a8bd713577064&type=3#magnifier-zoom-in");
 }
 
 .dld-icon--zoom-out {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-out.png?fileID=2800000&guid=a79106b28ce8595438e43344acec29ea&type=3#magnifier-zoom-out');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-out.png?fileID=2800000&guid=a79106b28ce8595438e43344acec29ea&type=3#magnifier-zoom-out");
 }
 
 .dld-icon--navigate-back {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-previous.png?fileID=2800000&guid=91363eadbf5eb084a8921104ca925c97&type=3#go-previous');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-previous.png?fileID=2800000&guid=91363eadbf5eb084a8921104ca925c97&type=3#go-previous");
 }
 
 .dld-icon--navigate-forward {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-next.png?fileID=2800000&guid=d0c386f97bd54224eb6d0533ece33a9d&type=3#go-next');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-next.png?fileID=2800000&guid=d0c386f97bd54224eb6d0533ece33a9d&type=3#go-next");
 }
 
 .dld-icon--file-navigate-jump {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/user-home.png?fileID=2800000&guid=fda7c4e83abd71c4b82fd1346defe54c&type=3#user-home');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/user-home.png?fileID=2800000&guid=fda7c4e83abd71c4b82fd1346defe54c&type=3#user-home");
 }
 
 .dld-icon--edit-file-path {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-system.png?fileID=2800000&guid=bc90a63feda7e7f4fa01ee335aa0f4dc&type=3#applications-system');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-system.png?fileID=2800000&guid=bc90a63feda7e7f4fa01ee335aa0f4dc&type=3#applications-system");
 }
 
 .dld-icon--open-file-explorer {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/computer.png?fileID=2800000&guid=66f7e83ea9c1a5c4fbadabee670e2abf&type=3#computer');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/computer.png?fileID=2800000&guid=66f7e83ea9c1a5c4fbadabee670e2abf&type=3#computer");
 }
 
 .dld-icon--here {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-next.png?fileID=2800000&guid=d0c386f97bd54224eb6d0533ece33a9d&type=3#go-next');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-next.png?fileID=2800000&guid=d0c386f97bd54224eb6d0533ece33a9d&type=3#go-next");
 }
 
 .dld-icon--modified {
-    background-image: url('project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/new.png?fileID=2800000&guid=5ce269f69f7cdb54facabc9cd32a0a8c&type=3#new');
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/new.png?fileID=2800000&guid=5ce269f69f7cdb54facabc9cd32a0a8c&type=3#new");
+}
+
+.dld-icon--error {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/exclamation-red.png?fileID=2800000&guid=4d3266b0fabb91142b90c8190ac306d3&type=3#exclamation-red");
 }

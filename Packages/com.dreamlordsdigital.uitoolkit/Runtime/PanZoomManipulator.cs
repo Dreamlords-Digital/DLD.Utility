@@ -112,6 +112,8 @@ namespace DLD.UIToolkit
 		/// </remarks>
 		VisualElement _mouseCursorDisplay;
 
+		ITooltip _tooltip;
+
 		readonly EventCallback<FocusOutEvent> _onFocusOut;
 		readonly EventCallback<KeyDownEvent> _onKeyDown;
 		readonly EventCallback<KeyUpEvent> _onKeyUp;
@@ -160,6 +162,11 @@ namespace DLD.UIToolkit
 		public void SetMouseCursorDisplay(VisualElement newMouseCursorDisplay)
 		{
 			_mouseCursorDisplay = newMouseCursorDisplay;
+		}
+
+		public void SetTooltip(ITooltip tooltip)
+		{
+			_tooltip = tooltip;
 		}
 
 		// ==================================================================================================
@@ -474,6 +481,7 @@ namespace DLD.UIToolkit
 			else if (_isDragging && e.pointerId == _draggingPointerId)
 			{
 				OnEndedDrag(e, _draggedElement.resolvedStyle.translate);
+				_tooltip?.HideTooltip();
 				if (_isDraggingClonedElement)
 				{
 					_draggedElement.RemoveFromHierarchy();
@@ -544,6 +552,7 @@ namespace DLD.UIToolkit
 		void CancelDrag()
 		{
 			OnCanceledDrag();
+			_tooltip?.HideTooltip();
 			if (_isDraggingClonedElement)
 			{
 				_draggedElement.RemoveFromHierarchy();
