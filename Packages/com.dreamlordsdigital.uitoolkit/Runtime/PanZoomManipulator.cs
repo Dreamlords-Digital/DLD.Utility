@@ -199,12 +199,14 @@ namespace DLD.UIToolkit
 			// will release the spacebar when we no longer have keyboard focus
 			// (user might have alt + tabbed) so might as well just assume it's been released.
 			_spacebarHeld = false;
+			_isPanning = false;
 
 			// Also reset the mouse cursor.
 			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
 			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
 			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
 			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
+			_mouseCursorDisplay.style.display = DisplayStyle.None;
 
 			// If drag-and-drop was happening, cancel it.
 			if (_draggingPointerId != -1)
@@ -305,13 +307,10 @@ namespace DLD.UIToolkit
 				return;
 			}
 
-			if (!_spacebarHeld)
+			if (!_spacebarHeld && e.button == 0)
 			{
-				if (e.button == 0)
-				{
-					Debug.Log($"NodeDragAndDrop OnPointerDown {e.position} Clicked on empty background");
-					_mouseCursorDisplay.style.display = DisplayStyle.None;
-				}
+				Debug.Log($"NodeDragAndDrop OnPointerDown {e.position} Clicked on empty background");
+				_mouseCursorDisplay.style.display = DisplayStyle.None;
 
 				return;
 			}
@@ -348,7 +347,7 @@ namespace DLD.UIToolkit
 
 			// ---------------------------------------------------
 
-			if (CanStartManipulation(e))
+			if ((_spacebarHeld && e.button == 0) || e.button == 2) // pan: spacebar + left-click, or middle-click
 			{
 				_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, e.localPosition);
 
@@ -572,6 +571,7 @@ namespace DLD.UIToolkit
 				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
 				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
 				_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
+				_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 			}
 			else if (_isDragging && _spacebarHeld)
 			{
