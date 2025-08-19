@@ -47,6 +47,14 @@ namespace DLD.UIToolkit
 		/// </remarks>
 		bool _alt;
 
+		/// <summary>
+		/// Used when dragging to indicate that user doesn't want to parent the dragged element.
+		/// </summary>
+		/// <remarks>
+		/// For single-click (select) this works as an "add to selection".
+		/// </remarks>
+		bool _shift;
+
 		bool _draggedElementHasBeenMoved;
 		bool _isDragging;
 		bool _isDraggingClonedElement;
@@ -143,6 +151,8 @@ namespace DLD.UIToolkit
 			_onWheel = OnWheel;
 		}
 
+		public bool IsDoingForceMove => _shift;
+
 		/// <inheritdoc cref="_moveTarget"/>
 		public void SetMoveTarget(VisualElement newMoveTarget)
 		{
@@ -172,6 +182,8 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================================
+
+		protected bool IsDragging => _isDragging;
 
 		protected override void RegisterCallbacksOnTarget()
 		{
@@ -262,14 +274,27 @@ namespace DLD.UIToolkit
 				_alt = e.altKey;
 			}
 
+			bool changeInShift = false;
+			if (_shift != e.shiftKey)
+			{
+				changeDetected = true;
+				changeInShift = true;
+				_shift = e.shiftKey;
+			}
+
 			if (changeDetected)
 			{
 				RefreshMouseCursor(_lastKnownMousePos);
+			}
+			if (changeInShift)
+			{
+				OnForceMoveChanged(_lastKnownMousePos);
 			}
 		}
 
 		void OnKeyUp(KeyUpEvent e)
 		{
+			bool changeInShift = false;
 			switch (e.keyCode)
 			{
 				case KeyCode.Space:
@@ -291,9 +316,18 @@ namespace DLD.UIToolkit
 				case KeyCode.RightAlt:
 					_alt = false;
 					break;
+				case KeyCode.LeftShift:
+				case KeyCode.RightShift:
+					_shift = false;
+					changeInShift = true;
+					break;
 			}
 
 			RefreshMouseCursor(_lastKnownMousePos);
+			if (changeInShift)
+			{
+				OnForceMoveChanged(_lastKnownMousePos);
+			}
 		}
 
 		void OnPointerDown(PointerDownEvent e)
@@ -331,6 +365,12 @@ namespace DLD.UIToolkit
 			{
 				_alt = false;
 				RefreshMouseCursor(e.position);
+			}
+			if (!e.shiftKey && _shift)
+			{
+				_shift = false;
+				RefreshMouseCursor(e.position);
+				OnForceMoveChanged(e.position);
 			}
 
 			if (_ctrl && _spacebarHeld)
@@ -382,7 +422,7 @@ namespace DLD.UIToolkit
 
 		void CommitToDragging(PointerMoveEvent e)
 		{
-			var gotClonedDragElement = OnStartedDrag();
+			var gotClonedDragElement = OnStartedDrag(e);
 			if (gotClonedDragElement != null)
 			{
 				_draggedElement = gotClonedDragElement;
@@ -524,9 +564,13 @@ namespace DLD.UIToolkit
 		/// <summary>
 		/// This method is called the moment that the user moves the mouse while having left mouse button held down on a node.
 		/// </summary>
-		protected virtual VisualElement OnStartedDrag()
+		protected virtual VisualElement OnStartedDrag(PointerMoveEvent e)
 		{
 			return null;
+		}
+
+		protected virtual void OnForceMoveChanged(Vector2 mousePos)
+		{
 		}
 
 		/// <summary>
@@ -568,6 +612,17 @@ namespace DLD.UIToolkit
 
 		void RefreshMouseCursor(Vector2 mousePos)
 		{
+			if (_isDragging)
+			{
+				if (_shift)
+				{
+					_tooltip?.ShowTooltipAtMouse("Move without parenting", BaseIcons.FORCE_MOVE, mousePos);
+				}
+				else
+				{
+					_tooltip?.HideTooltip();
+				}
+			}
 			if (_isPanning)
 			{
 				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);

@@ -65,3 +65,7 @@
 .dld-icon--error {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/exclamation-red.png?fileID=2800000&guid=4d3266b0fabb91142b90c8190ac306d3&type=3#exclamation-red");
 }
+
+.dld-icon--force-move {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/go-next.png?fileID=2800000&guid=d0c386f97bd54224eb6d0533ece33a9d&type=3#go-next");
+}
