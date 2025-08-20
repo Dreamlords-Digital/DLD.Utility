@@ -26,6 +26,8 @@ namespace DLD.UIToolkit
 
 		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
 
+		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
+
 		readonly VisualElement _menu;
 
 		readonly System.Action _delayedFocus;
@@ -158,7 +160,9 @@ namespace DLD.UIToolkit
 
 		void OnMouseUpOutside(MouseUpEvent e)
 		{
-			if (style.display == DisplayStyle.Flex && _mouseMovedDuringMouseDown)
+			var mouseDelta = e.localMousePosition - _menu.GetPosition2();
+			bool mouseMovedFarEnough = mouseDelta.sqrMagnitude > (DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE * DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE);
+			if (style.display == DisplayStyle.Flex && _mouseMovedDuringMouseDown && mouseMovedFarEnough)
 			{
 				Hide();
 				e.StopPropagation();

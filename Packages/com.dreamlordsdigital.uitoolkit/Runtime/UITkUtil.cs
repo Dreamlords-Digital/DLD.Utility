@@ -113,6 +113,7 @@ namespace DLD.UIToolkit
 		}
 
 		public static Vector3 GetPosition(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
+		public static Vector2 GetPosition2(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
 
 		/// <summary>
 		/// Add the specified delta value to the transform's x and y.
