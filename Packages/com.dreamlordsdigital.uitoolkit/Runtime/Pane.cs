@@ -94,19 +94,7 @@ namespace DLD.UIToolkit
 		{
 			var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
 			asset.CloneTree(this);
-
-			var clonedRoot = this.Q<VisualElement>("Pane");
-			foreach (string rootStyleClass in clonedRoot.GetClasses())
-			{
-				AddToClassList(rootStyleClass);
-			}
-
-			for (int n = clonedRoot.childCount - 1; n >= 0; --n)
-			{
-				Insert(0, clonedRoot[n]);
-			}
-
-			clonedRoot.RemoveFromHierarchy();
+			this.RemoveTemplateContainer("Pane");
 
 			// -----------------------------------
 

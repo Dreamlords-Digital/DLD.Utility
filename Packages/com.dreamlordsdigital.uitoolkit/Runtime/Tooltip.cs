@@ -36,27 +36,10 @@ namespace DLD.UIToolkit
 		{
 			var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
 			asset.CloneTree(this);
+			this.RemoveTemplateContainer("Tooltip");
 
-			var clonedRoot = this.Q<VisualElement>("Tooltip");
-			foreach (string rootStyleClass in clonedRoot.GetClasses())
-			{
-				AddToClassList(rootStyleClass);
-			}
-
-			for (int n = clonedRoot.childCount - 1; n >= 0; --n)
-			{
-				if (clonedRoot[n].name == "Icon")
-				{
-					_icon = clonedRoot[n];
-				}
-				else if (clonedRoot[n].name == "Text")
-				{
-					_text = (Label)clonedRoot[n];
-				}
-				Insert(0, clonedRoot[n]);
-			}
-
-			clonedRoot.RemoveFromHierarchy();
+			_icon = this.Q<VisualElement>("Icon");
+			_text = this.Q<Label>("Text");
 
 			// -----------------------------------
 

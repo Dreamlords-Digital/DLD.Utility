@@ -72,6 +72,22 @@ namespace DLD.UIToolkit
 			}
 		}
 
+		public static void RemoveTemplateContainer(this VisualElement me, string childRootName)
+		{
+			var clonedRoot = me.Q<VisualElement>(childRootName);
+			foreach (string rootStyleClass in clonedRoot.GetClasses())
+			{
+				me.AddToClassList(rootStyleClass);
+			}
+
+			for (int n = clonedRoot.childCount - 1; n >= 0; --n)
+			{
+				me.Insert(0, clonedRoot[n]);
+			}
+
+			clonedRoot.RemoveFromHierarchy();
+		}
+
 		public static void SetPosition(this VisualElement visualElement, Vector2 newPos)
 		{
 			visualElement.style.translate = newPos;
