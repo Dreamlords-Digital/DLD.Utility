@@ -34,6 +34,8 @@ namespace DLD.UIToolkit
 
 		bool _mouseMovedDuringMouseDown;
 
+		Focusable _focusTargetAfterClose;
+
 		public VisualElement Root => this;
 
 		public ContextMenu()
@@ -60,6 +62,11 @@ namespace DLD.UIToolkit
 			_menu.RegisterCallback<MouseDownEvent>(e => e.StopPropagation());
 
 			RegisterCallback<KeyDownEvent, ContextMenu>((e, c) => c.OnPressKey(e), this);
+		}
+
+		public void SetFocusTargetAfterClose(Focusable newFocusTarget)
+		{
+			_focusTargetAfterClose = newFocusTarget;
 		}
 
 		public void ClearMenu()
@@ -133,6 +140,10 @@ namespace DLD.UIToolkit
 		{
 			style.display = DisplayStyle.None;
 			Blur();
+			if (_focusTargetAfterClose != null)
+			{
+				_focusTargetAfterClose.Focus();
+			}
 		}
 
 		void DelayedFocus()
