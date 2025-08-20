@@ -410,6 +410,13 @@ namespace DLD.UIToolkit
 				return;
 			}
 
+			if (_spacebarHeld)
+			{
+				// dragging shouldn't happen if spacebar was already held
+				// upon left mouse down
+				return;
+			}
+
 			_draggedElement = draggedElement;
 			_draggedElementHasBeenMoved = false;
 			_isDragging = false;
@@ -467,7 +474,7 @@ namespace DLD.UIToolkit
 				return;
 			}
 
-			if (e.pointerId == _draggingPointerId)
+			if (!_isPanning && e.pointerId == _draggingPointerId)
 			{
 				if (!e.pressedButtons.GetFlag(0))
 				{
@@ -552,6 +559,13 @@ namespace DLD.UIToolkit
 				_isPanning = false;
 				target.ReleasePointer(e.pointerId);
 				e.StopPropagation();
+
+				if (e.button == 2)
+				{
+					// This is a fix for not being able to right-click after doing a pan via middle-mouse drag.
+					// Unfortunately this prevents spacebar from being detected. The user will need to do a left or right-click first.
+					target.focusController.focusedElement?.Blur();
+				}
 			}
 		}
 
@@ -569,6 +583,11 @@ namespace DLD.UIToolkit
 			return null;
 		}
 
+		/// <summary>
+		/// Called when user starts pressing shift, or releases shift.
+		/// Shift is used to indicate a "force move" command where the dragged node will not be parented,
+		/// even if there is a valid destination node under the mouse cursor.
+		/// </summary>
 		protected virtual void OnForceMoveChanged(Vector2 mousePos)
 		{
 		}
