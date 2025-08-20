@@ -77,13 +77,13 @@ namespace DLD.UIToolkit
 			var entryLabel = entryContainer.Q<Label>();
 			entryLabel.text = label;
 
-			entryContainer.RegisterCallback<PointerDownEvent, ContextMenu>((e, contextMenu) =>
+			entryContainer.RegisterCallback<PointerDownEvent>(e =>
 			{
 				if (e.currentTarget is VisualElement v)
 				{
 					v.AddToClassList(PRESSED_ENTRY_CLASS_NAME);
 				}
-			}, this);
+			});
 
 			entryContainer.RegisterCallback<PointerUpEvent, ContextMenu>((e, contextMenu) =>
 			{
@@ -92,7 +92,7 @@ namespace DLD.UIToolkit
 					v.Focus();
 					userCallback();
 				}
-				contextMenu.style.display = DisplayStyle.None;
+				contextMenu.Hide();
 			}, this);
 
 			_menu.Add(entryContainer);
@@ -132,6 +132,7 @@ namespace DLD.UIToolkit
 		public void Hide()
 		{
 			style.display = DisplayStyle.None;
+			Blur();
 		}
 
 		void DelayedFocus()
@@ -148,15 +149,15 @@ namespace DLD.UIToolkit
 		{
 			if (style.display == DisplayStyle.Flex && _mouseMovedDuringMouseDown)
 			{
-				style.display = DisplayStyle.None;
+				Hide();
+				e.StopPropagation();
 			}
 		}
 
 		void OnPressOutside(MouseDownEvent e)
 		{
-			style.display = DisplayStyle.None;
+			Hide();
 			e.StopPropagation();
-			Blur();
 		}
 
 		void OnPressKey(KeyDownEvent e)
@@ -172,9 +173,8 @@ namespace DLD.UIToolkit
 				{
 					// Pressing Escape is considered a cancel.
 					// Do the same thing as OnPressOutside.
-					style.display = DisplayStyle.None;
+					Hide();
 					e.StopPropagation();
-					Blur();
 					break;
 				}
 				case KeyCode.DownArrow:
@@ -221,7 +221,8 @@ namespace DLD.UIToolkit
 						if (menu[focusedMenuIdx].userData is System.Action userCallback)
 						{
 							userCallback();
-							style.display = DisplayStyle.None;
+							Hide();
+							e.StopPropagation();
 						}
 					}
 					break;
