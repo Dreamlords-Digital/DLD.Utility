@@ -98,6 +98,20 @@ namespace DLD.UIToolkit
 			visualElement.style.translate = new Translate(newX, newY);
 		}
 
+		public static void SetPositionX(this VisualElement visualElement, float newX)
+		{
+			var pos = visualElement.resolvedStyle.translate;
+			pos.x = newX;
+			visualElement.style.translate = pos;
+		}
+
+		public static void SetPositionY(this VisualElement visualElement, float newY)
+		{
+			var pos = visualElement.resolvedStyle.translate;
+			pos.y = newY;
+			visualElement.style.translate = pos;
+		}
+
 		public static Vector3 GetPosition(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
 
 		/// <summary>
