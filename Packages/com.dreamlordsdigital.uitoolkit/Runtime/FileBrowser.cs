@@ -115,6 +115,7 @@ namespace DLD.UIToolkit
 		readonly Button _backButton;
 		readonly Button _forwardButton;
 		readonly Toggle _jumpButton;
+		readonly Button _exploreButton;
 		readonly TextField _currentPathTextField;
 		readonly FilenameTextField _filenameTextField;
 		readonly Button _confirmButton;
@@ -284,6 +285,9 @@ namespace DLD.UIToolkit
 
 			_jumpButton = this.Q<Toggle>("Jump");
 			_jumpButton?.RegisterCallback((ChangeEvent<bool> e, FileBrowser f) => f.OnPressJumpButton(e), this);
+
+			_exploreButton = this.Q<Button>("Explore");
+			_exploreButton.RegisterCallback((ClickEvent e, FileBrowser f) => f.OnPressExploreButton(e), this);
 
 			// ---------------------------------------------------
 
@@ -881,6 +885,11 @@ namespace DLD.UIToolkit
 			DisplayStyle display = e.newValue ? DisplayStyle.Flex : DisplayStyle.None;
 			_popUpMenuOutside.style.display = display;
 			_jumpMenu.style.display = display;
+		}
+
+		void OnPressExploreButton(ClickEvent e)
+		{
+			ExplorerUtil.OpenInFileBrowser(_currentPath);
 		}
 
 		void OnChosePathHistoryEntry(IEnumerable<int> selectedIdx)
