@@ -1102,6 +1102,7 @@ namespace DLD.UIToolkit
 			}
 
 			_contextMenu.Show(e);
+			e.StopPropagation();
 		}
 
 		/// <summary>
