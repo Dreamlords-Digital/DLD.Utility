@@ -1066,7 +1066,6 @@ namespace DLD.UIToolkit
 		void OnContextClickEntry(ContextClickEvent e, int idx)
 		{
 			_fileSystemEntriesView.SetSelection(idx);
-			_fileSystemEntriesView.Focus();
 
 			_contextMenu.ClearMenu();
 
