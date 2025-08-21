@@ -1043,19 +1043,19 @@ namespace DLD.UIToolkit
 
 				if (IsPathInFavorites(_currentPath))
 				{
-					_contextMenu.AddMenu("Remove Current Path from Favorites", () =>
+					_contextMenu.AddMenu("Remove Current Path from Favorites", BaseIcons.REMOVE_FROM_FAVORITES, () =>
 					{
 						RemoveFromFavorites(_currentPath);
 					});
 				}
 				else
 				{
-					_contextMenu.AddMenu("Add Current Path to Favorites", () =>
+					_contextMenu.AddMenu("Add Current Path to Favorites", BaseIcons.ADD_TO_FAVORITES, () =>
 					{
 						AddToFavorites(_currentPath);
 					});
 				}
-				_contextMenu.AddMenu("Explore Here", () =>
+				_contextMenu.AddMenu("Explore Here", BaseIcons.OPEN_FILE_EXPLORER, () =>
 				{
 					ExplorerUtil.OpenInFileBrowser(_currentPath);
 				});
@@ -1077,25 +1077,25 @@ namespace DLD.UIToolkit
 
 			if (IsPathInFavorites(_currentPath))
 			{
-				_contextMenu.AddMenu("Remove Current Path from Favorites",
+				_contextMenu.AddMenu("Remove Current Path from Favorites", BaseIcons.REMOVE_FROM_FAVORITES,
 					() => { RemoveFromFavorites(_currentPath); });
 			}
 			else
 			{
-				_contextMenu.AddMenu("Add Current Path to Favorites",
+				_contextMenu.AddMenu("Add Current Path to Favorites", BaseIcons.ADD_TO_FAVORITES,
 					() => { AddToFavorites(_currentPath); });
 			}
 
 			string clickedFileFullPath = FileUtil.CombinePath(_currentPath, _fileSystemEntries[idx].Name);
 
-			_contextMenu.AddMenu("Explore Here", () =>
+			_contextMenu.AddMenu("Explore Here", BaseIcons.OPEN_FILE_EXPLORER, () =>
 			{
 				ExplorerUtil.OpenInFileBrowser(clickedFileFullPath);
 			});
 
 			if (_fileSystemEntries[idx].EntryType == FileSystemEntryType.File)
 			{
-				_contextMenu.AddMenu("Open with Associated Program", () =>
+				_contextMenu.AddMenu("Open with Associated Program", BaseIcons.OPEN_USING_ASSOCIATED, () =>
 				{
 					ExplorerUtil.OpenWithDefaultProgram(clickedFileFullPath);
 				});

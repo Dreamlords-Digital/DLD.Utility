@@ -81,3 +81,15 @@
 .dld-icon--debug {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-system.png?fileID=2800000&guid=bc90a63feda7e7f4fa01ee335aa0f4dc&type=3#applications-system");
 }
+
+.dld-icon--add-to-favorites {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/list-add.png?fileID=2800000&guid=a9b1afbc4dc1b524fa5f2ded0fd6b4f3&type=3#list-add");
+}
+
+.dld-icon--remove-from-favorites {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/list-remove.png?fileID=2800000&guid=aed97f4f9c8ff8b418315cef940a39b4&type=3#list-remove");
+}
+
+.dld-icon--open-using-associated {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-other.png?fileID=2800000&guid=e1a4fca9eedcc484ca6f5320cbf666c9&type=3#applications-other");
+}
