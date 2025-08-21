@@ -39,4 +39,6 @@
     padding-top: 0;
     padding-bottom: 0;
     -unity-text-align: lower-left;
+    max-width: 500px;
+    white-space: pre-wrap;
 }

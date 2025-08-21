@@ -30,6 +30,11 @@ namespace DLD.UIToolkit
 			{
 				iconClassName = tooltip.Substring(0, semicolonIdx);
 				tooltip = tooltip.Substring(semicolonIdx+1);
+
+				if (string.IsNullOrWhiteSpace(tooltip))
+				{
+					return;
+				}
 			}
 			else
 			{
