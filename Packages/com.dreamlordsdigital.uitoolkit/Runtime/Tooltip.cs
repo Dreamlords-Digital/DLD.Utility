@@ -5,9 +5,44 @@ namespace DLD.UIToolkit
 {
 	public interface ITooltip
 	{
-		void ShowTooltipAtMouse(string text, string iconClassName = null);
 		void ShowTooltipAtMouse(string text, string iconClassName, Vector2 mousePos);
 		void HideTooltip();
+	}
+
+	public static class TooltipUtil
+	{
+		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowFromUserData = _ShowTooltipFromUserData;
+		public static readonly EventCallback<PointerLeaveEvent, ITooltip> Hide = _HideTooltip;
+
+		static void _ShowTooltipFromUserData(PointerEnterEvent e, ITooltip t)
+		{
+			var eventTarget = (VisualElement)e.target;
+			string tooltip = (string)eventTarget.userData;
+
+			if (string.IsNullOrWhiteSpace(tooltip))
+			{
+				return;
+			}
+
+			string iconClassName;
+			int semicolonIdx = tooltip.IndexOf(';');
+			if (semicolonIdx != -1)
+			{
+				iconClassName = tooltip.Substring(0, semicolonIdx);
+				tooltip = tooltip.Substring(semicolonIdx+1);
+			}
+			else
+			{
+				iconClassName = null;
+			}
+
+			t.ShowTooltipAtMouse(tooltip, iconClassName, e.position);
+		}
+
+		static void _HideTooltip(PointerLeaveEvent _, ITooltip t)
+		{
+			t.HideTooltip();
+		}
 	}
 
 	[UxmlElement]
