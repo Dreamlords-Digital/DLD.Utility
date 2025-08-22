@@ -6,7 +6,9 @@ namespace DLD.UIToolkit
 	public interface ITooltip
 	{
 		void ShowTooltipAtMouse(string text, string iconClassName, Vector2 mousePos);
+		void SetTooltipContext(IEventHandler context);
 		void HideTooltip();
+		void HideTooltipIfContextIs(IEventHandler context);
 	}
 
 	public static class TooltipUtil
@@ -42,6 +44,7 @@ namespace DLD.UIToolkit
 			}
 
 			t.ShowTooltipAtMouse(tooltip, iconClassName, e.position);
+			t.SetTooltipContext(eventTarget);
 		}
 
 		static void _HideTooltip(PointerLeaveEvent _, ITooltip t)
@@ -71,6 +74,7 @@ namespace DLD.UIToolkit
 		readonly Label _text;
 
 		readonly EventCallback<PointerMoveEvent> _onPointerMove;
+		IEventHandler _context;
 
 		public Tooltip()
 		{
@@ -98,6 +102,11 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================================
+
+		public void SetContext(IEventHandler context)
+		{
+			_context = context;
+		}
 
 		public void Set(string text, string iconClassName = null)
 		{
@@ -138,6 +147,14 @@ namespace DLD.UIToolkit
 			_showType = ShowType.None;
 			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.None;
+		}
+
+		public void HideIfContextIs(IEventHandler context)
+		{
+			if (_context == context)
+			{
+				Hide();
+			}
 		}
 
 		// ==================================================================================================
