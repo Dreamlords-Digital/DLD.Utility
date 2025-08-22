@@ -13,6 +13,8 @@ namespace DLD.UIToolkit
 		VisualElement AddMenu(string label, System.Action callback);
 		void AddMenu(string label, string iconClassStyle, System.Action callback);
 
+		void AddSeparator();
+
 		void Show(Vector2 position);
 		void Show(ContextClickEvent e);
 		void Show(PointerDownEvent e);
@@ -22,6 +24,7 @@ namespace DLD.UIToolkit
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenu";
 		const string ENTRY_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntry";
+		const string SEPARATOR_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntrySeparator";
 		const string MENU_NAME = "ContextMenuBg";
 
 		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
@@ -33,6 +36,7 @@ namespace DLD.UIToolkit
 		readonly System.Action _delayedFocus;
 
 		readonly VisualTreeAsset _entryAsset;
+		readonly VisualTreeAsset _separatorAsset;
 
 		bool _mouseMovedDuringMouseDown;
 
@@ -45,6 +49,7 @@ namespace DLD.UIToolkit
 			_delayedFocus = DelayedFocus;
 
 			_entryAsset = Resources.Load<VisualTreeAsset>(ENTRY_TEMPLATE_RESOURCES_PATH);
+			_separatorAsset = Resources.Load<VisualTreeAsset>(SEPARATOR_TEMPLATE_RESOURCES_PATH);
 
 			// -----------------------------------
 
@@ -74,6 +79,14 @@ namespace DLD.UIToolkit
 		public void ClearMenu()
 		{
 			_menu.Clear();
+		}
+
+		public void AddSeparator()
+		{
+			var createdSeparator = _separatorAsset.Instantiate();
+
+			var entryContainer = createdSeparator.Q<VisualElement>("Entry");
+			_menu.Add(entryContainer);
 		}
 
 		public VisualElement AddMenu(string label, System.Action callback)

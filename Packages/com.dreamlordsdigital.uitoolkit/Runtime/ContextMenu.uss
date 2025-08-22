@@ -102,3 +102,28 @@
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
 }
+
+.dld-context-menu-entry-separator {
+    border-left-color: rgb(214, 214, 214);
+    border-right-color: rgb(214, 214, 214);
+    border-top-color: rgb(214, 214, 214);
+    border-bottom-color: rgb(214, 214, 214);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    height: 2px;
+    align-self: center;
+    flex-grow: 1;
+}
+
+.dld-context-menu-entry-container--separator {
+    height: 10px;
+    flex-direction: row;
+    padding-left: 5px;
+    padding-right: 5px;
+}
