@@ -27,6 +27,7 @@ namespace DLD.UIToolkit
 		const string SEPARATOR_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntrySeparator";
 		const string MENU_NAME = "ContextMenuBg";
 
+		const string ENTRY_ALT_CLASS_NAME = "dld-context-menu-entry-container--alt-bg";
 		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
 
 		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
@@ -38,6 +39,7 @@ namespace DLD.UIToolkit
 		readonly VisualTreeAsset _entryAsset;
 		readonly VisualTreeAsset _separatorAsset;
 
+		bool _doAltBgStyling;
 		bool _mouseMovedDuringMouseDown;
 
 		Focusable _focusTargetAfterClose;
@@ -81,6 +83,11 @@ namespace DLD.UIToolkit
 			_menu.Clear();
 		}
 
+		public void DoAltBgStyling(bool doAltBgStyling)
+		{
+			_doAltBgStyling = doAltBgStyling;
+		}
+
 		public void AddSeparator()
 		{
 			var createdSeparator = _separatorAsset.Instantiate();
@@ -118,6 +125,12 @@ namespace DLD.UIToolkit
 			}, this);
 
 			_menu.Add(entryContainer);
+
+			if (_doAltBgStyling && _menu.childCount % 2 == 0)
+			{
+				entryContainer.AddToClassList(ENTRY_ALT_CLASS_NAME);
+			}
+
 			return entryContainer;
 		}
 
