@@ -12,6 +12,7 @@ namespace DLD.UIToolkit
 
 		VisualElement AddMenu(string label, System.Action callback);
 		void AddMenu(string label, string iconClassStyle, System.Action callback);
+		void AddDisabledMenu(string label, string iconClassStyle = null);
 
 		void AddSeparator();
 
@@ -29,6 +30,7 @@ namespace DLD.UIToolkit
 
 		const string ENTRY_ALT_CLASS_NAME = "dld-context-menu-entry-container--alt-bg";
 		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
+		const string DISABLED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--disabled";
 
 		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
 
@@ -102,17 +104,24 @@ namespace DLD.UIToolkit
 
 			var entryContainer = createdEntry.Q<VisualElement>("Entry");
 			entryContainer.userData = callback;
+			if (callback == null)
+			{
+				entryContainer.AddToClassList(DISABLED_ENTRY_CLASS_NAME);
+			}
 
 			var entryLabel = entryContainer.Q<Label>();
 			entryLabel.text = label;
 
-			entryContainer.RegisterCallback<PointerDownEvent>(e =>
+			if (callback != null)
 			{
-				if (e.currentTarget is VisualElement v)
+				entryContainer.RegisterCallback<PointerDownEvent>(e =>
 				{
-					v.AddToClassList(PRESSED_ENTRY_CLASS_NAME);
-				}
-			});
+					if (e.currentTarget is VisualElement v)
+					{
+						v.AddToClassList(PRESSED_ENTRY_CLASS_NAME);
+					}
+				});
+			}
 
 			entryContainer.RegisterCallback<PointerUpEvent, ContextMenu>((e, contextMenu) =>
 			{
@@ -120,8 +129,12 @@ namespace DLD.UIToolkit
 				{
 					v.Focus();
 					userCallback();
+					contextMenu.Hide();
 				}
-				contextMenu.Hide();
+				else
+				{
+					e.StopPropagation();
+				}
 			}, this);
 
 			_menu.Add(entryContainer);
@@ -140,6 +153,11 @@ namespace DLD.UIToolkit
 
 			var entryIcon = entryContainer.Q<VisualElement>("Icon");
 			entryIcon.AddToClassList(iconClassStyle);
+		}
+
+		public void AddDisabledMenu(string label, string iconClassStyle = null)
+		{
+			AddMenu(label, iconClassStyle, null);
 		}
 
 		public void Show(Vector2 position)
@@ -229,7 +247,16 @@ namespace DLD.UIToolkit
 					else
 					{
 						// select menu entry below
-						_menu[focusedMenuIdx+1].Focus();
+						++focusedMenuIdx;
+						while (!_menu[focusedMenuIdx].focusable)
+						{
+							++focusedMenuIdx;
+							if (focusedMenuIdx >= _menu.childCount)
+							{
+								focusedMenuIdx = 0;
+							}
+						}
+						_menu[focusedMenuIdx].Focus();
 					}
 
 					break;
@@ -245,7 +272,16 @@ namespace DLD.UIToolkit
 					else
 					{
 						// select menu entry above
-						_menu[focusedMenuIdx-1].Focus();
+						--focusedMenuIdx;
+						while (!_menu[focusedMenuIdx].focusable)
+						{
+							--focusedMenuIdx;
+							if (focusedMenuIdx < 0)
+							{
+								focusedMenuIdx = _menu.childCount - 1;
+							}
+						}
+						_menu[focusedMenuIdx].Focus();
 					}
 
 					break;

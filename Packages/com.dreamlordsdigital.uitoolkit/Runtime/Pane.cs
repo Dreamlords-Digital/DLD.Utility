@@ -223,7 +223,8 @@ namespace DLD.UIToolkit
 
 			_contextMenu.ClearMenu();
 			_contextMenu.AddMenu("Close", BaseIcons.CLOSE, () => CloseTab(clickedTabContent));
-			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE, () => throw new NotImplementedException());
+			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE,
+				_tabList.Count > 1 ? () => throw new NotImplementedException() : null);
 			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE, () => throw new NotImplementedException());
 			_onTabContext?.Invoke(_contextMenu, clickedTabContent);
 			_contextMenu.Show(e);
