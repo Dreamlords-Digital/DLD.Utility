@@ -63,14 +63,6 @@ namespace DLD.Utility
 			byte b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
 			return new Color32(r, g, b, 255);
 		}
-
-		public static bool IsDifferentFrom(this Color32 me, Color32 other)
-		{
-			return me.r != other.r ||
-			       me.g != other.g ||
-			       me.b != other.b ||
-			       me.a != other.a;
-		}
 	}
 
 }
