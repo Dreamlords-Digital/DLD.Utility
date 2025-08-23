@@ -75,6 +75,10 @@ namespace DLD.UIToolkit
 		public static void RemoveTemplateContainer(this VisualElement me, string childRootName)
 		{
 			var clonedRoot = me.Q<VisualElement>(childRootName);
+
+			me.pickingMode = clonedRoot.pickingMode;
+			me.focusable = clonedRoot.focusable;
+
 			foreach (string rootStyleClass in clonedRoot.GetClasses())
 			{
 				me.AddToClassList(rootStyleClass);
