@@ -7,8 +7,9 @@ namespace DLD.Utility
 	/// This is a deep copy operation. No references will be shared. Object allocations will be created if necessary.
 	/// </summary>
 	/// <remarks>
-	/// This is different from <see cref="System.ICloneable"/> because ICloneable generates a new copy of the object,
-	/// whereas the <see cref="SetValuesFrom"/> just inspects the values of another instance and recreates that data within itself.
+	/// This is different from <see cref="System.ICloneable"/> because ICloneable generates a new copy of the <typeparamref name="T"/> object,
+	/// whereas the <see cref="SetValuesFrom"/> will not create a new <typeparamref name="T"/> object.
+	/// Instead, it inspects the values of another instance and recreates that data within itself.
 	/// </remarks>
 	/// <typeparam name="T"></typeparam>
 	public interface IValuesSettableFrom<in T>

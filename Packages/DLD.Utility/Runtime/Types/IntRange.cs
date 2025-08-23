@@ -210,6 +210,22 @@ namespace DLD.Utility
 
 		public bool IsLowerAndUpperLimitSameAndPositive => LowerLimit == UpperLimit && LowerLimit > 0;
 
+		/// <summary>
+		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the bounds.
+		/// </summary>
+		public int Random()
+		{
+			return UnityEngine.Random.Range(LowerLimit, UpperLimit+1);
+		}
+
+		/// <summary>
+		/// Uses a <see cref="System.Random"/> to generate a random value within the bounds.
+		/// </summary>
+		public int Random(System.Random random)
+		{
+			return random.Next(LowerLimit, UpperLimit+1);
+		}
+
 		public static bool operator ==(IntRange a, IntRange b)
 		{
 			return (a.UpperLimit == b.UpperLimit) && (a.LowerLimit == b.LowerLimit);
@@ -230,12 +246,15 @@ namespace DLD.Utility
 			return UpperLimit == other.UpperLimit && LowerLimit == other.LowerLimit;
 		}
 
+		public bool Equals(IntRange other)
+		{
+			return LowerLimit == other.LowerLimit && UpperLimit == other.UpperLimit;
+		}
+
 		public override int GetHashCode()
 		{
-			var l = (LowerLimit << 16) | (LowerLimit >> 16);
+			int l = (LowerLimit << 16) | (LowerLimit >> 16);
 			return UpperLimit ^ l;
-			//const int N1 = 99999997;
-			//return (_lowerLimit % N1) ^ _upperLimit;
 		}
 
 		public override string ToString()
@@ -285,10 +304,5 @@ namespace DLD.Utility
 
 		public static IntRange operator -(IntRange a, int offset) =>
 			new IntRange(a.LowerLimit - offset, a.UpperLimit - offset, true);
-
-		public bool Equals(IntRange other)
-		{
-			return LowerLimit == other.LowerLimit && UpperLimit == other.UpperLimit;
-		}
 	}
 }
