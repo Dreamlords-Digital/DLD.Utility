@@ -1,6 +1,6 @@
 ﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
-using DLD.Serializer;
+using System;
 
 namespace DLD.Utility
 {
@@ -11,40 +11,32 @@ namespace DLD.Utility
 	/// It has validation methods to prevent Lower Limit from going above Upper Limit.
 	/// This validation is enabled by default but can be optionally disabled.
 	/// </remarks>
-	public struct IntRange
+	public struct IntRange : IEquatable<IntRange>
 	{
-		/// <inheritdoc cref="_lowerLimit"/>
-		public int LowerLimit => _lowerLimit;
-
-		/// <inheritdoc cref="_upperLimit"/>
-		public int UpperLimit => _upperLimit;
-
 		/// <summary>
 		/// The inclusive lower limit to the range.
 		/// </summary>
-		[Serialized("LowerLimit")]
-		int _lowerLimit;
+		public int LowerLimit;
 
 		/// <summary>
 		/// The inclusive upper limit to the range.
 		/// </summary>
-		[Serialized("UpperLimit")]
-		int _upperLimit;
+		public int UpperLimit;
 
 		public IntRange(int lowerLimit, int upperLimit, bool allowSameValues = false)
 		{
-			_lowerLimit = lowerLimit;
-			_upperLimit = upperLimit;
-			_lowerLimit = ValidateLowerLimit(_lowerLimit, allowSameValues);
-			_upperLimit = ValidateUpperLimit(_upperLimit, allowSameValues);
+			LowerLimit = lowerLimit;
+			UpperLimit = upperLimit;
+			LowerLimit = ValidateLowerLimit(LowerLimit, allowSameValues);
+			UpperLimit = ValidateUpperLimit(UpperLimit, allowSameValues);
 		}
 
 		public IntRange(int singleNumber)
 		{
-			_lowerLimit = singleNumber;
-			_upperLimit = singleNumber;
-			_lowerLimit = ValidateLowerLimit(_lowerLimit, true);
-			_upperLimit = ValidateUpperLimit(_upperLimit, true);
+			LowerLimit = singleNumber;
+			UpperLimit = singleNumber;
+			LowerLimit = ValidateLowerLimit(LowerLimit, true);
+			UpperLimit = ValidateUpperLimit(UpperLimit, true);
 		}
 
 		/// <summary>
@@ -56,13 +48,13 @@ namespace DLD.Utility
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetLimit(IntRange value, bool validate = true, bool allowSameValues = false)
 		{
-			_lowerLimit = value._lowerLimit;
-			_upperLimit = value._upperLimit;
+			LowerLimit = value.LowerLimit;
+			UpperLimit = value.UpperLimit;
 
 			if (validate)
 			{
-				_lowerLimit = ValidateLowerLimit(_lowerLimit, allowSameValues);
-				_upperLimit = ValidateUpperLimit(_upperLimit, allowSameValues);
+				LowerLimit = ValidateLowerLimit(LowerLimit, allowSameValues);
+				UpperLimit = ValidateUpperLimit(UpperLimit, allowSameValues);
 			}
 		}
 
@@ -76,13 +68,13 @@ namespace DLD.Utility
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetLimit(int lowerLimit, int upperLimit, bool validate = true, bool allowSameValues = false)
 		{
-			_lowerLimit = lowerLimit;
-			_upperLimit = upperLimit;
+			LowerLimit = lowerLimit;
+			UpperLimit = upperLimit;
 
 			if (validate)
 			{
-				_lowerLimit = ValidateLowerLimit(lowerLimit, allowSameValues);
-				_upperLimit = ValidateUpperLimit(upperLimit, allowSameValues);
+				LowerLimit = ValidateLowerLimit(lowerLimit, allowSameValues);
+				UpperLimit = ValidateUpperLimit(upperLimit, allowSameValues);
 			}
 		}
 
@@ -94,7 +86,7 @@ namespace DLD.Utility
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetUpperLimit(int newUpperLimit, bool validate = true, bool allowSameValues = false)
 		{
-			_upperLimit = validate ? ValidateUpperLimit(newUpperLimit, allowSameValues) : newUpperLimit;
+			UpperLimit = validate ? ValidateUpperLimit(newUpperLimit, allowSameValues) : newUpperLimit;
 		}
 
 		/// <summary>
@@ -105,7 +97,7 @@ namespace DLD.Utility
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetLowerLimit(int newLowerLimit, bool validate = true, bool allowSameValues = false)
 		{
-			_lowerLimit = validate ? ValidateLowerLimit(newLowerLimit, allowSameValues) : newLowerLimit;
+			LowerLimit = validate ? ValidateLowerLimit(newLowerLimit, allowSameValues) : newLowerLimit;
 		}
 
 		/// <summary>
@@ -113,7 +105,7 @@ namespace DLD.Utility
 		/// </summary>
 		public void ModifyUpperLimit(int offsetToUpperLimit, bool allowSameValues = false)
 		{
-			_upperLimit = ValidateUpperLimit(_upperLimit + offsetToUpperLimit, allowSameValues);
+			UpperLimit = ValidateUpperLimit(UpperLimit + offsetToUpperLimit, allowSameValues);
 		}
 
 		/// <summary>
@@ -121,7 +113,7 @@ namespace DLD.Utility
 		/// </summary>
 		public void ModifyLowerLimit(int offsetToLowerLimit, bool allowSameValues = false)
 		{
-			_lowerLimit = ValidateLowerLimit(_lowerLimit + offsetToLowerLimit, allowSameValues);
+			LowerLimit = ValidateLowerLimit(LowerLimit + offsetToLowerLimit, allowSameValues);
 		}
 
 		int ValidateUpperLimit(int value, bool allowSameValues = false)
@@ -130,16 +122,16 @@ namespace DLD.Utility
 
 			if (allowSameValues)
 			{
-				if (newUpperLimit < _lowerLimit)
+				if (newUpperLimit < LowerLimit)
 				{
-					newUpperLimit = _lowerLimit;
+					newUpperLimit = LowerLimit;
 				}
 			}
 			else
 			{
-				if (newUpperLimit <= _lowerLimit)
+				if (newUpperLimit <= LowerLimit)
 				{
-					newUpperLimit = _lowerLimit + 1;
+					newUpperLimit = LowerLimit + 1;
 				}
 			}
 
@@ -153,16 +145,16 @@ namespace DLD.Utility
 
 			if (allowSameValues)
 			{
-				if (newLowerLimit > _upperLimit)
+				if (newLowerLimit > UpperLimit)
 				{
-					newLowerLimit = _upperLimit;
+					newLowerLimit = UpperLimit;
 				}
 			}
 			else
 			{
-				if (newLowerLimit >= _upperLimit)
+				if (newLowerLimit >= UpperLimit)
 				{
-					newLowerLimit = _upperLimit - 1;
+					newLowerLimit = UpperLimit - 1;
 				}
 			}
 
@@ -171,7 +163,7 @@ namespace DLD.Utility
 
 		public void DisallowNonPositiveValues(bool allowSameValues = false)
 		{
-			if (_upperLimit < 1)
+			if (UpperLimit < 1)
 			{
 				// We're about to set Upper Limit to 1,
 				// which necessitates setting the Lower Limit to 1 as well (1 to 1),
@@ -183,40 +175,40 @@ namespace DLD.Utility
 
 				if (allowSameValues)
 				{
-					_lowerLimit = 1;
-					_upperLimit = 1;
+					LowerLimit = 1;
+					UpperLimit = 1;
 				}
 				else
 				{
-					_lowerLimit = 1;
-					_upperLimit = 2;
+					LowerLimit = 1;
+					UpperLimit = 2;
 				}
 			}
-			else if (_lowerLimit < 1)
+			else if (LowerLimit < 1)
 			{
-				_lowerLimit = 1;
-				if (_upperLimit == 1 && !allowSameValues)
+				LowerLimit = 1;
+				if (UpperLimit == 1 && !allowSameValues)
 				{
-					_upperLimit = 2;
+					UpperLimit = 2;
 				}
 			}
 		}
 
 		public bool IsWithinLimit(int value)
 		{
-			return value >= _lowerLimit && value <= _upperLimit;
+			return value >= LowerLimit && value <= UpperLimit;
 		}
 
 		public bool IsOutsideLimit(int value)
 		{
-			return value < _lowerLimit || value > _upperLimit;
+			return value < LowerLimit || value > UpperLimit;
 		}
 
-		public bool IsZero => _lowerLimit == 0 && _upperLimit == 0;
+		public bool IsZero => LowerLimit == 0 && UpperLimit == 0;
 
-		public bool IsLowerAndUpperLimitSame => _lowerLimit == _upperLimit;
+		public bool IsLowerAndUpperLimitSame => LowerLimit == UpperLimit;
 
-		public bool IsLowerAndUpperLimitSameAndPositive => _lowerLimit == _upperLimit && _lowerLimit > 0;
+		public bool IsLowerAndUpperLimitSameAndPositive => LowerLimit == UpperLimit && LowerLimit > 0;
 
 		public static bool operator ==(IntRange a, IntRange b)
 		{
@@ -235,36 +227,36 @@ namespace DLD.Utility
 				return false;
 			}
 
-			return _upperLimit == other.UpperLimit && _lowerLimit == other.LowerLimit;
+			return UpperLimit == other.UpperLimit && LowerLimit == other.LowerLimit;
 		}
 
 		public override int GetHashCode()
 		{
-			var l = (_lowerLimit << 16) | (_lowerLimit >> 16);
-			return _upperLimit ^ l;
+			var l = (LowerLimit << 16) | (LowerLimit >> 16);
+			return UpperLimit ^ l;
 			//const int N1 = 99999997;
 			//return (_lowerLimit % N1) ^ _upperLimit;
 		}
 
 		public override string ToString()
 		{
-			return _lowerLimit == _upperLimit
-				? _lowerLimit.ToString()
-				: $"{_lowerLimit.ToString()} to {_upperLimit.ToString()}";
+			return LowerLimit == UpperLimit
+				? LowerLimit.ToString()
+				: $"{LowerLimit.ToString()} to {UpperLimit.ToString()}";
 		}
 
 		public string ToString(string format)
 		{
-			return _lowerLimit == _upperLimit
-				? _lowerLimit.ToString(format)
-				: $"{_lowerLimit.ToString(format)} to {_upperLimit.ToString(format)}";
+			return LowerLimit == UpperLimit
+				? LowerLimit.ToString(format)
+				: $"{LowerLimit.ToString(format)} to {UpperLimit.ToString(format)}";
 		}
 
 		public string ToString(int offset, string format = "N0")
 		{
-			return _lowerLimit == _upperLimit
-				? (_lowerLimit + offset).ToString(format)
-				: $"{(_lowerLimit + offset).ToString(format)} to {(_upperLimit + offset).ToString(format)}";
+			return LowerLimit == UpperLimit
+				? (LowerLimit + offset).ToString(format)
+				: $"{(LowerLimit + offset).ToString(format)} to {(UpperLimit + offset).ToString(format)}";
 		}
 
 		/// <summary>
@@ -293,5 +285,10 @@ namespace DLD.Utility
 
 		public static IntRange operator -(IntRange a, int offset) =>
 			new IntRange(a.LowerLimit - offset, a.UpperLimit - offset, true);
+
+		public bool Equals(IntRange other)
+		{
+			return LowerLimit == other.LowerLimit && UpperLimit == other.UpperLimit;
+		}
 	}
 }
