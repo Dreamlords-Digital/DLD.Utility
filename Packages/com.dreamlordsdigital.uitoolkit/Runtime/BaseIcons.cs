@@ -11,5 +11,6 @@ namespace DLD.UIToolkit
 		public const string ADD_TO_FAVORITES = "dld-icon--add-to-favorites";
 		public const string REMOVE_FROM_FAVORITES = "dld-icon--remove-from-favorites";
 		public const string OPEN_USING_ASSOCIATED = "dld-icon--open-using-associated";
+		public const string SELECTED_IN_DROPDOWN = "dld-icon--selected-in-dropdown";
 	}
 }

@@ -93,3 +93,7 @@
 .dld-icon--open-using-associated {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-other.png?fileID=2800000&guid=e1a4fca9eedcc484ca6f5320cbf666c9&type=3#applications-other");
 }
+
+.dld-icon--selected-in-dropdown {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/tick.png?fileID=2800000&guid=a8150005769b1ed4cbc62a9d059de829&type=3#tick");
+}

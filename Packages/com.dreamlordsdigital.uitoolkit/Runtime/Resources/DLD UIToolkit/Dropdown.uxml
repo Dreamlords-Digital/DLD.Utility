@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseStyles.uss?fileID=7433441132597879392&amp;guid=f7fc98db420be0e418d51a3e79579bf9&amp;type=3#BaseStyles" />
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BasePanel.uss?fileID=7433441132597879392&amp;guid=73c73881b6bb2764e81c18154d2c5a00&amp;type=3#BasePanel" />
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ContextMenu.uss?fileID=7433441132597879392&amp;guid=65fe3e65cd5272d4b800d24be6a0860b&amp;type=3#ContextMenu" />
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/Dropdown.uss?fileID=7433441132597879392&amp;guid=8fc00aea6e9ef6a47969190537f24eaa&amp;type=3#Dropdown" />
+    <ui:VisualElement name="Dropdown" class="dld-dropdown__container">
+        <ui:Label text="Dropdown" class="dld-dropdown__label" />
+        <ui:Toggle label="Valueyqp" class="dld-dropdown__toggle" />
+    </ui:VisualElement>
+</ui:UXML>

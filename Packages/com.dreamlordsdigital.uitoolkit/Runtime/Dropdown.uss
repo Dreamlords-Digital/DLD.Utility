@@ -1,0 +1,101 @@
+.dld-dropdown__container {
+    font-size: 12px;
+    align-items: flex-start;
+    flex-direction: row;
+}
+
+.dld-dropdown__label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 3px;
+    padding-top: 2px;
+    padding-bottom: 0;
+    -unity-text-align: upper-left;
+    -unity-font-style: bold;
+}
+
+.dld-dropdown__toggle {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/DropdownBg.png?fileID=2800000&guid=a872d0542b3b37945a6b9c1a24050b4c&type=3#DropdownBg");
+    -unity-slice-left: 5;
+    -unity-slice-top: 5;
+    -unity-slice-right: 5;
+    -unity-slice-bottom: 5;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+}
+
+.dld-dropdown__toggle > .unity-toggle__input {
+    display: none;
+}
+
+.dld-dropdown__toggle > .unity-toggle__label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    min-width: auto;
+}
+
+.dld-dropdown__toggle:checked {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/DropdownBg-Pressed.png?fileID=2800000&guid=18fd4f0c6ac81754d9052c1d3f3f2088&type=3#DropdownBg-Pressed");
+    -unity-slice-left: 7;
+    -unity-slice-top: 7;
+    -unity-slice-right: 7;
+    -unity-slice-bottom: 7;
+}
+
+.dld-dropdown__container:focus > .dld-dropdown__label {
+    color: rgb(121, 166, 233);
+}
+
+.dld-dropdown__toggle > Label {
+    -unity-font-style: normal;
+}
+
+.dld-dropdown__toggle > Label:focus {
+    border-left-color: rgb(58, 121, 187);
+    border-right-color: rgb(58, 121, 187);
+    border-top-color: rgb(58, 121, 187);
+    border-bottom-color: rgb(58, 121, 187);
+}
+
+.dld-dropdown__toggle:focus {
+    border-left-color: rgb(58, 121, 187);
+    border-right-color: rgb(58, 121, 187);
+    border-top-color: rgb(58, 121, 187);
+    border-bottom-color: rgb(58, 121, 187);
+}
+
+.dld-dropdown__arrow {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/DropdownArrow.psd?fileID=2800000&guid=5cdc567d5a5596e4e88a2b8f86351836&type=3#DropdownArrow");
+    align-self: center;
+    top: 2px;
+    background-size: 11px 10px;
+    background-position-x: right 0;
+    flex-grow: 1;
+    min-width: 11px;
+    min-height: 10px;
+}
+
+.dld-dropdown__container:focus > .dld-dropdown__toggle {
+    border-left-color: rgba(58, 121, 187, 0.45);
+    border-right-color: rgba(58, 121, 187, 0.45);
+    border-top-color: rgba(58, 121, 187, 0.45);
+    border-bottom-color: rgba(58, 121, 187, 0.45);
+}
