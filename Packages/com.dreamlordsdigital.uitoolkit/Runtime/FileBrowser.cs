@@ -1688,76 +1688,82 @@ namespace DLD.UIToolkit
 
 		// =====================================================================
 
-		static int SortByNameAsc(FileSystemEntry a, FileSystemEntry b)
+		const int A_FIRST_THEN_B = -1;
+		const int B_FIRST_THEN_A = +1;
+
+		static readonly Comparison<FileSystemEntry> SortByNameAsc = _SortByNameAsc;
+		static int _SortByNameAsc(FileSystemEntry a, FileSystemEntry b)
 		{
 			// the special "To Parent Folder" always comes first
 			if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			// folders come first before files
 			if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			return string.Compare(a.Name, b.Name, StringComparison.Ordinal);
 		}
 
-		static int SortByNameDesc(FileSystemEntry a, FileSystemEntry b)
+		static readonly Comparison<FileSystemEntry> SortByNameDesc = _SortByNameDesc;
+		static int _SortByNameDesc(FileSystemEntry a, FileSystemEntry b)
 		{
 			// the special "To Parent Folder" always comes first
 			if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			// folders come first before files
 			if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			return string.Compare(b.Name, a.Name, StringComparison.Ordinal);
 		}
 
-		static int SortBySizeAsc(FileSystemEntry a, FileSystemEntry b)
+		static readonly Comparison<FileSystemEntry> SortBySizeAsc = _SortBySizeAsc;
+		static int _SortBySizeAsc(FileSystemEntry a, FileSystemEntry b)
 		{
 			// the special "To Parent Folder" always comes first
 			if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			// folders come first before files
 			if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.Folder)
@@ -1770,26 +1776,27 @@ namespace DLD.UIToolkit
 			return a.SizeBytes.CompareTo(b.SizeBytes);
 		}
 
-		static int SortBySizeDesc(FileSystemEntry a, FileSystemEntry b)
+		static readonly Comparison<FileSystemEntry> SortBySizeDesc = _SortBySizeDesc;
+		static int _SortBySizeDesc(FileSystemEntry a, FileSystemEntry b)
 		{
 			// the special "To Parent Folder" always comes first
 			if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			// folders come first before files
 			if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 			{
-				return -1;
+				return A_FIRST_THEN_B;
 			}
 			if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 			{
-				return 1;
+				return B_FIRST_THEN_A;
 			}
 
 			if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.Folder)
