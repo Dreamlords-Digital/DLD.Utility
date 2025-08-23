@@ -67,9 +67,13 @@ namespace DLD.UIToolkit
 	}
 
 	[UxmlElement]
-	public partial class Pane<T> : VisualElement where T : TabbedContent, new()
+	public partial class Pane<T> : VisualElement, IContextMenuListener where T : TabbedContent, new()
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Pane";
+
+		const string CONTEXT_MENU_CLOSE_TAB = "CLOSE_TAB";
+		const string CONTEXT_MENU_CLOSE_OTHER_TABS = "CLOSE_OTHER_TABS";
+		const string CONTEXT_MENU_CLOSE_ALL_TABS = "CLOSE_ALL_TABS";
 
 		readonly VisualElement _tabContainer;
 		readonly List<T> _tabList = new();
@@ -222,12 +226,32 @@ namespace DLD.UIToolkit
 			}
 
 			_contextMenu.ClearMenu();
-			_contextMenu.AddMenu("Close", BaseIcons.CLOSE, () => CloseTab(clickedTabContent));
-			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE,
-				_tabList.Count > 1 ? () => throw new NotImplementedException() : null);
-			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE, () => throw new NotImplementedException());
+			_contextMenu.AddMenu("Close", BaseIcons.CLOSE, this, CONTEXT_MENU_CLOSE_TAB, clickedTabContent);
+			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE, this, CONTEXT_MENU_CLOSE_OTHER_TABS, clickedTabContent, _tabList.Count == 1);
+			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE, this, CONTEXT_MENU_CLOSE_ALL_TABS);
 			_onTabContext?.Invoke(_contextMenu, clickedTabContent);
 			_contextMenu.Show(e);
+		}
+
+		public void OnContextMenuChosen(int index, object userArg1, object userArg2)
+		{
+			switch (userArg1 as string)
+			{
+				case CONTEXT_MENU_CLOSE_TAB:
+					CloseTab(userArg2 as T);
+					break;
+				case CONTEXT_MENU_CLOSE_OTHER_TABS:
+					var thisTab = userArg2 as T;
+					Debug.LogError($"Close Other Tabs for {thisTab?.TabLabel}, not yet implemented");
+					break;
+				case CONTEXT_MENU_CLOSE_ALL_TABS:
+					Debug.LogError("Close All Tabs not yet implemented");
+					break;
+			}
+		}
+
+		public void OnContextMenuCanceled()
+		{
 		}
 	}
 }

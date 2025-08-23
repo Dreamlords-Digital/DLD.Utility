@@ -9,16 +9,22 @@ namespace DLD.UIToolkit
 		VisualElement Root { get; }
 
 		void ClearMenu();
-
-		VisualElement AddMenu(string label, System.Action callback);
-		void AddMenu(string label, string iconClassStyle, System.Action callback);
-		void AddDisabledMenu(string label, string iconClassStyle = null);
-
 		void AddSeparator();
+		void AddMenu(string label, string iconClassStyle = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+		void ChangeMenuIcon(object userArg1, string iconClassStyleToAdd = null, string iconClassStyleToRemove = null);
 
-		void Show(Vector2 position);
-		void Show(ContextClickEvent e);
-		void Show(PointerDownEvent e);
+		void Show(Vector2 position, IContextMenuListener listener = null);
+		void Show(ContextClickEvent e, IContextMenuListener listener = null);
+		void Show(PointerDownEvent e, IContextMenuListener listener = null);
+		void Show(VisualElement ve, IContextMenuListener listener = null);
+
+		bool WasLastShownOn(VisualElement ve);
+	}
+
+	public interface IContextMenuListener
+	{
+		void OnContextMenuChosen(int index, object userArg1, object userArg2);
+		void OnContextMenuCanceled();
 	}
 
 	public class ContextMenu : VisualElement, IContextMenu
@@ -31,6 +37,7 @@ namespace DLD.UIToolkit
 		const string ENTRY_ALT_CLASS_NAME = "dld-context-menu-entry-container--alt-bg";
 		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
 		const string DISABLED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--disabled";
+		const string MENU_AS_DROPDOWN_CLASS_NAME = "dld-context-menu--as-dropdown";
 
 		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
 
@@ -41,10 +48,14 @@ namespace DLD.UIToolkit
 		readonly VisualTreeAsset _entryAsset;
 		readonly VisualTreeAsset _separatorAsset;
 
+		VisualElement _elementShownOn;
+
 		bool _doAltBgStyling;
 		bool _mouseMovedDuringMouseDown;
 
 		Focusable _focusTargetAfterClose;
+
+		IContextMenuListener _listener;
 
 		public VisualElement Root => this;
 
@@ -71,6 +82,7 @@ namespace DLD.UIToolkit
 
 			_menu = this.Q<VisualElement>(MENU_NAME);
 			_menu.RegisterCallback<MouseDownEvent>(e => e.StopPropagation());
+			_menu.RegisterCallback<GeometryChangedEvent, ContextMenu>((e, c) => c.OnMenuResized(e), this);
 
 			RegisterCallback<KeyDownEvent, ContextMenu>((e, c) => c.OnPressKey(e), this);
 		}
@@ -98,21 +110,25 @@ namespace DLD.UIToolkit
 			_menu.Add(entryContainer);
 		}
 
-		public VisualElement AddMenu(string label, System.Action callback)
+		public void AddMenu(string label, string iconClassStyle = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false)
 		{
 			var createdEntry = _entryAsset.Instantiate();
 
 			var entryContainer = createdEntry.Q<VisualElement>("Entry");
-			entryContainer.userData = callback;
-			if (callback == null)
+			entryContainer.userData = listener;
+			if (showAsDisabled)
 			{
 				entryContainer.AddToClassList(DISABLED_ENTRY_CLASS_NAME);
 			}
 
+			var entryIcon = entryContainer.Q<VisualElement>("Icon");
+			entryIcon.userData = userArg1;
+
 			var entryLabel = entryContainer.Q<Label>();
 			entryLabel.text = label;
+			entryLabel.userData = userArg2;
 
-			if (callback != null)
+			if (!showAsDisabled)
 			{
 				entryContainer.RegisterCallback<PointerDownEvent>(e =>
 				{
@@ -121,21 +137,27 @@ namespace DLD.UIToolkit
 						v.AddToClassList(PRESSED_ENTRY_CLASS_NAME);
 					}
 				});
-			}
 
-			entryContainer.RegisterCallback<PointerUpEvent, ContextMenu>((e, contextMenu) =>
-			{
-				if (e.currentTarget is VisualElement { userData: System.Action userCallback } v)
+				entryContainer.RegisterCallback<PointerUpEvent>(e =>
 				{
-					v.Focus();
-					userCallback();
-					contextMenu.Hide();
-				}
-				else
-				{
-					e.StopPropagation();
-				}
-			}, this);
+					if (e.currentTarget is not VisualElement targetElement)
+					{
+						return;
+					}
+
+					if (targetElement.userData is IContextMenuListener gotListener)
+					{
+						targetElement.Focus();
+						var gotIcon = targetElement.Q<VisualElement>("Icon");
+						var gotLabel = targetElement.Q<Label>();
+						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotIcon.userData, gotLabel.userData);
+					}
+					else
+					{
+						e.StopPropagation();
+					}
+				});
+			}
 
 			_menu.Add(entryContainer);
 
@@ -144,24 +166,38 @@ namespace DLD.UIToolkit
 				entryContainer.AddToClassList(ENTRY_ALT_CLASS_NAME);
 			}
 
-			return entryContainer;
+			if (!string.IsNullOrEmpty(iconClassStyle))
+			{
+				entryIcon.AddToClassList(iconClassStyle);
+			}
 		}
 
-		public void AddMenu(string label, string iconClassStyle, System.Action callback)
+		public void ChangeMenuIcon(object userArg1, string iconClassStyleToAdd = null, string iconClassStyleToRemove = null)
 		{
-			var entryContainer = AddMenu(label, callback);
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var gotIcon = _menu[n].Q<VisualElement>("Icon");
+				if (gotIcon?.userData != null && gotIcon.userData.Equals(userArg1))
+				{
+					if (!string.IsNullOrEmpty(iconClassStyleToRemove))
+					{
+						gotIcon.RemoveFromClassList(iconClassStyleToRemove);
+					}
+					if (!string.IsNullOrEmpty(iconClassStyleToAdd))
+					{
+						gotIcon.AddToClassList(iconClassStyleToAdd);
+					}
 
-			var entryIcon = entryContainer.Q<VisualElement>("Icon");
-			entryIcon.AddToClassList(iconClassStyle);
+					// we assume the userArg1 value only appears once in the entire menu
+					return;
+				}
+			}
 		}
 
-		public void AddDisabledMenu(string label, string iconClassStyle = null)
+		public void Show(Vector2 position, IContextMenuListener listener = null)
 		{
-			AddMenu(label, iconClassStyle, null);
-		}
-
-		public void Show(Vector2 position)
-		{
+			_listener = listener;
+			_elementShownOn = null;
 			_menu.SetPosition(position);
 			style.display = DisplayStyle.Flex;
 			focusable = true;
@@ -170,25 +206,68 @@ namespace DLD.UIToolkit
 			schedule.Execute(_delayedFocus).ExecuteLater(0);
 		}
 
-		public void Show(ContextClickEvent e)
+		public void Show(ContextClickEvent e, IContextMenuListener listener = null)
 		{
 			var contextMenuMousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(this, e.localMousePosition);
-			Show(contextMenuMousePos);
+			Show(contextMenuMousePos, listener);
 		}
 
-		public void Show(PointerDownEvent e)
+		public void Show(PointerDownEvent e, IContextMenuListener listener = null)
 		{
 			var mousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(this, e.localPosition);
-			Show(mousePos);
+			Show(mousePos, listener);
+		}
+
+		public void Show(VisualElement ve, IContextMenuListener listener = null)
+		{
+			_listener = listener;
+			_elementShownOn = ve;
+
+			var veLayout = ve.layout;
+			var veWorldPos = ve.LocalToWorld(new Vector2(0, veLayout.height));
+			var localPos = this.WorldToLocal(veWorldPos);
+			_menu.SetPosition(localPos);
+			_menu.AddToClassList(MENU_AS_DROPDOWN_CLASS_NAME);
+
+			style.display = DisplayStyle.Flex;
+			focusable = true;
+			_mouseMovedDuringMouseDown = false;
+
+			schedule.Execute(_delayedFocus).ExecuteLater(0);
+		}
+
+		public bool WasLastShownOn(VisualElement ve) => ve == _elementShownOn;
+
+		void OnMenuResized(GeometryChangedEvent evt)
+		{
+			if (evt.newRect.width == 0 || evt.newRect.height == 0 || _elementShownOn == null)
+			{
+				return;
+			}
+
+			float menuWidth = _menu.layout.width;
+			float elementWidth = _elementShownOn.layout.width;
+			if (menuWidth > 0 && menuWidth < elementWidth)
+			{
+				_menu.style.width = elementWidth;
+			}
 		}
 
 		public void Hide()
 		{
 			style.display = DisplayStyle.None;
+			_menu.style.width = StyleKeyword.Null;
 			Blur();
+			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_CLASS_NAME);
 			if (_focusTargetAfterClose != null)
 			{
 				_focusTargetAfterClose.Focus();
+			}
+
+			if (_listener != null)
+			{
+				_listener.OnContextMenuCanceled();
+				_listener = null;
 			}
 		}
 
@@ -197,7 +276,7 @@ namespace DLD.UIToolkit
 			Focus();
 		}
 
-		void OnMouseMove(MouseMoveEvent e)
+		void OnMouseMove(MouseMoveEvent _)
 		{
 			_mouseMovedDuringMouseDown = true;
 		}
@@ -289,15 +368,15 @@ namespace DLD.UIToolkit
 				case KeyCode.Return:
 				case KeyCode.KeypadEnter:
 				{
-					var menu = this.Q<VisualElement>(MENU_NAME);
-
-					int focusedMenuIdx = GetFocusedMenuIdx(menu);
+					int focusedMenuIdx = GetFocusedMenuIdx(_menu);
 					if (focusedMenuIdx != -1)
 					{
 						// pressing enter will do the same thing that the menu entry's click callback does
-						if (menu[focusedMenuIdx].userData is System.Action userCallback)
+						if (_menu[focusedMenuIdx].userData is IContextMenuListener gotListener)
 						{
-							userCallback();
+							var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>("Icon");
+							var gotLabel = _menu[focusedMenuIdx].Q<Label>();
+							gotListener.OnContextMenuChosen(focusedMenuIdx, gotIcon.userData, gotLabel.userData);
 							Hide();
 							e.StopPropagation();
 						}
@@ -308,6 +387,7 @@ namespace DLD.UIToolkit
 
 			return;
 
+			// Get index of which child of m is focused
 			int GetFocusedMenuIdx(VisualElement m)
 			{
 				for (int i = 0; i < m.childCount; i++)

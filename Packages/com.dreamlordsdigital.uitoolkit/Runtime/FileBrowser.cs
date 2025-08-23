@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 namespace DLD.UIToolkit
 {
 	[UxmlElement]
-	public partial class FileBrowser : VisualElement
+	public partial class FileBrowser : VisualElement, IContextMenuListener
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/FileBrowser";
 
@@ -34,6 +34,11 @@ namespace DLD.UIToolkit
 
 		const int USER_FAVORITES_ID_START = 100;
 		const int RECENT_ENTRIES_ID_START = 200;
+
+		const string CONTEXT_MENU_REMOVE_FROM_FAVORITES = "REMOVE_FAVORITE";
+		const string CONTEXT_MENU_ADD_FAVORITE = "ADD_FAVORITE";
+		const string CONTEXT_MENU_OPEN_FILE_EXPLORER = "OPEN_FILE_EXPLORER";
+		const string CONTEXT_MENU_OPEN_USING_ASSOCIATED = "OPEN_USING_ASSOCIATED";
 
 		// -----------------------------------------
 
@@ -425,10 +430,8 @@ namespace DLD.UIToolkit
 					visualElement.RegisterCallback((ContextClickEvent e, IContextMenu c) =>
 					{
 						c.ClearMenu();
-						c.AddMenu("Remove from Favorites", () =>
-						{
-							RemoveFromFavorites(jumpMenuEntry.Path);
-						});
+						c.AddMenu("Remove from Favorites",
+							listener: this, userArg1: CONTEXT_MENU_REMOVE_FROM_FAVORITES, userArg2: jumpMenuEntry.Path);
 						c.Show(e);
 					}, _contextMenu, TrickleDown.TrickleDown);
 				}
@@ -1052,22 +1055,16 @@ namespace DLD.UIToolkit
 
 				if (IsPathInFavorites(_currentPath))
 				{
-					_contextMenu.AddMenu("Remove Current Path from Favorites", BaseIcons.REMOVE_FROM_FAVORITES, () =>
-					{
-						RemoveFromFavorites(_currentPath);
-					});
+					_contextMenu.AddMenu("Remove Current Path from Favorites", BaseIcons.REMOVE_FROM_FAVORITES,
+						this, CONTEXT_MENU_REMOVE_FROM_FAVORITES, _currentPath);
 				}
 				else
 				{
-					_contextMenu.AddMenu("Add Current Path to Favorites", BaseIcons.ADD_TO_FAVORITES, () =>
-					{
-						AddToFavorites(_currentPath);
-					});
+					_contextMenu.AddMenu("Add Current Path to Favorites", BaseIcons.ADD_TO_FAVORITES,
+						this, CONTEXT_MENU_ADD_FAVORITE, _currentPath);
 				}
-				_contextMenu.AddMenu("Explore Here", BaseIcons.OPEN_FILE_EXPLORER, () =>
-				{
-					ExplorerUtil.OpenInFileBrowser(_currentPath);
-				});
+				_contextMenu.AddMenu("Explore Here", BaseIcons.OPEN_FILE_EXPLORER,
+					this, CONTEXT_MENU_OPEN_FILE_EXPLORER, _currentPath);
 				_contextMenu.Show(contextMenuMousePos);
 			}
 		}
@@ -1086,31 +1083,50 @@ namespace DLD.UIToolkit
 			if (IsPathInFavorites(_currentPath))
 			{
 				_contextMenu.AddMenu("Remove Current Path from Favorites", BaseIcons.REMOVE_FROM_FAVORITES,
-					() => { RemoveFromFavorites(_currentPath); });
+					this, CONTEXT_MENU_REMOVE_FROM_FAVORITES, _currentPath);
 			}
 			else
 			{
 				_contextMenu.AddMenu("Add Current Path to Favorites", BaseIcons.ADD_TO_FAVORITES,
-					() => { AddToFavorites(_currentPath); });
+					this, CONTEXT_MENU_ADD_FAVORITE, _currentPath);
 			}
 
 			string clickedFileFullPath = FileUtil.CombinePath(_currentPath, _fileSystemEntries[idx].Name);
 
-			_contextMenu.AddMenu("Explore Here", BaseIcons.OPEN_FILE_EXPLORER, () =>
-			{
-				ExplorerUtil.OpenInFileBrowser(clickedFileFullPath);
-			});
+			_contextMenu.AddMenu("Explore Here", BaseIcons.OPEN_FILE_EXPLORER,
+				this, CONTEXT_MENU_OPEN_FILE_EXPLORER, clickedFileFullPath);
 
 			if (_fileSystemEntries[idx].EntryType == FileSystemEntryType.File)
 			{
-				_contextMenu.AddMenu("Open with Associated Program", BaseIcons.OPEN_USING_ASSOCIATED, () =>
-				{
-					ExplorerUtil.OpenWithDefaultProgram(clickedFileFullPath);
-				});
+				_contextMenu.AddMenu("Open with Associated Program", BaseIcons.OPEN_USING_ASSOCIATED,
+					this, CONTEXT_MENU_OPEN_USING_ASSOCIATED, clickedFileFullPath);
 			}
 
 			_contextMenu.Show(e);
 			e.StopPropagation();
+		}
+
+		public void OnContextMenuChosen(int index, object userArg1, object userArg2)
+		{
+			switch (userArg1 as string)
+			{
+				case CONTEXT_MENU_REMOVE_FROM_FAVORITES:
+					RemoveFromFavorites(userArg2 as string);
+					break;
+				case CONTEXT_MENU_ADD_FAVORITE:
+					AddToFavorites(userArg2 as string);
+					break;
+				case CONTEXT_MENU_OPEN_FILE_EXPLORER:
+					ExplorerUtil.OpenInFileBrowser(userArg2 as string);
+					break;
+				case CONTEXT_MENU_OPEN_USING_ASSOCIATED:
+					ExplorerUtil.OpenWithDefaultProgram(userArg2 as string);
+					break;
+			}
+		}
+
+		public void OnContextMenuCanceled()
+		{
 		}
 
 		/// <summary>
