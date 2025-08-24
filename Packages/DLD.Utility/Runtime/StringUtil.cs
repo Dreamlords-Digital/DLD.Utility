@@ -10,6 +10,8 @@ namespace DLD.Utility
 {
 	public static class StringUtil
 	{
+		public static string ToStringLabel(this object obj) => obj.ToString().AddSpacesToSentence();
+
 		/// <summary>
 		/// Equality checker for strings but will regard
 		/// null value and an empty string as equivalent.
