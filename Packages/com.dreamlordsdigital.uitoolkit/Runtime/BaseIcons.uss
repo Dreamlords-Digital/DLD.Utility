@@ -97,3 +97,35 @@
 .dld-icon--selected-in-dropdown {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/tick.png?fileID=2800000&guid=a8150005769b1ed4cbc62a9d059de829&type=3#tick");
 }
+
+.dld-icon--arrow-up {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-090.png?fileID=2800000&guid=c714db5245855cb4b87c833e60d76954&type=3#arrow-090");
+}
+
+.dld-icon--arrow-down {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-270.png?fileID=2800000&guid=0c9d4452e4911bd419cabe425aab5e5a&type=3#arrow-270");
+}
+
+.dld-icon--arrow-left {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-180.png?fileID=2800000&guid=bc161bb3f6046e84ab5be99a0ee23047&type=3#arrow-180");
+}
+
+.dld-icon--arrow-right {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow.png?fileID=2800000&guid=6de143d6546d9f64b9d5b4b4d34aa5dd&type=3#arrow");
+}
+
+.dld-icon--arrow-upper-left {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-135.png?fileID=2800000&guid=1aa2d25868f913643b24a08fb4be55fa&type=3#arrow-135");
+}
+
+.dld-icon--arrow-upper-right {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-045.png?fileID=2800000&guid=57b1dfd94c59b804e9b75a92f0028b9c&type=3#arrow-045");
+}
+
+.dld-icon--arrow-lower-left {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-225.png?fileID=2800000&guid=7223a6643dda60c4da820b2c83ecf750&type=3#arrow-225");
+}
+
+.dld-icon--arrow-lower-right {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-315.png?fileID=2800000&guid=e282116ac4b57a844ae61de85f349b3f&type=3#arrow-315");
+}

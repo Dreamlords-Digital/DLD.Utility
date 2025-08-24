@@ -15,5 +15,14 @@ namespace DLD.UIToolkit
 		public const string REMOVE_FROM_FAVORITES = "dld-icon--remove-from-favorites";
 		public const string OPEN_USING_ASSOCIATED = "dld-icon--open-using-associated";
 		public const string SELECTED_IN_DROPDOWN = "dld-icon--selected-in-dropdown";
+
+		public const string ARROW_UP = "dld-icon--arrow-up";
+		public const string ARROW_DOWN = "dld-icon--arrow-down";
+		public const string ARROW_LEFT = "dld-icon--arrow-left";
+		public const string ARROW_RIGHT = "dld-icon--arrow-right";
+		public const string ARROW_UPPER_LEFT = "dld-icon--arrow-upper-left";
+		public const string ARROW_UPPER_RIGHT = "dld-icon--arrow-upper-right";
+		public const string ARROW_LOWER_LEFT = "dld-icon--arrow-lower-left";
+		public const string ARROW_LOWER_RIGHT = "dld-icon--arrow-lower-right";
 	}
 }
