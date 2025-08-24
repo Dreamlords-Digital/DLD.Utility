@@ -17,6 +17,7 @@ namespace DLD.UIToolkit
 		public void SetEnumTypeOnOpen(Type enumType)
 		{
 			_enumTypeOnOpen = enumType;
+			_currentMode = Mode.Enum;
 		}
 
 		// ==================================================================================

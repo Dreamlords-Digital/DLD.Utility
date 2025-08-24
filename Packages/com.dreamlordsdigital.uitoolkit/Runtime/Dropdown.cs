@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,6 +34,26 @@ namespace DLD.UIToolkit
 
 		IContextMenu _contextMenu;
 		bool _doAltBgStyling;
+
+		enum Mode
+		{
+			/// <summary>
+			/// Dropdown will show all values of the specified Enum in <see cref="SetEnumTypeOnOpen"/>.
+			/// </summary>
+			Enum,
+
+			/// <summary>
+			/// Dropdown will show a list of <see cref="DropdownItem"/>
+			/// that is meant to represent the values of a byte mask
+			/// specified in <see cref="SetValueWithoutNotify(byte)"/>.
+			/// </summary>
+			/// <remarks>
+			/// In this mode, the user is allowed to select multiple dropdown items.
+			/// </remarks>
+			ByteMask
+		}
+
+		Mode _currentMode;
 
 		// ==================================================================================
 
@@ -112,17 +130,49 @@ namespace DLD.UIToolkit
 			_doAltBgStyling = doAltBgStyling;
 		}
 
+		public void SetSkipBlankValues(bool skipBlankValues)
+		{
+			_skipBlankValues = skipBlankValues;
+		}
+
+		public void SetCurrentValueDisplayType(DropdownCurrentValueDisplayType newDisplayType)
+		{
+			_currentValueDisplayType = newDisplayType;
+
+			if (_currentValueDisplayType == DropdownCurrentValueDisplayType.Icons)
+			{
+				if (_currentValueIcons != null)
+				{
+					_currentValueIcons.Clear();
+				}
+				else
+				{
+					_currentValueIcons = new List<VisualElement>();
+				}
+			}
+		}
+
 		// ==================================================================================
 
+		/// <summary>
+		/// Called when user clicks on the dropdown box.
+		/// </summary>
 		void OnOpen()
 		{
-			if (_dropdownItems != null && _dropdownItems.Count > 0)
+			switch (_currentMode)
 			{
-				Open(_dropdownItems, _currentByteValue);
-			}
-			else if (_enumTypeOnOpen != null)
-			{
-				Open(_enumTypeOnOpen);
+				case Mode.Enum:
+					if (_enumTypeOnOpen != null)
+					{
+						Open(_enumTypeOnOpen);
+					}
+					break;
+				case Mode.ByteMask:
+					if (_dropdownItems != null && _dropdownItems.Count > 0)
+					{
+						Open(_dropdownItems, _currentByteValue);
+					}
+					break;
 			}
 		}
 
@@ -130,13 +180,20 @@ namespace DLD.UIToolkit
 
 		public void OnContextMenuChosen(int index, string label, object newValue, object userArg2)
 		{
-			if (_dropdownItems != null && _dropdownItems.Count > 0)
+			switch (_currentMode)
 			{
-				OnDropdownByteMaskChosen((int)newValue);
-			}
-			else if (_enumTypeOnOpen != null)
-			{
-				OnDropdownEnumChosen(index, label, newValue);
+				case Mode.Enum:
+					if (_enumTypeOnOpen != null)
+					{
+						OnDropdownEnumChosen(index, label, newValue);
+					}
+					break;
+				case Mode.ByteMask:
+					if (_dropdownItems != null && _dropdownItems.Count > 0)
+					{
+						OnDropdownByteMaskChosen((int)newValue);
+					}
+					break;
 			}
 		}
 

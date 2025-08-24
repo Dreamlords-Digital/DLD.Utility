@@ -7,6 +7,56 @@ namespace DLD.UIToolkit
 {
 	public partial class Dropdown
 	{
+		public void InitializeCurrentDisplayIcons(int iconCount, ITooltip newTooltip)
+		{
+			if (_currentValueDisplayType != DropdownCurrentValueDisplayType.Icons)
+			{
+				return;
+			}
+
+			while (_currentValueIcons.Count < iconCount)
+			{
+				var newIcon = new VisualElement();
+				newIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+				_currentValueIcons.Add(newIcon);
+				newIcon.name = $"Icon{_currentValueIcons.Count}";
+			}
+
+			// Remove all of them first.
+			for (int i = 0; i < _currentValueIcons.Count; ++i)
+			{
+				if (_toggle.Contains(_currentValueIcons[i]))
+				{
+					_toggle.Remove(_currentValueIcons[i]);
+				}
+			}
+
+			// Add only up to the ones we need.
+			for (int i = iconCount-1; i >= 0; --i)
+			{
+				// The icons need to be inserted to the left
+				// because we need to keep the dropdown arrow that's inside the toggle to be the last.
+				// That's why we keep inserting at the beginning instead of using Add().
+				_toggle.Insert(0, _currentValueIcons[i]);
+			}
+
+			// Prepare the dropdown element to allow it to display tooltips.
+			_toggle.RegisterCallback(TooltipUtil.ShowFromUserData, newTooltip);
+			_toggle.RegisterCallback(TooltipUtil.Hide, newTooltip);
+		}
+
+		public void SetValueWithoutNotify(byte currentByteValue)
+		{
+			UpdateCurrentValueDisplayed(currentByteValue);
+
+			_currentMode = Mode.ByteMask;
+			_currentByteValue = currentByteValue;
+			_currentEnumValue = null;
+			_enumTypeOnOpen = null;
+		}
+
+		// ==================================================================================
+
 		public void ClearItems()
 		{
 			if (_dropdownItems != null)
@@ -55,7 +105,7 @@ namespace DLD.UIToolkit
 			_lastEnumTypeUsedOnOpen = null;
 		}
 
-		public void OnDropdownByteMaskChosen(int chosenIndex)
+		void OnDropdownByteMaskChosen(int chosenIndex)
 		{
 			byte previousValue = _currentByteValue;
 
@@ -71,75 +121,6 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================
-
-		public void SetCurrentValueDisplayType(DropdownCurrentValueDisplayType newDisplayType)
-		{
-			_currentValueDisplayType = newDisplayType;
-
-			if (_currentValueDisplayType == DropdownCurrentValueDisplayType.Icons)
-			{
-				if (_currentValueIcons != null)
-				{
-					_currentValueIcons.Clear();
-				}
-				else
-				{
-					_currentValueIcons = new List<VisualElement>();
-				}
-			}
-		}
-
-		public void InitializeCurrentDisplayIcons(int iconCount, ITooltip newTooltip)
-		{
-			if (_currentValueDisplayType != DropdownCurrentValueDisplayType.Icons)
-			{
-				return;
-			}
-
-			while (_currentValueIcons.Count < iconCount)
-			{
-				var newIcon = new VisualElement();
-				newIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
-				_currentValueIcons.Add(newIcon);
-				newIcon.name = $"Icon{_currentValueIcons.Count}";
-			}
-
-			// Remove all of them first.
-			for (int i = 0; i < _currentValueIcons.Count; ++i)
-			{
-				if (_toggle.Contains(_currentValueIcons[i]))
-				{
-					_toggle.Remove(_currentValueIcons[i]);
-				}
-			}
-
-			// Add only up to the ones we need.
-			for (int i = iconCount-1; i >= 0; --i)
-			{
-				// The icons need to be inserted to the left
-				// because we need to keep the dropdown arrow that's inside the toggle to be the last.
-				// That's why we keep inserting at the beginning instead of using Add().
-				_toggle.Insert(0, _currentValueIcons[i]);
-			}
-
-			// Prepare the dropdown element to allow it to display tooltips.
-			_toggle.RegisterCallback(TooltipUtil.ShowFromUserData, newTooltip);
-			_toggle.RegisterCallback(TooltipUtil.Hide, newTooltip);
-		}
-
-		public void SetSkipBlankValues(bool skipBlankValues)
-		{
-			_skipBlankValues = skipBlankValues;
-		}
-
-		public void SetValueWithoutNotify(byte currentByteValue)
-		{
-			UpdateCurrentValueDisplayed(currentByteValue);
-
-			_currentByteValue = currentByteValue;
-			_currentEnumValue = null;
-			_enumTypeOnOpen = null;
-		}
 
 		void UpdateCurrentValueDisplayed(byte currentByteValue)
 		{
@@ -162,7 +143,7 @@ namespace DLD.UIToolkit
 				// Get the long label and use it as the tooltip
 				if (currentByteValue > 0)
 				{
-					_toggle.userData = BaseIcons.GENERIC_INFO + ";" + GetAsLabel(_dropdownItems, currentByteValue, DropdownCurrentValueDisplayType.Labels);
+					_toggle.userData = BaseIcons.GENERIC_INFO + ";" + GetByteMaskAsLabel(_dropdownItems, currentByteValue, DropdownCurrentValueDisplayType.Labels);
 				}
 				else
 				{
@@ -171,11 +152,11 @@ namespace DLD.UIToolkit
 			}
 			else
 			{
-				_toggle.label = GetAsLabel(_dropdownItems, currentByteValue, _currentValueDisplayType);
+				_toggle.label = GetByteMaskAsLabel(_dropdownItems, currentByteValue, _currentValueDisplayType);
 			}
 		}
 
-		static string GetAsLabel(List<DropdownItem> items, byte value, DropdownCurrentValueDisplayType displayType)
+		static string GetByteMaskAsLabel(List<DropdownItem> items, byte value, DropdownCurrentValueDisplayType displayType)
 		{
 			if (value == 0)
 			{
