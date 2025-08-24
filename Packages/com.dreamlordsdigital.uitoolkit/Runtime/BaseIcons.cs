@@ -3,6 +3,8 @@ namespace DLD.UIToolkit
 {
 	public static class BaseIcons
 	{
+		public const string ICON_STYLE_CLASS = "dld-icon";
+
 		public const string GENERIC_INFO = "dld-icon--info";
 		public const string GENERIC_ERROR = "dld-icon--error";
 		public const string FORCE_MOVE = "dld-icon--force-move";

@@ -38,12 +38,12 @@ namespace DLD.UIToolkit
 		const string SELECTED_INDICATOR_NAME = "SelectedIndicator";
 		const string ICON_NAME = "Icon";
 
-		const string ENTRY_ALT_CLASS_NAME = "dld-context-menu-entry-container--alt-bg";
-		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
-		const string DISABLED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--disabled";
-		const string MENU_AS_DROPDOWN_CLASS_NAME = "dld-context-menu--as-dropdown";
-		const string MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_CLASS_NAME = "dld-context-menu--as-dropdown--longer";
-		const string SELECTED_ENTRY_LABEL_CLASS_NAME = "dld-context-menu-entry__label--selected";
+		const string ENTRY_ALT_STYLE_CLASS = "dld-context-menu-entry-container--alt-bg";
+		const string PRESSED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--active";
+		const string DISABLED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--disabled";
+		const string MENU_AS_DROPDOWN_STYLE_CLASS = "dld-context-menu--as-dropdown";
+		const string MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS = "dld-context-menu--as-dropdown--longer";
+		const string SELECTED_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--selected";
 
 		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
 
@@ -152,7 +152,7 @@ namespace DLD.UIToolkit
 
 			if (showAsDisabled)
 			{
-				entryContainer.AddToClassList(DISABLED_ENTRY_CLASS_NAME);
+				entryContainer.AddToClassList(DISABLED_ENTRY_STYLE_CLASS);
 			}
 
 			var selectedIndicator = entryContainer.Q<VisualElement>(SELECTED_INDICATOR_NAME);
@@ -169,7 +169,7 @@ namespace DLD.UIToolkit
 			{
 				selectedIndicator.style.display = DisplayStyle.Flex;
 				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_CLASS_NAME);
+				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
 			}
 			else
 			{
@@ -182,7 +182,7 @@ namespace DLD.UIToolkit
 				{
 					if (e.currentTarget is VisualElement v)
 					{
-						v.AddToClassList(PRESSED_ENTRY_CLASS_NAME);
+						v.AddToClassList(PRESSED_ENTRY_STYLE_CLASS);
 					}
 				});
 
@@ -212,7 +212,7 @@ namespace DLD.UIToolkit
 
 			if (_doAltBgStyling && _menu.childCount % 2 == 0)
 			{
-				entryContainer.AddToClassList(ENTRY_ALT_CLASS_NAME);
+				entryContainer.AddToClassList(ENTRY_ALT_STYLE_CLASS);
 			}
 
 			if (!string.IsNullOrEmpty(iconClassStyle))
@@ -258,12 +258,12 @@ namespace DLD.UIToolkit
 				if (n == newSelectedIdx)
 				{
 					selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-					entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_CLASS_NAME);
+					entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
 				}
 				else
 				{
 					selectedIndicator.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-					entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_CLASS_NAME);
+					entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
 				}
 			}
 		}
@@ -305,8 +305,8 @@ namespace DLD.UIToolkit
 			var localPos = this.WorldToLocal(veWorldPos);
 			_menu.SetPosition(localPos);
 			_menu.style.width = StyleKeyword.Null;
-			_menu.AddToClassList(MENU_AS_DROPDOWN_CLASS_NAME);
-			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_CLASS_NAME);
+			_menu.AddToClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
+			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
 
 			style.display = DisplayStyle.Flex;
 			focusable = true;
@@ -387,7 +387,7 @@ namespace DLD.UIToolkit
 			}
 			else
 			{
-				_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_CLASS_NAME);
+				_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
 			}
 		}
 
@@ -396,7 +396,7 @@ namespace DLD.UIToolkit
 			style.display = DisplayStyle.None;
 			_menu.style.width = StyleKeyword.Null;
 			Blur();
-			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_CLASS_NAME);
+			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
 			if (_focusTargetAfterClose != null)
 			{
 				_focusTargetAfterClose.Focus();

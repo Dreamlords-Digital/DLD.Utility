@@ -13,7 +13,6 @@ namespace DLD.UIToolkit
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/FileBrowser";
 
-		const string ICON_STYLE_CLASS = "dld-icon";
 		const string OPEN_ICON_STYLE_CLASS = "dld-icon--title--open";
 		const string SAVE_ICON_STYLE_CLASS = "dld-icon--title--save";
 
@@ -578,7 +577,7 @@ namespace DLD.UIToolkit
 			_currentOperationMode = newMode;
 
 			_titleIcon.ClearClassList();
-			_titleIcon.AddToClassList(ICON_STYLE_CLASS);
+			_titleIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
 
 			switch (_currentOperationMode)
 			{

@@ -167,7 +167,7 @@ namespace DLD.UIToolkit
 		void UpdateIcon(Enum currentValue)
 		{
 			_icon.ClearClassList();
-			_icon.AddToClassList("dld-icon");
+			_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
 			var enumUI = currentValue.GetEnumValueAttribute<EnumUI>();
 			if (enumUI != null && !string.IsNullOrEmpty(enumUI.IconStyleClass))
 			{
