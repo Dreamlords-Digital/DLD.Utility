@@ -5,8 +5,12 @@ using System;
 namespace DLD.Serializer
 {
 	[AttributeUsage(AttributeTargets.All)]
-	public sealed class SerializedAttribute : Attribute
+	[JetBrains.Annotations.MeansImplicitUse]
+	public class SerializedAttribute : Attribute
 	{
+		/// <summary>
+		/// Name of this field/property when serialized.
+		/// </summary>
 		public readonly string Name;
 
 		public SerializedAttribute()
@@ -20,7 +24,7 @@ namespace DLD.Serializer
 	}
 
 	[AttributeUsage(AttributeTargets.All)]
-	public sealed class NotSerializedAttribute : Attribute
+	public class NotSerializedAttribute : Attribute
 	{
 		public NotSerializedAttribute()
 		{

@@ -8,8 +8,7 @@ namespace DLD.Utility
 	/// Used to express an inclusive range for an int value.
 	/// </summary>
 	/// <remarks>
-	/// It has validation methods to prevent Lower Limit from going above Upper Limit.
-	/// This validation is enabled by default but can be optionally disabled.
+	/// Has optional validation methods to prevent Lower Limit from going above Upper Limit.
 	/// </remarks>
 	public struct IntRange : IEquatable<IntRange>
 	{
@@ -211,7 +210,7 @@ namespace DLD.Utility
 		public bool IsLowerAndUpperLimitSameAndPositive => LowerLimit == UpperLimit && LowerLimit > 0;
 
 		/// <summary>
-		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the bounds.
+		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
 		/// </summary>
 		public int Random()
 		{
@@ -219,7 +218,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Uses a <see cref="System.Random"/> to generate a random value within the bounds.
+		/// Uses a <see cref="System.Random"/> to generate a random value within the range.
 		/// </summary>
 		public int Random(System.Random random)
 		{
