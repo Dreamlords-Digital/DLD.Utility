@@ -1,15 +1,34 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DLD.UIToolkit
 {
+	public struct DropdownItem
+	{
+		public string Label;
+		public string ShortLabel;
+		public string Tooltip;
+		public string IconClassName;
+	}
+
+	public enum DropdownCurrentValueDisplayType
+	{
+		Labels,
+		ShortLabels,
+		Icons
+	}
+
 	[UxmlElement]
 	public partial class Dropdown : VisualElement, IContextMenuListener
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Dropdown";
 		const string ARROW_STYLE_CLASS = "dld-dropdown__arrow";
+
+		// ==================================================================================
 
 		readonly Label _label;
 		readonly Toggle _toggle;
@@ -18,9 +37,28 @@ namespace DLD.UIToolkit
 		IContextMenu _contextMenu;
 		bool _doAltBgStyling;
 
+		// ==================================================================================
+
 		System.Type _enumTypeOnOpen;
 		System.Type _lastEnumTypeUsedOnOpen;
 		Enum _currentEnumValue;
+
+		// ==================================================================================
+
+		DropdownCurrentValueDisplayType _currentValueDisplayType;
+		List<DropdownItem> _dropdownItems;
+
+		/// <summary>
+		/// true: DropdownItems that are not assigned a label will not be shown in the choices.<br/>
+		/// false: DropdownItems that are not assigned a label will still be shown in the choices.
+		/// </summary>
+		bool _skipBlankValues;
+
+		byte _currentByteValue;
+
+		List<VisualElement> _currentValueIcons;
+
+		// ==================================================================================
 
 		public Dropdown()
 		{
@@ -69,115 +107,43 @@ namespace DLD.UIToolkit
 			_contextMenu = contextMenu;
 		}
 
-		public void SetValueWithoutNotify(Enum currentValue)
-		{
-			_toggle.label = currentValue.ToStringLabel();
-			_currentEnumValue = currentValue;
-
-			UpdateIcon(currentValue);
-		}
-
-		public void SetEnumTypeOnOpen(Type enumType)
-		{
-			_enumTypeOnOpen = enumType;
-		}
-
 		public void DoAltBgStyling(bool doAltBgStyling)
 		{
 			_doAltBgStyling = doAltBgStyling;
 		}
 
+		// ==================================================================================
+
 		void OnOpen()
 		{
-			if (_enumTypeOnOpen != null)
+			if (_dropdownItems != null && _dropdownItems.Count > 0)
+			{
+				Open(_dropdownItems, _currentByteValue);
+			}
+			else if (_enumTypeOnOpen != null)
 			{
 				Open(_enumTypeOnOpen);
 			}
 		}
 
-		void Open(System.Type enumType)
+		// ==================================================================================
+
+		public void OnContextMenuChosen(int index, string label, object newValue, object userArg2)
 		{
-			if (_lastEnumTypeUsedOnOpen == enumType && _contextMenu.WasLastShownOn(_toggle))
+			if (_dropdownItems != null && _dropdownItems.Count > 0)
 			{
-				// Context Menu has the same entries as what we want,
-				// so no need to add them again. Just reuse it as-is.
-				_contextMenu.Show(_toggle, this);
-				return;
+				OnDropdownByteMaskChosen((int)newValue);
 			}
-
-			var enumValues = Enum.GetValues(enumType);
-
-			_contextMenu.DoAltBgStyling(_doAltBgStyling);
-			_contextMenu.ClearMenu();
-			for (int n = 0; n < enumValues.Length; ++n)
+			else if (_enumTypeOnOpen != null)
 			{
-				object enumValue = enumValues.GetValue(n);
-
-				bool enumValueIsCurrent = enumValue.Equals(_currentEnumValue);
-
-				string label = null;
-				string iconClassName = null;
-				string tooltipDesc = null;
-				var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
-				if (enumUI != null)
-				{
-					label = enumUI.Label;
-					iconClassName = enumUI.IconStyleClass;
-					tooltipDesc = enumUI.Tooltip;
-				}
-				if (string.IsNullOrEmpty(label))
-				{
-					label = enumValue.ToStringLabel();
-				}
-
-				_contextMenu.AddMenu(label, iconClassName, enumValueIsCurrent, tooltipDesc,
-					listener: this, userArg1: enumValue);
+				OnDropdownEnumChosen(index, label, newValue);
 			}
-			_contextMenu.Show(_toggle, this);
-
-			_lastEnumTypeUsedOnOpen = enumType;
-		}
-
-		public void OnContextMenuChosen(int index, string label, object enumValue, object userArg2)
-		{
-			if (enumValue.Equals(_currentEnumValue))
-			{
-				// same as currently chosen value, nothing to do
-				return;
-			}
-
-			_contextMenu.ChangeSelected(index);
-
-			using var changeEvent = ChangeEvent<object>.GetPooled(_currentEnumValue, enumValue);
-			changeEvent.target = this;
-
-			_currentEnumValue = (Enum)enumValue;
-			_toggle.label = label;
-			UpdateIcon(_currentEnumValue);
-
-			panel.visualTree.SendEvent(changeEvent);
 		}
 
 		public void OnContextMenuCanceled()
 		{
 			_toggle.value = false;
 			_toggle.Focus();
-		}
-
-		void UpdateIcon(Enum currentValue)
-		{
-			_icon.ClearClassList();
-			_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
-			var enumUI = currentValue.GetEnumValueAttribute<EnumUI>();
-			if (enumUI != null && !string.IsNullOrEmpty(enumUI.IconStyleClass))
-			{
-				_icon.style.display = DisplayStyle.Flex;
-				_icon.AddToClassList(enumUI.IconStyleClass);
-			}
-			else
-			{
-				_icon.style.display = DisplayStyle.None;
-			}
 		}
 	}
 }

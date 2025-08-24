@@ -5,6 +5,6 @@
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/Dropdown.uss?fileID=7433441132597879392&amp;guid=8fc00aea6e9ef6a47969190537f24eaa&amp;type=3#Dropdown" />
     <ui:VisualElement name="Dropdown" class="dld-dropdown__container">
         <ui:Label text="Dropdown" class="dld-dropdown__label" />
-        <ui:Toggle label="Valueyqp" class="dld-dropdown__toggle" />
+        <ui:Toggle label="Value" class="dld-dropdown__toggle" />
     </ui:VisualElement>
 </ui:UXML>
