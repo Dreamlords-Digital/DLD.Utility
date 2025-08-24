@@ -57,6 +57,21 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void ToggleFlag(ref System.Enum flags, System.Enum flag)
+		{
+			int flagsValue = System.Convert.ToInt32(flags);
+			int flagValue = System.Convert.ToInt32(flag);
+
+			if ((flagsValue & flagValue) == 0)
+			{
+				flags = (System.Enum)System.Enum.ToObject(flags.GetType(), flagsValue | flagValue);
+			}
+			else
+			{
+				flags = (System.Enum)System.Enum.ToObject(flags.GetType(), flagsValue & (~flagValue));
+			}
+		}
+
 		public static void SetFlag(this ref byte byteToChange, int index, bool value)
 		{
 			if (index < 0 || index > 7)
