@@ -42,7 +42,7 @@
 }
 
 .dld-dropdown__toggle > .unity-toggle__label {
-    margin-left: 0;
+    margin-left: 2px;
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;

@@ -3,7 +3,8 @@
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ContextMenu.uss?fileID=7433441132597879392&amp;guid=65fe3e65cd5272d4b800d24be6a0860b&amp;type=3#ContextMenu" />
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseIcons.uss?fileID=7433441132597879392&amp;guid=823f1eed85f57214796265fd88417ad2&amp;type=3#BaseIcons" />
     <ui:VisualElement name="Entry" focusable="true" class="dld-context-menu-entry-container">
+        <ui:VisualElement name="SelectedIndicator" class="dld-icon" />
         <ui:VisualElement name="Icon" class="dld-icon" />
-        <ui:Label text="Label" />
+        <ui:Label text="Label" class="dld-context-menu-entry__label" />
     </ui:VisualElement>
 </ui:UXML>

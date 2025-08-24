@@ -1,3 +1,4 @@
+using System.Linq;
 using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,9 +10,10 @@ namespace DLD.UIToolkit
 		VisualElement Root { get; }
 
 		void ClearMenu();
+		void DoAltBgStyling(bool doAltBgStyling);
 		void AddSeparator();
-		void AddMenu(string label, string iconClassStyle = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
-		void ChangeMenuIcon(object userArg1, string iconClassStyleToAdd = null, string iconClassStyleToRemove = null);
+		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string tooltip = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+		void ChangeSelected(int newSelectedIdx);
 
 		void Show(Vector2 position, IContextMenuListener listener = null);
 		void Show(ContextClickEvent e, IContextMenuListener listener = null);
@@ -23,7 +25,7 @@ namespace DLD.UIToolkit
 
 	public interface IContextMenuListener
 	{
-		void OnContextMenuChosen(int index, object userArg1, object userArg2);
+		void OnContextMenuChosen(int index, string label, object userArg1, object userArg2);
 		void OnContextMenuCanceled();
 	}
 
@@ -33,13 +35,21 @@ namespace DLD.UIToolkit
 		const string ENTRY_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntry";
 		const string SEPARATOR_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntrySeparator";
 		const string MENU_NAME = "ContextMenuBg";
+		const string SELECTED_INDICATOR_NAME = "SelectedIndicator";
+		const string ICON_NAME = "Icon";
 
 		const string ENTRY_ALT_CLASS_NAME = "dld-context-menu-entry-container--alt-bg";
 		const string PRESSED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--active";
 		const string DISABLED_ENTRY_CLASS_NAME = "dld-context-menu-entry-container--disabled";
 		const string MENU_AS_DROPDOWN_CLASS_NAME = "dld-context-menu--as-dropdown";
+		const string MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_CLASS_NAME = "dld-context-menu--as-dropdown--longer";
+		const string SELECTED_ENTRY_LABEL_CLASS_NAME = "dld-context-menu-entry__label--selected";
 
 		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
+
+		static readonly CustomStyleProperty<float> DropdownButtonFitWidthAdjust = new ("--dropdown--button-fit-width-adjust");
+
+		float _dropdownButtonFitWidthAdjust;
 
 		readonly VisualElement _menu;
 
@@ -55,6 +65,7 @@ namespace DLD.UIToolkit
 
 		Focusable _focusTargetAfterClose;
 
+		ITooltip _tooltip;
 		IContextMenuListener _listener;
 
 		public VisualElement Root => this;
@@ -85,11 +96,30 @@ namespace DLD.UIToolkit
 			_menu.RegisterCallback<GeometryChangedEvent, ContextMenu>((e, c) => c.OnMenuResized(e), this);
 
 			RegisterCallback<KeyDownEvent, ContextMenu>((e, c) => c.OnPressKey(e), this);
+
+			RegisterCallback<CustomStyleResolvedEvent>(OnCustomStyleResolved);
+		}
+
+		void OnCustomStyleResolved(CustomStyleResolvedEvent evt)
+		{
+			if (evt.customStyle.TryGetValue(DropdownButtonFitWidthAdjust, out float gotFloatValue))
+			{
+				_dropdownButtonFitWidthAdjust = gotFloatValue;
+			}
+			else
+			{
+				_dropdownButtonFitWidthAdjust = 0;
+			}
 		}
 
 		public void SetFocusTargetAfterClose(Focusable newFocusTarget)
 		{
 			_focusTargetAfterClose = newFocusTarget;
+		}
+
+		public void SetTooltip(ITooltip newTooltip)
+		{
+			_tooltip = newTooltip;
 		}
 
 		public void ClearMenu()
@@ -110,23 +140,41 @@ namespace DLD.UIToolkit
 			_menu.Add(entryContainer);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false)
+		public void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string menuTooltip = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false)
 		{
 			var createdEntry = _entryAsset.Instantiate();
 
 			var entryContainer = createdEntry.Q<VisualElement>("Entry");
-			entryContainer.userData = listener;
+
+			entryContainer.userData = menuTooltip;
+			entryContainer.RegisterCallback(TooltipUtil.ShowFromUserData, _tooltip);
+			entryContainer.RegisterCallback(TooltipUtil.Hide, _tooltip);
+
 			if (showAsDisabled)
 			{
 				entryContainer.AddToClassList(DISABLED_ENTRY_CLASS_NAME);
 			}
 
-			var entryIcon = entryContainer.Q<VisualElement>("Icon");
+			var selectedIndicator = entryContainer.Q<VisualElement>(SELECTED_INDICATOR_NAME);
+			selectedIndicator.userData = listener;
+
+			var entryIcon = entryContainer.Q<VisualElement>(ICON_NAME);
 			entryIcon.userData = userArg1;
 
 			var entryLabel = entryContainer.Q<Label>();
 			entryLabel.text = label;
 			entryLabel.userData = userArg2;
+
+			if (showAsSelected)
+			{
+				selectedIndicator.style.display = DisplayStyle.Flex;
+				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_CLASS_NAME);
+			}
+			else
+			{
+				selectedIndicator.style.display = DisplayStyle.None;
+			}
 
 			if (!showAsDisabled)
 			{
@@ -144,13 +192,14 @@ namespace DLD.UIToolkit
 					{
 						return;
 					}
+					var gotSelectedIndicator = targetElement.Q<VisualElement>(SELECTED_INDICATOR_NAME);
 
-					if (targetElement.userData is IContextMenuListener gotListener)
+					if (gotSelectedIndicator.userData is IContextMenuListener gotListener)
 					{
 						targetElement.Focus();
-						var gotIcon = targetElement.Q<VisualElement>("Icon");
+						var gotIcon = targetElement.Q<VisualElement>(ICON_NAME);
 						var gotLabel = targetElement.Q<Label>();
-						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotIcon.userData, gotLabel.userData);
+						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel.text, gotIcon.userData, gotLabel.userData);
 					}
 					else
 					{
@@ -176,7 +225,7 @@ namespace DLD.UIToolkit
 		{
 			for (int n = 0; n < _menu.childCount; ++n)
 			{
-				var gotIcon = _menu[n].Q<VisualElement>("Icon");
+				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
 				if (gotIcon?.userData != null && gotIcon.userData.Equals(userArg1))
 				{
 					if (!string.IsNullOrEmpty(iconClassStyleToRemove))
@@ -194,10 +243,37 @@ namespace DLD.UIToolkit
 			}
 		}
 
+		public void ChangeSelected(int newSelectedIdx)
+		{
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var selectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				if (selectedIndicator == null)
+				{
+					// we're at a separator, not a menu entry (separators don't have a selected indicator)
+					continue;
+				}
+
+				var entryLabel = _menu[n].Q<Label>();
+				if (n == newSelectedIdx)
+				{
+					selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+					entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_CLASS_NAME);
+				}
+				else
+				{
+					selectedIndicator.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+					entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_CLASS_NAME);
+				}
+			}
+		}
+
 		public void Show(Vector2 position, IContextMenuListener listener = null)
 		{
+			UpdateIconVisibility();
 			_listener = listener;
 			_elementShownOn = null;
+
 			_menu.SetPosition(position);
 			style.display = DisplayStyle.Flex;
 			focusable = true;
@@ -220,6 +296,7 @@ namespace DLD.UIToolkit
 
 		public void Show(VisualElement ve, IContextMenuListener listener = null)
 		{
+			UpdateIconVisibility();
 			_listener = listener;
 			_elementShownOn = ve;
 
@@ -227,7 +304,9 @@ namespace DLD.UIToolkit
 			var veWorldPos = ve.LocalToWorld(new Vector2(0, veLayout.height));
 			var localPos = this.WorldToLocal(veWorldPos);
 			_menu.SetPosition(localPos);
+			_menu.style.width = StyleKeyword.Null;
 			_menu.AddToClassList(MENU_AS_DROPDOWN_CLASS_NAME);
+			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_CLASS_NAME);
 
 			style.display = DisplayStyle.Flex;
 			focusable = true;
@@ -238,6 +317,55 @@ namespace DLD.UIToolkit
 
 		public bool WasLastShownOn(VisualElement ve) => ve == _elementShownOn;
 
+		void UpdateIconVisibility()
+		{
+			bool iconsShown = false;
+			bool selectedIndicatorShown = false;
+
+			// -----------------------------------------------------------------
+			// First Pass
+			// Check whether any menu entry has icon and selected indicator showing
+
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				if (gotSelectedIndicator == null)
+				{
+					// we're at a separator, not a menu entry (separators don't have a selected indicator)
+					continue;
+				}
+
+				if (gotSelectedIndicator.resolvedStyle.display == DisplayStyle.Flex)
+				{
+					selectedIndicatorShown = true;
+				}
+				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+				if (gotIcon.GetClasses().Count() > 1)
+				{
+					iconsShown = true;
+				}
+			}
+
+			// -----------------------------------------------------------------
+			// Second Pass
+			// Enable icons and selected indicator spaces if at least one menu entry is using them
+
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				if (gotSelectedIndicator == null)
+				{
+					// we're at a separator, not a menu entry (separators don't have a selected indicator)
+					continue;
+				}
+
+				gotSelectedIndicator.style.display = selectedIndicatorShown ? DisplayStyle.Flex : DisplayStyle.None;
+
+				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+				gotIcon.style.display = iconsShown ? DisplayStyle.Flex : DisplayStyle.None;
+			}
+		}
+
 		void OnMenuResized(GeometryChangedEvent evt)
 		{
 			if (evt.newRect.width == 0 || evt.newRect.height == 0 || _elementShownOn == null)
@@ -245,11 +373,21 @@ namespace DLD.UIToolkit
 				return;
 			}
 
-			float menuWidth = _menu.layout.width;
+			float menuWidth = _menu.layout.width - _dropdownButtonFitWidthAdjust;
 			float elementWidth = _elementShownOn.layout.width;
-			if (menuWidth > 0 && menuWidth < elementWidth)
+
+			if (menuWidth <= 0)
 			{
-				_menu.style.width = elementWidth;
+				return;
+			}
+
+			if (menuWidth <= elementWidth)
+			{
+				_menu.style.width = elementWidth + _dropdownButtonFitWidthAdjust;
+			}
+			else
+			{
+				_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_CLASS_NAME);
 			}
 		}
 
@@ -372,11 +510,12 @@ namespace DLD.UIToolkit
 					if (focusedMenuIdx != -1)
 					{
 						// pressing enter will do the same thing that the menu entry's click callback does
-						if (_menu[focusedMenuIdx].userData is IContextMenuListener gotListener)
+						var gotSelectedIndicator = _menu[focusedMenuIdx].Q<VisualElement>("SelectedIndicator");
+						if (gotSelectedIndicator.userData is IContextMenuListener gotListener)
 						{
-							var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>("Icon");
+							var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(ICON_NAME);
 							var gotLabel = _menu[focusedMenuIdx].Q<Label>();
-							gotListener.OnContextMenuChosen(focusedMenuIdx, gotIcon.userData, gotLabel.userData);
+							gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel.text, gotIcon.userData, gotLabel.userData);
 							Hide();
 							e.StopPropagation();
 						}

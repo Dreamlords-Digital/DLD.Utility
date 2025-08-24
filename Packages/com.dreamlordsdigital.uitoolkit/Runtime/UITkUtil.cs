@@ -237,4 +237,18 @@ namespace DLD.UIToolkit
 			return (float)(Math.Pow(1.0 + zoomStep, num5 + y) + num1);
 		}
 	}
+
+	public class EnumUI : Attribute
+	{
+		public readonly string Tooltip;
+		public readonly string Label;
+		public readonly string IconStyleClass;
+
+		public EnumUI(string tooltip = null, string label = null, string iconStyleClass = null)
+		{
+			Tooltip = tooltip;
+			Label = label;
+			IconStyleClass = iconStyleClass;
+		}
+	}
 }

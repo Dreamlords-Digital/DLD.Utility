@@ -13,12 +13,14 @@ namespace DLD.UIToolkit
 
 		readonly Label _label;
 		readonly Toggle _toggle;
+		readonly VisualElement _icon;
 
 		IContextMenu _contextMenu;
+		bool _doAltBgStyling;
 
 		System.Type _enumTypeOnOpen;
 		System.Type _lastEnumTypeUsedOnOpen;
-		object _currentEnumValue;
+		Enum _currentEnumValue;
 
 		public Dropdown()
 		{
@@ -29,9 +31,14 @@ namespace DLD.UIToolkit
 			_toggle = this.Q<Toggle>();
 			_toggle.labelElement.focusable = true;
 
+			_icon = new VisualElement();
+
 			var arrow = new VisualElement();
 			arrow.AddToClassList(ARROW_STYLE_CLASS);
 			_toggle.Add(arrow);
+
+			_toggle.Insert(0, _icon);
+			_icon.style.display = DisplayStyle.None;
 
 			_label = this.Q<Label>(null, "dld-dropdown__label");
 			_label.RegisterCallback<MouseDownEvent, Dropdown>((e, d) =>
@@ -64,13 +71,20 @@ namespace DLD.UIToolkit
 
 		public void SetValueWithoutNotify(Enum currentValue)
 		{
-			_toggle.label = currentValue.ToString();
+			_toggle.label = currentValue.ToStringLabel();
 			_currentEnumValue = currentValue;
+
+			UpdateIcon(currentValue);
 		}
 
 		public void SetEnumTypeOnOpen(Type enumType)
 		{
 			_enumTypeOnOpen = enumType;
+		}
+
+		public void DoAltBgStyling(bool doAltBgStyling)
+		{
+			_doAltBgStyling = doAltBgStyling;
 		}
 
 		void OnOpen()
@@ -85,27 +99,46 @@ namespace DLD.UIToolkit
 		{
 			if (_lastEnumTypeUsedOnOpen == enumType && _contextMenu.WasLastShownOn(_toggle))
 			{
+				// Context Menu has the same entries as what we want,
+				// so no need to add them again. Just reuse it as-is.
 				_contextMenu.Show(_toggle, this);
 				return;
 			}
 
 			var enumValues = Enum.GetValues(enumType);
 
+			_contextMenu.DoAltBgStyling(_doAltBgStyling);
 			_contextMenu.ClearMenu();
 			for (int n = 0; n < enumValues.Length; ++n)
 			{
 				object enumValue = enumValues.GetValue(n);
 
-				bool match = enumValue.Equals(_currentEnumValue);
-				string iconClassName = match ? BaseIcons.SELECTED_IN_DROPDOWN : null;
-				_contextMenu.AddMenu(enumValue.ToString(), iconClassName, this, enumValue);
+				bool enumValueIsCurrent = enumValue.Equals(_currentEnumValue);
+
+				string label = null;
+				string iconClassName = null;
+				string tooltipDesc = null;
+				var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
+				if (enumUI != null)
+				{
+					label = enumUI.Label;
+					iconClassName = enumUI.IconStyleClass;
+					tooltipDesc = enumUI.Tooltip;
+				}
+				if (string.IsNullOrEmpty(label))
+				{
+					label = enumValue.ToStringLabel();
+				}
+
+				_contextMenu.AddMenu(label, iconClassName, enumValueIsCurrent, tooltipDesc,
+					listener: this, userArg1: enumValue);
 			}
 			_contextMenu.Show(_toggle, this);
 
 			_lastEnumTypeUsedOnOpen = enumType;
 		}
 
-		public void OnContextMenuChosen(int index, object enumValue, object userArg2)
+		public void OnContextMenuChosen(int index, string label, object enumValue, object userArg2)
 		{
 			if (enumValue.Equals(_currentEnumValue))
 			{
@@ -113,14 +146,14 @@ namespace DLD.UIToolkit
 				return;
 			}
 
-			_contextMenu.ChangeMenuIcon(_currentEnumValue, iconClassStyleToRemove: BaseIcons.SELECTED_IN_DROPDOWN);
-			_contextMenu.ChangeMenuIcon(enumValue, iconClassStyleToAdd: BaseIcons.SELECTED_IN_DROPDOWN);
+			_contextMenu.ChangeSelected(index);
 
 			using var changeEvent = ChangeEvent<object>.GetPooled(_currentEnumValue, enumValue);
 			changeEvent.target = this;
 
-			_currentEnumValue = enumValue;
-			_toggle.label = enumValue.ToString();
+			_currentEnumValue = (Enum)enumValue;
+			_toggle.label = label;
+			UpdateIcon(_currentEnumValue);
 
 			panel.visualTree.SendEvent(changeEvent);
 		}
@@ -129,6 +162,22 @@ namespace DLD.UIToolkit
 		{
 			_toggle.value = false;
 			_toggle.Focus();
+		}
+
+		void UpdateIcon(Enum currentValue)
+		{
+			_icon.ClearClassList();
+			_icon.AddToClassList("dld-icon");
+			var enumUI = currentValue.GetEnumValueAttribute<EnumUI>();
+			if (enumUI != null && !string.IsNullOrEmpty(enumUI.IconStyleClass))
+			{
+				_icon.style.display = DisplayStyle.Flex;
+				_icon.AddToClassList(enumUI.IconStyleClass);
+			}
+			else
+			{
+				_icon.style.display = DisplayStyle.None;
+			}
 		}
 	}
 }
