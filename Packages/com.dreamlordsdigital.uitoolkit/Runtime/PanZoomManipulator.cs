@@ -635,7 +635,7 @@ namespace DLD.UIToolkit
 			{
 				if (_shift)
 				{
-					_tooltip?.ShowTooltipAtMouse("Move without parenting", BaseIcons.FORCE_MOVE, mousePos);
+					_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.FORCE_MOVE, mousePos);
 				}
 				else
 				{

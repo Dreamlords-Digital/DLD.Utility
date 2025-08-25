@@ -1,7 +1,9 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/Tooltip.uss?fileID=7433441132597879392&amp;guid=5f3688feb310324498295dfd49a1d291&amp;type=3#Tooltip" />
     <ui:VisualElement name="Tooltip" picking-mode="Ignore" class="dld-tooltip__bg">
-        <ui:VisualElement name="Icon" picking-mode="Ignore" class="dld-tooltip__icon" />
-        <ui:Label name="Text" parse-escape-sequences="true" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" picking-mode="Ignore" text="Test" class="dld-tooltip__text" />
+        <ui:VisualElement name="Row" class="dld-tooltip__row">
+            <ui:VisualElement name="Icon" picking-mode="Ignore" class="dld-tooltip__icon" />
+            <ui:Label name="Text" parse-escape-sequences="true" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" picking-mode="Ignore" text="Test" class="dld-tooltip__text" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

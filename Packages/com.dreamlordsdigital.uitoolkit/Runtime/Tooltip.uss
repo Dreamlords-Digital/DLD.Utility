@@ -7,7 +7,7 @@
     padding-left: 8px;
     padding-right: 8px;
     align-self: flex-start;
-    flex-direction: row;
+    flex-direction: column;
     padding-top: 6px;
     padding-bottom: 6px;
     position: absolute;
@@ -16,6 +16,10 @@
 .dld-tooltip__bg--follow-mouse {
     top: -20px;
     left: 10px;
+}
+
+.dld-tooltip__row {
+    flex-direction: row;
 }
 
 .dld-tooltip__icon {

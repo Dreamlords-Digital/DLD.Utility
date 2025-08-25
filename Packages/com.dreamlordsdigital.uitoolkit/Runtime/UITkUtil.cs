@@ -72,6 +72,15 @@ namespace DLD.UIToolkit
 			}
 		}
 
+		public static void AddStyleClassesFrom(this VisualElement destination, VisualElement source)
+		{
+			destination.ClearClassList();
+			foreach (string styleClass in source.GetClasses())
+			{
+				destination.AddToClassList(styleClass);
+			}
+		}
+
 		public static void RemoveTemplateContainer(this VisualElement me, string childRootName)
 		{
 			var clonedRoot = me.Q<VisualElement>(childRootName);

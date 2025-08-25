@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,10 +7,9 @@ namespace DLD.UIToolkit
 {
 	public interface ITooltip
 	{
-		void ShowTooltipAtMouse(string text, string iconClassName, Vector2 mousePos);
-		void SetTooltipContext(IEventHandler context);
+		void ShowTooltipAtMouse(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
 		void HideTooltip();
-		void HideTooltipIfContextIs(IEventHandler context);
+		void HideTooltipIfContextIs(IEventHandler context, bool popFromStack = false);
 	}
 
 	public static class TooltipUtil
@@ -16,7 +17,10 @@ namespace DLD.UIToolkit
 		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowFromUserData = _ShowTooltipFromUserData;
 		public static readonly EventCallback<PointerLeaveEvent, ITooltip> Hide = _HideTooltip;
 
-		public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO)
+		static readonly EventCallback<PointerEnterEvent, ITooltip> ShowTooltipFromUserDataPushToStack = _ShowTooltipFromUserDataPushToStack;
+		static readonly EventCallback<PointerLeaveEvent, ITooltip> HideTooltipIfContextIs = _HideTooltipIfContextIs;
+
+		public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO, bool pushToStack = false)
 		{
 			if (tooltipDisplayer == null)
 			{
@@ -32,8 +36,17 @@ namespace DLD.UIToolkit
 			string finalTooltipText = tooltipText.Contains(';') || string.IsNullOrWhiteSpace(iconClassName) ? tooltipText : $"{iconClassName};{tooltipText}";
 
 			tooltipDisplayer.userData = finalTooltipText;
-			tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
-			tooltipDisplayer.RegisterCallback(Hide, tooltip);
+
+			if (pushToStack)
+			{
+				tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
+				tooltipDisplayer.RegisterCallback(HideTooltipIfContextIs, tooltip);
+			}
+			else
+			{
+				tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
+				tooltipDisplayer.RegisterCallback(Hide, tooltip);
+			}
 
 			return finalTooltipText;
 		}
@@ -65,13 +78,48 @@ namespace DLD.UIToolkit
 				iconClassName = null;
 			}
 
-			t.ShowTooltipAtMouse(tooltip, iconClassName, e.position);
-			t.SetTooltipContext(eventTarget);
+			t.ShowTooltipAtMouse(eventTarget, tooltip, iconClassName, e.position);
 		}
 
-		static void _HideTooltip(PointerLeaveEvent _, ITooltip t)
+		static void _ShowTooltipFromUserDataPushToStack(PointerEnterEvent e, ITooltip t)
+		{
+			var eventTarget = (VisualElement)e.target;
+			string tooltip = (string)eventTarget.userData;
+
+			if (string.IsNullOrWhiteSpace(tooltip))
+			{
+				return;
+			}
+
+			string iconClassName;
+			int semicolonIdx = tooltip.IndexOf(';');
+			if (semicolonIdx != -1)
+			{
+				iconClassName = tooltip.Substring(0, semicolonIdx);
+				tooltip = tooltip.Substring(semicolonIdx+1);
+
+				if (string.IsNullOrWhiteSpace(tooltip))
+				{
+					return;
+				}
+			}
+			else
+			{
+				iconClassName = null;
+			}
+
+			t.ShowTooltipAtMouse(eventTarget, tooltip, iconClassName, e.position, true);
+		}
+
+		static void _HideTooltip(PointerLeaveEvent e, ITooltip t)
 		{
 			t.HideTooltip();
+		}
+
+		static void _HideTooltipIfContextIs(PointerLeaveEvent e, ITooltip t)
+		{
+			var eventTarget = (VisualElement)e.target;
+			t.HideTooltipIfContextIs(eventTarget, true);
 		}
 	}
 
@@ -90,13 +138,16 @@ namespace DLD.UIToolkit
 
 		ShowType _showType = ShowType.None;
 
-		string _lastIconStyleNameUsed;
-
+		bool _originalRowUsed;
+		readonly VisualElement _row;
 		readonly VisualElement _icon;
 		readonly Label _text;
 
-		readonly EventCallback<PointerMoveEvent> _onPointerMove;
 		IEventHandler _context;
+		readonly List<(IEventHandler context, VisualElement row, VisualElement icon, Label text)> _additionalRows = new();
+		int _additionalRowCountUsed;
+
+		readonly EventCallback<PointerMoveEvent> _onPointerMove;
 
 		public Tooltip()
 		{
@@ -104,8 +155,9 @@ namespace DLD.UIToolkit
 			asset.CloneTree(this);
 			this.RemoveTemplateContainer("Tooltip");
 
-			_icon = this.Q<VisualElement>("Icon");
-			_text = this.Q<Label>("Text");
+			_row = this.Q<VisualElement>("Row");
+			_icon = _row.Q<VisualElement>("Icon");
+			_text = _row.Q<Label>("Text");
 
 			// -----------------------------------
 
@@ -125,55 +177,104 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================================
 
-		public void SetContext(IEventHandler context)
+		public void Set(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
 		{
-			_context = context;
-		}
-
-		public void Set(string text, string iconClassName = null)
-		{
-			_text.text = text;
-
-			if (!string.IsNullOrWhiteSpace(iconClassName))
+			if (_originalRowUsed && pushToStack)
 			{
-				if (!string.IsNullOrWhiteSpace(_lastIconStyleNameUsed))
+				if (_additionalRows.Count == _additionalRowCountUsed)
 				{
-					_icon.RemoveFromClassList(_lastIconStyleNameUsed);
+					var newRow = new VisualElement();
+					newRow.AddStyleClassesFrom(_row);
+
+					var newText = new Label(text);
+					newText.AddStyleClassesFrom(_text);
+
+					var newIcon = new VisualElement();
+					if (!string.IsNullOrEmpty(iconClassName))
+					{
+						newIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+						newIcon.AddToClassList(iconClassName);
+					}
+
+					newRow.Add(newIcon);
+					newRow.Add(newText);
+
+					_additionalRows.Add((context, newRow, newIcon, newText));
+					_additionalRowCountUsed += 1;
+					Insert(0, newRow);
 				}
-				_icon.style.display = DisplayStyle.Flex;
-				_icon.AddToClassList(iconClassName);
-				_lastIconStyleNameUsed = iconClassName;
+				else
+				{
+					// reuse
+					var nextAvailable = _additionalRows[_additionalRowCountUsed];
+					{
+						// update context
+						nextAvailable.context = context;
+						_additionalRows[_additionalRowCountUsed] = nextAvailable;
+					}
+					nextAvailable.text.text = text;
+					nextAvailable.icon.ClearClassList();
+					if (!string.IsNullOrEmpty(iconClassName))
+					{
+						nextAvailable.icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+						nextAvailable.icon.AddToClassList(iconClassName);
+					}
+
+					Insert(0, nextAvailable.row);
+					_additionalRowCountUsed += 1;
+				}
 			}
 			else
 			{
-				_icon.style.display = DisplayStyle.None;
+				_context = context;
+				_text.text = text;
+
+				if (!string.IsNullOrWhiteSpace(iconClassName))
+				{
+					_icon.style.display = DisplayStyle.Flex;
+					_icon.ClearClassList();
+					_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+					_icon.AddToClassList(iconClassName);
+				}
+				else
+				{
+					_icon.style.display = DisplayStyle.None;
+				}
+
+				_originalRowUsed = true;
 			}
 		}
 
-		public void ShowAtMouseCursor(string text, string iconClassName = null)
+		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
 		{
-			Set(text, iconClassName);
+			Set(context, text, iconClassName, pushToStack);
 			_showType = ShowType.FollowMouseCursor;
 			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.Flex;
 		}
 
-		public void ShowAtMouseCursor(string text, string iconClassName, Vector2 mousePos)
+		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
 		{
-			ShowAtMouseCursor(text, iconClassName);
+			ShowAtMouseCursor(context, text, iconClassName, pushToStack);
 			this.SetPosition(mousePos);
 		}
 
 		public void Hide()
 		{
+			_originalRowUsed = false;
 			_showType = ShowType.None;
 			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.None;
 		}
 
-		public void HideIfContextIs(IEventHandler context)
+		public void HideIfContextIs(IEventHandler context, bool popFromStack = false)
 		{
-			if (_context == context)
+			if (popFromStack && _originalRowUsed && _additionalRowCountUsed > 0 && _additionalRows[_additionalRowCountUsed-1].Item1 == context)
+			{
+				RemoveAt(0);
+				_additionalRowCountUsed -= 1;
+			}
+			else if (_context == context)
 			{
 				Hide();
 			}
