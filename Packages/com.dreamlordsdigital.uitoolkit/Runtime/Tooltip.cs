@@ -16,6 +16,28 @@ namespace DLD.UIToolkit
 		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowFromUserData = _ShowTooltipFromUserData;
 		public static readonly EventCallback<PointerLeaveEvent, ITooltip> Hide = _HideTooltip;
 
+		public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO)
+		{
+			if (tooltipDisplayer == null)
+			{
+				return null;
+			}
+			if (string.IsNullOrWhiteSpace(tooltipText))
+			{
+				return null;
+			}
+
+			// If passed tooltipText already has an icon inside, or user doesn't want an icon displayed,
+			// then just use tooltipText as-is.
+			string finalTooltipText = tooltipText.Contains(';') || string.IsNullOrWhiteSpace(iconClassName) ? tooltipText : $"{iconClassName};{tooltipText}";
+
+			tooltipDisplayer.userData = finalTooltipText;
+			tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
+			tooltipDisplayer.RegisterCallback(Hide, tooltip);
+
+			return finalTooltipText;
+		}
+
 		static void _ShowTooltipFromUserData(PointerEnterEvent e, ITooltip t)
 		{
 			var eventTarget = (VisualElement)e.target;

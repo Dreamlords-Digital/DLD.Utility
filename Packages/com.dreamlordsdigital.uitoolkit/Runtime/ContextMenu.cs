@@ -179,9 +179,7 @@ namespace DLD.UIToolkit
 
 			var entryContainer = createdEntry.Q<VisualElement>("Entry");
 
-			entryContainer.userData = menuTooltip;
-			entryContainer.RegisterCallback(TooltipUtil.ShowFromUserData, _tooltip);
-			entryContainer.RegisterCallback(TooltipUtil.Hide, _tooltip);
+			entryContainer.Register(_tooltip, menuTooltip);
 
 			if (showAsDisabled)
 			{
