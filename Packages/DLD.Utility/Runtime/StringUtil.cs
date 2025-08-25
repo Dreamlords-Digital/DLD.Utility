@@ -78,11 +78,16 @@ namespace DLD.Utility
 		/// After the first letter, add a space before every capital letter.
 		/// </summary>
 		/// <param name="text"></param>
-		/// <param name="preserveAcronyms"></param>
+		/// <param name="preserveAcronyms">When true, "WindowGUILabel" will become "Window GUI Label" instead of "Window GUILabel".</param>
 		/// <returns></returns>
 		public static string AddSpacesToSentence(this string text, bool preserveAcronyms = true)
 		{
-			if (string.IsNullOrEmpty(text))
+			if (text == null)
+			{
+				return null;
+			}
+
+			if (text == string.Empty)
 			{
 				return string.Empty;
 			}
