@@ -7,9 +7,55 @@ namespace DLD.UIToolkit
 {
 	public interface ITooltip
 	{
+		/// <summary>
+		///    Show a tooltip message that follows the mouse cursor.
+		///    It will not hide until <see cref="HideTooltip"/> or <see cref="HideTooltipIfContextIs"/> is called.
+		/// </summary>
+		/// <param name="context">The thing that caused the tooltip to be shown.</param>
+		/// <param name="text"></param>
+		/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
+		/// <param name="mousePos">Initial mouse position. This ensures the tooltip is at the correct position at the start.</param>
+		/// <param name="pushToStack">Whether the tooltip text specified will be added to the existing text already on the tooltip, or not.</param>
 		void ShowTooltipAtMouse(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
+
+		/// <summary>
+		///    Add another message to the tooltip, assuming it's already shown.
+		/// </summary>
+		/// <remarks>
+		///    The new message will be shown above and all the existing messages will be moved downward.
+		/// </remarks>
+		/// <param name="context">The thing that caused the tooltip to be shown.</param>
+		/// <param name="text"></param>
+		/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
+		void AddToTooltip(IEventHandler context, string text, string iconClassName = null);
+
 		void HideTooltip();
+
+		/// <summary>
+		///    If the context that was last assigned to the tooltip matches the one specified, the tooltip is hidden.
+		/// </summary>
+		/// <remarks>
+		///    Basically, this ensures a VisualElement that showed a tooltip
+		///    will hide it only if the tooltip is still showing its message.
+		/// </remarks>
+		/// <param name="context"></param>
+		/// <param name="popFromStack">
+		///    Only remove the most recent tooltip message (if it's showing multiple tooltip messages),
+		///    instead of hiding the entire tooltip.
+		/// </param>
 		void HideTooltipIfContextIs(IEventHandler context, bool popFromStack = false);
+	}
+
+	public class TooltipMessage
+	{
+		public string IconClassName;
+		public string Text;
+
+		public TooltipMessage(string iconClassName, string text)
+		{
+			IconClassName = iconClassName;
+			Text = text;
+		}
 	}
 
 	public static class TooltipUtil
@@ -51,64 +97,98 @@ namespace DLD.UIToolkit
 			return finalTooltipText;
 		}
 
-		static void _ShowTooltipFromUserData(PointerEnterEvent e, ITooltip t)
+		public static void Register(this VisualElement tooltipDisplayer, ITooltip tooltip, bool pushToStack = false)
 		{
-			var eventTarget = (VisualElement)e.target;
-			string tooltip = (string)eventTarget.userData;
-
-			if (string.IsNullOrWhiteSpace(tooltip))
+			if (tooltipDisplayer == null)
 			{
 				return;
 			}
 
-			string iconClassName;
-			int semicolonIdx = tooltip.IndexOf(';');
-			if (semicolonIdx != -1)
+			if (pushToStack)
 			{
-				iconClassName = tooltip.Substring(0, semicolonIdx);
-				tooltip = tooltip.Substring(semicolonIdx+1);
-
-				if (string.IsNullOrWhiteSpace(tooltip))
-				{
-					return;
-				}
+				tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
+				tooltipDisplayer.RegisterCallback(HideTooltipIfContextIs, tooltip);
 			}
 			else
 			{
-				iconClassName = null;
+				tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
+				tooltipDisplayer.RegisterCallback(Hide, tooltip);
 			}
+		}
 
-			t.ShowTooltipAtMouse(eventTarget, tooltip, iconClassName, e.position);
+		static void _ShowTooltipFromUserData(PointerEnterEvent e, ITooltip t)
+		{
+			var eventTarget = (VisualElement)e.target;
+			_Show(eventTarget, t, e.position, false);
 		}
 
 		static void _ShowTooltipFromUserDataPushToStack(PointerEnterEvent e, ITooltip t)
 		{
 			var eventTarget = (VisualElement)e.target;
-			string tooltip = (string)eventTarget.userData;
+			_Show(eventTarget, t, e.position, true);
+		}
 
-			if (string.IsNullOrWhiteSpace(tooltip))
+		static void _Show(VisualElement eventTarget, ITooltip t, Vector2 mousePos, bool pushToStack)
+		{
+			switch (eventTarget.userData)
 			{
-				return;
-			}
-
-			string iconClassName;
-			int semicolonIdx = tooltip.IndexOf(';');
-			if (semicolonIdx != -1)
-			{
-				iconClassName = tooltip.Substring(0, semicolonIdx);
-				tooltip = tooltip.Substring(semicolonIdx+1);
-
-				if (string.IsNullOrWhiteSpace(tooltip))
+				case string tooltip:
 				{
-					return;
+					if (string.IsNullOrWhiteSpace(tooltip))
+					{
+						// nothing to show
+						return;
+					}
+					string iconClassName;
+					int semicolonIdx = tooltip.IndexOf(';');
+					if (semicolonIdx != -1)
+					{
+						iconClassName = tooltip.Substring(0, semicolonIdx);
+						tooltip = tooltip.Substring(semicolonIdx+1);
+
+						if (string.IsNullOrWhiteSpace(tooltip))
+						{
+							return;
+						}
+					}
+					else
+					{
+						iconClassName = null;
+					}
+
+					t.ShowTooltipAtMouse(eventTarget, tooltip, iconClassName, mousePos, pushToStack);
+					break;
+				}
+				case TooltipMessage tooltipMessage:
+				{
+					t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
+					break;
+				}
+				case TooltipMessage[] tooltipMessageArray:
+				{
+					t.ShowTooltipAtMouse(eventTarget, tooltipMessageArray[0].Text, tooltipMessageArray[0].IconClassName, mousePos, pushToStack);
+					if (tooltipMessageArray.Length > 1)
+					{
+						for (int i = 1; i < tooltipMessageArray.Length; ++i)
+						{
+							t.AddToTooltip(eventTarget, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+						}
+					}
+					break;
+				}
+				case List<TooltipMessage> tooltipMessageList:
+				{
+					t.ShowTooltipAtMouse(eventTarget, tooltipMessageList[0].Text, tooltipMessageList[0].IconClassName, mousePos, pushToStack);
+					if (tooltipMessageList.Count > 1)
+					{
+						for (int i = 1; i < tooltipMessageList.Count; ++i)
+						{
+							t.AddToTooltip(eventTarget, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
+						}
+					}
+					break;
 				}
 			}
-			else
-			{
-				iconClassName = null;
-			}
-
-			t.ShowTooltipAtMouse(eventTarget, tooltip, iconClassName, e.position, true);
 		}
 
 		static void _HideTooltip(PointerLeaveEvent e, ITooltip t)
@@ -128,6 +208,7 @@ namespace DLD.UIToolkit
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Tooltip";
 		const string FOLLOW_MOUSE_STYLE_CLASS = "dld-tooltip__bg--follow-mouse";
+		const string TOOLTIP_ICON_STYLE_CLASS = "dld-tooltip__icon";
 
 		enum ShowType
 		{
@@ -177,7 +258,66 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================================
 
-		public void Set(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
+		public void PushToStack(IEventHandler context, string text, string iconClassName = null)
+		{
+			Set(context, text, iconClassName, true);
+		}
+
+		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
+		{
+			Set(context, text, iconClassName, pushToStack);
+			_showType = ShowType.FollowMouseCursor;
+			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
+			style.display = DisplayStyle.Flex;
+		}
+
+		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
+		{
+			ShowAtMouseCursor(context, text, iconClassName, pushToStack);
+			this.SetPosition(mousePos);
+		}
+
+		public void Hide()
+		{
+			_originalRowUsed = false;
+			_showType = ShowType.None;
+			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
+			style.display = DisplayStyle.None;
+
+			if (_additionalRowCountUsed > 0)
+			{
+				for (int n = 0; n < _additionalRowCountUsed; ++n)
+				{
+					RemoveAt(0);
+				}
+				_additionalRowCountUsed = 0;
+			}
+		}
+
+		public void HideIfContextIs(IEventHandler context, bool popFromStack = false)
+		{
+			if (popFromStack && _originalRowUsed && _additionalRowCountUsed > 0 && _additionalRows[_additionalRowCountUsed-1].Item1 == context)
+			{
+				RemoveAt(0);
+				_additionalRowCountUsed -= 1;
+			}
+			else if (_context == context)
+			{
+				Hide();
+			}
+		}
+
+		// ==================================================================================================
+
+		void OnPointerMove(PointerMoveEvent e)
+		{
+			if (_showType == ShowType.FollowMouseCursor)
+			{
+				this.SetPosition(e.position);
+			}
+		}
+
+		void Set(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
 		{
 			if (_originalRowUsed && pushToStack)
 			{
@@ -192,7 +332,7 @@ namespace DLD.UIToolkit
 					var newIcon = new VisualElement();
 					if (!string.IsNullOrEmpty(iconClassName))
 					{
-						newIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+						newIcon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
 						newIcon.AddToClassList(iconClassName);
 					}
 
@@ -216,7 +356,7 @@ namespace DLD.UIToolkit
 					nextAvailable.icon.ClearClassList();
 					if (!string.IsNullOrEmpty(iconClassName))
 					{
-						nextAvailable.icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+						nextAvailable.icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
 						nextAvailable.icon.AddToClassList(iconClassName);
 					}
 
@@ -233,7 +373,7 @@ namespace DLD.UIToolkit
 				{
 					_icon.style.display = DisplayStyle.Flex;
 					_icon.ClearClassList();
-					_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+					_icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
 					_icon.AddToClassList(iconClassName);
 				}
 				else
@@ -242,51 +382,6 @@ namespace DLD.UIToolkit
 				}
 
 				_originalRowUsed = true;
-			}
-		}
-
-		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
-		{
-			Set(context, text, iconClassName, pushToStack);
-			_showType = ShowType.FollowMouseCursor;
-			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
-			style.display = DisplayStyle.Flex;
-		}
-
-		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
-		{
-			ShowAtMouseCursor(context, text, iconClassName, pushToStack);
-			this.SetPosition(mousePos);
-		}
-
-		public void Hide()
-		{
-			_originalRowUsed = false;
-			_showType = ShowType.None;
-			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
-			style.display = DisplayStyle.None;
-		}
-
-		public void HideIfContextIs(IEventHandler context, bool popFromStack = false)
-		{
-			if (popFromStack && _originalRowUsed && _additionalRowCountUsed > 0 && _additionalRows[_additionalRowCountUsed-1].Item1 == context)
-			{
-				RemoveAt(0);
-				_additionalRowCountUsed -= 1;
-			}
-			else if (_context == context)
-			{
-				Hide();
-			}
-		}
-
-		// ==================================================================================================
-
-		void OnPointerMove(PointerMoveEvent e)
-		{
-			if (_showType == ShowType.FollowMouseCursor)
-			{
-				this.SetPosition(e.position);
 			}
 		}
 	}

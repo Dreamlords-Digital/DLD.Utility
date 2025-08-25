@@ -228,11 +228,11 @@ namespace DLD.UIToolkit
 			_contextMenu.DoAltBgStyling(false);
 			_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(false);
 			_contextMenu.ClearMenu();
-			_contextMenu.AddMenu("Close", BaseIcons.CLOSE,
+			_contextMenu.AddMenu("Close", BaseIcons.CLOSE, tooltip: null,
 				listener: this, userArg1: CONTEXT_MENU_CLOSE_TAB, userArg2: clickedTabContent);
-			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE,
+			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE, tooltip: null,
 				listener: this, userArg1: CONTEXT_MENU_CLOSE_OTHER_TABS, userArg2: clickedTabContent, showAsDisabled: _tabList.Count == 1);
-			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE,
+			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE, tooltip: null,
 				listener: this, userArg1: CONTEXT_MENU_CLOSE_ALL_TABS);
 			_onTabContext?.Invoke(_contextMenu, clickedTabContent);
 			_contextMenu.Show(e);

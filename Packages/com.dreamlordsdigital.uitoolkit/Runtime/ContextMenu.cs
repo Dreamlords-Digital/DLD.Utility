@@ -13,7 +13,12 @@ namespace DLD.UIToolkit
 		void DoAltBgStyling(bool doAltBgStyling);
 		void SetAlwaysLeaveSpaceForSelectedIndicator(bool alwaysLeaveSpaceForSelectedIndicator);
 		void AddSeparator();
-		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string tooltip = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+
+		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string tooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+
+		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, TooltipMessage[] menuTooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
 
 		/// <summary>
 		/// Show the selected indicator only on the specified item.
@@ -173,83 +178,20 @@ namespace DLD.UIToolkit
 			_menu.Add(entryContainer);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string menuTooltip = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false)
+		public void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string menuTooltip = null, IContextMenuListener listener = null, object userArg1 = null,
+			object userArg2 = null, bool showAsDisabled = false)
 		{
-			var createdEntry = _entryAsset.Instantiate();
-
-			var entryContainer = createdEntry.Q<VisualElement>("Entry");
-
+			var entryContainer = AddMenu(label, iconClassStyle, showAsSelected, listener, userArg1, userArg2, showAsDisabled);
 			entryContainer.Register(_tooltip, menuTooltip);
+		}
 
-			if (showAsDisabled)
-			{
-				entryContainer.AddToClassList(DISABLED_ENTRY_STYLE_CLASS);
-			}
+		public void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, TooltipMessage[] menuTooltip = null, IContextMenuListener listener = null, object userArg1 = null,
+			object userArg2 = null, bool showAsDisabled = false)
+		{
+			var entryContainer = AddMenu(label, iconClassStyle, showAsSelected, listener, userArg1, userArg2, showAsDisabled);
 
-			var selectedIndicator = entryContainer.Q<VisualElement>(SELECTED_INDICATOR_NAME);
-			selectedIndicator.userData = listener;
-
-			var entryIcon = entryContainer.Q<VisualElement>(ICON_NAME);
-			entryIcon.userData = userArg1;
-
-			var entryLabel = entryContainer.Q<Label>();
-			entryLabel.text = label;
-			entryLabel.userData = userArg2;
-
-			if (showAsSelected)
-			{
-				selectedIndicator.style.display = DisplayStyle.Flex;
-				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
-			}
-			else
-			{
-				selectedIndicator.style.display = DisplayStyle.None;
-			}
-
-			if (!showAsDisabled)
-			{
-				entryContainer.RegisterCallback<PointerDownEvent>(e =>
-				{
-					if (e.currentTarget is VisualElement v)
-					{
-						v.AddToClassList(PRESSED_ENTRY_STYLE_CLASS);
-					}
-				});
-
-				entryContainer.RegisterCallback<PointerUpEvent>(e =>
-				{
-					if (e.currentTarget is not VisualElement targetElement)
-					{
-						return;
-					}
-					var gotSelectedIndicator = targetElement.Q<VisualElement>(SELECTED_INDICATOR_NAME);
-
-					if (gotSelectedIndicator.userData is IContextMenuListener gotListener)
-					{
-						targetElement.Focus();
-						var gotIcon = targetElement.Q<VisualElement>(ICON_NAME);
-						var gotLabel = targetElement.Q<Label>();
-						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel.text, gotIcon.userData, gotLabel.userData);
-					}
-					else
-					{
-						e.StopPropagation();
-					}
-				});
-			}
-
-			_menu.Add(entryContainer);
-
-			if (_doAltBgStyling && _menu.childCount % 2 == 0)
-			{
-				entryContainer.AddToClassList(ENTRY_ALT_STYLE_CLASS);
-			}
-
-			if (!string.IsNullOrEmpty(iconClassStyle))
-			{
-				entryIcon.AddToClassList(iconClassStyle);
-			}
+			entryContainer.userData = menuTooltip;
+			entryContainer.Register(_tooltip);
 		}
 
 		// ==================================================================================
@@ -573,6 +515,85 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================
+
+		VisualElement AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false)
+		{
+			var createdEntry = _entryAsset.Instantiate();
+
+			var entryContainer = createdEntry.Q<VisualElement>("Entry");
+
+			if (showAsDisabled)
+			{
+				entryContainer.AddToClassList(DISABLED_ENTRY_STYLE_CLASS);
+			}
+
+			var selectedIndicator = entryContainer.Q<VisualElement>(SELECTED_INDICATOR_NAME);
+			selectedIndicator.userData = listener;
+
+			var entryIcon = entryContainer.Q<VisualElement>(ICON_NAME);
+			entryIcon.userData = userArg1;
+
+			var entryLabel = entryContainer.Q<Label>();
+			entryLabel.text = label;
+			entryLabel.userData = userArg2;
+
+			if (showAsSelected)
+			{
+				selectedIndicator.style.display = DisplayStyle.Flex;
+				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+			}
+			else
+			{
+				selectedIndicator.style.display = DisplayStyle.None;
+			}
+
+			if (!showAsDisabled)
+			{
+				entryContainer.RegisterCallback<PointerDownEvent>(e =>
+				{
+					if (e.currentTarget is VisualElement v)
+					{
+						v.AddToClassList(PRESSED_ENTRY_STYLE_CLASS);
+					}
+				});
+
+				entryContainer.RegisterCallback<PointerUpEvent>(e =>
+				{
+					if (e.currentTarget is not VisualElement targetElement)
+					{
+						return;
+					}
+					var gotSelectedIndicator = targetElement.Q<VisualElement>(SELECTED_INDICATOR_NAME);
+
+					if (gotSelectedIndicator.userData is IContextMenuListener gotListener)
+					{
+						targetElement.Focus();
+						var gotIcon = targetElement.Q<VisualElement>(ICON_NAME);
+						var gotLabel = targetElement.Q<Label>();
+						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel.text, gotIcon.userData, gotLabel.userData);
+					}
+					else
+					{
+						e.StopPropagation();
+					}
+				});
+			}
+
+			_menu.Add(entryContainer);
+
+			if (_doAltBgStyling && _menu.childCount % 2 == 0)
+			{
+				entryContainer.AddToClassList(ENTRY_ALT_STYLE_CLASS);
+			}
+
+			if (!string.IsNullOrEmpty(iconClassStyle))
+			{
+				entryIcon.AddToClassList(iconClassStyle);
+			}
+
+			return entryContainer;
+		}
 
 		void UpdateIconVisibility()
 		{

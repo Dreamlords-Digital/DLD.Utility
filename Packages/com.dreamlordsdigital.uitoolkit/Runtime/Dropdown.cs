@@ -126,6 +126,12 @@ namespace DLD.UIToolkit
 		/// <inheritdoc cref="DropdownEnumFlagHandling"/>
 		DropdownEnumFlagHandling _enumFlagHandling = DropdownEnumFlagHandling.Auto;
 
+		/// <summary>
+		/// Whether enum values that have the <see cref="System.ObsoleteAttribute"/>
+		/// are included in the dropdown choices or not.
+		/// </summary>
+		bool _includeObsoleteEnums;
+
 		// ==================================================================================
 
 		/// <summary>

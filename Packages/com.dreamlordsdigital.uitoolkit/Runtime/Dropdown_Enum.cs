@@ -2,21 +2,18 @@ using System;
 using System.Reflection;
 using System.Text;
 using DLD.Utility;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DLD.UIToolkit
 {
 	public partial class Dropdown
 	{
-		/// <inheritdoc cref="DropdownEnumFlagHandling"/>
-		public void SetEnumFlagHandling(DropdownEnumFlagHandling newEnumFlagHandling)
-		{
-			_enumFlagHandling = newEnumFlagHandling;
-		}
-
-		public void SetEnumTypeOnOpen(Type enumType)
+		public void SetEnumTypeOnOpen(Type enumType, DropdownEnumFlagHandling newEnumFlagHandling, bool includeObsoleteEnums)
 		{
 			_enumTypeOnOpen = enumType;
+			_enumFlagHandling = newEnumFlagHandling;
+			_includeObsoleteEnums = includeObsoleteEnums;
 			_currentMode = Mode.Enum;
 
 			if (enumType.GetCustomAttribute<FlagsAttribute>(false) != null)
@@ -79,6 +76,13 @@ namespace DLD.UIToolkit
 			{
 				var enumValue = (Enum)enumValues.GetValue(n);
 
+				var obsoleteAttribute = enumValue.GetEnumValueAttribute<ObsoleteAttribute>();
+				if (obsoleteAttribute != null && !_includeObsoleteEnums)
+				{
+					//Debug.Log($"Skipping over {enumValue} since it's marked Obsolete: {obsoleteAttribute.Message}");
+					continue;
+				}
+
 				int enumValueInt = Convert.ToInt32(enumValue);
 				if (enumValueInt == 0 && _noneEnumValue == null)
 				{
@@ -93,24 +97,54 @@ namespace DLD.UIToolkit
 					_ => false
 				};
 
-				string label = null;
-				string iconClassName = null;
-				string tooltipDesc = null;
-				var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
-				if (enumUI != null)
-				{
-					label = enumUI.Label;
-					iconClassName = enumUI.IconStyleClass;
-					tooltipDesc = enumUI.Tooltip;
-				}
+				string label;
+				string iconClassName;
+				string tooltipDesc;
 
-				if (string.IsNullOrEmpty(label))
+				var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
+				if (obsoleteAttribute != null && enumUI != null)
+				{
+					label = enumUI.Label ?? enumValue.ToStringLabel();
+					iconClassName = enumUI.IconStyleClass;
+
+					if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
+					{
+						// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
+						var tooltipMessages = new TooltipMessage[]
+						{
+							new(BaseIcons.GENERIC_INFO, enumUI.Tooltip),
+							new(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteAttribute.Message ?? "Marked as obsolete"),
+						};
+
+						_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipMessages,
+							listener: this, userArg1: enumValue);
+					}
+					else
+					{
+						// tooltip is only from the ObsoleteAttribute
+						tooltipDesc = $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message}";
+
+						_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipDesc,
+							listener: this, userArg1: enumValue);
+					}
+				}
+				else if (obsoleteAttribute != null)
 				{
 					label = enumValue.ToStringLabel();
-				}
+					tooltipDesc = $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message}";
 
-				_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipDesc,
-					listener: this, userArg1: enumValue);
+					_contextMenu.AddMenu(label, null, enumValueIsSelected, tooltipDesc,
+						listener: this, userArg1: enumValue);
+				}
+				else if (enumUI != null)
+				{
+					label = enumUI.Label ?? enumValue.ToStringLabel();
+					iconClassName = enumUI.IconStyleClass;
+					tooltipDesc = enumUI.Tooltip;
+
+					_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipDesc,
+						listener: this, userArg1: enumValue);
+				}
 			}
 
 			_contextMenu.Show(_toggle, this);

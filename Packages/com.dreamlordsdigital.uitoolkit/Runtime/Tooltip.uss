@@ -20,6 +20,7 @@
 
 .dld-tooltip__row {
     flex-direction: row;
+    align-items: flex-start;
 }
 
 .dld-tooltip__icon {
@@ -28,7 +29,8 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/information-button.png?fileID=2800000&guid=80ff433ea366017449f71d8fb341f590&type=3#information-button");
     margin-right: 2px;
     margin-left: -2px;
-    display: none;
+    display: flex;
+    align-self: flex-start;
 }
 
 .dld-tooltip__text {
