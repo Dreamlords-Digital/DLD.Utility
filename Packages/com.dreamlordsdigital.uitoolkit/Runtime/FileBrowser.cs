@@ -1051,6 +1051,7 @@ namespace DLD.UIToolkit
 
 				// Context Menu for the current path
 				_contextMenu.DoAltBgStyling(false);
+				_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(false);
 				_contextMenu.ClearMenu();
 
 				if (IsPathInFavorites(_currentPath))
@@ -1074,6 +1075,7 @@ namespace DLD.UIToolkit
 			_fileSystemEntriesView.SetSelection(idx);
 
 			_contextMenu.DoAltBgStyling(false);
+			_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(false);
 			_contextMenu.ClearMenu();
 
 			if (idx != 0)

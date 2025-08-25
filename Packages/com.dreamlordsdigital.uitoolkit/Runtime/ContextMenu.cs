@@ -11,9 +11,30 @@ namespace DLD.UIToolkit
 
 		void ClearMenu();
 		void DoAltBgStyling(bool doAltBgStyling);
+		void SetAlwaysLeaveSpaceForSelectedIndicator(bool alwaysLeaveSpaceForSelectedIndicator);
 		void AddSeparator();
 		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string tooltip = null, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+
+		/// <summary>
+		/// Show the selected indicator only on the specified item.
+		/// All other items will have their selected indicators cleared.
+		/// </summary>
 		void ChangeSelected(int newSelectedIdx);
+
+		/// <summary>
+		/// Find the menu item that has the specified userArg1 and
+		/// show the selected indicator on it only.
+		/// All other items will have their selected indicators cleared.
+		/// </summary>
+		void ChangeSelected(object userArg1);
+
+		/// <summary>
+		/// Show/hide the selected indicator of the specified item.
+		/// Other items are not edited.
+		/// </summary>
+		/// <param name="menuIdx">The item to edit, by index.</param>
+		/// <param name="selected">Whether to show the selected indicator or not.</param>
+		void SetSelected(int menuIdx, bool selected);
 
 		void Show(Vector2 position, IContextMenuListener listener = null);
 		void Show(ContextClickEvent e, IContextMenuListener listener = null);
@@ -49,6 +70,8 @@ namespace DLD.UIToolkit
 
 		static readonly CustomStyleProperty<float> DropdownButtonFitWidthAdjust = new ("--dropdown--button-fit-width-adjust");
 
+		// ==================================================================================
+
 		float _dropdownButtonFitWidthAdjust;
 
 		readonly VisualElement _menu;
@@ -62,11 +85,14 @@ namespace DLD.UIToolkit
 
 		bool _doAltBgStyling;
 		bool _mouseMovedDuringMouseDown;
+		bool _alwaysLeaveSpaceForSelectedIndicator;
 
 		Focusable _focusTargetAfterClose;
 
 		ITooltip _tooltip;
 		IContextMenuListener _listener;
+
+		// ==================================================================================
 
 		public VisualElement Root => this;
 
@@ -122,14 +148,21 @@ namespace DLD.UIToolkit
 			_tooltip = newTooltip;
 		}
 
-		public void ClearMenu()
-		{
-			_menu.Clear();
-		}
-
 		public void DoAltBgStyling(bool doAltBgStyling)
 		{
 			_doAltBgStyling = doAltBgStyling;
+		}
+
+		public void SetAlwaysLeaveSpaceForSelectedIndicator(bool alwaysLeaveSpaceForSelectedIndicator)
+		{
+			_alwaysLeaveSpaceForSelectedIndicator = alwaysLeaveSpaceForSelectedIndicator;
+		}
+
+		// ==================================================================================
+
+		public void ClearMenu()
+		{
+			_menu.Clear();
 		}
 
 		public void AddSeparator()
@@ -221,6 +254,8 @@ namespace DLD.UIToolkit
 			}
 		}
 
+		// ==================================================================================
+
 		public void ChangeMenuIcon(object userArg1, string iconClassStyleToAdd = null, string iconClassStyleToRemove = null)
 		{
 			for (int n = 0; n < _menu.childCount; ++n)
@@ -243,7 +278,7 @@ namespace DLD.UIToolkit
 			}
 		}
 
-		public void ChangeSelected(int newSelectedIdx)
+		public void ChangeSelected(int menuIdx)
 		{
 			for (int n = 0; n < _menu.childCount; ++n)
 			{
@@ -255,7 +290,7 @@ namespace DLD.UIToolkit
 				}
 
 				var entryLabel = _menu[n].Q<Label>();
-				if (n == newSelectedIdx)
+				if (n == menuIdx)
 				{
 					selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
 					entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
@@ -267,6 +302,56 @@ namespace DLD.UIToolkit
 				}
 			}
 		}
+
+		public void ChangeSelected(object userArg1)
+		{
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var selectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				if (selectedIndicator == null)
+				{
+					// we're at a separator, not a menu entry (separators don't have a selected indicator)
+					continue;
+				}
+
+				var entryLabel = _menu[n].Q<Label>();
+				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+				if (gotIcon?.userData != null && gotIcon.userData.Equals(userArg1))
+				{
+					selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+					entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+				}
+				else
+				{
+					selectedIndicator.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+					entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+				}
+			}
+		}
+
+		public void SetSelected(int menuIdx, bool selected)
+		{
+			var entryLabel = _menu[menuIdx].Q<Label>();
+			if (entryLabel == null)
+			{
+				return;
+			}
+
+			var selectedIndicator = _menu[menuIdx].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+
+			if (selected)
+			{
+				selectedIndicator?.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+			}
+			else
+			{
+				selectedIndicator?.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
+				entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+			}
+		}
+
+		// ==================================================================================
 
 		public void Show(Vector2 position, IContextMenuListener listener = null)
 		{
@@ -317,54 +402,25 @@ namespace DLD.UIToolkit
 
 		public bool WasLastShownOn(VisualElement ve) => ve == _elementShownOn;
 
-		void UpdateIconVisibility()
+		public void Hide()
 		{
-			bool iconsShown = false;
-			bool selectedIndicatorShown = false;
-
-			// -----------------------------------------------------------------
-			// First Pass
-			// Check whether any menu entry has icon and selected indicator showing
-
-			for (int n = 0; n < _menu.childCount; ++n)
+			style.display = DisplayStyle.None;
+			_menu.style.width = StyleKeyword.Null;
+			Blur();
+			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
+			if (_focusTargetAfterClose != null)
 			{
-				var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
-				if (gotSelectedIndicator == null)
-				{
-					// we're at a separator, not a menu entry (separators don't have a selected indicator)
-					continue;
-				}
-
-				if (gotSelectedIndicator.resolvedStyle.display == DisplayStyle.Flex)
-				{
-					selectedIndicatorShown = true;
-				}
-				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
-				if (gotIcon.GetClasses().Count() > 1)
-				{
-					iconsShown = true;
-				}
+				_focusTargetAfterClose.Focus();
 			}
 
-			// -----------------------------------------------------------------
-			// Second Pass
-			// Enable icons and selected indicator spaces if at least one menu entry is using them
-
-			for (int n = 0; n < _menu.childCount; ++n)
+			if (_listener != null)
 			{
-				var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
-				if (gotSelectedIndicator == null)
-				{
-					// we're at a separator, not a menu entry (separators don't have a selected indicator)
-					continue;
-				}
-
-				gotSelectedIndicator.style.display = selectedIndicatorShown ? DisplayStyle.Flex : DisplayStyle.None;
-
-				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
-				gotIcon.style.display = iconsShown ? DisplayStyle.Flex : DisplayStyle.None;
+				_listener.OnContextMenuCanceled();
+				_listener = null;
 			}
 		}
+
+		// ==================================================================================
 
 		void OnMenuResized(GeometryChangedEvent evt)
 		{
@@ -389,29 +445,6 @@ namespace DLD.UIToolkit
 			{
 				_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
 			}
-		}
-
-		public void Hide()
-		{
-			style.display = DisplayStyle.None;
-			_menu.style.width = StyleKeyword.Null;
-			Blur();
-			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
-			if (_focusTargetAfterClose != null)
-			{
-				_focusTargetAfterClose.Focus();
-			}
-
-			if (_listener != null)
-			{
-				_listener.OnContextMenuCanceled();
-				_listener = null;
-			}
-		}
-
-		void DelayedFocus()
-		{
-			Focus();
 		}
 
 		void OnMouseMove(MouseMoveEvent _)
@@ -539,6 +572,62 @@ namespace DLD.UIToolkit
 
 				return -1;
 			}
+		}
+
+		// ==================================================================================
+
+		void UpdateIconVisibility()
+		{
+			bool iconsShown = false;
+			bool selectedIndicatorShown = false;
+
+			// -----------------------------------------------------------------
+			// First Pass
+			// Check whether any menu entry has icon and selected indicator showing
+
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				if (gotSelectedIndicator == null)
+				{
+					// we're at a separator, not a menu entry (separators don't have a selected indicator)
+					continue;
+				}
+
+				if (gotSelectedIndicator.resolvedStyle.display == DisplayStyle.Flex)
+				{
+					selectedIndicatorShown = true;
+				}
+				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+				if (gotIcon.GetClasses().Count() > 1)
+				{
+					iconsShown = true;
+				}
+			}
+
+			// -----------------------------------------------------------------
+			// Second Pass
+			// Enable icons and selected indicator spaces if at least one menu entry is using them
+
+			for (int n = 0; n < _menu.childCount; ++n)
+			{
+				var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				if (gotSelectedIndicator == null)
+				{
+					// we're at a separator, not a menu entry (separators don't have a selected indicator)
+					continue;
+				}
+
+				gotSelectedIndicator.style.display = selectedIndicatorShown || _alwaysLeaveSpaceForSelectedIndicator ? DisplayStyle.Flex : DisplayStyle.None;
+
+				var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+				gotIcon.style.display = iconsShown ? DisplayStyle.Flex : DisplayStyle.None;
+			}
+		}
+
+		void DelayedFocus()
+		{
+			Focus();
 		}
 	}
 }

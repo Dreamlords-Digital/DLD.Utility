@@ -7,7 +7,7 @@ namespace DLD.UIToolkit
 {
 	public partial class Dropdown
 	{
-		public void InitializeCurrentDisplayIcons(int iconCount, ITooltip newTooltip)
+		public void InitializeCurrentDisplayIcons(int iconCount)
 		{
 			if (_currentValueDisplayType != DropdownCurrentValueDisplayType.Icons)
 			{
@@ -39,15 +39,11 @@ namespace DLD.UIToolkit
 				// That's why we keep inserting at the beginning instead of using Add().
 				_toggle.Insert(0, _currentValueIcons[i]);
 			}
-
-			// Prepare the dropdown element to allow it to display tooltips.
-			_toggle.RegisterCallback(TooltipUtil.ShowFromUserData, newTooltip);
-			_toggle.RegisterCallback(TooltipUtil.Hide, newTooltip);
 		}
 
 		public void SetValueWithoutNotify(byte currentByteValue)
 		{
-			UpdateCurrentValueDisplayed(currentByteValue);
+			UpdateCurrentMaskValueDisplayed(currentByteValue);
 
 			_currentMode = Mode.ByteMask;
 			_currentByteValue = currentByteValue;
@@ -80,9 +76,13 @@ namespace DLD.UIToolkit
 			});
 		}
 
+		/// <summary>
+		/// Called when user clicks on the dropdown box.
+		/// </summary>
 		void Open(List<DropdownItem> dropdownItems, byte value)
 		{
 			_contextMenu.DoAltBgStyling(_doAltBgStyling);
+			_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(true);
 			_contextMenu.ClearMenu();
 			for (int n = 0; n < dropdownItems.Count; ++n)
 			{
@@ -105,6 +105,9 @@ namespace DLD.UIToolkit
 			_lastEnumTypeUsedOnOpen = null;
 		}
 
+		/// <summary>
+		/// Called when user chooses an item inside the dropdown box.
+		/// </summary>
 		void OnDropdownByteMaskChosen(int chosenIndex)
 		{
 			byte previousValue = _currentByteValue;
@@ -115,14 +118,14 @@ namespace DLD.UIToolkit
 			using var changeEvent = ChangeEvent<byte>.GetPooled(previousValue, _currentByteValue);
 			changeEvent.target = this;
 
-			UpdateCurrentValueDisplayed(_currentByteValue);
+			UpdateCurrentMaskValueDisplayed(_currentByteValue);
 
 			panel.visualTree.SendEvent(changeEvent);
 		}
 
 		// ==================================================================================
 
-		void UpdateCurrentValueDisplayed(byte currentByteValue)
+		void UpdateCurrentMaskValueDisplayed(byte currentByteValue)
 		{
 			if (_currentValueDisplayType == DropdownCurrentValueDisplayType.Icons)
 			{
@@ -147,12 +150,17 @@ namespace DLD.UIToolkit
 				}
 				else
 				{
-					_toggle.userData = null;
+					_toggle.userData = _labelToDisplayWhenNoneSelected;
 				}
 			}
 			else
 			{
 				_toggle.label = GetByteMaskAsLabel(_dropdownItems, currentByteValue, _currentValueDisplayType);
+
+				if (string.IsNullOrEmpty(_toggle.label))
+				{
+					_toggle.label = _labelToDisplayWhenNoneSelected;
+				}
 			}
 		}
 
@@ -160,7 +168,7 @@ namespace DLD.UIToolkit
 		{
 			if (value == 0)
 			{
-				return "\u2800";
+				return null;
 			}
 
 			StringBuilder s = new StringBuilder();

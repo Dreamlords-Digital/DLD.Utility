@@ -20,6 +20,26 @@ namespace DLD.UIToolkit
 		Icons
 	}
 
+	/// <summary>
+	/// Whether an Enum that has the <see cref="System.FlagsAttribute"/> is treated like a bitmask
+	/// where we allow the user to select multiple values, or we ignore it and
+	/// enforce that only one value is selected.
+	/// </summary>
+	public enum DropdownEnumFlagHandling
+	{
+		/// <summary>
+		/// Make the dropdown behave like a ToggleButtonGroup (i.e. allow multiple values to be selected)
+		/// if the Enum has the <see cref="System.FlagsAttribute"/>.
+		/// </summary>
+		Auto,
+
+		/// <summary>
+		/// Even if the Enum has the <see cref="System.FlagsAttribute"/>, ignore it.
+		/// Dropdown will then enforce that only one value is selected.
+		/// </summary>
+		ForceIgnore,
+	}
+
 	[UxmlElement]
 	public partial class Dropdown : VisualElement, IContextMenuListener
 	{
@@ -29,11 +49,24 @@ namespace DLD.UIToolkit
 		// ==================================================================================
 
 		readonly Label _label;
+
+		/// <summary>
+		/// Behaves as our "dropdown box".
+		/// </summary>
 		readonly Toggle _toggle;
+
+		/// <summary>
+		/// Icon displayed when the dropdown box is displaying a single value.
+		/// Only used if the value actually has an icon assigned to it.
+		/// </summary>
 		readonly VisualElement _icon;
 
 		IContextMenu _contextMenu;
+		ITooltip _tooltip;
+
 		bool _doAltBgStyling;
+
+		string _labelToDisplayWhenNoneSelected = "None";
 
 		enum Mode
 		{
@@ -41,6 +74,14 @@ namespace DLD.UIToolkit
 			/// Dropdown will show all values of the specified Enum in <see cref="SetEnumTypeOnOpen"/>.
 			/// </summary>
 			Enum,
+
+			/// <summary>
+			/// Dropdown will show all values of the specified Enum in <see cref="SetEnumTypeOnOpen"/>.
+			/// </summary>
+			/// <remarks>
+			/// In this mode, the user is allowed to select multiple dropdown items.
+			/// </remarks>
+			EnumFlag,
 
 			/// <summary>
 			/// Dropdown will show a list of <see cref="DropdownItem"/>
@@ -57,23 +98,65 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================
 
+		/// <summary>
+		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
+		/// this is the enum type that we are currently displaying.
+		/// </summary>
 		System.Type _enumTypeOnOpen;
+
+		/// <summary>
+		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
+		/// this is used for checking if we can reuse the current context menu or not.
+		/// </summary>
 		System.Type _lastEnumTypeUsedOnOpen;
+
+		/// <summary>
+		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
+		/// this is the current Enum value.
+		/// This is the value that we send when we dispatch a ChangeEvent.
+		/// </summary>
 		Enum _currentEnumValue;
+
+		/// <summary>
+		/// Enum value in the <see cref="_enumTypeOnOpen"/> that represents the zero value.
+		/// Only used when <see cref="_currentMode"/> is <see cref="Mode.EnumFlag"/>.
+		/// </summary>
+		Enum _noneEnumValue;
+
+		/// <inheritdoc cref="DropdownEnumFlagHandling"/>
+		DropdownEnumFlagHandling _enumFlagHandling = DropdownEnumFlagHandling.Auto;
 
 		// ==================================================================================
 
+		/// <summary>
+		/// Determines whether dropdown will display the
+		/// currently selected values as either labels, shortened labels, or icons.
+		/// Only applicable when dropdown is showing <see cref="Mode.EnumFlag"/> or <see cref="Mode.ByteMask"/>.
+		/// </summary>
 		DropdownCurrentValueDisplayType _currentValueDisplayType;
+
 		List<DropdownItem> _dropdownItems;
 
 		/// <summary>
-		/// true: DropdownItems that are not assigned a label will not be shown in the choices.<br/>
+		/// Only used when <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>.<br/><br/>
+		/// true: DropdownItems that are not assigned a label will not be shown in the choices.<br/><br/>
 		/// false: DropdownItems that are not assigned a label will still be shown in the choices.
+		/// Their ordinal positions will be used as their label.
 		/// </summary>
 		bool _skipBlankValues;
 
+		/// <summary>
+		/// When <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>,
+		/// this is the current byte value.
+		/// This is the value that we send when we dispatch a ChangeEvent.
+		/// </summary>
 		byte _currentByteValue;
 
+		/// <summary>
+		/// When <see cref="_currentValueDisplayType"/> is
+		/// <see cref="DropdownCurrentValueDisplayType.Icons"/>,
+		/// these hold the icons being displayed.
+		/// </summary>
 		List<VisualElement> _currentValueIcons;
 
 		// ==================================================================================
@@ -88,6 +171,7 @@ namespace DLD.UIToolkit
 			_toggle.labelElement.focusable = true;
 
 			_icon = new VisualElement();
+			_icon.name = "SingleValueIcon";
 
 			var arrow = new VisualElement();
 			arrow.AddToClassList(ARROW_STYLE_CLASS);
@@ -125,9 +209,21 @@ namespace DLD.UIToolkit
 			_contextMenu = contextMenu;
 		}
 
+		public void SetTooltip(ITooltip newTooltip)
+		{
+			// Prepare the dropdown box to allow it to display tooltips.
+			_toggle.RegisterCallback(TooltipUtil.ShowFromUserData, newTooltip);
+			_toggle.RegisterCallback(TooltipUtil.Hide, newTooltip);
+		}
+
 		public void DoAltBgStyling(bool doAltBgStyling)
 		{
 			_doAltBgStyling = doAltBgStyling;
+		}
+
+		public void SetLabelToDisplayWhenNoneSelected(string labelToDisplayWhenNoneSelected)
+		{
+			_labelToDisplayWhenNoneSelected = labelToDisplayWhenNoneSelected;
 		}
 
 		public void SetSkipBlankValues(bool skipBlankValues)
@@ -162,16 +258,13 @@ namespace DLD.UIToolkit
 			switch (_currentMode)
 			{
 				case Mode.Enum:
-					if (_enumTypeOnOpen != null)
-					{
-						Open(_enumTypeOnOpen);
-					}
+				case Mode.EnumFlag:
+					Debug.Assert(_enumTypeOnOpen != null);
+					Open(_enumTypeOnOpen);
 					break;
 				case Mode.ByteMask:
-					if (_dropdownItems != null && _dropdownItems.Count > 0)
-					{
-						Open(_dropdownItems, _currentByteValue);
-					}
+					Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
+					Open(_dropdownItems, _currentByteValue);
 					break;
 			}
 		}
@@ -183,16 +276,16 @@ namespace DLD.UIToolkit
 			switch (_currentMode)
 			{
 				case Mode.Enum:
-					if (_enumTypeOnOpen != null)
-					{
-						OnDropdownEnumChosen(index, label, newValue);
-					}
+					Debug.Assert(_enumTypeOnOpen != null);
+					OnDropdownEnumChosen(index, label, (Enum)newValue);
+					break;
+				case Mode.EnumFlag:
+					Debug.Assert(_enumTypeOnOpen != null);
+					OnDropdownEnumFlagChosen(index, label, (Enum)newValue);
 					break;
 				case Mode.ByteMask:
-					if (_dropdownItems != null && _dropdownItems.Count > 0)
-					{
-						OnDropdownByteMaskChosen((int)newValue);
-					}
+					Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
+					OnDropdownByteMaskChosen((int)newValue);
 					break;
 			}
 		}

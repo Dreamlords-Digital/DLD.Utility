@@ -226,6 +226,7 @@ namespace DLD.UIToolkit
 			}
 
 			_contextMenu.DoAltBgStyling(false);
+			_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(false);
 			_contextMenu.ClearMenu();
 			_contextMenu.AddMenu("Close", BaseIcons.CLOSE,
 				listener: this, userArg1: CONTEXT_MENU_CLOSE_TAB, userArg2: clickedTabContent);
