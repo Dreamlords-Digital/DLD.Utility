@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Text;
 using DLD.Utility;
 using UnityEngine.UIElements;
@@ -18,7 +19,7 @@ namespace DLD.UIToolkit
 			_enumTypeOnOpen = enumType;
 			_currentMode = Mode.Enum;
 
-			if (enumType.GetCustomAttributes(typeof(FlagsAttribute), false).Length > 0)
+			if (enumType.GetCustomAttribute<FlagsAttribute>(false) != null)
 			{
 				// enum has flags
 				if (_enumFlagHandling == DropdownEnumFlagHandling.Auto)
