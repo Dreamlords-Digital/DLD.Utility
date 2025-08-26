@@ -51,7 +51,7 @@ namespace DLD.UIToolkit
 
 	public interface IContextMenuListener
 	{
-		void OnContextMenuChosen(int index, string label, object userArg1, object userArg2);
+		void OnContextMenuChosen(int index, string label, object tooltip, object userArg1, object userArg2);
 		void OnContextMenuCanceled();
 	}
 
@@ -498,7 +498,7 @@ namespace DLD.UIToolkit
 						{
 							var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(ICON_NAME);
 							var gotLabel = _menu[focusedMenuIdx].Q<Label>();
-							gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel.text, gotIcon.userData, gotLabel.userData);
+							gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel.text, _menu[focusedMenuIdx].userData, gotIcon.userData, gotLabel.userData);
 							Hide();
 							e.StopPropagation();
 						}
@@ -583,7 +583,7 @@ namespace DLD.UIToolkit
 						targetElement.Focus();
 						var gotIcon = targetElement.Q<VisualElement>(ICON_NAME);
 						var gotLabel = targetElement.Q<Label>();
-						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel.text, gotIcon.userData, gotLabel.userData);
+						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel.text, targetElement.userData, gotIcon.userData, gotLabel.userData);
 					}
 					else
 					{

@@ -1109,7 +1109,7 @@ namespace DLD.UIToolkit
 			e.StopPropagation();
 		}
 
-		public void OnContextMenuChosen(int index, string label, object userArg1, object userArg2)
+		public void OnContextMenuChosen(int index, string label, object itemTooltip, object userArg1, object userArg2)
 		{
 			switch (userArg1 as string)
 			{

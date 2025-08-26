@@ -277,13 +277,13 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================
 
-		public void OnContextMenuChosen(int index, string label, object newValue, object userArg2)
+		public void OnContextMenuChosen(int index, string label, object tooltip, object newValue, object userArg2)
 		{
 			switch (_currentMode)
 			{
 				case Mode.Enum:
 					Debug.Assert(_enumTypeOnOpen != null);
-					OnDropdownEnumChosen(index, label, (Enum)newValue);
+					OnDropdownEnumChosen(index, label, tooltip, (Enum)newValue);
 					break;
 				case Mode.EnumFlag:
 					Debug.Assert(_enumTypeOnOpen != null);

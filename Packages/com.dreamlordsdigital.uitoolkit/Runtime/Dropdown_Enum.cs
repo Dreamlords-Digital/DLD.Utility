@@ -187,7 +187,7 @@ namespace DLD.UIToolkit
 		/// <summary>
 		///    Called when user chooses an item inside the dropdown box.
 		/// </summary>
-		void OnDropdownEnumChosen(int index, string label, Enum newEnumValueChosen)
+		void OnDropdownEnumChosen(int index, string label, object chosenEnumTooltip, Enum newEnumValueChosen)
 		{
 			if (newEnumValueChosen.Equals(_currentEnumValue))
 			{
@@ -202,6 +202,7 @@ namespace DLD.UIToolkit
 
 			_currentEnumValue = newEnumValueChosen;
 			_toggle.label = label;
+			_toggle.userData = chosenEnumTooltip;
 			UpdateCurrentValueIcon(_currentEnumValue);
 
 			panel.visualTree.SendEvent(changeEvent);
