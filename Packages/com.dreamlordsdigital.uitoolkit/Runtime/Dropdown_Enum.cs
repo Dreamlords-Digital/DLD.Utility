@@ -22,9 +22,11 @@ namespace DLD.UIToolkit
 				if (_enumFlagHandling == DropdownEnumFlagHandling.Auto)
 				{
 					_currentMode = Mode.EnumFlag;
-
-					Array enumValues = Enum.GetValues(enumType);
-					InitializeCurrentDisplayIcons(enumValues.Length);
+					if (_currentValueDisplayType == DropdownCurrentValueDisplayType.Icons)
+					{
+						Array enumValues = Enum.GetValues(enumType);
+						InitializeCurrentDisplayIcons(enumValues.Length);
+					}
 				}
 			}
 		}
@@ -79,7 +81,6 @@ namespace DLD.UIToolkit
 				var obsoleteAttribute = enumValue.GetEnumValueAttribute<ObsoleteAttribute>();
 				if (obsoleteAttribute != null && !_includeObsoleteEnums)
 				{
-					//Debug.Log($"Skipping over {enumValue} since it's marked Obsolete: {obsoleteAttribute.Message}");
 					continue;
 				}
 
