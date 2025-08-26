@@ -97,7 +97,9 @@ namespace DLD.UIToolkit
 
 					label = (n + 1).ToString();
 				}
-				_contextMenu.AddMenu(label, item.IconClassName, value.GetFlag(n), item.Tooltip,
+				var menuItemStyle = value.GetFlag(n) ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard;
+
+				_contextMenu.AddMenu(label, item.IconClassName, menuItemStyle, tooltip: item.Tooltip,
 					listener: this, userArg1: n);
 			}
 			_contextMenu.Show(_toggle, this);

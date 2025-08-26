@@ -230,8 +230,8 @@ namespace DLD.UIToolkit
 			_contextMenu.ClearMenu();
 			_contextMenu.AddMenu("Close", BaseIcons.CLOSE, tooltip: null,
 				listener: this, userArg1: CONTEXT_MENU_CLOSE_TAB, userArg2: clickedTabContent);
-			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE, tooltip: null,
-				listener: this, userArg1: CONTEXT_MENU_CLOSE_OTHER_TABS, userArg2: clickedTabContent, showAsDisabled: _tabList.Count == 1);
+			_contextMenu.AddMenu("Close Other Tabs", BaseIcons.CLOSE, _tabList.Count == 1 ? ContextMenuItemStyle.Disabled : ContextMenuItemStyle.Standard, tooltip: null,
+				listener: this, userArg1: CONTEXT_MENU_CLOSE_OTHER_TABS, userArg2: clickedTabContent);
 			_contextMenu.AddMenu("Close All Tabs", BaseIcons.CLOSE, tooltip: null,
 				listener: this, userArg1: CONTEXT_MENU_CLOSE_ALL_TABS);
 			_onTabContext?.Invoke(_contextMenu, clickedTabContent);

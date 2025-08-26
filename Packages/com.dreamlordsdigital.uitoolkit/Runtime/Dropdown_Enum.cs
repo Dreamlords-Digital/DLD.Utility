@@ -101,12 +101,26 @@ namespace DLD.UIToolkit
 				string label;
 				string iconClassName;
 				string tooltipDesc;
+				ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard;
+				if (enumValueIsSelected)
+				{
+					menuItemStyle |= ContextMenuItemStyle.Selected;
+				}
 
 				var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
 				if (obsoleteAttribute != null && enumUI != null)
 				{
 					label = enumUI.Label ?? enumValue.ToStringLabel();
 					iconClassName = enumUI.IconStyleClass;
+
+					if (obsoleteAttribute.IsError)
+					{
+						menuItemStyle |= ContextMenuItemStyle.Error;
+					}
+					else
+					{
+						menuItemStyle |= ContextMenuItemStyle.Warning;
+					}
 
 					if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
 					{
@@ -117,7 +131,7 @@ namespace DLD.UIToolkit
 							new(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteAttribute.Message ?? "Marked as obsolete"),
 						};
 
-						_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipMessages,
+						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, tooltipMessages,
 							listener: this, userArg1: enumValue);
 					}
 					else
@@ -125,16 +139,26 @@ namespace DLD.UIToolkit
 						// tooltip is only from the ObsoleteAttribute
 						tooltipDesc = $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message}";
 
-						_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipDesc,
+						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, tooltipDesc,
 							listener: this, userArg1: enumValue);
 					}
 				}
 				else if (obsoleteAttribute != null)
 				{
 					label = enumValue.ToStringLabel();
+
+					if (obsoleteAttribute.IsError)
+					{
+						menuItemStyle |= ContextMenuItemStyle.Error;
+					}
+					else
+					{
+						menuItemStyle |= ContextMenuItemStyle.Warning;
+					}
+
 					tooltipDesc = $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message}";
 
-					_contextMenu.AddMenu(label, null, enumValueIsSelected, tooltipDesc,
+					_contextMenu.AddMenu(label, null, menuItemStyle, tooltipDesc,
 						listener: this, userArg1: enumValue);
 				}
 				else if (enumUI != null)
@@ -143,14 +167,14 @@ namespace DLD.UIToolkit
 					iconClassName = enumUI.IconStyleClass;
 					tooltipDesc = enumUI.Tooltip;
 
-					_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipDesc,
+					_contextMenu.AddMenu(label, iconClassName, menuItemStyle, tooltipDesc,
 						listener: this, userArg1: enumValue);
 				}
 				else
 				{
 					label = enumValue.ToStringLabel();
 
-					_contextMenu.AddMenu(label, null, enumValueIsSelected, tooltip: null,
+					_contextMenu.AddMenu(label, tooltip: null,
 						listener: this, userArg1: enumValue);
 				}
 			}

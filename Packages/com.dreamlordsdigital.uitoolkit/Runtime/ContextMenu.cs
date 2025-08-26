@@ -14,11 +14,11 @@ namespace DLD.UIToolkit
 		void SetAlwaysLeaveSpaceForSelectedIndicator(bool alwaysLeaveSpaceForSelectedIndicator);
 		void AddSeparator();
 
-		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string tooltip = null,
-			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, string tooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
-		void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, TooltipMessage[] menuTooltip = null,
-			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false);
+		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, TooltipMessage[] menuTooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
 		/// <summary>
 		/// Show the selected indicator only on the specified item.
@@ -53,6 +53,16 @@ namespace DLD.UIToolkit
 	{
 		void OnContextMenuChosen(int index, string label, object userArg1, object userArg2);
 		void OnContextMenuCanceled();
+	}
+
+	[System.Flags]
+	public enum ContextMenuItemStyle : byte
+	{
+		Standard = 0,
+		Selected = 1,
+		Disabled = 2,
+		Warning = 4,
+		Error = 8,
 	}
 
 	public class ContextMenu : VisualElement, IContextMenu
@@ -178,17 +188,17 @@ namespace DLD.UIToolkit
 			_menu.Add(entryContainer);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, string menuTooltip = null, IContextMenuListener listener = null, object userArg1 = null,
-			object userArg2 = null, bool showAsDisabled = false)
+		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, string menuTooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
-			var entryContainer = AddMenu(label, iconClassStyle, showAsSelected, listener, userArg1, userArg2, showAsDisabled);
+			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
 			entryContainer.Register(_tooltip, menuTooltip);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, TooltipMessage[] menuTooltip = null, IContextMenuListener listener = null, object userArg1 = null,
-			object userArg2 = null, bool showAsDisabled = false)
+		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, TooltipMessage[] menuTooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
-			var entryContainer = AddMenu(label, iconClassStyle, showAsSelected, listener, userArg1, userArg2, showAsDisabled);
+			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
 
 			entryContainer.userData = menuTooltip;
 			entryContainer.Register(_tooltip);
@@ -516,12 +526,14 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================
 
-		VisualElement AddMenu(string label, string iconClassStyle = null, bool showAsSelected = false, IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null, bool showAsDisabled = false)
+		VisualElement AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
 			var createdEntry = _entryAsset.Instantiate();
 
 			var entryContainer = createdEntry.Q<VisualElement>("Entry");
 
+			bool showAsDisabled = (menuItemStyle & ContextMenuItemStyle.Disabled) != 0;
 			if (showAsDisabled)
 			{
 				entryContainer.AddToClassList(DISABLED_ENTRY_STYLE_CLASS);
@@ -537,7 +549,7 @@ namespace DLD.UIToolkit
 			entryLabel.text = label;
 			entryLabel.userData = userArg2;
 
-			if (showAsSelected)
+			if ((menuItemStyle & ContextMenuItemStyle.Selected) != 0)
 			{
 				selectedIndicator.style.display = DisplayStyle.Flex;
 				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
