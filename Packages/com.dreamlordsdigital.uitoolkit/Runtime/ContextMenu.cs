@@ -51,7 +51,7 @@ namespace DLD.UIToolkit
 
 	public interface IContextMenuListener
 	{
-		void OnContextMenuChosen(int index, string label, object tooltip, object userArg1, object userArg2);
+		void OnContextMenuChosen(int index, Label label, object tooltip, object userArg1, object userArg2);
 		void OnContextMenuCanceled();
 	}
 
@@ -79,7 +79,10 @@ namespace DLD.UIToolkit
 		const string DISABLED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--disabled";
 		const string MENU_AS_DROPDOWN_STYLE_CLASS = "dld-context-menu--as-dropdown";
 		const string MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS = "dld-context-menu--as-dropdown--longer";
+
 		const string SELECTED_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--selected";
+		public const string ERROR_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--error";
+		public const string WARNING_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--warning";
 
 		const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
 
@@ -498,7 +501,7 @@ namespace DLD.UIToolkit
 						{
 							var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(ICON_NAME);
 							var gotLabel = _menu[focusedMenuIdx].Q<Label>();
-							gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel.text, _menu[focusedMenuIdx].userData, gotIcon.userData, gotLabel.userData);
+							gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel, _menu[focusedMenuIdx].userData, gotIcon.userData, gotLabel.userData);
 							Hide();
 							e.StopPropagation();
 						}
@@ -549,6 +552,15 @@ namespace DLD.UIToolkit
 			entryLabel.text = label;
 			entryLabel.userData = userArg2;
 
+			if ((menuItemStyle & ContextMenuItemStyle.Error) != 0)
+			{
+				entryLabel.AddToClassList(ERROR_ENTRY_LABEL_STYLE_CLASS);
+			}
+			else if ((menuItemStyle & ContextMenuItemStyle.Warning) != 0)
+			{
+				entryLabel.AddToClassList(WARNING_ENTRY_LABEL_STYLE_CLASS);
+			}
+
 			if ((menuItemStyle & ContextMenuItemStyle.Selected) != 0)
 			{
 				selectedIndicator.style.display = DisplayStyle.Flex;
@@ -583,7 +595,7 @@ namespace DLD.UIToolkit
 						targetElement.Focus();
 						var gotIcon = targetElement.Q<VisualElement>(ICON_NAME);
 						var gotLabel = targetElement.Q<Label>();
-						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel.text, targetElement.userData, gotIcon.userData, gotLabel.userData);
+						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel, targetElement.userData, gotIcon.userData, gotLabel.userData);
 					}
 					else
 					{

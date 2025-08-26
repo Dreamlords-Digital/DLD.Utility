@@ -1,3 +1,10 @@
+:root {
+    --dld-color-label-warning: rgb(195, 133, 0);
+    --dld-color-label-warning-focused: rgb(255, 193, 61);
+    --dld-color-label-error: rgb(212, 78, 78);
+    --dld-color-label-error-focused: rgb(255, 105, 105);
+}
+
 .unity-label {
     color: rgb(238, 238, 238);
 }
@@ -51,6 +58,35 @@
 
 .dld-text-field:focus > Label {
     color: rgb(121, 166, 233);
+}
+
+.dld-text-field--error > #unity-text-input {
+    border-left-color: rgb(191, 0, 0);
+    border-right-color: rgb(191, 0, 0);
+    border-top-color: rgb(191, 0, 0);
+    border-bottom-color: rgb(191, 0, 0);
+}
+
+.dld-box--error {
+    border-left-color: rgb(191, 0, 0);
+    border-right-color: rgb(191, 0, 0);
+    border-top-color: rgb(191, 0, 0);
+    border-bottom-color: rgb(191, 0, 0);
+}
+
+.dld-box--warning {
+    border-left-color: rgb(195, 133, 0);
+    border-right-color: rgb(195, 133, 0);
+    border-top-color: rgb(195, 133, 0);
+    border-bottom-color: rgb(195, 133, 0);
+}
+
+.dld-label--warning {
+    color: rgb(195, 133, 0);
+}
+
+.dld-label--error {
+    color: rgb(191, 0, 0);
 }
 
 .dld-label--filename {

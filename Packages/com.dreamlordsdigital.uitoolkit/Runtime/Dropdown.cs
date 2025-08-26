@@ -45,6 +45,8 @@ namespace DLD.UIToolkit
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Dropdown";
 		const string ARROW_STYLE_CLASS = "dld-dropdown__arrow";
+		const string DROPDOWN_BOX_WARNING_STYLE_CLASS = "dld-box--warning";
+		const string DROPDOWN_BOX_ERROR_STYLE_CLASS = "dld-box--error";
 
 		// ==================================================================================
 
@@ -277,17 +279,17 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================
 
-		public void OnContextMenuChosen(int index, string label, object tooltip, object newValue, object userArg2)
+		public void OnContextMenuChosen(int index, Label label, object menuTooltip, object newValue, object userArg2)
 		{
 			switch (_currentMode)
 			{
 				case Mode.Enum:
 					Debug.Assert(_enumTypeOnOpen != null);
-					OnDropdownEnumChosen(index, label, tooltip, (Enum)newValue);
+					OnDropdownEnumChosen(index, label, menuTooltip, (Enum)newValue);
 					break;
 				case Mode.EnumFlag:
 					Debug.Assert(_enumTypeOnOpen != null);
-					OnDropdownEnumFlagChosen(index, label, (Enum)newValue);
+					OnDropdownEnumFlagChosen(index, (Enum)newValue);
 					break;
 				case Mode.ByteMask:
 					Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
