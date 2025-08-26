@@ -145,6 +145,13 @@ namespace DLD.UIToolkit
 					_contextMenu.AddMenu(label, iconClassName, enumValueIsSelected, tooltipDesc,
 						listener: this, userArg1: enumValue);
 				}
+				else
+				{
+					label = enumValue.ToStringLabel();
+
+					_contextMenu.AddMenu(label, null, enumValueIsSelected, tooltip: null,
+						listener: this, userArg1: enumValue);
+				}
 			}
 
 			_contextMenu.Show(_toggle, this);
