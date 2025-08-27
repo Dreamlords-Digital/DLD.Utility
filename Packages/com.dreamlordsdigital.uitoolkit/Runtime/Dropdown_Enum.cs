@@ -9,8 +9,6 @@ namespace DLD.UIToolkit
 {
 	public partial class Dropdown
 	{
-		const string DEFAULT_OBSOLETE_MESSAGE = "Marked as obsolete";
-
 		public void SetEnumTypeOnOpen(Type enumType, DropdownEnumFlagHandling newEnumFlagHandling, bool includeObsoleteEnums)
 		{
 			_enumTypeOnOpen = enumType;
@@ -49,20 +47,6 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================
-
-		static TooltipMessage[] CreateTooltipMessages(EnumUI enumUI, ObsoleteAttribute obsoleteAttribute)
-		{
-			return new TooltipMessage[]
-			{
-				new(BaseIcons.GENERIC_INFO, enumUI.Tooltip),
-				new(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteAttribute.Message ?? DEFAULT_OBSOLETE_MESSAGE),
-			};
-		}
-
-		static string CreateObsoleteTooltip(ObsoleteAttribute obsoleteAttribute)
-		{
-			return $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message ?? DEFAULT_OBSOLETE_MESSAGE}";
-		}
 
 		/// <summary>
 		///    Called when user clicks on the dropdown box.
@@ -140,13 +124,13 @@ namespace DLD.UIToolkit
 					if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
 					{
 						// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
-						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, CreateTooltipMessages(enumUI, obsoleteAttribute),
+						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, TooltipUtil.CreateTooltipMessages(enumUI, obsoleteAttribute),
 							listener: this, userArg1: enumValue);
 					}
 					else
 					{
 						// tooltip is only from the ObsoleteAttribute
-						tooltipDesc = CreateObsoleteTooltip(obsoleteAttribute);
+						tooltipDesc = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
 
 						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, tooltipDesc,
 							listener: this, userArg1: enumValue);
@@ -165,7 +149,7 @@ namespace DLD.UIToolkit
 						menuItemStyle |= ContextMenuItemStyle.Warning;
 					}
 
-					tooltipDesc = CreateObsoleteTooltip(obsoleteAttribute);
+					tooltipDesc = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
 
 					_contextMenu.AddMenu(label, null, menuItemStyle, tooltipDesc,
 						listener: this, userArg1: enumValue);
@@ -240,16 +224,16 @@ namespace DLD.UIToolkit
 				if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
 				{
 					// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
-					_toggle.userData = CreateTooltipMessages(enumUI, obsoleteAttribute);
+					_toggle.userData = TooltipUtil.CreateTooltipMessages(enumUI, obsoleteAttribute);
 				}
 				else
 				{
-					_toggle.userData = CreateObsoleteTooltip(obsoleteAttribute);
+					_toggle.userData = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
 				}
 			}
 			else if (obsoleteAttribute != null)
 			{
-				_toggle.userData = CreateObsoleteTooltip(obsoleteAttribute);
+				_toggle.userData = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
 			}
 			else if (enumUI != null)
 			{

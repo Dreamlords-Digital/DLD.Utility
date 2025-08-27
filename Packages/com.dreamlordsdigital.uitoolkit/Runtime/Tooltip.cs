@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DLD.Utility;
 using UnityEngine;
@@ -65,6 +66,22 @@ namespace DLD.UIToolkit
 
 		static readonly EventCallback<PointerEnterEvent, ITooltip> ShowTooltipFromUserDataPushToStack = _ShowTooltipFromUserDataPushToStack;
 		static readonly EventCallback<PointerLeaveEvent, ITooltip> HideTooltipIfContextIs = _HideTooltipIfContextIs;
+
+		const string DEFAULT_OBSOLETE_MESSAGE = "Marked as obsolete";
+
+		public static TooltipMessage[] CreateTooltipMessages(EnumUIAttribute enumUI, ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		{
+			return new TooltipMessage[]
+			{
+				new(BaseIcons.GENERIC_INFO, enumUI.Tooltip),
+				new(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteAttribute.Message ?? obsoleteMessageToUseIfNull),
+			};
+		}
+
+		public static string CreateObsoleteTooltip(ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		{
+			return $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message ?? obsoleteMessageToUseIfNull}";
+		}
 
 		public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO, bool pushToStack = false)
 		{
