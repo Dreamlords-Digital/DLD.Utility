@@ -122,7 +122,7 @@ namespace DLD.UIToolkit
 					menuItemStyle |= ContextMenuItemStyle.Selected;
 				}
 
-				var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
+				var enumUI = enumValue.GetEnumValueAttribute<EnumUIAttribute>();
 				if (obsoleteAttribute != null && enumUI != null)
 				{
 					label = enumUI.Label ?? enumValue.ToStringLabel();
@@ -234,7 +234,7 @@ namespace DLD.UIToolkit
 			UpdateCurrentValueIcon(currentValue);
 
 			var obsoleteAttribute = currentValue.GetEnumValueAttribute<ObsoleteAttribute>();
-			var enumUI = currentValue.GetEnumValueAttribute<EnumUI>();
+			var enumUI = currentValue.GetEnumValueAttribute<EnumUIAttribute>();
 			if (obsoleteAttribute != null && enumUI != null)
 			{
 				if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
@@ -275,7 +275,7 @@ namespace DLD.UIToolkit
 		{
 			_icon.ClearClassList();
 			_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
-			var enumUI = currentValue.GetEnumValueAttribute<EnumUI>();
+			var enumUI = currentValue.GetEnumValueAttribute<EnumUIAttribute>();
 			if (enumUI != null && !string.IsNullOrEmpty(enumUI.IconStyleClass))
 			{
 				_icon.style.display = DisplayStyle.Flex;
@@ -344,7 +344,7 @@ namespace DLD.UIToolkit
 				{
 					// current enum value is zero
 
-					var enumUI = _noneEnumValue.GetEnumValueAttribute<EnumUI>();
+					var enumUI = _noneEnumValue.GetEnumValueAttribute<EnumUIAttribute>();
 					if (enumUI != null)
 					{
 						_icon.style.display = DisplayStyle.Flex;
@@ -389,7 +389,7 @@ namespace DLD.UIToolkit
 						_currentValueIcons[n].ClearClassList();
 						if (currentEnumFlagValue.HasFlag(enumValue) && Convert.ToInt32(enumValue) != 0)
 						{
-							var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
+							var enumUI = enumValue.GetEnumValueAttribute<EnumUIAttribute>();
 							if (enumUI != null)
 							{
 								_currentValueIcons[n].AddToClassList(BaseIcons.ICON_STYLE_CLASS);
@@ -419,7 +419,7 @@ namespace DLD.UIToolkit
 
 			if (currentValueAsInt == 0)
 			{
-				var enumUI = noneValue.GetEnumValueAttribute<EnumUI>();
+				var enumUI = noneValue.GetEnumValueAttribute<EnumUIAttribute>();
 				if (enumUI != null)
 				{
 					switch (displayType)
@@ -451,7 +451,7 @@ namespace DLD.UIToolkit
 						s.Append(", ");
 					}
 
-					var enumUI = enumValue.GetEnumValueAttribute<EnumUI>();
+					var enumUI = enumValue.GetEnumValueAttribute<EnumUIAttribute>();
 					if (enumUI != null)
 					{
 						switch (displayType)
