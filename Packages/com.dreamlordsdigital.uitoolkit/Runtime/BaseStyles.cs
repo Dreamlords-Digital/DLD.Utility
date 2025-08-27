@@ -11,5 +11,7 @@ namespace DLD.UIToolkit
         public const string LABEL_WITH_ERROR_STYLE_CLASS = "dld-label--error";
 
         public const string TOGGLE_WITH_ICON_STYLE_CLASS = "dld-grid-toggle--with-icon";
+
+        public const string SCROLL_VIEW_WITH_EXPANDED_WIDTH_STYLE_CLASS = "dld-scroll-view--expand-width";
     }
 }

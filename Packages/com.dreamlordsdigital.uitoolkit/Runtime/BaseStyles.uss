@@ -187,3 +187,7 @@ FilenameTextField > #unity-text-input > Label {
 .dld-grid-toggle--with-icon {
     flex-direction: row;
 }
+
+.dld-scroll-view--expand-width {
+    flex-grow: 1;
+}
