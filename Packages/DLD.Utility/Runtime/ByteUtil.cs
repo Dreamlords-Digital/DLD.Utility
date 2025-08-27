@@ -1,7 +1,6 @@
 ﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using System.Text;
-using UnityEngine;
 
 namespace DLD.Utility
 {
@@ -40,6 +39,8 @@ namespace DLD.Utility
 			return position - 1;
 		}
 
+		// =================================================================
+
 		public static void ToggleFlag(this ref byte byteToChange, int index)
 		{
 			if (index < 0 || index > 7)
@@ -71,6 +72,8 @@ namespace DLD.Utility
 				flags = (System.Enum)System.Enum.ToObject(flags.GetType(), flagsValue & (~flagValue));
 			}
 		}
+
+		// =================================================================
 
 		public static void SetFlag(this ref byte byteToChange, int index, bool value)
 		{
@@ -123,6 +126,8 @@ namespace DLD.Utility
 			}
 		}
 
+		// =================================================================
+
 		public static bool GetFlag(this byte byteToGet, int index)
 		{
 			if (index < 0 || index > 7)
@@ -143,6 +148,8 @@ namespace DLD.Utility
 			return ((intToGet & (1 << index)) != 0);
 		}
 
+		// =================================================================
+
 		public static string ToStringFlags(this byte byteToGet)
 		{
 			StringBuilder s = new StringBuilder();
@@ -158,6 +165,11 @@ namespace DLD.Utility
 				}
 			}
 			return s.ToString();
+		}
+
+		public static System.Enum Clone(this System.Enum value)
+		{
+			return (System.Enum)System.Enum.ToObject(value.GetType(), System.Convert.ToInt32(value));
 		}
 
 		static char GetHexValue(int i) => i < 10 ? (char) (i + 48) : (char) (i - 10 + 65);

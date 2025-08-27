@@ -291,7 +291,8 @@ namespace DLD.UIToolkit
 
 		void OnDropdownEnumFlagChosen(int index, Enum newEnumValueChosen)
 		{
-			Enum previousValue = _currentEnumValue;
+			// create a copy of the System.Enum
+			Enum previousValue = _currentEnumValue.Clone();
 
 			int newEnumChosenInt = Convert.ToInt32(newEnumValueChosen);
 			if (newEnumChosenInt == 0)

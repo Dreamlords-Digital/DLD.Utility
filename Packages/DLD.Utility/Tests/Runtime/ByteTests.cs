@@ -185,5 +185,34 @@ namespace DLD.Utility.Tests
 			testValue.SetFlag(31, true);
 			Assert.AreEqual(3221554436U, testValue);
 		}
+
+		enum TestEnum : byte
+		{
+			None = 0,
+			First = 1,
+			Second = 2,
+			Third = 3,
+		}
+
+		[Test(Description = "Clone for a System.Enum returns a new instance of a System.Enum")]
+		public void Clone_ForEnum_ReturnsNewInstance()
+		{
+			System.Enum a = TestEnum.First;
+			System.Enum b = TestEnum.First;
+
+			// two different instances, despite having same enum value
+			Assert.IsFalse(ReferenceEquals(a, b));
+			Assert.IsTrue(a.Equals(b));
+
+			// assigned by reference
+			System.Enum fromA = a;
+			Assert.IsTrue(ReferenceEquals(a, fromA));
+			Assert.IsTrue(a.Equals(fromA));
+
+			// assign by copy using Clone()
+			System.Enum copyA = a.Clone();
+			Assert.IsFalse(ReferenceEquals(a, copyA));
+			Assert.IsTrue(a.Equals(copyA));
+		}
 	}
 }
