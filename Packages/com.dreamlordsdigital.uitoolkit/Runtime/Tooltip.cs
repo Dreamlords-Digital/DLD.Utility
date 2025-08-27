@@ -17,7 +17,7 @@ namespace DLD.UIToolkit
 		/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
 		/// <param name="mousePos">Initial mouse position. This ensures the tooltip is at the correct position at the start.</param>
 		/// <param name="pushToStack">Whether the tooltip text specified will be added to the existing text already on the tooltip, or not.</param>
-		void ShowTooltipAtMouse(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
+		void ShowTooltipAtMouse(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
 
 		/// <summary>
 		///    Add another message to the tooltip, assuming it's already shown.
@@ -28,9 +28,16 @@ namespace DLD.UIToolkit
 		/// <param name="context">The thing that caused the tooltip to be shown.</param>
 		/// <param name="text"></param>
 		/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
-		void AddToTooltip(IEventHandler context, string text, string iconClassName = null);
+		void AddToTooltip(VisualElement context, string text, string iconClassName = null);
 
 		void HideTooltip();
+
+		/// <summary>
+		///    Remove all messages in the tooltip, without hiding it (if it's shown).
+		/// </summary>
+		void ClearTooltipMessages();
+
+		void ShowAtMouseCursor(Vector2 mousePos);
 
 		/// <summary>
 		///    If the context that was last assigned to the tooltip matches the one specified, the tooltip is hidden.
@@ -44,7 +51,17 @@ namespace DLD.UIToolkit
 		///    Only remove the most recent tooltip message (if it's showing multiple tooltip messages),
 		///    instead of hiding the entire tooltip.
 		/// </param>
-		void HideTooltipIfContextIs(IEventHandler context, bool popFromStack = false);
+		void HideTooltipIfContextIs(VisualElement context, bool popFromStack = false);
+
+		/// <summary>
+		///    Removes all currently displayed messages of the specified context,
+		///    then re-adds the up-to-date messages given by the specified context.
+		/// </summary>
+		/// <remarks>
+		///    If the tooltip ends up with no more messages, then the tooltip will be automatically hidden.<br/>
+		///    If the tooltip ends up having messages, and it's currently hidden, then it will be automatically shown.
+		/// </remarks>
+		void RefreshTooltipsOfContext(VisualElement context);
 	}
 
 	public class TooltipMessage
@@ -145,6 +162,28 @@ namespace DLD.UIToolkit
 			_Show(eventTarget, t, e.position, true);
 		}
 
+		public static (string, string) GetTooltipText(string tooltip)
+		{
+			string iconClassName;
+			int semicolonIdx = tooltip.IndexOf(';');
+			if (semicolonIdx != -1)
+			{
+				iconClassName = tooltip.Substring(0, semicolonIdx);
+				tooltip = tooltip.Substring(semicolonIdx+1);
+
+				if (string.IsNullOrWhiteSpace(tooltip))
+				{
+					return (null, null);
+				}
+			}
+			else
+			{
+				iconClassName = null;
+			}
+
+			return (tooltip, iconClassName);
+		}
+
 		static void _Show(VisualElement eventTarget, ITooltip t, Vector2 mousePos, bool pushToStack)
 		{
 			switch (eventTarget.userData)
@@ -156,53 +195,58 @@ namespace DLD.UIToolkit
 						// nothing to show
 						return;
 					}
-					string iconClassName;
-					int semicolonIdx = tooltip.IndexOf(';');
-					if (semicolonIdx != -1)
-					{
-						iconClassName = tooltip.Substring(0, semicolonIdx);
-						tooltip = tooltip.Substring(semicolonIdx+1);
 
-						if (string.IsNullOrWhiteSpace(tooltip))
-						{
-							return;
-						}
-					}
-					else
-					{
-						iconClassName = null;
-					}
+					(string tooltipText, string iconClassName) = GetTooltipText(tooltip);
 
-					t.ShowTooltipAtMouse(eventTarget, tooltip, iconClassName, mousePos, pushToStack);
+					t.ShowTooltipAtMouse(eventTarget, tooltipText, iconClassName, mousePos, pushToStack);
 					break;
 				}
 				case TooltipMessage tooltipMessage:
 				{
+					if (string.IsNullOrWhiteSpace(tooltipMessage.Text))
+					{
+						// nothing to show
+						return;
+					}
 					t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
 					break;
 				}
 				case TooltipMessage[] tooltipMessageArray:
 				{
-					t.ShowTooltipAtMouse(eventTarget, tooltipMessageArray[0].Text, tooltipMessageArray[0].IconClassName, mousePos, pushToStack);
-					if (tooltipMessageArray.Length > 1)
+					if (tooltipMessageArray.Length == 0)
 					{
-						for (int i = 1; i < tooltipMessageArray.Length; ++i)
-						{
-							t.AddToTooltip(eventTarget, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
-						}
+						return;
 					}
+					if (!pushToStack)
+					{
+						t.ClearTooltipMessages();
+					}
+
+					for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+					{
+						t.AddToTooltip(eventTarget, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					}
+
+					t.ShowAtMouseCursor(mousePos);
 					break;
 				}
 				case List<TooltipMessage> tooltipMessageList:
 				{
-					t.ShowTooltipAtMouse(eventTarget, tooltipMessageList[0].Text, tooltipMessageList[0].IconClassName, mousePos, pushToStack);
-					if (tooltipMessageList.Count > 1)
+					if (tooltipMessageList.Count == 0)
 					{
-						for (int i = 1; i < tooltipMessageList.Count; ++i)
-						{
-							t.AddToTooltip(eventTarget, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
-						}
+						return;
 					}
+					if (!pushToStack)
+					{
+						t.ClearTooltipMessages();
+					}
+
+					for (int i = tooltipMessageList.Count - 1; i >= 0; --i)
+					{
+						t.AddToTooltip(eventTarget, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
+					}
+
+					t.ShowAtMouseCursor(mousePos);
 					break;
 				}
 			}
@@ -236,14 +280,16 @@ namespace DLD.UIToolkit
 
 		ShowType _showType = ShowType.None;
 
-		bool _originalRowUsed;
-		readonly VisualElement _row;
-		readonly VisualElement _icon;
-		readonly Label _text;
+		struct TooltipRow
+		{
+			public VisualElement Context;
+			public VisualElement Container;
+			public VisualElement Icon;
+			public Label Text;
+		}
 
-		IEventHandler _context;
-		readonly List<(IEventHandler context, VisualElement row, VisualElement icon, Label text)> _additionalRows = new();
-		int _additionalRowCountUsed;
+		readonly List<TooltipRow> _messageRows = new(10);
+		int _messageRowCountUsed;
 
 		readonly EventCallback<PointerMoveEvent> _onPointerMove;
 
@@ -252,10 +298,6 @@ namespace DLD.UIToolkit
 			var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
 			asset.CloneTree(this);
 			this.RemoveTemplateContainer("Tooltip");
-
-			_row = this.Q<VisualElement>("Row");
-			_icon = _row.Q<VisualElement>("Icon");
-			_text = _row.Q<Label>("Text");
 
 			// -----------------------------------
 
@@ -275,52 +317,156 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================================
 
-		public void PushToStack(IEventHandler context, string text, string iconClassName = null)
+		public void PushToStack(VisualElement context, string text, string iconClassName = null)
 		{
 			Set(context, text, iconClassName, true);
 		}
 
-		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
+		public void ShowAtMouseCursor()
 		{
-			Set(context, text, iconClassName, pushToStack);
+			if (_messageRowCountUsed == 0)
+			{
+				return;
+			}
 			_showType = ShowType.FollowMouseCursor;
 			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.Flex;
 		}
 
-		public void ShowAtMouseCursor(IEventHandler context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
+		public void ShowAtMouseCursor(Vector2 mousePos)
+		{
+			if (_messageRowCountUsed == 0)
+			{
+				return;
+			}
+			ShowAtMouseCursor();
+			this.SetPosition(mousePos);
+		}
+
+		public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName = null, bool pushToStack = false)
+		{
+			Set(context, text, iconClassName, pushToStack);
+			ShowAtMouseCursor();
+		}
+
+		public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
 		{
 			ShowAtMouseCursor(context, text, iconClassName, pushToStack);
 			this.SetPosition(mousePos);
 		}
 
+		public void ClearTooltipMessages()
+		{
+			Clear();
+			_messageRowCountUsed = 0;
+		}
+
 		public void Hide()
 		{
-			_originalRowUsed = false;
 			_showType = ShowType.None;
 			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.None;
 
-			if (_additionalRowCountUsed > 0)
+			if (_messageRowCountUsed > 0)
 			{
-				for (int n = 0; n < _additionalRowCountUsed; ++n)
-				{
-					RemoveAt(0);
-				}
-				_additionalRowCountUsed = 0;
+				Clear();
+				_messageRowCountUsed = 0;
 			}
 		}
 
-		public void HideIfContextIs(IEventHandler context, bool popFromStack = false)
+		public void HideIfContextIs(VisualElement context, bool popFromStack = false)
 		{
-			if (popFromStack && _originalRowUsed && _additionalRowCountUsed > 0 && _additionalRows[_additionalRowCountUsed-1].Item1 == context)
+			if (popFromStack)
 			{
-				RemoveAt(0);
-				_additionalRowCountUsed -= 1;
+				while (_messageRowCountUsed > 0 && _messageRows[_messageRowCountUsed - 1].Context == context)
+				{
+					Debug.Assert(ReferenceEquals(_messageRows[_messageRowCountUsed - 1].Container, this[0]),
+						$"_messageRows[{_messageRowCountUsed - 1}]: \"{_messageRows[_messageRowCountUsed - 1].Text.text}\", this[0]: \"{this[0].Q<Label>().text}\"");
+
+					RemoveAt(0);
+					_messageRowCountUsed -= 1;
+				}
+				Debug.Assert(_messageRowCountUsed == childCount,
+					$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 			}
-			else if (_context == context)
+
+			if (_messageRowCountUsed == 0)
 			{
 				Hide();
+			}
+		}
+
+		public void RefreshTooltipsOfContext(VisualElement context)
+		{
+			if (_messageRowCountUsed > 0)
+			{
+				Debug.Assert(_messageRowCountUsed == childCount,
+					$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+
+				for (int n = _messageRowCountUsed - 1; n >= 0; --n)
+				{
+					if (_messageRows[n].Context == context)
+					{
+						int reversedIndex = _messageRowCountUsed - (n + 1);
+						Debug.Assert(ReferenceEquals(_messageRows[n].Container, this[reversedIndex]),
+							$"_messageRows[{n}]: \"{_messageRows[n].Text.text}\", this[{reversedIndex}]: \"{this[reversedIndex].Q<Label>().text}\"");
+
+						RemoveAt(reversedIndex);
+						--_messageRowCountUsed;
+					}
+				}
+			}
+
+			Debug.Assert(_messageRowCountUsed == childCount,
+				$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+
+			switch (context.userData)
+			{
+				case string tooltipText:
+				{
+					if (!string.IsNullOrWhiteSpace(tooltipText))
+					{
+						(string updatedTooltipText, string iconClassName) = TooltipUtil.GetTooltipText(tooltipText);
+						PushToStack(context, updatedTooltipText, iconClassName);
+					}
+					break;
+				}
+				case TooltipMessage tooltipMessage:
+				{
+					if (!string.IsNullOrWhiteSpace(tooltipMessage.Text))
+					{
+						PushToStack(context, tooltipMessage.Text, tooltipMessage.IconClassName);
+					}
+					break;
+				}
+				case TooltipMessage[] tooltipMessageArray:
+				{
+					for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+					{
+						PushToStack(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					}
+					break;
+				}
+				case List<TooltipMessage> tooltipMessageList:
+				{
+					for (int i = tooltipMessageList.Count - 1; i >= 0; --i)
+					{
+						PushToStack(context, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
+					}
+					break;
+				}
+			}
+
+			Debug.Assert(_messageRowCountUsed == childCount,
+				$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+
+			if (_messageRowCountUsed == 0)
+			{
+				Hide();
+			}
+			else
+			{
+				ShowAtMouseCursor();
 			}
 		}
 
@@ -334,72 +480,113 @@ namespace DLD.UIToolkit
 			}
 		}
 
-		void Set(IEventHandler context, string text, string iconClassName = null, bool pushToStack = false)
+		static TooltipRow CreateNewTooltipRow(VisualElement context, string text, string iconClassName = null)
 		{
-			if (_originalRowUsed && pushToStack)
+			var newContainer = new VisualElement();
+			newContainer.AddToClassList("dld-tooltip__row");
+
+			var newText = new Label(text);
+			newText.AddToClassList("dld-tooltip__text");
+
+			var newIcon = new VisualElement();
+			if (!string.IsNullOrEmpty(iconClassName))
 			{
-				if (_additionalRows.Count == _additionalRowCountUsed)
+				newIcon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
+				newIcon.AddToClassList(iconClassName);
+			}
+
+			newContainer.Add(newIcon);
+			newContainer.Add(newText);
+
+			return new TooltipRow
+			{
+				Context = context,
+				Container = newContainer,
+				Icon = newIcon,
+				Text = newText
+			};
+		}
+
+		void Set(VisualElement context, string text, string iconClassName = null, bool pushToStack = false)
+		{
+			if (pushToStack)
+			{
+				if (_messageRows.Count == _messageRowCountUsed) // used up all existing rows, make a new one
 				{
-					var newRow = new VisualElement();
-					newRow.AddStyleClassesFrom(_row);
+					var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
 
-					var newText = new Label(text);
-					newText.AddStyleClassesFrom(_text);
-
-					var newIcon = new VisualElement();
-					if (!string.IsNullOrEmpty(iconClassName))
-					{
-						newIcon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
-						newIcon.AddToClassList(iconClassName);
-					}
-
-					newRow.Add(newIcon);
-					newRow.Add(newText);
-
-					_additionalRows.Add((context, newRow, newIcon, newText));
-					_additionalRowCountUsed += 1;
-					Insert(0, newRow);
+					_messageRows.Add(newTooltipRow);
+					_messageRowCountUsed += 1;
+					Insert(0, newTooltipRow.Container);
 				}
-				else
+				else // reuse an existing row
 				{
-					// reuse
-					var nextAvailable = _additionalRows[_additionalRowCountUsed];
+					var nextAvailable = _messageRows[_messageRowCountUsed];
 					{
 						// update context
-						nextAvailable.context = context;
-						_additionalRows[_additionalRowCountUsed] = nextAvailable;
+						nextAvailable.Context = context;
+						_messageRows[_messageRowCountUsed] = nextAvailable;
 					}
-					nextAvailable.text.text = text;
-					nextAvailable.icon.ClearClassList();
+					nextAvailable.Text.text = text;
 					if (!string.IsNullOrEmpty(iconClassName))
 					{
-						nextAvailable.icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
-						nextAvailable.icon.AddToClassList(iconClassName);
+						nextAvailable.Icon.style.display = DisplayStyle.Flex;
+						nextAvailable.Icon.ClearClassList();
+						nextAvailable.Icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
+						nextAvailable.Icon.AddToClassList(iconClassName);
+					}
+					else
+					{
+						nextAvailable.Icon.style.display = DisplayStyle.None;
 					}
 
-					Insert(0, nextAvailable.row);
-					_additionalRowCountUsed += 1;
+					Insert(0, nextAvailable.Container);
+					_messageRowCountUsed += 1;
 				}
 			}
 			else
 			{
-				_context = context;
-				_text.text = text;
-
-				if (!string.IsNullOrWhiteSpace(iconClassName))
+				while (_messageRowCountUsed > 1)
 				{
-					_icon.style.display = DisplayStyle.Flex;
-					_icon.ClearClassList();
-					_icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
-					_icon.AddToClassList(iconClassName);
+					RemoveAt(0);
+					--_messageRowCountUsed;
+				}
+
+				_messageRowCountUsed = 1;
+				if (_messageRows.Count == 0)
+				{
+					var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
+					_messageRows.Add(newTooltipRow);
+					Insert(0, newTooltipRow.Container);
 				}
 				else
 				{
-					_icon.style.display = DisplayStyle.None;
+					Insert(0, _messageRows[0].Container);
 				}
 
-				_originalRowUsed = true;
+				var lastMessage = _messageRows[0];
+				{
+					// update context
+					lastMessage.Context = context;
+					_messageRows[0] = lastMessage;
+				}
+
+				lastMessage.Text.text = text;
+				if (!string.IsNullOrWhiteSpace(iconClassName))
+				{
+					lastMessage.Icon.style.display = DisplayStyle.Flex;
+					lastMessage.Icon.ClearClassList();
+					lastMessage.Icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
+					lastMessage.Icon.AddToClassList(iconClassName);
+				}
+				else
+				{
+					lastMessage.Icon.style.display = DisplayStyle.None;
+				}
 			}
+
+			Debug.Assert(_messageRowCountUsed == childCount,
+				$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 		}
 	}
 }
