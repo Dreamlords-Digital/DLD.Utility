@@ -101,6 +101,29 @@ namespace DLD.UIToolkit
 			clonedRoot.RemoveFromHierarchy();
 		}
 
+		public static void Set(this Button button, string label, string iconClassName)
+		{
+			if (string.IsNullOrWhiteSpace(iconClassName))
+			{
+				button.text = label;
+				return;
+			}
+
+			var icon = new VisualElement();
+			icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+			icon.AddToClassList(iconClassName);
+
+			button.Add(icon);
+			button.AddToClassList(BaseStyles.TOGGLE_WITH_ICON_STYLE_CLASS);
+
+			if (!string.IsNullOrWhiteSpace(label))
+			{
+				var buttonLabel = new Label(label);
+				button.Add(buttonLabel);
+			}
+			button.text = "";
+		}
+
 		public static void SetPosition(this VisualElement visualElement, Vector2 newPos)
 		{
 			visualElement.style.translate = newPos;

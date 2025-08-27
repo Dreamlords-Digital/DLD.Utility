@@ -7,5 +7,7 @@ namespace DLD.UIToolkit
         public const string TEXT_FIELD_WITH_ERROR_STYLE_CLASS = "dld-text-field--error";
         public const string LABEL_WITH_WARNING_STYLE_CLASS = "dld-label--warning";
         public const string LABEL_WITH_ERROR_STYLE_CLASS = "dld-label--error";
+
+        public const string TOGGLE_WITH_ICON_STYLE_CLASS = "dld-grid-toggle--with-icon";
     }
 }
