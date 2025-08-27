@@ -13,7 +13,7 @@ namespace DLD.UIToolkit
 		public string IconClassName;
 	}
 
-	public enum DropdownCurrentValueDisplayType
+	public enum DropdownCurrentValueDisplayType : byte
 	{
 		Labels,
 		ShortLabels,
@@ -25,7 +25,7 @@ namespace DLD.UIToolkit
 	/// where we allow the user to select multiple values, or we ignore it and
 	/// enforce that only one value is selected.
 	/// </summary>
-	public enum DropdownEnumFlagHandling
+	public enum DropdownEnumFlagHandling : byte
 	{
 		/// <summary>
 		/// Make the dropdown behave like a ToggleButtonGroup (i.e. allow multiple values to be selected)
