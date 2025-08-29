@@ -5,40 +5,39 @@ using UnityEngine;
 
 namespace DLD.Utility.Inspector.Editor
 {
-	[CustomPropertyDrawer(typeof(RangeFloatShowPropertyAttribute))]
-	public class RangeFloatShowPropertyPropertyDrawer : PropertyDrawer
+	[CustomPropertyDrawer(typeof(FloatRangeShowIfAttribute))]
+	public class FloatRangeShowIfPropertyDrawer : PropertyDrawer
 	{
-		RangeFloatShowPropertyAttribute _rangeShowIf;
+		FloatRangeShowIfAttribute _rangeShowIf;
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			_rangeShowIf ??= attribute as RangeFloatShowPropertyAttribute;
+			_rangeShowIf ??= attribute as FloatRangeShowIfAttribute;
 			if (_rangeShowIf == null)
 			{
-				return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(RangeFloat.Start)), label);
+				return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Start)), label);
 			}
 
-			bool show = Utility.GetPropertyReturnValue<bool>(property, _rangeShowIf.PropertyName);
-
-			if (!show && _rangeShowIf.HideType == HideType.DoNotDraw)
+			if (!ShowIfPropertyDrawer.IsConditionMet(property, _rangeShowIf.PropertyToCheck, _rangeShowIf.ValueToCheckAgainst, _rangeShowIf.ComparisonType) &&
+			    _rangeShowIf.HideType == HideType.DoNotDraw)
 			{
 				return -EditorGUIUtility.standardVerticalSpacing;
 			}
 
-			return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(RangeFloat.Start)), label);
+			return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Start)), label);
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			_rangeShowIf ??= attribute as RangeFloatShowPropertyAttribute;
+			_rangeShowIf ??= attribute as FloatRangeShowIfAttribute;
 			if (_rangeShowIf == null)
 			{
 				return;
 			}
 
-			bool show = Utility.GetPropertyReturnValue<bool>(property, _rangeShowIf.PropertyName);
-
-			if (show || _rangeShowIf.HideType == HideType.ReadOnly)
+			bool conditionMet = ShowIfPropertyDrawer.IsConditionMet(property, _rangeShowIf.PropertyToCheck,
+				_rangeShowIf.ValueToCheckAgainst, _rangeShowIf.ComparisonType);
+			if (conditionMet || _rangeShowIf.HideType == HideType.ReadOnly)
 			{
 				string originalLabel = label.text;
 				string customLabel = _rangeShowIf.Label;
@@ -49,12 +48,12 @@ namespace DLD.Utility.Inspector.Editor
 				bool useAllAvailableSpace = _rangeShowIf.UseAllAvailableSpace;
 
 				bool prevEnabled = GUI.enabled;
-				if (!show)
+				if (!conditionMet)
 				{
 					GUI.enabled = false;
 				}
 
-				RangeFloatPropertyDrawer.DrawGUI(position, property, label, useAllAvailableSpace,
+				FloatRangePropertyDrawer.DrawGUI(position, property, label, useAllAvailableSpace,
 					originalLabel, customLabel, startLabel, startPostLabel, endLabel, endPostLabel);
 
 				GUI.enabled = prevEnabled;

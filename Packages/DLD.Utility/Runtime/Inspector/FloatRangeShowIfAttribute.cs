@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DLD.Utility.Inspector
 {
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
-	public class RangeFloatShowIfAttribute : PropertyAttribute
+	public class FloatRangeShowIfAttribute : PropertyAttribute
 	{
 		public string PropertyToCheck { get; }
 		public ComparisonType ComparisonType { get; }
@@ -28,7 +28,7 @@ namespace DLD.Utility.Inspector
 		public readonly float EndMin;
 		public readonly float EndMax;
 
-		public RangeFloatShowIfAttribute()
+		public FloatRangeShowIfAttribute()
 		{
 			PropertyToCheck = null;
 			ComparisonType = ComparisonType.Equals;
@@ -50,7 +50,7 @@ namespace DLD.Utility.Inspector
 			EndMax = float.MaxValue;
 		}
 
-		public RangeFloatShowIfAttribute(string propertyToCheck,
+		public FloatRangeShowIfAttribute(string propertyToCheck,
 			object valueToCheckAgainst,
 			string startLabel, string endLabel, bool useAllAvailableSpace = false,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
@@ -75,7 +75,7 @@ namespace DLD.Utility.Inspector
 			EndMax = endMax;
 		}
 
-		public RangeFloatShowIfAttribute(string propertyToCheck, ComparisonType comparisonType,
+		public FloatRangeShowIfAttribute(string propertyToCheck, ComparisonType comparisonType,
 			object valueToCheckAgainst, HideType hideType,
 			string startLabel, string endLabel, bool useAllAvailableSpace = false,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
@@ -100,7 +100,7 @@ namespace DLD.Utility.Inspector
 			EndMax = endMax;
 		}
 
-		public RangeFloatShowIfAttribute(string propertyToCheck, ComparisonType comparisonType,
+		public FloatRangeShowIfAttribute(string propertyToCheck, ComparisonType comparisonType,
 			object valueToCheckAgainst, HideType hideType,
 			string label, string startLabel, string startPostLabel, string endLabel, string endPostLabel, bool useAllAvailableSpace,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)

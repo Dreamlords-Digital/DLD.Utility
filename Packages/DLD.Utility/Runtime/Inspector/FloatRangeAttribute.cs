@@ -6,14 +6,14 @@ using UnityEngine;
 namespace DLD.Utility.Inspector
 {
 	/// <summary>
-	/// Show a RangeFloat in a compact format (with two input fields in one line),
+	/// Show a FloatRange in a compact format (with two input fields in one line),
 	/// and optionally with custom labels for the input fields.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
-	public class RangeFloatAttribute : PropertyAttribute
+	public class FloatRangeAttribute : PropertyAttribute
 	{
 		/// <summary>
-		/// Custom label on the RangeFloat. Can be left at null to use the default (just use the variable name).
+		/// Custom label on the FloatRange. Can be left at null to use the default (just use the variable name).
 		/// </summary>
 		public readonly string Label;
 
@@ -48,7 +48,7 @@ namespace DLD.Utility.Inspector
 		public readonly float EndMin;
 		public readonly float EndMax;
 
-		public RangeFloatAttribute()
+		public FloatRangeAttribute()
 		{
 			Label = null;
 			StartLabel = null;
@@ -65,7 +65,7 @@ namespace DLD.Utility.Inspector
 			EndMax = float.MaxValue;
 		}
 
-		public RangeFloatAttribute(string startLabel, string endLabel, bool useAllAvailableSpace = false,
+		public FloatRangeAttribute(string startLabel, string endLabel, bool useAllAvailableSpace = false,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
 		{
 			Label = null;
@@ -83,7 +83,7 @@ namespace DLD.Utility.Inspector
 			EndMax = endMax;
 		}
 
-		public RangeFloatAttribute(string label = null, string startLabel = null, string startPostLabel = null, string endLabel = null, string endPostLabel = null, bool useAllAvailableSpace = false,
+		public FloatRangeAttribute(string label = null, string startLabel = null, string startPostLabel = null, string endLabel = null, string endPostLabel = null, bool useAllAvailableSpace = false,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
 		{
 			Label = label;

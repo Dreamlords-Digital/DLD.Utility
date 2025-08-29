@@ -5,26 +5,26 @@ using UnityEngine;
 
 namespace DLD.Utility.Inspector.Editor
 {
-	[CustomPropertyDrawer(typeof(RangeFloatAttribute))]
-	public class RangeFloatPropertyDrawer : PropertyDrawer
+	[CustomPropertyDrawer(typeof(FloatRangeAttribute))]
+	public class FloatRangePropertyDrawer : PropertyDrawer
 	{
-		RangeFloatAttribute _rangeFloatAttribute;
+		FloatRangeAttribute _floatRangeAttribute;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			_rangeFloatAttribute ??= attribute as RangeFloatAttribute;
-			if (_rangeFloatAttribute == null)
+			_floatRangeAttribute ??= attribute as FloatRangeAttribute;
+			if (_floatRangeAttribute == null)
 			{
 				return;
 			}
 
 			string originalLabel = label.text;
-			string customLabel = _rangeFloatAttribute.Label;
-			string startLabel = _rangeFloatAttribute.StartLabel;
-			string startPostLabel = _rangeFloatAttribute.StartPostLabel;
-			string endLabel = _rangeFloatAttribute.EndLabel;
-			string endPostLabel = _rangeFloatAttribute.EndPostLabel;
-			bool useAllAvailableSpace = _rangeFloatAttribute.UseAllAvailableSpace;
+			string customLabel = _floatRangeAttribute.Label;
+			string startLabel = _floatRangeAttribute.StartLabel;
+			string startPostLabel = _floatRangeAttribute.StartPostLabel;
+			string endLabel = _floatRangeAttribute.EndLabel;
+			string endPostLabel = _floatRangeAttribute.EndPostLabel;
+			bool useAllAvailableSpace = _floatRangeAttribute.UseAllAvailableSpace;
 			DrawGUI(position, property, label, useAllAvailableSpace,
 				originalLabel, customLabel, startLabel, startPostLabel, endLabel, endPostLabel);
 		}
@@ -112,8 +112,8 @@ namespace DLD.Utility.Inspector.Editor
 
 			// -----------------------
 
-			var startProperty = property.FindPropertyRelative(nameof(RangeFloat.Start));
-			var endProperty = property.FindPropertyRelative(nameof(RangeFloat.End));
+			var startProperty = property.FindPropertyRelative(nameof(FloatRange.Start));
+			var endProperty = property.FindPropertyRelative(nameof(FloatRange.End));
 
 			// -----------------------
 

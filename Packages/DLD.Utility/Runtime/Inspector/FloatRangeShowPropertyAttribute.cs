@@ -6,17 +6,17 @@ using UnityEngine;
 namespace DLD.Utility.Inspector
 {
 	/// <summary>
-	/// Show a RangeFloat in a compact format (with two input fields in one line), but only if the specified property returns true.
+	/// Show a FloatRange in a compact format (with two input fields in one line), but only if the specified property returns true.
 	/// </summary>
 	/// <remarks>
 	/// <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>
 	/// <para>This assumes the property returns a boolean. The property does not have to be public.</para>
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
-	public class RangeFloatShowPropertyAttribute : PropertyAttribute
+	public class FloatRangeShowPropertyAttribute : PropertyAttribute
 	{
 		/// <summary>
-		/// Name of property to use for determining if the RangeFloat will be shown.
+		/// Name of property to use for determining if the FloatRange will be shown.
 		/// </summary>
 		/// <remarks>
 		/// <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>
@@ -25,12 +25,12 @@ namespace DLD.Utility.Inspector
 		public readonly string PropertyName;
 
 		/// <summary>
-		/// Whether to completely hide the RangeFloat, or still show it but with read-only disabled controls.
+		/// Whether to completely hide the FloatRange, or still show it but with read-only disabled controls.
 		/// </summary>
 		public HideType HideType { get; } = HideType.DoNotDraw;
 
 		/// <summary>
-		/// Custom label on the RangeFloat. Can be left at null to use the default (just use the variable name).
+		/// Custom label on the FloatRange. Can be left at null to use the default (just use the variable name).
 		/// </summary>
 		public readonly string Label;
 
@@ -65,7 +65,7 @@ namespace DLD.Utility.Inspector
 		public readonly float EndMin;
 		public readonly float EndMax;
 
-		public RangeFloatShowPropertyAttribute()
+		public FloatRangeShowPropertyAttribute()
 		{
 			PropertyName = null;
 
@@ -84,7 +84,7 @@ namespace DLD.Utility.Inspector
 			EndMax = float.MaxValue;
 		}
 
-		public RangeFloatShowPropertyAttribute(string propertyName, HideType hideType,
+		public FloatRangeShowPropertyAttribute(string propertyName, HideType hideType,
 			string startLabel, string endLabel, bool useAllAvailableSpace = false,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
 		{
@@ -106,7 +106,7 @@ namespace DLD.Utility.Inspector
 			EndMax = endMax;
 		}
 
-		public RangeFloatShowPropertyAttribute(string propertyName, HideType hideType,
+		public FloatRangeShowPropertyAttribute(string propertyName, HideType hideType,
 			string label, string startLabel, string startPostLabel, string endLabel, string endPostLabel, bool useAllAvailableSpace,
 			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
 		{

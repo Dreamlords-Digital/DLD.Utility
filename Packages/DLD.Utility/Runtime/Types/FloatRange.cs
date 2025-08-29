@@ -7,12 +7,12 @@ using UnityEngine;
 namespace DLD.Utility
 {
 	[Serializable]
-	public struct RangeFloat
+	public struct FloatRange
 	{
 		public float Start;
 		public float End;
 
-		public RangeFloat(float start, float end)
+		public FloatRange(float start, float end)
 		{
 			Start = start;
 			End = end;
