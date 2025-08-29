@@ -3,6 +3,9 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+#if DLD_UTILITY_UNITY_MATHS_AVAILABLE
+using Unity.Mathematics;
+#endif
 
 namespace DLD.Utility
 {
@@ -159,5 +162,10 @@ namespace DLD.Utility
 
 		public static FloatRange operator -(FloatRange a, float offset) =>
 			new FloatRange(a.LowerLimit - offset, a.UpperLimit - offset);
+
+#if DLD_UTILITY_UNITY_MATHS_AVAILABLE
+		public static implicit operator FloatRange(float2 f) => new(f.x, f.y);
+		public static implicit operator float2(FloatRange floatRange) => new(floatRange.LowerLimit, floatRange.UpperLimit);
+#endif
 	}
 }

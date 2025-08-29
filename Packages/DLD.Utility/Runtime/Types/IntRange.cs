@@ -2,6 +2,9 @@
 
 using System;
 using UnityEngine;
+#if DLD_UTILITY_UNITY_MATHS_AVAILABLE
+using Unity.Mathematics;
+#endif
 
 namespace DLD.Utility
 {
@@ -340,5 +343,10 @@ namespace DLD.Utility
 
 		public static IntRange operator -(IntRange a, int offset) =>
 			new IntRange(a.LowerLimit - offset, a.UpperLimit - offset, true);
+
+#if DLD_UTILITY_UNITY_MATHS_AVAILABLE
+		public static implicit operator IntRange(int2 i) => new(i.x, i.y);
+		public static implicit operator int2(IntRange intRange) => new(intRange.LowerLimit, intRange.UpperLimit);
+#endif
 	}
 }
