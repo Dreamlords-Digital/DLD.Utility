@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using DLD.Utility;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace DLD.UIToolkit
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
 		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, TooltipMessage[] menuTooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
+
+		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, List<TooltipMessage> menuTooltip = null,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
 		/// <summary>
@@ -199,6 +203,15 @@ namespace DLD.UIToolkit
 		}
 
 		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, TooltipMessage[] menuTooltip = null,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
+		{
+			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
+
+			entryContainer.userData = menuTooltip;
+			entryContainer.Register(_tooltip);
+		}
+
+		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, List<TooltipMessage> menuTooltip = null,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
 			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);

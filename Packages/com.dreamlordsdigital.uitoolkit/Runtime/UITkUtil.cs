@@ -101,10 +101,11 @@ namespace DLD.UIToolkit
 			clonedRoot.RemoveFromHierarchy();
 		}
 
-		public static void Set(this Button button, string label, string iconClassName)
+		public static void Set(this Button button, string label = null, string iconClassName = null)
 		{
 			if (string.IsNullOrWhiteSpace(iconClassName))
 			{
+				// only label is available
 				button.text = label;
 				return;
 			}

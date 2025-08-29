@@ -7,6 +7,11 @@ namespace DLD.UIToolkit
         public const string BOX_WITH_WARNING_STYLE_CLASS = "dld-box--warning";
         public const string BOX_WITH_ERROR_STYLE_CLASS = "dld-box--error";
         public const string TEXT_FIELD_WITH_ERROR_STYLE_CLASS = "dld-text-field--error";
+        public const string CHECKBOX_WITH_ERROR_STYLE_CLASS = "dld-checkbox--error";
+        public const string GRID_TOGGLE_WITH_ERROR_STYLE_CLASS = "dld-grid-toggle--error";
+        public const string GRID_TOGGLE_ROW_1_WITH_ERROR_STYLE_CLASS = "dld-grid-toggle__row1--error";
+        public const string GRID_TOGGLE_ROW_2_WITH_ERROR_STYLE_CLASS = "dld-grid-toggle__row2--error";
+        public const string GRID_TOGGLE_ROW_3_WITH_ERROR_STYLE_CLASS = "dld-grid-toggle__row3--error";
         public const string LABEL_WITH_WARNING_STYLE_CLASS = "dld-label--warning";
         public const string LABEL_WITH_ERROR_STYLE_CLASS = "dld-label--error";
 

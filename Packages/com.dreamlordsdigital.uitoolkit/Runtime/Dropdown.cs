@@ -57,6 +57,9 @@ namespace DLD.UIToolkit
 		/// </summary>
 		readonly Toggle _toggle;
 
+		readonly TooltipMessage _enumValueTooltip = new(BaseIcons.GENERIC_INFO);
+		readonly TooltipMessage _enumObsoleteTooltip = new(BaseIcons.GENERIC_ERROR);
+
 		/// <summary>
 		/// Icon displayed when the dropdown box is displaying a single value.
 		/// Only used if the value actually has an icon assigned to it.
@@ -70,7 +73,7 @@ namespace DLD.UIToolkit
 
 		string _labelToDisplayWhenNoneSelected = "None";
 
-		enum Mode
+		enum Mode : byte
 		{
 			/// <summary>
 			/// Dropdown will show all values of the specified Enum in <see cref="SetEnumTypeOnOpen"/>.
@@ -134,6 +137,8 @@ namespace DLD.UIToolkit
 		/// </summary>
 		bool _includeObsoleteEnums;
 
+		List<List<TooltipMessage>> _dropdownItemTooltips;
+
 		// ==================================================================================
 
 		/// <summary>
@@ -143,6 +148,9 @@ namespace DLD.UIToolkit
 		/// </summary>
 		DropdownCurrentValueDisplayType _currentValueDisplayType;
 
+		/// <summary>
+		/// Only used when the Dropdown <see cref="_currentMode"/> is in <see cref="Mode.ByteMask"/>.
+		/// </summary>
 		List<DropdownItem> _dropdownItems;
 
 		/// <summary>
@@ -212,17 +220,23 @@ namespace DLD.UIToolkit
 
 		public Label LabelElement => _label;
 
+		public Enum CurrentEnumValue => _currentEnumValue;
+
 		public void SetContextMenu(IContextMenu contextMenu)
 		{
 			_contextMenu = contextMenu;
 		}
 
-		public void SetTooltip(ITooltip newTooltip)
+		public void SetTooltip(ITooltip newTooltip, TooltipMessage additionalTooltip = null)
 		{
 			// Prepare the dropdown box to allow it to display tooltips.
 			_toggle.RegisterCallback(TooltipUtil.ShowFromUserData, newTooltip);
 			_toggle.RegisterCallback(TooltipUtil.Hide, newTooltip);
+
+			_toggle.userData = new[] { additionalTooltip, _enumValueTooltip, _enumObsoleteTooltip };
 		}
+
+		public bool HasAnyErrorTooltip => !string.IsNullOrWhiteSpace(_enumObsoleteTooltip.Text);
 
 		public void DoAltBgStyling(bool doAltBgStyling)
 		{
@@ -254,6 +268,24 @@ namespace DLD.UIToolkit
 					_currentValueIcons = new List<VisualElement>();
 				}
 			}
+		}
+
+		public void ShowErrorIndication()
+		{
+			_toggle.AddToClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
+
+			// error indication is higher priority than warning
+			_toggle.RemoveFromClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+		}
+
+		public void ShowWarningIndication()
+		{
+			_toggle.AddToClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+		}
+
+		public void HideErrorIndication()
+		{
+			_toggle.RemoveFromClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
 		}
 
 		// ==================================================================================

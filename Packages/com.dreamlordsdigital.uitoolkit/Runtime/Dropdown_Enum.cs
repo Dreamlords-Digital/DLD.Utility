@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using DLD.Utility;
@@ -63,6 +64,9 @@ namespace DLD.UIToolkit
 
 			Array enumValues = Enum.GetValues(enumType);
 
+			_dropdownItemTooltips ??= new List<List<TooltipMessage>>();
+			_dropdownItemTooltips.Clear();
+
 			if (_currentMode == Mode.EnumFlag)
 			{
 				InitializeCurrentDisplayIcons(enumValues.Length);
@@ -83,6 +87,9 @@ namespace DLD.UIToolkit
 					continue;
 				}
 
+				var itemTooltips = new List<TooltipMessage>();
+				_dropdownItemTooltips.Add(itemTooltips);
+
 				int enumValueInt = Convert.ToInt32(enumValue);
 				if (enumValueInt == 0 && _noneEnumValue == null)
 				{
@@ -99,7 +106,6 @@ namespace DLD.UIToolkit
 
 				string label;
 				string iconClassName;
-				string tooltipDesc;
 				ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard;
 				if (enumValueIsSelected)
 				{
@@ -124,15 +130,17 @@ namespace DLD.UIToolkit
 					if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
 					{
 						// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
-						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, TooltipUtil.CreateTooltipMessages(enumUI, obsoleteAttribute),
+						itemTooltips.Add(new TooltipMessage(BaseIcons.GENERIC_INFO, enumUI.Tooltip));
+						itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(obsoleteAttribute));
+						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, itemTooltips,
 							listener: this, userArg1: enumValue);
 					}
 					else
 					{
 						// tooltip is only from the ObsoleteAttribute
-						tooltipDesc = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
+						itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(obsoleteAttribute));
 
-						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, tooltipDesc,
+						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, itemTooltips,
 							listener: this, userArg1: enumValue);
 					}
 				}
@@ -149,18 +157,21 @@ namespace DLD.UIToolkit
 						menuItemStyle |= ContextMenuItemStyle.Warning;
 					}
 
-					tooltipDesc = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
+					itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(obsoleteAttribute));
 
-					_contextMenu.AddMenu(label, null, menuItemStyle, tooltipDesc,
+					_contextMenu.AddMenu(label, null, menuItemStyle, itemTooltips,
 						listener: this, userArg1: enumValue);
 				}
 				else if (enumUI != null)
 				{
 					label = enumUI.Label ?? enumValue.ToStringLabel();
 					iconClassName = enumUI.IconStyleClass;
-					tooltipDesc = enumUI.Tooltip;
+					if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
+					{
+						itemTooltips.Add(new TooltipMessage(BaseIcons.GENERIC_INFO, enumUI.Tooltip));
+					}
 
-					_contextMenu.AddMenu(label, iconClassName, menuItemStyle, tooltipDesc,
+					_contextMenu.AddMenu(label, iconClassName, menuItemStyle, itemTooltips,
 						listener: this, userArg1: enumValue);
 				}
 				else
@@ -195,8 +206,8 @@ namespace DLD.UIToolkit
 
 			_currentEnumValue = newEnumValueChosen;
 			_toggle.label = label.text;
-			_toggle.userData = chosenEnumTooltip;
 			UpdateCurrentValueIcon(_currentEnumValue);
+			UpdateTooltip(newEnumValueChosen);
 
 			_toggle.RemoveFromClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
 			_toggle.RemoveFromClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
@@ -216,32 +227,11 @@ namespace DLD.UIToolkit
 		{
 			_toggle.label = currentValue.ToStringLabel();
 			UpdateCurrentValueIcon(currentValue);
-
-			var obsoleteAttribute = currentValue.GetEnumValueAttribute<ObsoleteAttribute>();
-			var enumUI = currentValue.GetEnumValueAttribute<EnumUIAttribute>();
-			if (obsoleteAttribute != null && enumUI != null)
-			{
-				if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
-				{
-					// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
-					_toggle.userData = TooltipUtil.CreateTooltipMessages(enumUI, obsoleteAttribute);
-				}
-				else
-				{
-					_toggle.userData = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
-				}
-			}
-			else if (obsoleteAttribute != null)
-			{
-				_toggle.userData = TooltipUtil.CreateObsoleteTooltip(obsoleteAttribute);
-			}
-			else if (enumUI != null)
-			{
-				_toggle.userData = enumUI.Tooltip;
-			}
+			UpdateTooltip(currentValue);
 
 			_toggle.RemoveFromClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
 			_toggle.RemoveFromClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+			var obsoleteAttribute = currentValue.GetEnumValueAttribute<ObsoleteAttribute>();
 			if (obsoleteAttribute != null)
 			{
 				if (obsoleteAttribute.IsError)
@@ -268,6 +258,42 @@ namespace DLD.UIToolkit
 			else
 			{
 				_icon.style.display = DisplayStyle.None;
+			}
+		}
+
+		void UpdateTooltip(Enum currentValue)
+		{
+			var obsoleteAttribute = currentValue.GetEnumValueAttribute<ObsoleteAttribute>();
+			var enumUI = currentValue.GetEnumValueAttribute<EnumUIAttribute>();
+			if (obsoleteAttribute != null && enumUI != null)
+			{
+				if (!string.IsNullOrWhiteSpace(enumUI.Tooltip))
+				{
+					// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
+					_enumValueTooltip.Text = enumUI.Tooltip;
+				}
+				else
+				{
+					_enumValueTooltip.Text = null;
+				}
+				_enumObsoleteTooltip.IconClassName = TooltipUtil.CreateObsoleteTooltipIcon(obsoleteAttribute);
+				_enumObsoleteTooltip.Text = TooltipUtil.CreateObsoleteTooltipText(obsoleteAttribute);
+			}
+			else if (obsoleteAttribute != null)
+			{
+				_enumValueTooltip.Text = null;
+				_enumObsoleteTooltip.IconClassName = TooltipUtil.CreateObsoleteTooltipIcon(obsoleteAttribute);
+				_enumObsoleteTooltip.Text = TooltipUtil.CreateObsoleteTooltipText(obsoleteAttribute);
+			}
+			else if (enumUI != null)
+			{
+				_enumValueTooltip.Text = enumUI.Tooltip;
+				_enumObsoleteTooltip.Text = null;
+			}
+			else
+			{
+				_enumValueTooltip.Text = null;
+				_enumObsoleteTooltip.Text = null;
 			}
 		}
 
@@ -335,7 +361,8 @@ namespace DLD.UIToolkit
 						_icon.ClearClassList();
 						_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
 						_icon.AddToClassList(enumUI.IconStyleClass);
-						_toggle.userData = enumUI.Tooltip;
+
+						_enumValueTooltip.Text = enumUI.Tooltip;
 
 						// Note: Assigning to _toggle.label actually causes the label to be re-inserted
 						// back as the first child of _toggle.
@@ -350,8 +377,9 @@ namespace DLD.UIToolkit
 					{
 						_icon.style.display = DisplayStyle.None;
 						_toggle.label = _labelToDisplayWhenNoneSelected;
-						_toggle.userData = null;
+						_enumValueTooltip.Text = null;
 					}
+					_enumObsoleteTooltip.Text = null;
 
 					// clear other icons
 					for (int n = 0; n < _currentValueIcons.Count; ++n)
@@ -383,7 +411,7 @@ namespace DLD.UIToolkit
 					}
 
 					// Get the long label and use it as the tooltip
-					_toggle.userData = BaseIcons.GENERIC_INFO + ";" + GetEnumFlagAsLabel(_enumTypeOnOpen, currentEnumFlagValue, _noneEnumValue, DropdownCurrentValueDisplayType.Labels);
+					_enumValueTooltip.Text = GetEnumFlagAsLabel(_enumTypeOnOpen, currentEnumFlagValue, _noneEnumValue, DropdownCurrentValueDisplayType.Labels);
 				}
 			}
 			else

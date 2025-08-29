@@ -39,6 +39,8 @@ namespace DLD.UIToolkit
 
 		void ShowAtMouseCursor(Vector2 mousePos);
 
+		void SetContext(VisualElement eventTarget);
+
 		/// <summary>
 		///    If the context that was last assigned to the tooltip matches the one specified, the tooltip is hidden.
 		/// </summary>
@@ -58,6 +60,7 @@ namespace DLD.UIToolkit
 		///    then re-adds the up-to-date messages given by the specified context.
 		/// </summary>
 		/// <remarks>
+		///    If the tooltip isn't shown on the specified context, then this aborts.<br/>
 		///    If the tooltip ends up with no more messages, then the tooltip will be automatically hidden.<br/>
 		///    If the tooltip ends up having messages, and it's currently hidden, then it will be automatically shown.
 		/// </remarks>
@@ -69,7 +72,7 @@ namespace DLD.UIToolkit
 		public string IconClassName;
 		public string Text;
 
-		public TooltipMessage(string iconClassName, string text)
+		public TooltipMessage(string iconClassName = null, string text = null)
 		{
 			IconClassName = iconClassName;
 			Text = text;
@@ -100,6 +103,25 @@ namespace DLD.UIToolkit
 			return $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message ?? obsoleteMessageToUseIfNull}";
 		}
 
+		public static string CreateObsoleteTooltipIcon(ObsoleteAttribute obsoleteAttribute)
+		{
+			return obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING;
+		}
+
+		public static string CreateObsoleteTooltipText(ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		{
+			if (!string.IsNullOrWhiteSpace(obsoleteAttribute.Message))
+			{
+				return obsoleteAttribute.Message;
+			}
+			return obsoleteMessageToUseIfNull;
+		}
+
+		public static TooltipMessage CreateObsoleteTooltipMessage(ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		{
+			return new TooltipMessage(CreateObsoleteTooltipIcon(obsoleteAttribute), CreateObsoleteTooltipText(obsoleteAttribute, obsoleteMessageToUseIfNull));
+		}
+
 		public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO, bool pushToStack = false)
 		{
 			if (tooltipDisplayer == null)
@@ -120,7 +142,7 @@ namespace DLD.UIToolkit
 			if (pushToStack)
 			{
 				tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
-				tooltipDisplayer.RegisterCallback(HideTooltipIfContextIs, tooltip);
+				tooltipDisplayer.RegisterCallback(Hide, tooltip);
 			}
 			else
 			{
@@ -141,7 +163,7 @@ namespace DLD.UIToolkit
 			if (pushToStack)
 			{
 				tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
-				tooltipDisplayer.RegisterCallback(HideTooltipIfContextIs, tooltip);
+				tooltipDisplayer.RegisterCallback(Hide, tooltip);
 			}
 			else
 			{
@@ -193,6 +215,7 @@ namespace DLD.UIToolkit
 					if (string.IsNullOrWhiteSpace(tooltip))
 					{
 						// nothing to show
+						t.SetContext(eventTarget);
 						return;
 					}
 
@@ -206,6 +229,7 @@ namespace DLD.UIToolkit
 					if (string.IsNullOrWhiteSpace(tooltipMessage.Text))
 					{
 						// nothing to show
+						t.SetContext(eventTarget);
 						return;
 					}
 					t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
@@ -215,6 +239,7 @@ namespace DLD.UIToolkit
 				{
 					if (tooltipMessageArray.Length == 0)
 					{
+						t.SetContext(eventTarget);
 						return;
 					}
 					if (!pushToStack)
@@ -222,9 +247,21 @@ namespace DLD.UIToolkit
 						t.ClearTooltipMessages();
 					}
 
+					bool addedAtLeastOne = false;
 					for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
 					{
+						if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
+						{
+							continue;
+						}
+
+						addedAtLeastOne = true;
 						t.AddToTooltip(eventTarget, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					}
+
+					if (!addedAtLeastOne)
+					{
+						t.SetContext(eventTarget);
 					}
 
 					t.ShowAtMouseCursor(mousePos);
@@ -234,6 +271,7 @@ namespace DLD.UIToolkit
 				{
 					if (tooltipMessageList.Count == 0)
 					{
+						t.SetContext(eventTarget);
 						return;
 					}
 					if (!pushToStack)
@@ -241,9 +279,21 @@ namespace DLD.UIToolkit
 						t.ClearTooltipMessages();
 					}
 
+					bool addedAtLeastOne = false;
 					for (int i = tooltipMessageList.Count - 1; i >= 0; --i)
 					{
+						if (tooltipMessageList[i] == null || string.IsNullOrWhiteSpace(tooltipMessageList[i].Text))
+						{
+							continue;
+						}
+
+						addedAtLeastOne = true;
 						t.AddToTooltip(eventTarget, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
+					}
+
+					if (!addedAtLeastOne)
+					{
+						t.SetContext(eventTarget);
 					}
 
 					t.ShowAtMouseCursor(mousePos);
@@ -290,6 +340,7 @@ namespace DLD.UIToolkit
 
 		readonly List<TooltipRow> _messageRows = new(10);
 		int _messageRowCountUsed;
+		VisualElement _lastContext;
 
 		readonly EventCallback<PointerMoveEvent> _onPointerMove;
 
@@ -319,6 +370,7 @@ namespace DLD.UIToolkit
 
 		public void PushToStack(VisualElement context, string text, string iconClassName = null)
 		{
+			_lastContext = context;
 			Set(context, text, iconClassName, true);
 		}
 
@@ -345,12 +397,14 @@ namespace DLD.UIToolkit
 
 		public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName = null, bool pushToStack = false)
 		{
+			_lastContext = context;
 			Set(context, text, iconClassName, pushToStack);
 			ShowAtMouseCursor();
 		}
 
 		public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
 		{
+			_lastContext = context;
 			ShowAtMouseCursor(context, text, iconClassName, pushToStack);
 			this.SetPosition(mousePos);
 		}
@@ -361,7 +415,19 @@ namespace DLD.UIToolkit
 			_messageRowCountUsed = 0;
 		}
 
+		public void SetContext(VisualElement context)
+		{
+			_lastContext = context;
+		}
+
 		public void Hide()
+		{
+			_lastContext = null;
+
+			_Hide();
+		}
+
+		void _Hide()
 		{
 			_showType = ShowType.None;
 			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
@@ -392,12 +458,18 @@ namespace DLD.UIToolkit
 
 			if (_messageRowCountUsed == 0)
 			{
-				Hide();
+				_Hide();
 			}
 		}
 
 		public void RefreshTooltipsOfContext(VisualElement context)
 		{
+			Debug.Assert(context != null, "RefreshTooltipsOfContext: Passed context is null");
+			if (_lastContext != context)
+			{
+				return;
+			}
+
 			if (_messageRowCountUsed > 0)
 			{
 				Debug.Assert(_messageRowCountUsed == childCount,
@@ -443,6 +515,10 @@ namespace DLD.UIToolkit
 				{
 					for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
 					{
+						if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
+						{
+							continue;
+						}
 						PushToStack(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
 					}
 					break;
@@ -451,6 +527,10 @@ namespace DLD.UIToolkit
 				{
 					for (int i = tooltipMessageList.Count - 1; i >= 0; --i)
 					{
+						if (tooltipMessageList[i] == null || string.IsNullOrWhiteSpace(tooltipMessageList[i].Text))
+						{
+							continue;
+						}
 						PushToStack(context, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
 					}
 					break;
@@ -462,7 +542,7 @@ namespace DLD.UIToolkit
 
 			if (_messageRowCountUsed == 0)
 			{
-				Hide();
+				_Hide();
 			}
 			else
 			{
@@ -474,7 +554,7 @@ namespace DLD.UIToolkit
 
 		void OnPointerMove(PointerMoveEvent e)
 		{
-			if (_showType == ShowType.FollowMouseCursor)
+			if (_showType is ShowType.FollowMouseCursor or ShowType.None)
 			{
 				this.SetPosition(e.position);
 			}

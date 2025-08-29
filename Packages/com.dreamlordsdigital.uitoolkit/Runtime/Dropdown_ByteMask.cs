@@ -148,11 +148,11 @@ namespace DLD.UIToolkit
 				// Get the long label and use it as the tooltip
 				if (currentByteValue > 0)
 				{
-					_toggle.userData = BaseIcons.GENERIC_INFO + ";" + GetByteMaskAsLabel(_dropdownItems, currentByteValue, DropdownCurrentValueDisplayType.Labels);
+					_enumValueTooltip.Text = GetByteMaskAsLabel(_dropdownItems, currentByteValue, DropdownCurrentValueDisplayType.Labels);
 				}
 				else
 				{
-					_toggle.userData = _labelToDisplayWhenNoneSelected;
+					_enumValueTooltip.Text = _labelToDisplayWhenNoneSelected;
 				}
 			}
 			else
