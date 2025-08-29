@@ -18,19 +18,14 @@ namespace DLD.Utility.Inspector.Editor
 				return;
 			}
 
-			string originalLabel = label.text;
-			string customLabel = _floatRangeAttribute.Label;
-			string startLabel = _floatRangeAttribute.StartLabel;
-			string startPostLabel = _floatRangeAttribute.StartPostLabel;
-			string endLabel = _floatRangeAttribute.EndLabel;
-			string endPostLabel = _floatRangeAttribute.EndPostLabel;
-			bool useAllAvailableSpace = _floatRangeAttribute.UseAllAvailableSpace;
-			DrawGUI(position, property, label, useAllAvailableSpace,
-				originalLabel, customLabel, startLabel, startPostLabel, endLabel, endPostLabel);
+			DrawGUI(position, property, label, _floatRangeAttribute.UseAllAvailableSpace,
+				label.text, _floatRangeAttribute.Label,
+				_floatRangeAttribute.LowerLimitLabel, _floatRangeAttribute.LowerLimitPostLabel,
+				_floatRangeAttribute.UpperLimitLabel, _floatRangeAttribute.UpperLimitPostLabel);
 		}
 
 		public static void DrawGUI(Rect position, SerializedProperty property, GUIContent label, bool useAllAvailableSpace,
-			string originalLabel, string customLabel, string startLabel, string startPostLabel, string endLabel, string endPostLabel)
+			string originalLabel, string customLabel, string lowerLimitLabel, string lowerLimitPostLabel, string upperLimitLabel, string upperLimitPostLabel)
 		{
 			// -----------------------
 			bool hasLabel = !string.IsNullOrWhiteSpace(customLabel);
@@ -52,52 +47,52 @@ namespace DLD.Utility.Inspector.Editor
 			}
 
 			// -----------------------
-			bool hasStartLabel = !string.IsNullOrWhiteSpace(startLabel);
+			bool hasLowerLimitLabel = !string.IsNullOrWhiteSpace(lowerLimitLabel);
 
-			Vector2 startLabelSize;
-			if (hasStartLabel)
+			Vector2 lowerLimitLabelSize;
+			if (hasLowerLimitLabel)
 			{
-				label.text = startLabel;
-				startLabelSize = EditorStyles.label.CalcSize(label);
+				label.text = lowerLimitLabel;
+				lowerLimitLabelSize = EditorStyles.label.CalcSize(label);
 			}
 			else
 			{
-				startLabelSize = Vector2.zero;
+				lowerLimitLabelSize = Vector2.zero;
 			}
 
 			// -----------------------
-			bool hasStartPostLabel = !string.IsNullOrWhiteSpace(startPostLabel);
+			bool hasLowerLimitPostLabel = !string.IsNullOrWhiteSpace(lowerLimitPostLabel);
 
-			Vector2 startPostLabelSize;
-			if (hasStartPostLabel)
+			Vector2 lowerLimitPostLabelSize;
+			if (hasLowerLimitPostLabel)
 			{
-				label.text = startPostLabel;
-				startPostLabelSize = EditorStyles.label.CalcSize(label);
+				label.text = lowerLimitPostLabel;
+				lowerLimitPostLabelSize = EditorStyles.label.CalcSize(label);
 			}
 			else
 			{
-				startPostLabelSize = Vector2.zero;
+				lowerLimitPostLabelSize = Vector2.zero;
 			}
 
 			// -----------------------
-			bool hasEndLabel = !string.IsNullOrWhiteSpace(endLabel);
+			bool hasUpperLimitLabel = !string.IsNullOrWhiteSpace(upperLimitLabel);
 
-			label.text = hasEndLabel ? endLabel : "to";
-			var endLabelSize = EditorStyles.label.CalcSize(label);
+			label.text = hasUpperLimitLabel ? upperLimitLabel : "to";
+			var upperLimitLabelSize = EditorStyles.label.CalcSize(label);
 
-			bool hasEndPostLabel = !string.IsNullOrWhiteSpace(endPostLabel);
-			Vector2 endPostLabelSize;
-			if (hasEndPostLabel)
+			bool hasUpperLimitPostLabel = !string.IsNullOrWhiteSpace(upperLimitPostLabel);
+			Vector2 upperLimitPostLabelSize;
+			if (hasUpperLimitPostLabel)
 			{
-				label.text = endPostLabel;
-				endPostLabelSize = EditorStyles.label.CalcSize(label);
+				label.text = upperLimitPostLabel;
+				upperLimitPostLabelSize = EditorStyles.label.CalcSize(label);
 			}
 			else
 			{
-				endPostLabelSize = Vector2.zero;
+				upperLimitPostLabelSize = Vector2.zero;
 			}
 
-			float allLabelsWidth = startLabelSize.x + startPostLabelSize.x + endLabelSize.x + endPostLabelSize.x;
+			float allLabelsWidth = lowerLimitLabelSize.x + lowerLimitPostLabelSize.x + upperLimitLabelSize.x + upperLimitPostLabelSize.x;
 
 			float inputFieldWidth;
 			if (useAllAvailableSpace)
@@ -112,17 +107,17 @@ namespace DLD.Utility.Inspector.Editor
 
 			// -----------------------
 
-			var startProperty = property.FindPropertyRelative(nameof(FloatRange.Start));
-			var endProperty = property.FindPropertyRelative(nameof(FloatRange.End));
+			var lowerLimitProperty = property.FindPropertyRelative(nameof(FloatRange.LowerLimit));
+			var upperLimitProperty = property.FindPropertyRelative(nameof(FloatRange.UpperLimit));
 
 			// -----------------------
 
-			const float SPACE_BETWEEN_START_AND_TO = 8;
+			const float SPACE_BETWEEN_LOWER_LIMIT_AND_TO = 8;
 			const float SPACE_BETWEEN_FIELD_AND_POST_LABEL = 2;
 
 			float end;
 
-			if (hasStartLabel)
+			if (hasLowerLimitLabel)
 			{
 				var labelRect = new Rect(position);
 				labelRect.width = labelSize.x;
@@ -131,45 +126,45 @@ namespace DLD.Utility.Inspector.Editor
 				label.text = hasLabel ? customLabel : originalLabel;
 				GUI.Label(indentedRect, label, EditorStyles.label);
 
-				var startRect = new Rect(position);
-				startRect.x = indentedRect.xMax;
-				startRect.width = startLabelSize.x + inputFieldWidth - SPACE_BETWEEN_START_AND_TO;
+				var lowerLimitRect = new Rect(position);
+				lowerLimitRect.x = indentedRect.xMax;
+				lowerLimitRect.width = lowerLimitLabelSize.x + inputFieldWidth - SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
 
-				EditorGUIUtility.labelWidth = startLabelSize.x + 3;
+				EditorGUIUtility.labelWidth = lowerLimitLabelSize.x + 3;
 
 				EditorGUI.indentLevel = 0;
-				label.text = startLabel;
-				EditorGUI.PropertyField(startRect, startProperty, label);
+				label.text = lowerLimitLabel;
+				EditorGUI.PropertyField(lowerLimitRect, lowerLimitProperty, label);
 
-				end = startRect.xMax;
+				end = lowerLimitRect.xMax;
 			}
 			else
 			{
-				var startRect = new Rect(position);
-				startRect.width = labelSize.x + inputFieldWidth - SPACE_BETWEEN_START_AND_TO;
+				var lowerLimitRect = new Rect(position);
+				lowerLimitRect.width = labelSize.x + inputFieldWidth - SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
 
 				label.text = hasLabel ? customLabel : originalLabel;
-				EditorGUI.PropertyField(startRect, startProperty, label);
+				EditorGUI.PropertyField(lowerLimitRect, lowerLimitProperty, label);
 
-				end = startRect.xMax;
+				end = lowerLimitRect.xMax;
 			}
 
 			// -----------------------
 
-			if (hasStartPostLabel)
+			if (hasLowerLimitPostLabel)
 			{
-				var startPostRect = new Rect(position);
-				startPostRect.x = end + SPACE_BETWEEN_FIELD_AND_POST_LABEL;
-				startPostRect.width = startPostLabelSize.x;
+				var lowerLimitPostRect = new Rect(position);
+				lowerLimitPostRect.x = end + SPACE_BETWEEN_FIELD_AND_POST_LABEL;
+				lowerLimitPostRect.width = lowerLimitPostLabelSize.x;
 
-				label.text = startPostLabel;
-				GUI.Label(startPostRect, label, EditorStyles.label);
+				label.text = lowerLimitPostLabel;
+				GUI.Label(lowerLimitPostRect, label, EditorStyles.label);
 
-				end = startPostRect.xMax;
+				end = lowerLimitPostRect.xMax;
 			}
 			else
 			{
-				end += SPACE_BETWEEN_START_AND_TO;
+				end += SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
 			}
 
 			// -----------------------
@@ -177,27 +172,27 @@ namespace DLD.Utility.Inspector.Editor
 			int prevIndentLevel = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
 
-			var endRect = new Rect(position);
-			endRect.x = end;
-			endRect.width = endLabelSize.x + inputFieldWidth - SPACE_BETWEEN_START_AND_TO;
+			var upperLimitRect = new Rect(position);
+			upperLimitRect.x = end;
+			upperLimitRect.width = upperLimitLabelSize.x + inputFieldWidth - SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
 
-			EditorGUIUtility.labelWidth = endLabelSize.x + 3;
+			EditorGUIUtility.labelWidth = upperLimitLabelSize.x + 3;
 
-			label.text = hasEndLabel ? endLabel : "to";
-			EditorGUI.PropertyField(endRect, endProperty, label);
+			label.text = hasUpperLimitLabel ? upperLimitLabel : "to";
+			EditorGUI.PropertyField(upperLimitRect, upperLimitProperty, label);
 
 			EditorGUI.indentLevel = prevIndentLevel;
 
 			// -----------------------
 
-			if (hasEndPostLabel)
+			if (hasUpperLimitPostLabel)
 			{
-				var endPostLabelRect = new Rect(position);
-				endPostLabelRect.x = endRect.xMax + SPACE_BETWEEN_FIELD_AND_POST_LABEL;
-				endPostLabelRect.width = endPostLabelSize.x;
+				var upperLimitPostLabelRect = new Rect(position);
+				upperLimitPostLabelRect.x = upperLimitRect.xMax + SPACE_BETWEEN_FIELD_AND_POST_LABEL;
+				upperLimitPostLabelRect.width = upperLimitPostLabelSize.x;
 
-				label.text = endPostLabel;
-				GUI.Label(endPostLabelRect, label, EditorStyles.label);
+				label.text = upperLimitPostLabel;
+				GUI.Label(upperLimitPostLabelRect, label, EditorStyles.label);
 			}
 		}
 	}

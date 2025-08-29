@@ -18,34 +18,34 @@ namespace DLD.Utility
 		/// <summary>
 		/// The inclusive lower limit to the range.
 		/// </summary>
-		public float Start;
+		public float LowerLimit;
 
 		/// <summary>
 		/// The inclusive upper limit to the range.
 		/// </summary>
-		public float End;
+		public float UpperLimit;
 
-		public FloatRange(float start, float end)
+		public FloatRange(float lower, float upper)
 		{
-			Start = start;
-			End = end;
+			LowerLimit = lower;
+			UpperLimit = upper;
 		}
 
 		public bool IsWithinLimit(float value)
 		{
-			return value >= Start && value <= End;
+			return value >= LowerLimit && value <= UpperLimit;
 		}
 
 		public bool IsOutsideLimit(float value)
 		{
-			return value < Start || value > End;
+			return value < LowerLimit || value > UpperLimit;
 		}
 
-		public bool IsZero => Mathf.Abs(Start) < float.Epsilon && Mathf.Abs(End) < float.Epsilon;
+		public bool IsZero => Mathf.Abs(LowerLimit) < float.Epsilon && Mathf.Abs(UpperLimit) < float.Epsilon;
 
-		public bool IsLowerAndUpperLimitSame => Mathf.Approximately(Start, End);
+		public bool IsLowerAndUpperLimitSame => Mathf.Approximately(LowerLimit, UpperLimit);
 
-		public bool IsLowerAndUpperLimitSameAndPositive => Mathf.Approximately(Start, End) && Start > 0;
+		public bool IsLowerAndUpperLimitSameAndPositive => Mathf.Approximately(LowerLimit, UpperLimit) && LowerLimit > 0;
 
 		/// <summary>
 		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
@@ -53,7 +53,7 @@ namespace DLD.Utility
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Random()
 		{
-			return UnityEngine.Random.Range(Start, End);
+			return UnityEngine.Random.Range(LowerLimit, UpperLimit);
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace DLD.Utility
 		/// </summary>
 		public float Random(System.Random random)
 		{
-			return Start + ((float)NextDoubleInclusive(random) * (End - Start));
+			return LowerLimit + ((float)NextDoubleInclusive(random) * (UpperLimit - LowerLimit));
 		}
 
 		/// <summary>Returns a random floating-point number that is greater than or equal to 0.0,
@@ -76,7 +76,7 @@ namespace DLD.Utility
 
 		public static bool operator ==(FloatRange a, FloatRange b)
 		{
-			return Mathf.Approximately(a.Start, b.Start) && Mathf.Approximately(a.End, b.End);
+			return Mathf.Approximately(a.LowerLimit, b.LowerLimit) && Mathf.Approximately(a.UpperLimit, b.UpperLimit);
 		}
 
 		public static bool operator !=(FloatRange a, FloatRange b)
@@ -91,73 +91,73 @@ namespace DLD.Utility
 				return false;
 			}
 
-			return Mathf.Approximately(Start, other.Start) && Mathf.Approximately(End, other.End);
+			return Mathf.Approximately(LowerLimit, other.LowerLimit) && Mathf.Approximately(UpperLimit, other.UpperLimit);
 		}
 
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(Start, End);
+			return HashCode.Combine(LowerLimit, UpperLimit);
 		}
 
 		public bool Equals(FloatRange other)
 		{
-			return Mathf.Approximately(Start, other.Start) && Mathf.Approximately(End, other.End);
+			return Mathf.Approximately(LowerLimit, other.LowerLimit) && Mathf.Approximately(UpperLimit, other.UpperLimit);
 		}
 
 		public string ToString(string format)
 		{
-			return Mathf.Approximately(Start, End)
-				? Start.ToString(format)
-				: $"{Start.ToString(format)} to {End.ToString(format)}";
+			return Mathf.Approximately(LowerLimit, UpperLimit)
+				? LowerLimit.ToString(format)
+				: $"{LowerLimit.ToString(format)} to {UpperLimit.ToString(format)}";
 		}
 
 		public string ToString(int offset, string format = "N0")
 		{
-			return Mathf.Approximately(Start, End)
-				? (Start + offset).ToString(format)
-				: $"{(Start + offset).ToString(format)} to {(End + offset).ToString(format)}";
+			return Mathf.Approximately(LowerLimit, UpperLimit)
+				? (LowerLimit + offset).ToString(format)
+				: $"{(LowerLimit + offset).ToString(format)} to {(UpperLimit + offset).ToString(format)}";
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Lerp(float t)
 		{
-			return Mathf.Lerp(Start, End, t);
+			return Mathf.Lerp(LowerLimit, UpperLimit, t);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float LerpUnclamped(float t)
 		{
-			return Mathf.LerpUnclamped(Start, End, t);
+			return Mathf.LerpUnclamped(LowerLimit, UpperLimit, t);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float InverseLerp(float v)
 		{
-			return Mathf.InverseLerp(Start, End, v);
+			return Mathf.InverseLerp(LowerLimit, UpperLimit, v);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Clamp(float v)
 		{
-			return Mathf.Clamp(v, Start, End);
+			return Mathf.Clamp(v, LowerLimit, UpperLimit);
 		}
 
 		public static FloatRange operator +(FloatRange a, FloatRange b) =>
-			new FloatRange(a.Start + b.Start, a.End + b.End);
+			new FloatRange(a.LowerLimit + b.LowerLimit, a.UpperLimit + b.UpperLimit);
 
 		public static FloatRange operator +(FloatRange a, int offset) =>
-			new FloatRange(a.Start + offset, a.End + offset);
+			new FloatRange(a.LowerLimit + offset, a.UpperLimit + offset);
 
 		public static FloatRange operator +(FloatRange a, float offset) =>
-			new FloatRange(a.Start + offset, a.End + offset);
+			new FloatRange(a.LowerLimit + offset, a.UpperLimit + offset);
 
 		public static FloatRange operator -(FloatRange a, FloatRange b) =>
-			new FloatRange(a.Start - b.Start, a.End - b.End);
+			new FloatRange(a.LowerLimit - b.LowerLimit, a.UpperLimit - b.UpperLimit);
 
 		public static FloatRange operator -(FloatRange a, int offset) =>
-			new FloatRange(a.Start - offset, a.End - offset);
+			new FloatRange(a.LowerLimit - offset, a.UpperLimit - offset);
 
 		public static FloatRange operator -(FloatRange a, float offset) =>
-			new FloatRange(a.Start - offset, a.End - offset);
+			new FloatRange(a.LowerLimit - offset, a.UpperLimit - offset);
 	}
 }

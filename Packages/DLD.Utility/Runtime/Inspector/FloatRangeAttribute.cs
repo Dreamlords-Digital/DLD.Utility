@@ -20,85 +20,85 @@ namespace DLD.Utility.Inspector
 		/// <summary>
 		/// Optional label just before the Range Start's input field.
 		/// </summary>
-		public readonly string StartLabel;
+		public readonly string LowerLimitLabel;
 
 		/// <summary>
 		/// Optional label to the right of the Range Start's input field.
 		/// </summary>
-		public readonly string StartPostLabel;
+		public readonly string LowerLimitPostLabel;
 
 		/// <summary>
 		/// Optional label just before the Range End's input field.
 		/// </summary>
-		public readonly string EndLabel;
+		public readonly string UpperLimitLabel;
 
 		/// <summary>
 		/// Optional label to the right of the Range End's input field.
 		/// </summary>
-		public readonly string EndPostLabel;
+		public readonly string UpperLimitPostLabel;
 
 		/// <summary>
 		/// Make the control use all the available width, instead of lining up with other controls.
 		/// </summary>
 		public readonly bool UseAllAvailableSpace;
 
-		public readonly float StartMin;
-		public readonly float StartMax;
+		public readonly float LowerLimitMin;
+		public readonly float LowerLimitMax;
 
-		public readonly float EndMin;
-		public readonly float EndMax;
+		public readonly float UpperLimitMin;
+		public readonly float UpperLimitMax;
 
 		public FloatRangeAttribute()
 		{
 			Label = null;
-			StartLabel = null;
-			StartPostLabel = null;
-			EndLabel = null;
-			EndPostLabel = null;
+			LowerLimitLabel = null;
+			LowerLimitPostLabel = null;
+			UpperLimitLabel = null;
+			UpperLimitPostLabel = null;
 
 			UseAllAvailableSpace = false;
 
-			StartMin = float.MinValue;
-			StartMax = float.MaxValue;
+			LowerLimitMin = float.MinValue;
+			LowerLimitMax = float.MaxValue;
 
-			EndMin = float.MinValue;
-			EndMax = float.MaxValue;
+			UpperLimitMin = float.MinValue;
+			UpperLimitMax = float.MaxValue;
 		}
 
-		public FloatRangeAttribute(string startLabel, string endLabel, bool useAllAvailableSpace = false,
-			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
+		public FloatRangeAttribute(string lowerLimitLabel, string upperLimitLabel, bool useAllAvailableSpace = false,
+			float lowerLimitMin = float.MinValue, float lowerLimitMax = float.MaxValue, float upperLimitMin = float.MinValue, float upperLimitMax = float.MaxValue)
 		{
 			Label = null;
-			StartLabel = startLabel;
-			StartPostLabel = null;
-			EndLabel = endLabel;
-			EndPostLabel = null;
+			LowerLimitLabel = lowerLimitLabel;
+			LowerLimitPostLabel = null;
+			UpperLimitLabel = upperLimitLabel;
+			UpperLimitPostLabel = null;
 
 			UseAllAvailableSpace = useAllAvailableSpace;
 
-			StartMin = startMin;
-			StartMax = startMax;
+			LowerLimitMin = lowerLimitMin;
+			LowerLimitMax = lowerLimitMax;
 
-			EndMin = endMin;
-			EndMax = endMax;
+			UpperLimitMin = upperLimitMin;
+			UpperLimitMax = upperLimitMax;
 		}
 
-		public FloatRangeAttribute(string label = null, string startLabel = null, string startPostLabel = null, string endLabel = null, string endPostLabel = null, bool useAllAvailableSpace = false,
-			float startMin = float.MinValue, float startMax = float.MaxValue, float endMin = float.MinValue, float endMax = float.MaxValue)
+		public FloatRangeAttribute(string label = null, string lowerLimitLabel = null, string lowerLimitPostLabel = null, string upperLimitLabel = null, string upperLimitPostLabel = null, bool useAllAvailableSpace = false,
+			float lowerLimitMin = float.MinValue, float lowerLimitMax = float.MaxValue, float upperLimitMin = float.MinValue, float upperLimitMax = float.MaxValue)
 		{
 			Label = label;
-			StartLabel = startLabel;
-			StartPostLabel = startPostLabel;
-			EndLabel = endLabel;
-			EndPostLabel = endPostLabel;
+			LowerLimitLabel = lowerLimitLabel;
+			LowerLimitPostLabel = lowerLimitPostLabel;
+			UpperLimitLabel = upperLimitLabel;
+			UpperLimitPostLabel = upperLimitPostLabel;
 
 			UseAllAvailableSpace = useAllAvailableSpace;
 
-			StartMin = startMin;
-			StartMax = startMax;
+			LowerLimitMin = lowerLimitMin;
+			LowerLimitMax = lowerLimitMax;
 
-			EndMin = endMin;
-			EndMax = endMax;
+			UpperLimitMin = upperLimitMin;
+			UpperLimitMax = upperLimitMax;
 		}
 	}
 }
