@@ -1,6 +1,7 @@
 ﻿// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using System;
+using UnityEngine;
 
 namespace DLD.Utility
 {
@@ -8,6 +9,7 @@ namespace DLD.Utility
 	/// Used to express an inclusive range for an int value.
 	/// </summary>
 	/// <remarks>
+	/// Primarily intended for expressing damage ranges in games.
 	/// Has optional validation methods to prevent Lower Limit from going above Upper Limit.
 	/// </remarks>
 	public struct IntRange : IEquatable<IntRange>
@@ -225,6 +227,41 @@ namespace DLD.Utility
 			return random.Next(LowerLimit, UpperLimit+1);
 		}
 
+		public float Lerp(float t)
+		{
+			return Mathf.Lerp(LowerLimit, UpperLimit, t);
+		}
+
+		public float LerpUnclamped(float t)
+		{
+			return Mathf.LerpUnclamped(LowerLimit, UpperLimit, t);
+		}
+
+		public float InverseLerp(float v)
+		{
+			return Mathf.InverseLerp(LowerLimit, UpperLimit, v);
+		}
+
+		public float Clamp(float v)
+		{
+			return Mathf.Clamp(v, LowerLimit, UpperLimit);
+		}
+
+		public int Clamp(int v)
+		{
+			if (v < LowerLimit)
+			{
+				return LowerLimit;
+			}
+
+			if (v > UpperLimit)
+			{
+				return UpperLimit;
+			}
+
+			return v;
+		}
+
 		public static bool operator ==(IntRange a, IntRange b)
 		{
 			return (a.UpperLimit == b.UpperLimit) && (a.LowerLimit == b.LowerLimit);
@@ -237,7 +274,7 @@ namespace DLD.Utility
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is IntRange other))
+			if (obj is not IntRange other)
 			{
 				return false;
 			}
