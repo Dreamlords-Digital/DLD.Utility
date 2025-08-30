@@ -20,22 +20,22 @@ namespace DLD.Utility.Inspector
 		/// <summary>
 		/// Optional label just before the Range Start's input field.
 		/// </summary>
-		public readonly string LowerLimitLabel;
+		public readonly string MinLabel;
 
 		/// <summary>
 		/// Optional label to the right of the Range Start's input field.
 		/// </summary>
-		public readonly string LowerLimitPostLabel;
+		public readonly string MinPostLabel;
 
 		/// <summary>
 		/// Optional label just before the Range End's input field.
 		/// </summary>
-		public readonly string UpperLimitLabel;
+		public readonly string MaxLabel;
 
 		/// <summary>
 		/// Optional label to the right of the Range End's input field.
 		/// </summary>
-		public readonly string UpperLimitPostLabel;
+		public readonly string MaxPostLabel;
 
 		/// <summary>
 		/// Make the control use all the available width, instead of lining up with other controls.
@@ -51,10 +51,10 @@ namespace DLD.Utility.Inspector
 		public FloatRangeAttribute()
 		{
 			Label = null;
-			LowerLimitLabel = null;
-			LowerLimitPostLabel = null;
-			UpperLimitLabel = null;
-			UpperLimitPostLabel = null;
+			MinLabel = null;
+			MinPostLabel = null;
+			MaxLabel = null;
+			MaxPostLabel = null;
 
 			UseAllAvailableSpace = false;
 
@@ -65,14 +65,14 @@ namespace DLD.Utility.Inspector
 			UpperLimitMax = float.MaxValue;
 		}
 
-		public FloatRangeAttribute(string lowerLimitLabel, string upperLimitLabel, bool useAllAvailableSpace = false,
+		public FloatRangeAttribute(string minLabel, string maxLabel, bool useAllAvailableSpace = false,
 			float lowerLimitMin = float.MinValue, float lowerLimitMax = float.MaxValue, float upperLimitMin = float.MinValue, float upperLimitMax = float.MaxValue)
 		{
 			Label = null;
-			LowerLimitLabel = lowerLimitLabel;
-			LowerLimitPostLabel = null;
-			UpperLimitLabel = upperLimitLabel;
-			UpperLimitPostLabel = null;
+			MinLabel = minLabel;
+			MinPostLabel = null;
+			MaxLabel = maxLabel;
+			MaxPostLabel = null;
 
 			UseAllAvailableSpace = useAllAvailableSpace;
 
@@ -83,14 +83,14 @@ namespace DLD.Utility.Inspector
 			UpperLimitMax = upperLimitMax;
 		}
 
-		public FloatRangeAttribute(string label = null, string lowerLimitLabel = null, string lowerLimitPostLabel = null, string upperLimitLabel = null, string upperLimitPostLabel = null, bool useAllAvailableSpace = false,
+		public FloatRangeAttribute(string label = null, string minLabel = null, string minPostLabel = null, string maxLabel = null, string maxPostLabel = null, bool useAllAvailableSpace = false,
 			float lowerLimitMin = float.MinValue, float lowerLimitMax = float.MaxValue, float upperLimitMin = float.MinValue, float upperLimitMax = float.MaxValue)
 		{
 			Label = label;
-			LowerLimitLabel = lowerLimitLabel;
-			LowerLimitPostLabel = lowerLimitPostLabel;
-			UpperLimitLabel = upperLimitLabel;
-			UpperLimitPostLabel = upperLimitPostLabel;
+			MinLabel = minLabel;
+			MinPostLabel = minPostLabel;
+			MaxLabel = maxLabel;
+			MaxPostLabel = maxPostLabel;
 
 			UseAllAvailableSpace = useAllAvailableSpace;
 

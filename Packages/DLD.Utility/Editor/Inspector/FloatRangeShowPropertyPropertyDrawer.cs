@@ -15,7 +15,7 @@ namespace DLD.Utility.Inspector.Editor
 			_rangeShowIf ??= attribute as FloatRangeShowPropertyAttribute;
 			if (_rangeShowIf == null)
 			{
-				return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.LowerLimit)), label);
+				return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Min)), label);
 			}
 
 			bool show = Utility.GetPropertyReturnValue<bool>(property, _rangeShowIf.PropertyName);
@@ -25,7 +25,7 @@ namespace DLD.Utility.Inspector.Editor
 				return -EditorGUIUtility.standardVerticalSpacing;
 			}
 
-			return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.LowerLimit)), label);
+			return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Min)), label);
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

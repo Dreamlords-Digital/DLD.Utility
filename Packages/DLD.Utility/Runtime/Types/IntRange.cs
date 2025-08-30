@@ -12,35 +12,36 @@ namespace DLD.Utility
 	/// Used to express an inclusive range for an int value.
 	/// </summary>
 	/// <remarks>
-	/// Primarily intended for expressing damage ranges in games.
+	/// Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
 	/// Has optional validation methods to prevent Lower Limit from going above Upper Limit.
 	/// </remarks>
+	[Serializable]
 	public struct IntRange : IEquatable<IntRange>
 	{
 		/// <summary>
 		/// The inclusive lower limit to the range.
 		/// </summary>
-		public int LowerLimit;
+		public int Min;
 
 		/// <summary>
 		/// The inclusive upper limit to the range.
 		/// </summary>
-		public int UpperLimit;
+		public int Max;
 
-		public IntRange(int lowerLimit, int upperLimit, bool allowSameValues = false)
+		public IntRange(int min, int max, bool allowSameValues = false)
 		{
-			LowerLimit = lowerLimit;
-			UpperLimit = upperLimit;
-			LowerLimit = ValidateLowerLimit(LowerLimit, allowSameValues);
-			UpperLimit = ValidateUpperLimit(UpperLimit, allowSameValues);
+			Min = min;
+			Max = max;
+			Min = ValidateMin(Min, allowSameValues);
+			Max = ValidateMax(Max, allowSameValues);
 		}
 
 		public IntRange(int singleNumber)
 		{
-			LowerLimit = singleNumber;
-			UpperLimit = singleNumber;
-			LowerLimit = ValidateLowerLimit(LowerLimit, true);
-			UpperLimit = ValidateUpperLimit(UpperLimit, true);
+			Min = singleNumber;
+			Max = singleNumber;
+			Min = ValidateMin(Min, true);
+			Max = ValidateMax(Max, true);
 		}
 
 		/// <summary>
@@ -52,64 +53,64 @@ namespace DLD.Utility
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetLimit(IntRange value, bool validate = true, bool allowSameValues = false)
 		{
-			LowerLimit = value.LowerLimit;
-			UpperLimit = value.UpperLimit;
+			Min = value.Min;
+			Max = value.Max;
 
 			if (validate)
 			{
-				LowerLimit = ValidateLowerLimit(LowerLimit, allowSameValues);
-				UpperLimit = ValidateUpperLimit(UpperLimit, allowSameValues);
+				Min = ValidateMin(Min, allowSameValues);
+				Max = ValidateMax(Max, allowSameValues);
 			}
 		}
 
 		/// <summary>
 		/// Sets a limit that a value can reach.
 		/// </summary>
-		/// <param name="lowerLimit"></param>
-		/// <param name="upperLimit"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
 		/// <param name="validate">Do not allow Lower Limit to be higher than the Upper Limit,
 		/// and do not allow Upper Limit to be lower than the Lower Limit.</param>
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
-		public void SetLimit(int lowerLimit, int upperLimit, bool validate = true, bool allowSameValues = false)
+		public void SetLimit(int min, int max, bool validate = true, bool allowSameValues = false)
 		{
-			LowerLimit = lowerLimit;
-			UpperLimit = upperLimit;
+			Min = min;
+			Max = max;
 
 			if (validate)
 			{
-				LowerLimit = ValidateLowerLimit(lowerLimit, allowSameValues);
-				UpperLimit = ValidateUpperLimit(upperLimit, allowSameValues);
+				Min = ValidateMin(min, allowSameValues);
+				Max = ValidateMax(max, allowSameValues);
 			}
 		}
 
 		/// <summary>
 		/// Sets the Upper Limit that a value can reach.
 		/// </summary>
-		/// <param name="newUpperLimit"></param>
+		/// <param name="newMax"></param>
 		/// <param name="validate">Do not allow Upper Limit to become lower than the current Lower Limit.</param>
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
-		public void SetUpperLimit(int newUpperLimit, bool validate = true, bool allowSameValues = false)
+		public void SetMax(int newMax, bool validate = true, bool allowSameValues = false)
 		{
-			UpperLimit = validate ? ValidateUpperLimit(newUpperLimit, allowSameValues) : newUpperLimit;
+			Max = validate ? ValidateMax(newMax, allowSameValues) : newMax;
 		}
 
 		/// <summary>
 		/// Sets the Lower Limit that a value can drop to.
 		/// </summary>
-		/// <param name="newLowerLimit"></param>
+		/// <param name="newMin"></param>
 		/// <param name="validate">Do not allow Lower Limit to become higher than the current Upper Limit.</param>
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
-		public void SetLowerLimit(int newLowerLimit, bool validate = true, bool allowSameValues = false)
+		public void SetMin(int newMin, bool validate = true, bool allowSameValues = false)
 		{
-			LowerLimit = validate ? ValidateLowerLimit(newLowerLimit, allowSameValues) : newLowerLimit;
+			Min = validate ? ValidateMin(newMin, allowSameValues) : newMin;
 		}
 
 		/// <summary>
 		/// Modify an upper limit by moving it via an offset from current upper limit.
 		/// </summary>
-		public void ModifyUpperLimit(int offsetToUpperLimit, bool allowSameValues = false)
+		public void ModifyMax(int offsetToUpperLimit, bool allowSameValues = false)
 		{
-			UpperLimit = ValidateUpperLimit(UpperLimit + offsetToUpperLimit, allowSameValues);
+			Max = ValidateMax(Max + offsetToUpperLimit, allowSameValues);
 		}
 
 		/// <summary>
@@ -117,25 +118,25 @@ namespace DLD.Utility
 		/// </summary>
 		public void ModifyLowerLimit(int offsetToLowerLimit, bool allowSameValues = false)
 		{
-			LowerLimit = ValidateLowerLimit(LowerLimit + offsetToLowerLimit, allowSameValues);
+			Min = ValidateMin(Min + offsetToLowerLimit, allowSameValues);
 		}
 
-		int ValidateUpperLimit(int value, bool allowSameValues = false)
+		int ValidateMax(int value, bool allowSameValues = false)
 		{
 			int newUpperLimit = value;
 
 			if (allowSameValues)
 			{
-				if (newUpperLimit < LowerLimit)
+				if (newUpperLimit < Min)
 				{
-					newUpperLimit = LowerLimit;
+					newUpperLimit = Min;
 				}
 			}
 			else
 			{
-				if (newUpperLimit <= LowerLimit)
+				if (newUpperLimit <= Min)
 				{
-					newUpperLimit = LowerLimit + 1;
+					newUpperLimit = Min + 1;
 				}
 			}
 
@@ -143,22 +144,22 @@ namespace DLD.Utility
 			return newUpperLimit;
 		}
 
-		int ValidateLowerLimit(int value, bool allowSameValues = false)
+		int ValidateMin(int value, bool allowSameValues = false)
 		{
 			int newLowerLimit = value;
 
 			if (allowSameValues)
 			{
-				if (newLowerLimit > UpperLimit)
+				if (newLowerLimit > Max)
 				{
-					newLowerLimit = UpperLimit;
+					newLowerLimit = Max;
 				}
 			}
 			else
 			{
-				if (newLowerLimit >= UpperLimit)
+				if (newLowerLimit >= Max)
 				{
-					newLowerLimit = UpperLimit - 1;
+					newLowerLimit = Max - 1;
 				}
 			}
 
@@ -167,7 +168,7 @@ namespace DLD.Utility
 
 		public void DisallowNonPositiveValues(bool allowSameValues = false)
 		{
-			if (UpperLimit < 1)
+			if (Max < 1)
 			{
 				// We're about to set Upper Limit to 1,
 				// which necessitates setting the Lower Limit to 1 as well (1 to 1),
@@ -179,47 +180,47 @@ namespace DLD.Utility
 
 				if (allowSameValues)
 				{
-					LowerLimit = 1;
-					UpperLimit = 1;
+					Min = 1;
+					Max = 1;
 				}
 				else
 				{
-					LowerLimit = 1;
-					UpperLimit = 2;
+					Min = 1;
+					Max = 2;
 				}
 			}
-			else if (LowerLimit < 1)
+			else if (Min < 1)
 			{
-				LowerLimit = 1;
-				if (UpperLimit == 1 && !allowSameValues)
+				Min = 1;
+				if (Max == 1 && !allowSameValues)
 				{
-					UpperLimit = 2;
+					Max = 2;
 				}
 			}
 		}
 
-		public bool IsWithinLimit(int value)
+		public bool IsWithinRange(int value)
 		{
-			return value >= LowerLimit && value <= UpperLimit;
+			return value >= Min && value <= Max;
 		}
 
-		public bool IsOutsideLimit(int value)
+		public bool IsOutsideRange(int value)
 		{
-			return value < LowerLimit || value > UpperLimit;
+			return value < Min || value > Max;
 		}
 
-		public bool IsZero => LowerLimit == 0 && UpperLimit == 0;
+		public bool IsZero => Min == 0 && Max == 0;
 
-		public bool IsLowerAndUpperLimitSame => LowerLimit == UpperLimit;
+		public bool IsMinAndMaxSame => Min == Max;
 
-		public bool IsLowerAndUpperLimitSameAndPositive => LowerLimit == UpperLimit && LowerLimit > 0;
+		public bool IsMinAndMaxSameAndPositive => Min == Max && Min > 0;
 
 		/// <summary>
 		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
 		/// </summary>
 		public int Random()
 		{
-			return UnityEngine.Random.Range(LowerLimit, UpperLimit+1);
+			return UnityEngine.Random.Range(Min, Max+1);
 		}
 
 		/// <summary>
@@ -227,39 +228,39 @@ namespace DLD.Utility
 		/// </summary>
 		public int Random(System.Random random)
 		{
-			return random.Next(LowerLimit, UpperLimit+1);
+			return random.Next(Min, Max+1);
 		}
 
 		public float Lerp(float t)
 		{
-			return Mathf.Lerp(LowerLimit, UpperLimit, t);
+			return Mathf.Lerp(Min, Max, t);
 		}
 
 		public float LerpUnclamped(float t)
 		{
-			return Mathf.LerpUnclamped(LowerLimit, UpperLimit, t);
+			return Mathf.LerpUnclamped(Min, Max, t);
 		}
 
 		public float InverseLerp(float v)
 		{
-			return Mathf.InverseLerp(LowerLimit, UpperLimit, v);
+			return Mathf.InverseLerp(Min, Max, v);
 		}
 
 		public float Clamp(float v)
 		{
-			return Mathf.Clamp(v, LowerLimit, UpperLimit);
+			return Mathf.Clamp(v, Min, Max);
 		}
 
 		public int Clamp(int v)
 		{
-			if (v < LowerLimit)
+			if (v < Min)
 			{
-				return LowerLimit;
+				return Min;
 			}
 
-			if (v > UpperLimit)
+			if (v > Max)
 			{
-				return UpperLimit;
+				return Max;
 			}
 
 			return v;
@@ -267,7 +268,7 @@ namespace DLD.Utility
 
 		public static bool operator ==(IntRange a, IntRange b)
 		{
-			return (a.UpperLimit == b.UpperLimit) && (a.LowerLimit == b.LowerLimit);
+			return (a.Max == b.Max) && (a.Min == b.Min);
 		}
 
 		public static bool operator !=(IntRange a, IntRange b)
@@ -282,39 +283,39 @@ namespace DLD.Utility
 				return false;
 			}
 
-			return UpperLimit == other.UpperLimit && LowerLimit == other.LowerLimit;
+			return Max == other.Max && Min == other.Min;
 		}
 
 		public bool Equals(IntRange other)
 		{
-			return LowerLimit == other.LowerLimit && UpperLimit == other.UpperLimit;
+			return Min == other.Min && Max == other.Max;
 		}
 
 		public override int GetHashCode()
 		{
-			int l = (LowerLimit << 16) | (LowerLimit >> 16);
-			return UpperLimit ^ l;
+			int l = (Min << 16) | (Min >> 16);
+			return Max ^ l;
 		}
 
 		public override string ToString()
 		{
-			return LowerLimit == UpperLimit
-				? LowerLimit.ToString()
-				: $"{LowerLimit.ToString()} to {UpperLimit.ToString()}";
+			return Min == Max
+				? Min.ToString()
+				: $"{Min.ToString()} to {Max.ToString()}";
 		}
 
 		public string ToString(string format)
 		{
-			return LowerLimit == UpperLimit
-				? LowerLimit.ToString(format)
-				: $"{LowerLimit.ToString(format)} to {UpperLimit.ToString(format)}";
+			return Min == Max
+				? Min.ToString(format)
+				: $"{Min.ToString(format)} to {Max.ToString(format)}";
 		}
 
 		public string ToString(int offset, string format = "N0")
 		{
-			return LowerLimit == UpperLimit
-				? (LowerLimit + offset).ToString(format)
-				: $"{(LowerLimit + offset).ToString(format)} to {(UpperLimit + offset).ToString(format)}";
+			return Min == Max
+				? (Min + offset).ToString(format)
+				: $"{(Min + offset).ToString(format)} to {(Max + offset).ToString(format)}";
 		}
 
 		/// <summary>
@@ -333,20 +334,20 @@ namespace DLD.Utility
 		public static IntRange One => new IntRange(1, 1, true);
 
 		public static IntRange operator +(IntRange a, IntRange b) =>
-			new IntRange(a.LowerLimit + b.LowerLimit, a.UpperLimit + b.UpperLimit, true);
+			new IntRange(a.Min + b.Min, a.Max + b.Max, true);
 
 		public static IntRange operator +(IntRange a, int offset) =>
-			new IntRange(a.LowerLimit + offset, a.UpperLimit + offset, true);
+			new IntRange(a.Min + offset, a.Max + offset, true);
 
 		public static IntRange operator -(IntRange a, IntRange b) =>
-			new IntRange(a.LowerLimit - b.LowerLimit, a.UpperLimit - b.UpperLimit, true);
+			new IntRange(a.Min - b.Min, a.Max - b.Max, true);
 
 		public static IntRange operator -(IntRange a, int offset) =>
-			new IntRange(a.LowerLimit - offset, a.UpperLimit - offset, true);
+			new IntRange(a.Min - offset, a.Max - offset, true);
 
 #if DLD_UTILITY_UNITY_MATHS_AVAILABLE
 		public static implicit operator IntRange(int2 i) => new(i.x, i.y);
-		public static implicit operator int2(IntRange intRange) => new(intRange.LowerLimit, intRange.UpperLimit);
+		public static implicit operator int2(IntRange intRange) => new(intRange.Min, intRange.Max);
 #endif
 	}
 }

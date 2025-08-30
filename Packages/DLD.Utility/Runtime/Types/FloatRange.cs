@@ -13,7 +13,7 @@ namespace DLD.Utility
 	/// Used to express an inclusive range for a float value.
 	/// </summary>
 	/// <remarks>
-	/// Primarily intended for expressing damage ranges in games.
+	/// Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
 	/// </remarks>
 	[Serializable]
 	public struct FloatRange : IEquatable<FloatRange>
@@ -21,34 +21,34 @@ namespace DLD.Utility
 		/// <summary>
 		/// The inclusive lower limit to the range.
 		/// </summary>
-		public float LowerLimit;
+		public float Min;
 
 		/// <summary>
 		/// The inclusive upper limit to the range.
 		/// </summary>
-		public float UpperLimit;
+		public float Max;
 
 		public FloatRange(float lower, float upper)
 		{
-			LowerLimit = lower;
-			UpperLimit = upper;
+			Min = lower;
+			Max = upper;
 		}
 
-		public bool IsWithinLimit(float value)
+		public bool IsWithinRange(float value)
 		{
-			return value >= LowerLimit && value <= UpperLimit;
+			return value >= Min && value <= Max;
 		}
 
-		public bool IsOutsideLimit(float value)
+		public bool IsOutsideRange(float value)
 		{
-			return value < LowerLimit || value > UpperLimit;
+			return value < Min || value > Max;
 		}
 
-		public bool IsZero => Mathf.Abs(LowerLimit) < float.Epsilon && Mathf.Abs(UpperLimit) < float.Epsilon;
+		public bool IsZero => Mathf.Abs(Min) < float.Epsilon && Mathf.Abs(Max) < float.Epsilon;
 
-		public bool IsLowerAndUpperLimitSame => Mathf.Approximately(LowerLimit, UpperLimit);
+		public bool IsMinAndMaxSame => Mathf.Approximately(Min, Max);
 
-		public bool IsLowerAndUpperLimitSameAndPositive => Mathf.Approximately(LowerLimit, UpperLimit) && LowerLimit > 0;
+		public bool IsMinAndMaxSameAndPositive => Mathf.Approximately(Min, Max) && Min > 0;
 
 		/// <summary>
 		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
@@ -56,7 +56,7 @@ namespace DLD.Utility
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Random()
 		{
-			return UnityEngine.Random.Range(LowerLimit, UpperLimit);
+			return UnityEngine.Random.Range(Min, Max);
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace DLD.Utility
 		/// </summary>
 		public float Random(System.Random random)
 		{
-			return LowerLimit + ((float)NextDoubleInclusive(random) * (UpperLimit - LowerLimit));
+			return Min + ((float)NextDoubleInclusive(random) * (Max - Min));
 		}
 
 		/// <summary>Returns a random floating-point number that is greater than or equal to 0.0,
@@ -79,7 +79,7 @@ namespace DLD.Utility
 
 		public static bool operator ==(FloatRange a, FloatRange b)
 		{
-			return Mathf.Approximately(a.LowerLimit, b.LowerLimit) && Mathf.Approximately(a.UpperLimit, b.UpperLimit);
+			return Mathf.Approximately(a.Min, b.Min) && Mathf.Approximately(a.Max, b.Max);
 		}
 
 		public static bool operator !=(FloatRange a, FloatRange b)
@@ -94,78 +94,78 @@ namespace DLD.Utility
 				return false;
 			}
 
-			return Mathf.Approximately(LowerLimit, other.LowerLimit) && Mathf.Approximately(UpperLimit, other.UpperLimit);
+			return Mathf.Approximately(Min, other.Min) && Mathf.Approximately(Max, other.Max);
 		}
 
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(LowerLimit, UpperLimit);
+			return HashCode.Combine(Min, Max);
 		}
 
 		public bool Equals(FloatRange other)
 		{
-			return Mathf.Approximately(LowerLimit, other.LowerLimit) && Mathf.Approximately(UpperLimit, other.UpperLimit);
+			return Mathf.Approximately(Min, other.Min) && Mathf.Approximately(Max, other.Max);
 		}
 
 		public string ToString(string format)
 		{
-			return Mathf.Approximately(LowerLimit, UpperLimit)
-				? LowerLimit.ToString(format)
-				: $"{LowerLimit.ToString(format)} to {UpperLimit.ToString(format)}";
+			return Mathf.Approximately(Min, Max)
+				? Min.ToString(format)
+				: $"{Min.ToString(format)} to {Max.ToString(format)}";
 		}
 
 		public string ToString(int offset, string format = "N0")
 		{
-			return Mathf.Approximately(LowerLimit, UpperLimit)
-				? (LowerLimit + offset).ToString(format)
-				: $"{(LowerLimit + offset).ToString(format)} to {(UpperLimit + offset).ToString(format)}";
+			return Mathf.Approximately(Min, Max)
+				? (Min + offset).ToString(format)
+				: $"{(Min + offset).ToString(format)} to {(Max + offset).ToString(format)}";
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Lerp(float t)
 		{
-			return Mathf.Lerp(LowerLimit, UpperLimit, t);
+			return Mathf.Lerp(Min, Max, t);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float LerpUnclamped(float t)
 		{
-			return Mathf.LerpUnclamped(LowerLimit, UpperLimit, t);
+			return Mathf.LerpUnclamped(Min, Max, t);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float InverseLerp(float v)
 		{
-			return Mathf.InverseLerp(LowerLimit, UpperLimit, v);
+			return Mathf.InverseLerp(Min, Max, v);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Clamp(float v)
 		{
-			return Mathf.Clamp(v, LowerLimit, UpperLimit);
+			return Mathf.Clamp(v, Min, Max);
 		}
 
 		public static FloatRange operator +(FloatRange a, FloatRange b) =>
-			new FloatRange(a.LowerLimit + b.LowerLimit, a.UpperLimit + b.UpperLimit);
+			new FloatRange(a.Min + b.Min, a.Max + b.Max);
 
 		public static FloatRange operator +(FloatRange a, int offset) =>
-			new FloatRange(a.LowerLimit + offset, a.UpperLimit + offset);
+			new FloatRange(a.Min + offset, a.Max + offset);
 
 		public static FloatRange operator +(FloatRange a, float offset) =>
-			new FloatRange(a.LowerLimit + offset, a.UpperLimit + offset);
+			new FloatRange(a.Min + offset, a.Max + offset);
 
 		public static FloatRange operator -(FloatRange a, FloatRange b) =>
-			new FloatRange(a.LowerLimit - b.LowerLimit, a.UpperLimit - b.UpperLimit);
+			new FloatRange(a.Min - b.Min, a.Max - b.Max);
 
 		public static FloatRange operator -(FloatRange a, int offset) =>
-			new FloatRange(a.LowerLimit - offset, a.UpperLimit - offset);
+			new FloatRange(a.Min - offset, a.Max - offset);
 
 		public static FloatRange operator -(FloatRange a, float offset) =>
-			new FloatRange(a.LowerLimit - offset, a.UpperLimit - offset);
+			new FloatRange(a.Min - offset, a.Max - offset);
 
 #if DLD_UTILITY_UNITY_MATHS_AVAILABLE
 		public static implicit operator FloatRange(float2 f) => new(f.x, f.y);
-		public static implicit operator float2(FloatRange floatRange) => new(floatRange.LowerLimit, floatRange.UpperLimit);
+		public static implicit operator float2(FloatRange floatRange) => new(floatRange.Min, floatRange.Max);
 #endif
 	}
 }

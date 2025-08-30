@@ -1996,36 +1996,36 @@ namespace DLD.IMGUI
 		public static IntRange DrawValueRangeWithPlusMinus(string label, IntRange current, string lowerLimitInputId, string upperLimitInputId)
 		{
 			GUILayout.BeginHorizontal();
-			int newLowerLimitValue = DrawIntFieldWithPlusMinus(label, current.LowerLimit,
+			int newLowerLimitValue = DrawIntFieldWithPlusMinus(label, current.Min,
 				1, int.MaxValue - 1, lowerLimitInputId);
 
 			int newUpperLimitValue;
-			if (newLowerLimitValue != current.LowerLimit)
+			if (newLowerLimitValue != current.Min)
 			{
-				if (newLowerLimitValue >= current.UpperLimit)
+				if (newLowerLimitValue >= current.Max)
 				{
 					// User input pushed the lower limit above the upper limit.
 					// We allow this, but we increase the upper limit, so that the range stays valid.
 					newUpperLimitValue = newLowerLimitValue + 1;
-					current.SetUpperLimit(newUpperLimitValue, false);
+					current.SetMax(newUpperLimitValue, false);
 				}
-				current.SetLowerLimit(newLowerLimitValue, false);
+				current.SetMin(newLowerLimitValue, false);
 				ClearInputStrings();
 			}
 
-			newUpperLimitValue = DrawIntFieldWithPlusMinus(" to ", current.UpperLimit,
+			newUpperLimitValue = DrawIntFieldWithPlusMinus(" to ", current.Max,
 				2, int.MaxValue - 1, upperLimitInputId);
 
-			if (newUpperLimitValue != current.UpperLimit)
+			if (newUpperLimitValue != current.Max)
 			{
 				if (newUpperLimitValue <= newLowerLimitValue)
 				{
 					// User input pushed the upper limit below the lower limit.
 					// We allow this, but we decrease the lower limit, so that the range stays valid.
 					newLowerLimitValue = newUpperLimitValue - 1;
-					current.SetLowerLimit(newLowerLimitValue, false);
+					current.SetMin(newLowerLimitValue, false);
 				}
-				current.SetUpperLimit(newUpperLimitValue, false);
+				current.SetMax(newUpperLimitValue, false);
 				ClearInputStrings();
 			}
 			GUILayout.EndHorizontal();
@@ -2036,36 +2036,36 @@ namespace DLD.IMGUI
 		public static IntRange DrawValueRangeWithPlusMinus(string label, string postLabel, IntRange current, string lowerLimitInputId, string upperLimitInputId)
 		{
 			GUILayout.BeginHorizontal();
-			int newLowerLimitValue = DrawIntFieldWithPlusMinus(label, current.LowerLimit,
+			int newLowerLimitValue = DrawIntFieldWithPlusMinus(label, current.Min,
 				1, int.MaxValue - 1, lowerLimitInputId);
 
 			int newUpperLimitValue;
-			if (newLowerLimitValue != current.LowerLimit)
+			if (newLowerLimitValue != current.Min)
 			{
-				if (newLowerLimitValue >= current.UpperLimit)
+				if (newLowerLimitValue >= current.Max)
 				{
 					// User input pushed the lower limit above the upper limit.
 					// We allow this, but we increase the upper limit, so that the range stays valid.
 					newUpperLimitValue = newLowerLimitValue + 1;
-					current.SetUpperLimit(newUpperLimitValue, false);
+					current.SetMax(newUpperLimitValue, false);
 				}
-				current.SetLowerLimit(newLowerLimitValue, false);
+				current.SetMin(newLowerLimitValue, false);
 				ClearInputStrings();
 			}
 
-			newUpperLimitValue = DrawIntFieldWithPostLabelAndPlusMinus(" to ", postLabel, current.UpperLimit,
+			newUpperLimitValue = DrawIntFieldWithPostLabelAndPlusMinus(" to ", postLabel, current.Max,
 				2, int.MaxValue - 1, upperLimitInputId);
 
-			if (newUpperLimitValue != current.UpperLimit)
+			if (newUpperLimitValue != current.Max)
 			{
 				if (newUpperLimitValue <= newLowerLimitValue)
 				{
 					// User input pushed the upper limit below the lower limit.
 					// We allow this, but we decrease the lower limit, so that the range stays valid.
 					newLowerLimitValue = newUpperLimitValue - 1;
-					current.SetLowerLimit(newLowerLimitValue, false);
+					current.SetMin(newLowerLimitValue, false);
 				}
-				current.SetUpperLimit(newUpperLimitValue, false);
+				current.SetMax(newUpperLimitValue, false);
 				ClearInputStrings();
 			}
 			GUILayout.EndHorizontal();
