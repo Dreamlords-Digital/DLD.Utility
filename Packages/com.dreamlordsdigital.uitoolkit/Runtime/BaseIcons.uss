@@ -133,3 +133,9 @@
 .dld-icon--arrow-lower-right {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/arrow-315.png?fileID=2800000&guid=e282116ac4b57a844ae61de85f349b3f&type=3#arrow-315");
 }
+
+.dld-icon--dropdown {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/DropdownArrow.psd?fileID=2800000&amp;guid=5cdc567d5a5596e4e88a2b8f86351836&amp;type=3#DropdownArrow");
+    width: 11px;
+    height: 10px;
+}

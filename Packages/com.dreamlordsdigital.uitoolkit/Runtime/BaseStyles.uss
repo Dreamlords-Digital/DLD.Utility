@@ -266,3 +266,37 @@ FilenameTextField > #unity-text-input > Label {
 .dld-scroll-view--expand-width {
     flex-grow: 1;
 }
+
+.dld-button-burger {
+    width: 19px;
+    height: 19px;
+    padding-top: 3px;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-left: 2px;
+    border-left-color: rgb(56, 56, 56);
+    border-right-color: rgb(56, 56, 56);
+    border-top-color: rgb(56, 56, 56);
+    border-bottom-color: rgb(38, 38, 38);
+    align-items: center;
+    justify-content: center;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/DropdownBg.png?fileID=2800000&guid=a872d0542b3b37945a6b9c1a24050b4c&type=3#DropdownBg");
+    -unity-slice-left: 1;
+    -unity-slice-top: 1;
+    -unity-slice-right: 1;
+    -unity-slice-bottom: 1;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.dld-button-burger > .unity-toggle__input {
+    display: none;
+}
+
+.dld-button-burger:checked {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/DropdownBg-Pressed.png?fileID=2800000&guid=18fd4f0c6ac81754d9052c1d3f3f2088&type=3#DropdownBg-Pressed");
+    padding-top: 5px;
+}
