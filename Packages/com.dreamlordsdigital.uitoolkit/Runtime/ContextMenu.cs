@@ -15,13 +15,16 @@ namespace DLD.UIToolkit
 		void SetAlwaysLeaveSpaceForSelectedIndicator(bool alwaysLeaveSpaceForSelectedIndicator);
 		void AddSeparator();
 
-		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, string tooltip = null,
+		VisualElement AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
-		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, TooltipMessage[] menuTooltip = null,
+		void AddMenu(string label, string tooltip, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
-		void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, List<TooltipMessage> menuTooltip = null,
+		void AddMenu(string label, TooltipMessage[] menuTooltip, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
+			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
+
+		void AddMenu(string label, List<TooltipMessage> menuTooltip, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
 		/// <summary>
@@ -55,7 +58,7 @@ namespace DLD.UIToolkit
 
 	public interface IContextMenuListener
 	{
-		void OnContextMenuChosen(int index, Label label, object tooltip, object userArg1, object userArg2);
+		void OnContextMenuChosen(int index, Label label, object itemTooltip, object userArg1, object userArg2);
 		void OnContextMenuCanceled();
 	}
 
@@ -195,14 +198,16 @@ namespace DLD.UIToolkit
 			_menu.Add(entryContainer);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, string menuTooltip = null,
+		public void AddMenu(string label, string menuTooltip = null,
+			string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
 			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
 			entryContainer.Register(_tooltip, menuTooltip);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, TooltipMessage[] menuTooltip = null,
+		public void AddMenu(string label, TooltipMessage[] menuTooltip = null,
+			string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
 			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
@@ -211,7 +216,8 @@ namespace DLD.UIToolkit
 			entryContainer.Register(_tooltip);
 		}
 
-		public void AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard, List<TooltipMessage> menuTooltip = null,
+		public void AddMenu(string label, List<TooltipMessage> menuTooltip = null,
+			string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
 			var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
@@ -542,7 +548,7 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================
 
-		VisualElement AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
+		public VisualElement AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 		{
 			var createdEntry = _entryAsset.Instantiate();

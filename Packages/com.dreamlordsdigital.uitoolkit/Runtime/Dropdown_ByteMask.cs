@@ -99,10 +99,10 @@ namespace DLD.UIToolkit
 				}
 				var menuItemStyle = value.GetFlag(n) ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard;
 
-				_contextMenu.AddMenu(label, item.IconClassName, menuItemStyle, tooltip: item.Tooltip,
+				_contextMenu.AddMenu(label, item.Tooltip, item.IconClassName, menuItemStyle,
 					listener: this, userArg1: n);
 			}
-			_contextMenu.Show(_toggle, this);
+			_contextMenu.Show(_toggle, listener: this);
 
 			_lastEnumTypeUsedOnOpen = null;
 		}

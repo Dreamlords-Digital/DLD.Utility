@@ -58,7 +58,7 @@ namespace DLD.UIToolkit
 			{
 				// Context Menu has the same entries as what we want,
 				// so no need to add them again. Just reuse it as-is.
-				_contextMenu.Show(_toggle, this);
+				_contextMenu.Show(_toggle, listener: this);
 				return;
 			}
 
@@ -132,7 +132,7 @@ namespace DLD.UIToolkit
 						// two tooltip messages immediately: the tooltip from the EnumUI, and the message from ObsoleteAttribute
 						itemTooltips.Add(new TooltipMessage(BaseIcons.GENERIC_INFO, enumUI.Tooltip));
 						itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(obsoleteAttribute));
-						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, itemTooltips,
+						_contextMenu.AddMenu(label, itemTooltips, iconClassName, menuItemStyle,
 							listener: this, userArg1: enumValue);
 					}
 					else
@@ -140,7 +140,7 @@ namespace DLD.UIToolkit
 						// tooltip is only from the ObsoleteAttribute
 						itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(obsoleteAttribute));
 
-						_contextMenu.AddMenu(label, iconClassName, menuItemStyle, itemTooltips,
+						_contextMenu.AddMenu(label, itemTooltips, iconClassName, menuItemStyle,
 							listener: this, userArg1: enumValue);
 					}
 				}
@@ -159,7 +159,7 @@ namespace DLD.UIToolkit
 
 					itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(obsoleteAttribute));
 
-					_contextMenu.AddMenu(label, null, menuItemStyle, itemTooltips,
+					_contextMenu.AddMenu(label, itemTooltips, null, menuItemStyle,
 						listener: this, userArg1: enumValue);
 				}
 				else if (enumUI != null)
@@ -171,19 +171,19 @@ namespace DLD.UIToolkit
 						itemTooltips.Add(new TooltipMessage(BaseIcons.GENERIC_INFO, enumUI.Tooltip));
 					}
 
-					_contextMenu.AddMenu(label, iconClassName, menuItemStyle, itemTooltips,
+					_contextMenu.AddMenu(label, itemTooltips, iconClassName, menuItemStyle,
 						listener: this, userArg1: enumValue);
 				}
 				else
 				{
 					label = enumValue.ToStringLabel();
 
-					_contextMenu.AddMenu(label, tooltip: null,
+					_contextMenu.AddMenu(label,
 						listener: this, userArg1: enumValue);
 				}
 			}
 
-			_contextMenu.Show(_toggle, this);
+			_contextMenu.Show(_toggle, listener: this);
 
 			_lastEnumTypeUsedOnOpen = enumType;
 		}
