@@ -58,6 +58,8 @@
     -unity-slice-top: 7;
     -unity-slice-right: 7;
     -unity-slice-bottom: 7;
+    padding-top: 3px;
+    padding-bottom: 1px;
 }
 
 .dld-dropdown__container:focus > .dld-dropdown__label {
@@ -91,6 +93,7 @@
     flex-grow: 1;
     min-width: 11px;
     min-height: 10px;
+    translate: 0 -1px;
 }
 
 .dld-dropdown__container:focus > .dld-dropdown__toggle {
