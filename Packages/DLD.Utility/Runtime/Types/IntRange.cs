@@ -16,6 +16,7 @@ namespace DLD.Utility
 	/// Has optional validation methods to prevent Lower Limit from going above Upper Limit.
 	/// </remarks>
 	[Serializable]
+	[JetBrains.Annotations.PublicAPI]
 	public struct IntRange : IEquatable<IntRange>
 	{
 		/// <summary>
@@ -293,8 +294,7 @@ namespace DLD.Utility
 
 		public override int GetHashCode()
 		{
-			int l = (Min << 16) | (Min >> 16);
-			return Max ^ l;
+			return HashCode.Combine(Min, Max);
 		}
 
 		public override string ToString()

@@ -16,6 +16,7 @@ namespace DLD.Utility
 	/// Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
 	/// </remarks>
 	[Serializable]
+	[JetBrains.Annotations.PublicAPI]
 	public struct FloatRange : IEquatable<FloatRange>
 	{
 		/// <summary>
@@ -107,6 +108,11 @@ namespace DLD.Utility
 			return Mathf.Approximately(Min, other.Min) && Mathf.Approximately(Max, other.Max);
 		}
 
+		public override string ToString()
+		{
+			return ToString("0.###");
+		}
+
 		public string ToString(string format)
 		{
 			return Mathf.Approximately(Min, Max)
@@ -114,7 +120,7 @@ namespace DLD.Utility
 				: $"{Min.ToString(format)} to {Max.ToString(format)}";
 		}
 
-		public string ToString(int offset, string format = "N0")
+		public string ToString(int offset, string format = "0.###")
 		{
 			return Mathf.Approximately(Min, Max)
 				? (Min + offset).ToString(format)
