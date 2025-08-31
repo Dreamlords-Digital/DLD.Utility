@@ -51,7 +51,7 @@ namespace DLD.UIToolkit
 		void Show(Vector2 position, IContextMenuListener listener = null);
 		void Show(ContextClickEvent e, IContextMenuListener listener = null);
 		void Show(PointerDownEvent e, IContextMenuListener listener = null);
-		void Show(VisualElement ve, IContextMenuListener listener = null);
+		void Show(VisualElement ve, ContextMenuAnchorPoint anchorPoint = ContextMenuAnchorPoint.Bottom, IContextMenuListener listener = null);
 
 		bool WasLastShownOn(VisualElement ve);
 	}
@@ -70,6 +70,17 @@ namespace DLD.UIToolkit
 		Disabled = 2,
 		Warning = 4,
 		Error = 8,
+	}
+
+	public enum ContextMenuAnchorPoint : byte
+	{
+		Bottom,
+		LowerLeft,
+		LowerRight,
+		UpperLeft,
+		UpperRight,
+		Left,
+		Right,
 	}
 
 	public class ContextMenu : VisualElement, IContextMenu
@@ -107,6 +118,7 @@ namespace DLD.UIToolkit
 		readonly VisualTreeAsset _separatorAsset;
 
 		VisualElement _elementShownOn;
+		ContextMenuAnchorPoint _elementAnchorPoint;
 
 		bool _doAltBgStyling;
 		bool _mouseMovedDuringMouseDown;
@@ -351,16 +363,25 @@ namespace DLD.UIToolkit
 			Show(mousePos, listener);
 		}
 
-		public void Show(VisualElement ve, IContextMenuListener listener = null)
+		public void Show(VisualElement ve, ContextMenuAnchorPoint anchorPoint = ContextMenuAnchorPoint.Bottom, IContextMenuListener listener = null)
 		{
 			UpdateIconVisibility();
 			_listener = listener;
 			_elementShownOn = ve;
+			_elementAnchorPoint = anchorPoint;
 
 			var veLayout = ve.layout;
-			var veWorldPos = ve.LocalToWorld(new Vector2(0, veLayout.height));
+			var anchorPos = anchorPoint switch
+			{
+				ContextMenuAnchorPoint.LowerRight => new Vector2(veLayout.width, veLayout.height),
+				ContextMenuAnchorPoint.Left => new Vector2(0, 0),
+				ContextMenuAnchorPoint.Right => new Vector2(veLayout.width, 0),
+				_ => new Vector2(0, veLayout.height), // default is Bottom
+			};
+			var veWorldPos = ve.LocalToWorld(anchorPos);
 			var localPos = this.WorldToLocal(veWorldPos);
 			_menu.SetPosition(localPos);
+
 			_menu.style.width = StyleKeyword.Null;
 			_menu.AddToClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
 			_menu.RemoveFromClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
@@ -402,6 +423,7 @@ namespace DLD.UIToolkit
 			}
 
 			float menuWidth = _menu.layout.width - _dropdownButtonFitWidthAdjust;
+			float menuHeight = _menu.layout.height;
 			float elementWidth = _elementShownOn.layout.width;
 
 			if (menuWidth <= 0)
@@ -409,13 +431,89 @@ namespace DLD.UIToolkit
 				return;
 			}
 
-			if (menuWidth <= elementWidth)
+			switch (_elementAnchorPoint)
 			{
-				_menu.style.width = elementWidth + _dropdownButtonFitWidthAdjust;
-			}
-			else
-			{
-				_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.Bottom:
+					//
+					//                ********
+					//                ********
+					//                +------+
+					//                |      |
+					//                +------+
+					//
+					if (menuWidth <= elementWidth)
+					{
+						// fit context menu width to element
+						_menu.style.width = elementWidth + _dropdownButtonFitWidthAdjust;
+					}
+					else
+					{
+						_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
+					}
+					break;
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.LowerLeft:
+					//
+					//                ********
+					//                ********
+					//                +----------+
+					//                |          |
+					//                +----------+
+					//
+					_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
+					break;
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.LowerRight:
+					//
+					//                ********
+					//                ********
+					//            +----------+
+					//            |          |
+					//            +----------+
+					//
+					_menu.AddToPosition(new Vector2(-menuWidth, 0));
+					break;
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.UpperLeft:
+					//
+					//                +----------+
+					//                |          |
+					//                +----------+
+					//                ********
+					//                ********
+					//
+					_menu.AddToPosition(new Vector2(0, -menuHeight));
+					break;
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.UpperRight:
+					//
+					//            +----------+
+					//            |          |
+					//            +----------+
+					//                ********
+					//                ********
+					//
+					_menu.AddToPosition(new Vector2(-menuWidth, -menuHeight));
+					break;
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.Left:
+					//
+					//    +----------+********
+					//    |          |********
+					//    +----------+
+					//
+					_menu.AddToPosition(new Vector2(-menuWidth, 0));
+					break;
+				// -------------------------------------------------------------------------------------
+				case ContextMenuAnchorPoint.Right:
+					//
+					//                ********+----------+
+					//                ********|          |
+					//                        +----------+
+					//
+					break;
+				// -------------------------------------------------------------------------------------
 			}
 		}
 
