@@ -68,6 +68,10 @@ namespace DLD.UIToolkit
 		{
 			for (int n = 0; n < source.styleSheets.count; ++n)
 			{
+				if (destination.styleSheets.Contains(source.styleSheets[n]))
+				{
+					continue;
+				}
 				destination.styleSheets.Add(source.styleSheets[n]);
 			}
 		}
@@ -77,6 +81,10 @@ namespace DLD.UIToolkit
 			destination.ClearClassList();
 			foreach (string styleClass in source.GetClasses())
 			{
+				if (destination.ClassListContains(styleClass))
+				{
+					continue;
+				}
 				destination.AddToClassList(styleClass);
 			}
 		}

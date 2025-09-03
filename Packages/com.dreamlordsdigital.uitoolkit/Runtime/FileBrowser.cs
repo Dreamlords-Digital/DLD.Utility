@@ -696,7 +696,7 @@ namespace DLD.UIToolkit
 			_cancel = callback;
 		}
 
-		public void Update(float deltaTime)
+		public void Update(float deltaTimeSeconds)
 		{
 			// show path history list if mouse is pressed down on back/forward button long enough
 			if (!_pathHistoryListShown)
