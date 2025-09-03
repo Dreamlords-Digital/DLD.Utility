@@ -19,6 +19,8 @@ namespace DLD.UIToolkit
 		/// <param name="pushToStack">Whether the tooltip text specified will be added to the existing text already on the tooltip, or not.</param>
 		void ShowTooltipAtMouse(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
 
+		void ShowTooltipAt(VisualElement context, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false);
+
 		/// <summary>
 		///    Add another message to the tooltip, assuming it's already shown.
 		/// </summary>
@@ -38,6 +40,8 @@ namespace DLD.UIToolkit
 		void ClearTooltipMessages();
 
 		void ShowAtMouseCursor(Vector2 mousePos);
+
+		void ShowAt(VisualElement context, ElementAnchorPoint anchorPoint);
 
 		void SetContext(VisualElement eventTarget);
 
@@ -82,6 +86,7 @@ namespace DLD.UIToolkit
 	public static class TooltipUtil
 	{
 		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowFromUserData = _ShowTooltipFromUserData;
+		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRightFromUserData = _ShowTooltipAtRightFromUserData;
 		public static readonly EventCallback<PointerLeaveEvent, ITooltip> Hide = _HideTooltip;
 
 		static readonly EventCallback<PointerEnterEvent, ITooltip> ShowTooltipFromUserDataPushToStack = _ShowTooltipFromUserDataPushToStack;
@@ -172,16 +177,33 @@ namespace DLD.UIToolkit
 			}
 		}
 
+		public static void RegisterToRight(this VisualElement tooltipDisplayer, ITooltip tooltip)
+		{
+			if (tooltipDisplayer == null)
+			{
+				return;
+			}
+
+			tooltipDisplayer.RegisterCallback(ShowAtRightFromUserData, tooltip);
+			tooltipDisplayer.RegisterCallback(Hide, tooltip);
+		}
+
 		static void _ShowTooltipFromUserData(PointerEnterEvent e, ITooltip t)
 		{
 			var eventTarget = (VisualElement)e.target;
-			_Show(eventTarget, t, e.position, false);
+			_Show(eventTarget, t, e.position, false, ElementAnchorPoint.Mouse);
 		}
 
 		static void _ShowTooltipFromUserDataPushToStack(PointerEnterEvent e, ITooltip t)
 		{
 			var eventTarget = (VisualElement)e.target;
-			_Show(eventTarget, t, e.position, true);
+			_Show(eventTarget, t, e.position, true, ElementAnchorPoint.Mouse);
+		}
+
+		static void _ShowTooltipAtRightFromUserData(PointerEnterEvent e, ITooltip t)
+		{
+			var eventTarget = (VisualElement)e.target;
+			_Show(eventTarget, t, e.position, false, ElementAnchorPoint.Right);
 		}
 
 		public static (string, string) GetTooltipText(string tooltip)
@@ -206,7 +228,7 @@ namespace DLD.UIToolkit
 			return (tooltip, iconClassName);
 		}
 
-		static void _Show(VisualElement eventTarget, ITooltip t, Vector2 mousePos, bool pushToStack)
+		static void _Show(VisualElement eventTarget, ITooltip t, Vector2 mousePos, bool pushToStack, ElementAnchorPoint anchorPoint)
 		{
 			switch (eventTarget.userData)
 			{
@@ -221,7 +243,15 @@ namespace DLD.UIToolkit
 
 					(string tooltipText, string iconClassName) = GetTooltipText(tooltip);
 
-					t.ShowTooltipAtMouse(eventTarget, tooltipText, iconClassName, mousePos, pushToStack);
+					switch (anchorPoint)
+					{
+						case ElementAnchorPoint.Mouse:
+							t.ShowTooltipAtMouse(eventTarget, tooltipText, iconClassName, mousePos, pushToStack);
+							break;
+						default:
+							t.ShowTooltipAt(eventTarget, tooltipText, iconClassName, anchorPoint, pushToStack);
+							break;
+					}
 					break;
 				}
 				case TooltipMessage tooltipMessage:
@@ -232,7 +262,15 @@ namespace DLD.UIToolkit
 						t.SetContext(eventTarget);
 						return;
 					}
-					t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
+					switch (anchorPoint)
+					{
+						case ElementAnchorPoint.Mouse:
+							t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
+							break;
+						default:
+							t.ShowTooltipAt(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, anchorPoint, pushToStack);
+							break;
+					}
 					break;
 				}
 				case TooltipMessage[] tooltipMessageArray:
@@ -264,7 +302,15 @@ namespace DLD.UIToolkit
 						t.SetContext(eventTarget);
 					}
 
-					t.ShowAtMouseCursor(mousePos);
+					switch (anchorPoint)
+					{
+						case ElementAnchorPoint.Mouse:
+							t.ShowAtMouseCursor(mousePos);
+							break;
+						default:
+							t.ShowAt(eventTarget, anchorPoint);
+							break;
+					}
 					break;
 				}
 				case List<TooltipMessage> tooltipMessageList:
@@ -296,7 +342,15 @@ namespace DLD.UIToolkit
 						t.SetContext(eventTarget);
 					}
 
-					t.ShowAtMouseCursor(mousePos);
+					switch (anchorPoint)
+					{
+						case ElementAnchorPoint.Mouse:
+							t.ShowAtMouseCursor(mousePos);
+							break;
+						default:
+							t.ShowAt(eventTarget, anchorPoint);
+							break;
+					}
 					break;
 				}
 			}
@@ -319,6 +373,7 @@ namespace DLD.UIToolkit
 	{
 		const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Tooltip";
 		const string FOLLOW_MOUSE_STYLE_CLASS = "dld-tooltip__bg--follow-mouse";
+		const string FOLLOW_ELEMENT_STYLE_CLASS = "dld-tooltip__bg--follow-element";
 		const string TOOLTIP_ICON_STYLE_CLASS = "dld-tooltip__icon";
 
 		enum ShowType
@@ -381,6 +436,7 @@ namespace DLD.UIToolkit
 				return;
 			}
 			_showType = ShowType.FollowMouseCursor;
+			RemoveFromClassList(FOLLOW_ELEMENT_STYLE_CLASS);
 			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
 			style.display = DisplayStyle.Flex;
 		}
@@ -395,6 +451,26 @@ namespace DLD.UIToolkit
 			this.SetPosition(mousePos);
 		}
 
+		public void ShowAt(VisualElement context, ElementAnchorPoint anchorPoint)
+		{
+			Rect contextRect = context.layout;
+			var anchorPos = anchorPoint switch
+			{
+				ElementAnchorPoint.LowerRight => new Vector2(contextRect.width, contextRect.height),
+				ElementAnchorPoint.Left => new Vector2(0, 0),
+				ElementAnchorPoint.Right => new Vector2(contextRect.width, 0),
+				_ => new Vector2(0, contextRect.height), // default is Bottom
+			};
+			var contextWorldPos = context.LocalToWorld(anchorPos);
+			var localPos = parent.WorldToLocal(contextWorldPos);
+			this.SetPosition(localPos);
+
+			_showType = ShowType.AttachToVisualElement;
+			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
+			AddToClassList(FOLLOW_ELEMENT_STYLE_CLASS);
+			style.display = DisplayStyle.Flex;
+		}
+
 		public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName = null, bool pushToStack = false)
 		{
 			_lastContext = context;
@@ -407,6 +483,13 @@ namespace DLD.UIToolkit
 			_lastContext = context;
 			ShowAtMouseCursor(context, text, iconClassName, pushToStack);
 			this.SetPosition(mousePos);
+		}
+
+		public void ShowAt(VisualElement context, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false)
+		{
+			_lastContext = context;
+			Set(context, text, iconClassName, pushToStack);
+			ShowAt(context, anchorPoint);
 		}
 
 		public void ClearTooltipMessages()
@@ -431,6 +514,7 @@ namespace DLD.UIToolkit
 		{
 			_showType = ShowType.None;
 			RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
+			RemoveFromClassList(FOLLOW_ELEMENT_STYLE_CLASS);
 			style.display = DisplayStyle.None;
 
 			if (_messageRowCountUsed > 0)

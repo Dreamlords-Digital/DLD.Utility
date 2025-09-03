@@ -18,6 +18,10 @@
     left: 10px;
 }
 
+.dld-tooltip__bg--follow-element {
+    top: -4px;
+}
+
 .dld-tooltip__row {
     flex-direction: row;
     align-items: flex-start;
