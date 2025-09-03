@@ -1129,7 +1129,7 @@ namespace DLD.UIToolkit
 			}
 		}
 
-		public void OnContextMenuCanceled()
+		public void OnContextMenuClosed(bool userCancelled)
 		{
 		}
 

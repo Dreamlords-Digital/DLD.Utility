@@ -59,8 +59,8 @@ namespace DLD.UIToolkit
 
 	public interface IContextMenuListener
 	{
-		void OnContextMenuChosen(int index, Label label, object itemTooltip, object userArg1, object userArg2);
-		void OnContextMenuCanceled();
+		void OnContextMenuChosen(int itemIndex, Label itemLabel, object itemTooltip, object userArg1, object userArg2);
+		void OnContextMenuClosed(bool userCancelled);
 	}
 
 	[System.Flags]
@@ -404,7 +404,7 @@ namespace DLD.UIToolkit
 
 		public bool WasLastShownOn(VisualElement ve) => ve == _elementShownOn;
 
-		public void Hide()
+		public void Hide(bool userCancelled = true)
 		{
 			style.display = DisplayStyle.None;
 			_menu.style.width = StyleKeyword.Null;
@@ -417,7 +417,7 @@ namespace DLD.UIToolkit
 
 			if (_listener != null)
 			{
-				_listener.OnContextMenuCanceled();
+				_listener.OnContextMenuClosed(userCancelled);
 				_listener = null;
 			}
 		}
@@ -708,7 +708,7 @@ namespace DLD.UIToolkit
 					}
 				});
 
-				entryContainer.RegisterCallback<PointerUpEvent>(e =>
+				entryContainer.RegisterCallback<PointerUpEvent, ContextMenu>((e, me) =>
 				{
 					if (e.currentTarget is not VisualElement targetElement)
 					{
@@ -723,11 +723,9 @@ namespace DLD.UIToolkit
 						var gotLabel = targetElement.Q<Label>();
 						gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel, targetElement.userData, gotIcon.userData, gotLabel.userData);
 					}
-					else
-					{
-						e.StopPropagation();
-					}
-				});
+					e.StopPropagation();
+					me.Hide(false);
+				}, this);
 			}
 
 			_menu.Add(entryContainer);

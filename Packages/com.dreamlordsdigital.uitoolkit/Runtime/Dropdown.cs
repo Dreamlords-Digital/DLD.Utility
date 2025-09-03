@@ -330,7 +330,7 @@ namespace DLD.UIToolkit
 			}
 		}
 
-		public void OnContextMenuCanceled()
+		public void OnContextMenuClosed(bool userCancelled)
 		{
 			_toggle.value = false;
 			_toggle.Focus();
