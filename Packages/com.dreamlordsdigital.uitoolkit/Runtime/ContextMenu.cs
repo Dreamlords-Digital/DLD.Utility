@@ -52,7 +52,7 @@ namespace DLD.UIToolkit
 		void Show(Vector2 position, IContextMenuListener listener = null);
 		void Show(ContextClickEvent e, IContextMenuListener listener = null);
 		void Show(PointerDownEvent e, IContextMenuListener listener = null);
-		void Show(VisualElement ve, ContextMenuAnchorPoint anchorPoint = ContextMenuAnchorPoint.Bottom, IContextMenuListener listener = null);
+		void Show(VisualElement ve, ElementAnchorPoint anchorPoint = ElementAnchorPoint.Bottom, IContextMenuListener listener = null);
 
 		bool WasLastShownOn(VisualElement ve);
 	}
@@ -71,17 +71,6 @@ namespace DLD.UIToolkit
 		Disabled = 2,
 		Warning = 4,
 		Error = 8,
-	}
-
-	public enum ContextMenuAnchorPoint : byte
-	{
-		Bottom,
-		LowerLeft,
-		LowerRight,
-		UpperLeft,
-		UpperRight,
-		Left,
-		Right,
 	}
 
 	public class ContextMenu : VisualElement, IContextMenu
@@ -120,7 +109,7 @@ namespace DLD.UIToolkit
 		readonly VisualTreeAsset _separatorAsset;
 
 		VisualElement _elementShownOn;
-		ContextMenuAnchorPoint _elementAnchorPoint;
+		ElementAnchorPoint _elementAnchorPoint;
 
 		bool _doAltBgStyling;
 		bool _mouseMovedDuringMouseDown;
@@ -372,7 +361,7 @@ namespace DLD.UIToolkit
 			Show(mousePos, listener);
 		}
 
-		public void Show(VisualElement ve, ContextMenuAnchorPoint anchorPoint = ContextMenuAnchorPoint.Bottom, IContextMenuListener listener = null)
+		public void Show(VisualElement ve, ElementAnchorPoint anchorPoint = ElementAnchorPoint.Bottom, IContextMenuListener listener = null)
 		{
 			UpdateIconVisibility();
 			_listener = listener;
@@ -382,9 +371,9 @@ namespace DLD.UIToolkit
 			var veLayout = ve.layout;
 			var anchorPos = anchorPoint switch
 			{
-				ContextMenuAnchorPoint.LowerRight => new Vector2(veLayout.width, veLayout.height),
-				ContextMenuAnchorPoint.Left => new Vector2(0, 0),
-				ContextMenuAnchorPoint.Right => new Vector2(veLayout.width, 0),
+				ElementAnchorPoint.LowerRight => new Vector2(veLayout.width, veLayout.height),
+				ElementAnchorPoint.Left => new Vector2(0, 0),
+				ElementAnchorPoint.Right => new Vector2(veLayout.width, 0),
 				_ => new Vector2(0, veLayout.height), // default is Bottom
 			};
 			var veWorldPos = ve.LocalToWorld(anchorPos);
@@ -443,7 +432,7 @@ namespace DLD.UIToolkit
 			switch (_elementAnchorPoint)
 			{
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.Bottom:
+				case ElementAnchorPoint.Bottom:
 					//
 					//                ********
 					//                ********
@@ -462,7 +451,7 @@ namespace DLD.UIToolkit
 					}
 					break;
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.LowerLeft:
+				case ElementAnchorPoint.LowerLeft:
 					//
 					//                ********
 					//                ********
@@ -473,7 +462,7 @@ namespace DLD.UIToolkit
 					_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
 					break;
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.LowerRight:
+				case ElementAnchorPoint.LowerRight:
 					//
 					//                ********
 					//                ********
@@ -484,7 +473,7 @@ namespace DLD.UIToolkit
 					_menu.AddToPosition(new Vector2(-menuWidth, 0));
 					break;
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.UpperLeft:
+				case ElementAnchorPoint.UpperLeft:
 					//
 					//                +----------+
 					//                |          |
@@ -495,7 +484,7 @@ namespace DLD.UIToolkit
 					_menu.AddToPosition(new Vector2(0, -menuHeight));
 					break;
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.UpperRight:
+				case ElementAnchorPoint.UpperRight:
 					//
 					//            +----------+
 					//            |          |
@@ -506,7 +495,7 @@ namespace DLD.UIToolkit
 					_menu.AddToPosition(new Vector2(-menuWidth, -menuHeight));
 					break;
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.Left:
+				case ElementAnchorPoint.Left:
 					//
 					//    +----------+********
 					//    |          |********
@@ -515,7 +504,7 @@ namespace DLD.UIToolkit
 					_menu.AddToPosition(new Vector2(-menuWidth, 0));
 					break;
 				// -------------------------------------------------------------------------------------
-				case ContextMenuAnchorPoint.Right:
+				case ElementAnchorPoint.Right:
 					//
 					//                ********+----------+
 					//                ********|          |

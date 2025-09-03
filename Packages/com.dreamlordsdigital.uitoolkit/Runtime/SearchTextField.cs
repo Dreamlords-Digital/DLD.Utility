@@ -161,7 +161,7 @@ namespace DLD.UIToolkit
 			_contextMenu.AddMenu("Match Case", tooltip: matchCaseTooltip,
 				menuItemStyle: matchCaseStyle,
 				listener: this, userArg1: MATCH_CASE);
-			_contextMenu.Show(this, ContextMenuAnchorPoint.LowerRight, listener: this);
+			_contextMenu.Show(this, ElementAnchorPoint.LowerRight, listener: this);
 		}
 
 		public void OnContextMenuChosen(int index, Label itemLabel, object itemTooltip, object userArg1, object userArg2)
