@@ -207,3 +207,8 @@
 .dld-context-menu-entry-container:hover > .dld-context-menu-entry__label--warning {
     color: var(--dld-color-label-warning-focused);
 }
+
+.dld-context-menu-entry-label {
+    -unity-font-style: bold;
+    margin-left: 6px;
+}

@@ -13,6 +13,7 @@ namespace DLD.UIToolkit
 		void ClearMenu();
 		void DoAltBgStyling(bool doAltBgStyling);
 		void SetAlwaysLeaveSpaceForSelectedIndicator(bool alwaysLeaveSpaceForSelectedIndicator);
+		void AddLabel(string text);
 		void AddSeparator();
 
 		VisualElement AddMenu(string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
@@ -92,6 +93,7 @@ namespace DLD.UIToolkit
 		const string SELECTED_INDICATOR_NAME = "SelectedIndicator";
 		const string ICON_NAME = "Icon";
 
+		const string LABEL_STYLE_CLASS = "dld-context-menu-entry-label";
 		const string ENTRY_ALT_STYLE_CLASS = "dld-context-menu-entry-container--alt-bg";
 		const string PRESSED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--active";
 		const string DISABLED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--disabled";
@@ -200,6 +202,13 @@ namespace DLD.UIToolkit
 		public void ClearMenu()
 		{
 			_menu.Clear();
+		}
+
+		public void AddLabel(string text)
+		{
+			var newLabel = new Label(text);
+			newLabel.AddToClassList(LABEL_STYLE_CLASS);
+			_menu.Add(newLabel);
 		}
 
 		public void AddSeparator()
