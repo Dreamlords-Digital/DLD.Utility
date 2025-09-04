@@ -4,7 +4,12 @@ using UnityEngine.UIElements;
 
 namespace DLD.UIToolkit
 {
-	public class PanZoomManipulator : PointerManipulator
+	public interface IDragStatus
+	{
+		bool IsDragging { get; }
+	}
+
+	public class PanZoomManipulator : PointerManipulator, IDragStatus
 	{
 		/// <summary>
 		/// The local mouse coordinates when pan started.
@@ -209,7 +214,7 @@ namespace DLD.UIToolkit
 
 		// ==================================================================================================
 
-		protected bool IsDragging => _isDragging;
+		public bool IsDragging => _isDragging;
 
 		protected override void RegisterCallbacksOnTarget()
 		{

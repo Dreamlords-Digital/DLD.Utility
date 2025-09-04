@@ -69,6 +69,8 @@ namespace DLD.UIToolkit
 		///    If the tooltip ends up having messages, and it's currently hidden, then it will be automatically shown.
 		/// </remarks>
 		void RefreshTooltipsOfContext(VisualElement context);
+
+		bool IsDragging { get; }
 	}
 
 	public class TooltipMessage
@@ -86,6 +88,7 @@ namespace DLD.UIToolkit
 	public static class TooltipUtil
 	{
 		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowFromUserData = _ShowTooltipFromUserData;
+		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRightNoDragFromUserData = _ShowTooltipAtRightNoDragFromUserData;
 		public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRightFromUserData = _ShowTooltipAtRightFromUserData;
 		public static readonly EventCallback<PointerLeaveEvent, ITooltip> Hide = _HideTooltip;
 
@@ -177,6 +180,23 @@ namespace DLD.UIToolkit
 			}
 		}
 
+		/// <summary>
+		/// Prepare the VisualElement to be able to show a tooltip to its right side, but only if no drag-and-drop is happening.
+		/// </summary>
+		public static void RegisterToRightNoDrag(this VisualElement tooltipDisplayer, ITooltip tooltip)
+		{
+			if (tooltipDisplayer == null)
+			{
+				return;
+			}
+
+			tooltipDisplayer.RegisterCallback(ShowAtRightNoDragFromUserData, tooltip);
+			tooltipDisplayer.RegisterCallback(Hide, tooltip);
+		}
+
+		/// <summary>
+		/// Prepare the VisualElement to be able to show a tooltip to its right side.
+		/// </summary>
 		public static void RegisterToRight(this VisualElement tooltipDisplayer, ITooltip tooltip)
 		{
 			if (tooltipDisplayer == null)
@@ -198,6 +218,17 @@ namespace DLD.UIToolkit
 		{
 			var eventTarget = (VisualElement)e.target;
 			_Show(eventTarget, t, e.position, true, ElementAnchorPoint.Mouse);
+		}
+
+		static void _ShowTooltipAtRightNoDragFromUserData(PointerEnterEvent e, ITooltip t)
+		{
+			if (t.IsDragging)
+			{
+				return;
+			}
+
+			var eventTarget = (VisualElement)e.target;
+			_Show(eventTarget, t, e.position, false, ElementAnchorPoint.Right);
 		}
 
 		static void _ShowTooltipAtRightFromUserData(PointerEnterEvent e, ITooltip t)
@@ -400,6 +431,8 @@ namespace DLD.UIToolkit
 
 		readonly EventCallback<PointerMoveEvent> _onPointerMove;
 
+		IDragStatus _dragStatus;
+
 		public Tooltip()
 		{
 			var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
@@ -423,6 +456,13 @@ namespace DLD.UIToolkit
 		}
 
 		// ==================================================================================================
+
+		public void SetDragStatus(IDragStatus newDragStatus)
+		{
+			_dragStatus = newDragStatus;
+		}
+
+		public bool IsDragging => _dragStatus != null && _dragStatus.IsDragging;
 
 		public void PushToStack(VisualElement context, string text, string iconClassName = null)
 		{
