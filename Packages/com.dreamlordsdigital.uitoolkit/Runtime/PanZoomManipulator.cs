@@ -546,26 +546,11 @@ namespace DLD.UIToolkit
 
 			if (_isPanning && target.HasPointerCapture(e.pointerId))
 			{
-				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
-				if (_spacebarHeld)
-				{
-					_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-				}
-				else
-				{
-					_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-				}
-
 				_isPanning = false;
+				RefreshMouseCursor(e.position);
+
 				target.ReleasePointer(e.pointerId);
 				e.StopPropagation();
-
-				if (e.button == 2)
-				{
-					// This is a fix for not being able to right-click after doing a pan via middle-mouse drag.
-					// Unfortunately this prevents spacebar from being detected. The user will need to do a left or right-click first.
-					target.focusController.focusedElement?.Blur();
-				}
 			}
 		}
 
