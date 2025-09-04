@@ -209,6 +209,12 @@ namespace DLD.UIToolkit
 
 		void OnFocusOut(FocusOutEvent e)
 		{
+			if (e.relatedTarget == _keyEventTarget)
+			{
+				// we're actually moving focus back to the key event listener, which means we're not really losing focus
+				return;
+			}
+
 			// Assuming spacebar is still held, we cannot reliably know when/if user
 			// will release the spacebar when we no longer have keyboard focus
 			// (user might have alt + tabbed) so might as well just assume it's been released.
