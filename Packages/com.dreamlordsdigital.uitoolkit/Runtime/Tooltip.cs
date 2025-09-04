@@ -396,6 +396,7 @@ namespace DLD.UIToolkit
 		readonly List<TooltipRow> _messageRows = new(10);
 		int _messageRowCountUsed;
 		VisualElement _lastContext;
+		ElementAnchorPoint _lastAnchorPoint;
 
 		readonly EventCallback<PointerMoveEvent> _onPointerMove;
 
@@ -435,6 +436,8 @@ namespace DLD.UIToolkit
 			{
 				return;
 			}
+
+			_lastAnchorPoint = ElementAnchorPoint.Mouse;
 			_showType = ShowType.FollowMouseCursor;
 			RemoveFromClassList(FOLLOW_ELEMENT_STYLE_CLASS);
 			AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
@@ -453,6 +456,7 @@ namespace DLD.UIToolkit
 
 		public void ShowAt(VisualElement context, ElementAnchorPoint anchorPoint)
 		{
+			_lastAnchorPoint = anchorPoint;
 			Rect contextRect = context.layout;
 			var anchorPos = anchorPoint switch
 			{
@@ -638,7 +642,15 @@ namespace DLD.UIToolkit
 			}
 			else
 			{
-				ShowAtMouseCursor();
+				switch (_lastAnchorPoint)
+				{
+					case ElementAnchorPoint.Mouse:
+						ShowAtMouseCursor();
+						break;
+					default:
+						ShowAt(context, _lastAnchorPoint);
+						break;
+				}
 			}
 		}
 
