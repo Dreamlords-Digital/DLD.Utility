@@ -538,11 +538,19 @@ namespace DLD.UIToolkit
 				}
 				Debug.Assert(_messageRowCountUsed == childCount,
 					$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
-			}
 
-			if (_messageRowCountUsed == 0)
+				if (_messageRowCountUsed == 0)
+				{
+					_Hide();
+				}
+			}
+			else
 			{
-				_Hide();
+				// check only topmost message, if context matches, hide
+				if (_messageRowCountUsed > 0 && _messageRows[_messageRowCountUsed - 1].Context == context)
+				{
+					_Hide();
+				}
 			}
 		}
 
