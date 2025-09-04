@@ -76,6 +76,14 @@ namespace DLD.UIToolkit
 		/// </summary>
 		VisualElement _moveTarget;
 
+		VisualElement _additionalDragContainer;
+
+		/// <summary>
+		/// Specially designated container where dragged element will be in.
+		/// This should be above everything else, so the dragged element is visible above them.
+		/// </summary>
+		VisualElement _draggedElementContainer;
+
 		/// <summary>
 		/// The element where we listen for key-down and key-up events.
 		/// </summary>
@@ -162,6 +170,24 @@ namespace DLD.UIToolkit
 			}
 
 			_moveTarget = newMoveTarget;
+		}
+
+		public void AddDragContainer(VisualElement newContainer)
+		{
+			_additionalDragContainer = newContainer;
+			_additionalDragContainer.RegisterCallback(_onPointerMove);
+			_additionalDragContainer.RegisterCallback(_onPointerUp);
+		}
+
+		public void RemoveDragContainer(VisualElement newContainer)
+		{
+			newContainer.UnregisterCallback(_onPointerMove);
+			newContainer.UnregisterCallback(_onPointerUp);
+		}
+
+		public void SetDraggedElementContainer(VisualElement newContainer)
+		{
+			_draggedElementContainer = newContainer;
 		}
 
 		/// <inheritdoc cref="_keyEventTarget"/>
@@ -431,6 +457,9 @@ namespace DLD.UIToolkit
 			_draggedElementStartLocalPos = localPos;
 
 			_draggingPointerId = e.pointerId;
+			// Note: We won't capture the pointer, to allow other Pointer events to still work.
+			// The only downside is that for every element that we want to be a drag-and-drop destination,
+			// we have to manually register our OnPointerMove callback to it.
 		}
 
 		void CommitToDragging(PointerMoveEvent e)
@@ -442,8 +471,8 @@ namespace DLD.UIToolkit
 				_isDraggingClonedElement = true;
 			}
 
-			// While being dragged, the node should be directly on the Tab Body
-			if (_draggedElement.parent != _moveTarget)
+			// While being dragged, the node should be parented to the designated container
+			if (_draggedElement.parent != _draggedElementContainer)
 			{
 				// A NodeView's style.position gets set to Position.Relative when it's assigned into another NodeView
 				// (see NodeView.Add and NodeView.Insert).
@@ -454,10 +483,9 @@ namespace DLD.UIToolkit
 				// Since the draggedElement will change parents, its local position doesn't get adjusted automatically.
 				// The moment the parent is changed, the draggedElement's local position value doesn't make sense anymore.
 				// We need to convert it and assign it manually.
-				var newPosition = _draggedElement.ChangeCoordinatesTo(_moveTarget.contentContainer, _draggedElement.resolvedStyle.translate);
+				var newPosition = _draggedElement.ChangeCoordinatesTo(_draggedElementContainer.contentContainer, _draggedElement.resolvedStyle.translate);
 
-				// Note: _moveTarget is the Tab Body
-				_moveTarget.Add(_draggedElement);
+				_draggedElementContainer.Add(_draggedElement);
 
 				_draggedElement.SetPosition(newPosition);
 			}
@@ -501,9 +529,28 @@ namespace DLD.UIToolkit
 				}
 				if (_isDragging && !_spacebarHeld)
 				{
-					// convert mouse pos to be relative to the Tab Body
-					var localPointer = target.ChangeCoordinatesTo(_moveTarget.contentContainer, e.localPosition);
-					_draggedElement.SetPosition(localPointer.x - _draggedElementStartLocalPos.x, localPointer.y - _draggedElementStartLocalPos.y);
+					if (e.target is VisualElement targetElement)
+					{
+						// convert mouse pos to be relative to the Tab Body
+						Vector2 localPointer;
+						if (_additionalDragContainer.IsOrAncestorOf(targetElement))
+						{
+							// PointerMoveEvent happened on the _additionalDragContainer
+							// convert the event's mouse position to our special container for dragged elements
+							localPointer = _additionalDragContainer.ChangeCoordinatesTo(_draggedElementContainer.contentContainer, e.localPosition);
+						}
+						else if (target.IsOrAncestorOf(targetElement)) // note: target is the TabBodyContainer of the Pane
+						{
+							// PointerMoveEvent happened on the TabBodyContainer
+							// convert the event's mouse position to our special container for dragged elements
+							localPointer = target.ChangeCoordinatesTo(_draggedElementContainer.contentContainer, e.localPosition);
+						}
+						else
+						{
+							return;
+						}
+						_draggedElement.SetPosition(localPointer.x - _draggedElementStartLocalPos.x, localPointer.y - _draggedElementStartLocalPos.y);
+					}
 
 					_pointerLastKnownLocalPos = e.localPosition;
 				}
@@ -536,7 +583,25 @@ namespace DLD.UIToolkit
 			}
 			else if (_isDragging && e.pointerId == _draggingPointerId)
 			{
-				OnEndedDrag(e, _draggedElement.resolvedStyle.translate);
+				Vector2 draggedElementEndPos = _draggedElement.resolvedStyle.translate;
+				Vector2 draggedElementEndWorldPos = _draggedElementContainer.LocalToWorld(draggedElementEndPos);
+
+				bool droppedInAdditional;
+				{
+					Vector2 draggedElementEndLocalPosInAdditional = _additionalDragContainer.WorldToLocal(draggedElementEndWorldPos);
+					droppedInAdditional = _additionalDragContainer.ContainsPoint(draggedElementEndLocalPosInAdditional);
+				}
+
+				if (droppedInAdditional)
+				{
+					// todo: delete the node
+				}
+				else
+				{
+					Vector2 draggedElementEndLocalPos = _moveTarget.WorldToLocal(draggedElementEndWorldPos);
+					OnEndedDrag(e, draggedElementEndLocalPos);
+				}
+
 				_tooltip?.HideTooltip();
 				if (_isDraggingClonedElement)
 				{

@@ -109,6 +109,24 @@ namespace DLD.UIToolkit
 			clonedRoot.RemoveFromHierarchy();
 		}
 
+		public static bool IsOrAncestorOf(this VisualElement ancestor, VisualElement child)
+		{
+			if (ReferenceEquals(ancestor, child))
+			{
+				return true;
+			}
+
+			for (VisualElement parent = child.hierarchy.parent; parent != null; parent = parent.hierarchy.parent)
+			{
+				if (ReferenceEquals(parent, ancestor))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public static void Set(this Button button, string label = null, string iconClassName = null)
 		{
 			if (string.IsNullOrWhiteSpace(iconClassName))
