@@ -73,6 +73,18 @@ namespace DLD.Utility
 			}
 		}
 
+		public static void ToggleFlag(this ref ulong flags, ulong flag)
+		{
+			if ((flags & flag) == 0) // if currently does not have value
+			{
+				flags |= flag;
+			}
+			else
+			{
+				flags &= (~flag);
+			}
+		}
+
 		// =================================================================
 
 		public static void SetFlag(this ref byte byteToChange, int index, bool value)
@@ -146,6 +158,21 @@ namespace DLD.Utility
 			}
 
 			return ((intToGet & (1 << index)) != 0);
+		}
+
+		public static bool GetFlag(this ulong intToGet, int index)
+		{
+			if (index < 0 || index > 31)
+			{
+				return false;
+			}
+
+			return ((intToGet & (1u << index)) != 0);
+		}
+
+		public static bool HasFlag(this ulong intToGet, ulong flagToCheck)
+		{
+			return (intToGet & flagToCheck) == flagToCheck;
 		}
 
 		// =================================================================

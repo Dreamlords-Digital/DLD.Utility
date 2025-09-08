@@ -47,7 +47,7 @@ namespace DLD.UIToolkit
 
 			_currentMode = Mode.ByteMask;
 			_currentByteValue = currentByteValue;
-			_currentEnumValue = null;
+			_currentEnumValue = 0;
 			_enumTypeOnOpen = null;
 		}
 

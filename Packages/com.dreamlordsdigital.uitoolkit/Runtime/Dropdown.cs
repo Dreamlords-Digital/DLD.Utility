@@ -120,7 +120,7 @@ namespace DLD.UIToolkit
 		/// this is the current Enum value.
 		/// This is the value that we send when we dispatch a ChangeEvent.
 		/// </summary>
-		Enum _currentEnumValue;
+		ulong _currentEnumValue;
 
 		/// <summary>
 		/// Enum value in the <see cref="_enumTypeOnOpen"/> that represents the zero value.
@@ -220,8 +220,6 @@ namespace DLD.UIToolkit
 
 		public Label LabelElement => _label;
 
-		public Enum CurrentEnumValue => _currentEnumValue;
-
 		public void SetContextMenu(IContextMenu contextMenu)
 		{
 			_contextMenu = contextMenu;
@@ -317,11 +315,11 @@ namespace DLD.UIToolkit
 			{
 				case Mode.Enum:
 					Debug.Assert(_enumTypeOnOpen != null);
-					OnDropdownEnumChosen(index, label, menuTooltip, (Enum)newValue);
+					OnDropdownEnumChosen(index, label, menuTooltip, (ulong)newValue);
 					break;
 				case Mode.EnumFlag:
 					Debug.Assert(_enumTypeOnOpen != null);
-					OnDropdownEnumFlagChosen(index, (Enum)newValue);
+					OnDropdownEnumFlagChosen(index, (ulong)newValue);
 					break;
 				case Mode.ByteMask:
 					Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
