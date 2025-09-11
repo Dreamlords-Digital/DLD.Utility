@@ -48,7 +48,6 @@ namespace DLD.UIToolkit
 			_currentMode = Mode.ByteMask;
 			_currentByteValue = currentByteValue;
 			_currentEnumValue = 0;
-			_enumTypeOnOpen = null;
 		}
 
 		// ==================================================================================
@@ -103,8 +102,6 @@ namespace DLD.UIToolkit
 					listener: this, userArg1: n);
 			}
 			_contextMenu.Show(_toggle, listener: this);
-
-			_lastEnumTypeUsedOnOpen = null;
 		}
 
 		/// <summary>

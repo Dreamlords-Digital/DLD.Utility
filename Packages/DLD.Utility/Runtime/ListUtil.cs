@@ -75,6 +75,24 @@ namespace DLD.Utility
 			}
 		}
 
+		public static int IndexOf<T>(this T[] me, T valueToLookFor)
+		{
+			if (me == null)
+			{
+				return -1;
+			}
+
+			for (int i = 0; i < me.Length; ++i)
+			{
+				if (Comparer<T>.Default.Compare(me[i], valueToLookFor) == 0)
+				{
+					return i;
+				}
+			}
+
+			return -1;
+		}
+
 		/// <summary>
 		/// Removes an element then re-inserts it into a new index in the list.
 		/// All the other elements in the list are pushed upwards/downwards as a result.

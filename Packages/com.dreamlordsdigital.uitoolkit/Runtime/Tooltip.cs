@@ -97,37 +97,31 @@ namespace DLD.UIToolkit
 
 		const string DEFAULT_OBSOLETE_MESSAGE = "Marked as obsolete";
 
-		public static TooltipMessage[] CreateTooltipMessages(EnumUIAttribute enumUI, ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		public static TooltipMessage[] CreateTooltipMessages(DropdownItem item, EnumDropdownItem obsoleteItem, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
 		{
 			return new TooltipMessage[]
 			{
-				new(BaseIcons.GENERIC_INFO, enumUI.Tooltip),
-				new(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteAttribute.Message ?? obsoleteMessageToUseIfNull),
+				new(BaseIcons.GENERIC_INFO, item.Tooltip),
+				new(obsoleteItem.Obsolete == EnumObsoleteType.ObsoleteError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteItem.ObsoleteMessage ?? obsoleteMessageToUseIfNull),
 			};
 		}
 
-		public static string CreateObsoleteTooltip(ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		public static string CreateObsoleteTooltip(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
 		{
-			return $"{(obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{obsoleteAttribute.Message ?? obsoleteMessageToUseIfNull}";
+			return $"{(item.Obsolete == EnumObsoleteType.ObsoleteError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{item.ObsoleteMessage ?? obsoleteMessageToUseIfNull}";
 		}
 
-		public static string CreateObsoleteTooltipIcon(ObsoleteAttribute obsoleteAttribute)
+		public static string CreateObsoleteTooltipIcon(EnumObsoleteType obsoleteType)
 		{
-			return obsoleteAttribute.IsError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING;
+			return obsoleteType == EnumObsoleteType.ObsoleteError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING;
 		}
 
-		public static string CreateObsoleteTooltipText(ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
-		{
-			if (!string.IsNullOrWhiteSpace(obsoleteAttribute.Message))
-			{
-				return obsoleteAttribute.Message;
-			}
-			return obsoleteMessageToUseIfNull;
-		}
+		public static string CreateObsoleteTooltipText(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE) =>
+			!string.IsNullOrWhiteSpace(item.ObsoleteMessage) ? item.ObsoleteMessage : obsoleteMessageToUseIfNull;
 
-		public static TooltipMessage CreateObsoleteTooltipMessage(ObsoleteAttribute obsoleteAttribute, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+		public static TooltipMessage CreateObsoleteTooltipMessage(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
 		{
-			return new TooltipMessage(CreateObsoleteTooltipIcon(obsoleteAttribute), CreateObsoleteTooltipText(obsoleteAttribute, obsoleteMessageToUseIfNull));
+			return new TooltipMessage(CreateObsoleteTooltipIcon(item.Obsolete), CreateObsoleteTooltipText(item, obsoleteMessageToUseIfNull));
 		}
 
 		public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO, bool pushToStack = false)

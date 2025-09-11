@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,6 +10,21 @@ namespace DLD.UIToolkit
 		public string ShortLabel;
 		public string Tooltip;
 		public string IconClassName;
+	}
+
+	public struct EnumDropdownItem
+	{
+		public EnumObsoleteType Obsolete;
+		public string ObsoleteMessage;
+
+		public static readonly EnumDropdownItem Empty = new EnumDropdownItem();
+	}
+
+	public enum EnumObsoleteType : byte
+	{
+		None,
+		ObsoleteWarning,
+		ObsoleteError,
 	}
 
 	public enum DropdownCurrentValueDisplayType : byte
@@ -76,12 +90,12 @@ namespace DLD.UIToolkit
 		enum Mode : byte
 		{
 			/// <summary>
-			/// Dropdown will show all values of the specified Enum in <see cref="SetEnumTypeOnOpen"/>.
+			/// Dropdown will show all values of the specified Enum in <see cref="SetItemsFromEnum"/>.
 			/// </summary>
 			Enum,
 
 			/// <summary>
-			/// Dropdown will show all values of the specified Enum in <see cref="SetEnumTypeOnOpen"/>.
+			/// Dropdown will show all values of the specified Enum in <see cref="SetItemsFromEnum"/>.
 			/// </summary>
 			/// <remarks>
 			/// In this mode, the user is allowed to select multiple dropdown items.
@@ -105,28 +119,10 @@ namespace DLD.UIToolkit
 
 		/// <summary>
 		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
-		/// this is the enum type that we are currently displaying.
-		/// </summary>
-		System.Type _enumTypeOnOpen;
-
-		/// <summary>
-		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
-		/// this is used for checking if we can reuse the current context menu or not.
-		/// </summary>
-		System.Type _lastEnumTypeUsedOnOpen;
-
-		/// <summary>
-		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
 		/// this is the current Enum value.
 		/// This is the value that we send when we dispatch a ChangeEvent.
 		/// </summary>
 		ulong _currentEnumValue;
-
-		/// <summary>
-		/// Enum value in the <see cref="_enumTypeOnOpen"/> that represents the zero value.
-		/// Only used when <see cref="_currentMode"/> is <see cref="Mode.EnumFlag"/>.
-		/// </summary>
-		Enum _noneEnumValue;
 
 		/// <inheritdoc cref="DropdownEnumFlagHandling"/>
 		DropdownEnumFlagHandling _enumFlagHandling = DropdownEnumFlagHandling.Auto;
@@ -137,7 +133,15 @@ namespace DLD.UIToolkit
 		/// </summary>
 		bool _includeObsoleteEnums;
 
-		List<List<TooltipMessage>> _dropdownItemTooltips;
+		ulong[] _enumValues;
+		DropdownItem[] _enumItems;
+		EnumDropdownItem[] _enumObsoleteItems;
+
+		/// <summary>
+		/// Which element in the <see cref="_enumValues"/> has the 0 value, if any.
+		/// This is usually the first in the list of enum items, but that isn't a guarantee.
+		/// </summary>
+		int _noneIndex;
 
 		// ==================================================================================
 
@@ -297,8 +301,7 @@ namespace DLD.UIToolkit
 			{
 				case Mode.Enum:
 				case Mode.EnumFlag:
-					Debug.Assert(_enumTypeOnOpen != null);
-					Open(_enumTypeOnOpen);
+					Open();
 					break;
 				case Mode.ByteMask:
 					Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
@@ -314,11 +317,9 @@ namespace DLD.UIToolkit
 			switch (_currentMode)
 			{
 				case Mode.Enum:
-					Debug.Assert(_enumTypeOnOpen != null);
-					OnDropdownEnumChosen(index, label, menuTooltip, (ulong)newValue);
+					OnDropdownEnumChosen(index, label, (ulong)newValue);
 					break;
 				case Mode.EnumFlag:
-					Debug.Assert(_enumTypeOnOpen != null);
 					OnDropdownEnumFlagChosen(index, (ulong)newValue);
 					break;
 				case Mode.ByteMask:
