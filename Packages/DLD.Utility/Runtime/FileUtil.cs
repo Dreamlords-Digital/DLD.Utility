@@ -623,6 +623,19 @@ namespace DLD.Utility
 #endif
 			}
 		}
+		public static string ProjectPathWithTrailingSlash
+		{
+			get
+			{
+#if UNITY_EDITOR
+				string result = Application.dataPath;
+
+				return result[..^6]; // minus 7 to remove the "Assets"
+#else
+				return Application.dataPath;
+#endif
+			}
+		}
 
 		public static string ProjectFolderName
 		{
