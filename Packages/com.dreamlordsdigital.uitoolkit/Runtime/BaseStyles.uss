@@ -5,6 +5,8 @@
     --dld-color-border-error: rgb(181, 0, 0);
     --dld-color-label-error: rgb(212, 78, 78);
     --dld-color-label-error-focused: rgb(255, 105, 105);
+    --dld-color-label-link: rgb(238, 238, 238);
+    --dld-color-label-link-hovered: rgb(123, 174, 250);
 }
 
 .unity-label {
@@ -184,6 +186,21 @@
 
 .dld-label--filename-extension {
     color: rgb(119, 119, 119);
+}
+
+.dld-label--link {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/Custom/Dash-xxoo.png?fileID=2800000&guid=6ddd360cab675ea4ba34564778d2d01f&type=3#Dash-xxoo");
+    -unity-slice-type: tiled;
+    -unity-slice-left: 4;
+    background-repeat: space no-repeat;
+    color: var(--dld-color-label-link);
+    -unity-background-image-tint-color: var(--dld-color-label-link);
+}
+
+.dld-label--link:hover {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Point.png?fileID=2800000&guid=eb4a51b21c37dd841be3d960ab614491&type=3#Hand-Point") 8 3;
+    color: var(--dld-color-label-link-hovered);
+    -unity-background-image-tint-color: var(--dld-color-label-link-hovered);
 }
 
 FilenameTextField > #unity-text-input > TextElement {
