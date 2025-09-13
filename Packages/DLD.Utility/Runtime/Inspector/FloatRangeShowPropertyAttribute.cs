@@ -6,56 +6,56 @@ using UnityEngine;
 namespace DLD.Utility.Inspector
 {
 	/// <summary>
-	/// Show a FloatRange in a compact format (with two input fields in one line), but only if the specified property returns true.
+	///    Show a FloatRange in a compact format (with two input fields in one line), but only if the specified property returns true.
 	/// </summary>
 	/// <remarks>
-	/// <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>
-	/// <para>This assumes the property returns a boolean. The property does not have to be public.</para>
+	///    <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>
+	///    <para>This assumes the property returns a boolean. The property does not have to be public.</para>
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
 	public class FloatRangeShowPropertyAttribute : PropertyAttribute
 	{
 		/// <summary>
-		/// Name of property to use for determining if the FloatRange will be shown.
+		///    Name of property to use for determining if the FloatRange will be shown.
 		/// </summary>
 		/// <remarks>
-		/// <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>
-		/// <para>This assumes the property returns a boolean. The property does not have to be public.</para>
+		///    <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>
+		///    <para>This assumes the property returns a boolean. The property does not have to be public.</para>
 		/// </remarks>
 		public readonly string PropertyName;
 
 		/// <summary>
-		/// Whether to completely hide the FloatRange, or still show it but with read-only disabled controls.
+		///    Whether to completely hide the FloatRange, or still show it but with read-only disabled controls.
 		/// </summary>
 		public HideType HideType { get; } = HideType.DoNotDraw;
 
 		/// <summary>
-		/// Custom label on the FloatRange. Can be left at null to use the default (just use the variable name).
+		///    Custom label on the FloatRange. Can be left at null to use the default (just use the variable name).
 		/// </summary>
 		public readonly string Label;
 
 		/// <summary>
-		/// Optional label just before the Range Start's input field.
+		///    Optional label just before the Range Start's input field.
 		/// </summary>
 		public readonly string StartLabel;
 
 		/// <summary>
-		/// Optional label to the right of the Range Start's input field.
+		///    Optional label to the right of the Range Start's input field.
 		/// </summary>
 		public readonly string StartPostLabel;
 
 		/// <summary>
-		/// Optional label just before the Range End's input field.
+		///    Optional label just before the Range End's input field.
 		/// </summary>
 		public readonly string EndLabel;
 
 		/// <summary>
-		/// Optional label to the right of the Range End's input field.
+		///    Optional label to the right of the Range End's input field.
 		/// </summary>
 		public readonly string EndPostLabel;
 
 		/// <summary>
-		/// Make the control use all the available width, instead of lining up with other controls.
+		///    Make the control use all the available width, instead of lining up with other controls.
 		/// </summary>
 		public readonly bool UseAllAvailableSpace;
 

@@ -13,45 +13,45 @@ using FileUtil = DLD.Utility.FileUtil;
 namespace DLD.IMGUI
 {
 	/// <summary>
-	/// GUI widget that displays a sound file with timeline and play, pause, stop buttons.
+	///    GUI widget that displays a sound file with timeline and play, pause, stop buttons.
 	/// </summary>
 	public class SoundPlayer
 	{
 		/// <summary>
-		/// File (with absolute path) of a sound file that user wants to be played.
-		/// If this has a value, this means user wants to have the sound played but
-		/// is currently unable to (most likely because it hasn't finished loading yet).
+		///    File (with absolute path) of a sound file that user wants to be played.
+		///    If this has a value, this means user wants to have the sound played but
+		///    is currently unable to (most likely because it hasn't finished loading yet).
 		/// </summary>
 		string _currentAudioFileWantingPreview;
 
 		/// <summary>
-		/// File (with absolute path) of a sound file that is being played right now.
+		///    File (with absolute path) of a sound file that is being played right now.
 		/// </summary>
 		string _currentAudioFileBeingPreviewed;
 
 		/// <summary>
-		/// True if there is currently a sound being played.
-		/// This will make the GUI show a stop button for
-		/// the file instead of a play button.
+		///    True if there is currently a sound being played.
+		///    This will make the GUI show a stop button for
+		///    the file instead of a play button.
 		/// </summary>
 		bool _isPreviewingSound;
 
 		/// <summary>
-		/// Time in seconds when the currently played sound was started.
-		/// This is used to compute the current playback position.
+		///    Time in seconds when the currently played sound was started.
+		///    This is used to compute the current playback position.
 		/// </summary>
 		double _timeLastSoundPreviewStart;
 
 		/// <summary>
-		/// If there is a sound being played, this is the current time
-		/// the sound is in. Measured in seconds.
+		///    If there is a sound being played, this is the current time
+		///    the sound is in. Measured in seconds.
 		/// </summary>
 		float _currentPreviewedSoundTimeValue;
 
 		/// <summary>
-		/// Length of current sound being played. Measured in seconds.
-		/// This is shown in the GUI. Also, it's used to compute the
-		/// current playback position.
+		///    Length of current sound being played. Measured in seconds.
+		///    This is shown in the GUI. Also, it's used to compute the
+		///    current playback position.
 		/// </summary>
 		float _currentPreviewedSoundLength;
 

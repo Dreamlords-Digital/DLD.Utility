@@ -81,13 +81,15 @@ namespace DLD.Serializer
 		protected abstract string SerializeObject<T>(T data, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM);
 
 		/// <summary>
-		/// Generates a hash out of the binary form of the serializable fields and properties of the passed data.
-		/// That means any variables that are configured to be not serialized are not included in the hash.
-		/// The hash is then converted into a string for ease of use.
+		///    Generates a hash out of the binary form of the serializable fields and properties of the passed data.
+		///    That means any variables that are configured to be not serialized are not included in the hash.
+		///    The hash is then converted into a string for ease of use.
 		/// </summary>
 		/// <param name="data"></param>
-		/// <param name="hashAlgorithmName">for other possible values, see:
-		///	https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.hashalgorithm.create?view=net-5.0#system-security-cryptography-hashalgorithm-create(system-string)</param>
+		/// <param name="hashAlgorithmName">
+		///    for other possible values, see:
+		///    https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.hashalgorithm.create?view=net-5.0#system-security-cryptography-hashalgorithm-create(system-string)
+		/// </param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		protected abstract string GetObjectHash<T>(T data, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM);
@@ -197,8 +199,8 @@ namespace DLD.Serializer
 #endif
 
 		/// <summary>
-		/// Deserialize text file specified in <see cref="file"/>, into the type <see cref="T"/>, and add it to the <see cref="resultBag"/>.
-		/// If the file has erroneous data that can't be resolved, it won't be added to the bag.
+		///    Deserialize text file specified in <see cref="file"/>, into the type <see cref="T"/>, and add it to the <see cref="resultBag"/>.
+		///    If the file has erroneous data that can't be resolved, it won't be added to the bag.
 		/// </summary>
 		/// <param name="file">Absolute path to the serialized text file.</param>
 		/// <param name="resultBag">Where the deserialized object will be placed into.</param>

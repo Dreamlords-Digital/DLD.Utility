@@ -279,7 +279,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Is GameObject tagged with any of the tags in the list?
+		///    Is GameObject tagged with any of the tags in the list?
 		/// </summary>
 		/// <param name="self"></param>
 		/// <param name="tags"></param>
@@ -344,10 +344,10 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Get the filename out of the scenePath without the extension type.
+		///    Get the filename out of the scenePath without the extension type.
 		/// </summary>
 		/// <remarks>
-		/// Given "Assets/Scenes/Others/Scene1.unity", this will return "Scene1".
+		///    Given "Assets/Scenes/Others/Scene1.unity", this will return "Scene1".
 		/// </remarks>
 		public static string GetSceneNameFromPath(this string scenePath)
 		{
@@ -368,11 +368,11 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Get the scene path that is suitable for use with <see cref="UnityEngine.SceneManagement.SceneManager.GetSceneByName"/>.
-		/// It will remove any "Assets/" in the beginning, and ".unity" at the end.
+		///    Get the scene path that is suitable for use with <see cref="UnityEngine.SceneManagement.SceneManager.GetSceneByName"/>.
+		///    It will remove any "Assets/" in the beginning, and ".unity" at the end.
 		/// </summary>
 		/// <remarks>
-		/// Given "Assets/Scenes/Others/Scene1.unity", this will return "Scenes/Others/Scene1".
+		///    Given "Assets/Scenes/Others/Scene1.unity", this will return "Scenes/Others/Scene1".
 		/// </remarks>
 		public static string GetScenePartialNameFromPath(this string scenePath)
 		{

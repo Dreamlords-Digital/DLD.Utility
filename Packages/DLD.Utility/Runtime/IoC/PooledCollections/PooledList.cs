@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace DLD.Utility
 {
 	/// <summary>
-	/// Same as <see cref="List{T}"/> but implements <see cref="IPooled"/>
-	/// so that you can use <see cref="IoC.GetFromPool{T}()"/> on it.
+	///    Same as <see cref="List{T}"/> but implements <see cref="IPooled"/>
+	///    so that you can use <see cref="IoC.GetFromPool{T}()"/> on it.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class PooledList<T> : List<T>, IPooled
@@ -31,8 +31,8 @@ namespace DLD.Utility
 	}
 
 	/// <summary>
-	/// Same as <see cref="PooledList{T}"/> but expects <see cref="T"/> to implement <see cref="IPooled"/>
-	/// so that elements inside are properly released back to pool when removed.
+	///    Same as <see cref="PooledList{T}"/> but expects <see cref="T"/> to implement <see cref="IPooled"/>
+	///    so that elements inside are properly released back to pool when removed.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class PooledPooledList<T> : List<T>, IPooled where T : IPooled
@@ -85,7 +85,9 @@ namespace DLD.Utility
 		{
 			int index = IndexOf(item);
 			if (index < 0)
+			{
 				return false;
+			}
 
 			RemoveAt(index, releaseToPool);
 			return true;

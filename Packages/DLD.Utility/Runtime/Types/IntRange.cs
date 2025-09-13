@@ -9,23 +9,23 @@ using Unity.Mathematics;
 namespace DLD.Utility
 {
 	/// <summary>
-	/// Used to express an inclusive range for an int value.
+	///    Used to express an inclusive range for an int value.
 	/// </summary>
 	/// <remarks>
-	/// Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
-	/// Has optional validation methods to prevent Lower Limit from going above Upper Limit.
+	///    Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
+	///    Has optional validation methods to prevent Lower Limit from going above Upper Limit.
 	/// </remarks>
 	[Serializable]
 	[JetBrains.Annotations.PublicAPI]
 	public struct IntRange : IEquatable<IntRange>
 	{
 		/// <summary>
-		/// The inclusive lower limit to the range.
+		///    The inclusive lower limit to the range.
 		/// </summary>
 		public int Min;
 
 		/// <summary>
-		/// The inclusive upper limit to the range.
+		///    The inclusive upper limit to the range.
 		/// </summary>
 		public int Max;
 
@@ -46,11 +46,13 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Sets a limit that a value can reach.
+		///    Sets a limit that a value can reach.
 		/// </summary>
 		/// <param name="value"></param>
-		/// <param name="validate">Do not allow Lower Limit to be higher than the Upper Limit,
-		/// and do not allow Upper Limit to be lower than the Lower Limit.</param>
+		/// <param name="validate">
+		///    Do not allow Lower Limit to be higher than the Upper Limit,
+		///    and do not allow Upper Limit to be lower than the Lower Limit.
+		/// </param>
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetLimit(IntRange value, bool validate = true, bool allowSameValues = false)
 		{
@@ -65,12 +67,14 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Sets a limit that a value can reach.
+		///    Sets a limit that a value can reach.
 		/// </summary>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
-		/// <param name="validate">Do not allow Lower Limit to be higher than the Upper Limit,
-		/// and do not allow Upper Limit to be lower than the Lower Limit.</param>
+		/// <param name="validate">
+		///    Do not allow Lower Limit to be higher than the Upper Limit,
+		///    and do not allow Upper Limit to be lower than the Lower Limit.
+		/// </param>
 		/// <param name="allowSameValues">Allow Lower Limit to be same value as Upper Limit.</param>
 		public void SetLimit(int min, int max, bool validate = true, bool allowSameValues = false)
 		{
@@ -85,7 +89,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Sets the Upper Limit that a value can reach.
+		///    Sets the Upper Limit that a value can reach.
 		/// </summary>
 		/// <param name="newMax"></param>
 		/// <param name="validate">Do not allow Upper Limit to become lower than the current Lower Limit.</param>
@@ -96,7 +100,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Sets the Lower Limit that a value can drop to.
+		///    Sets the Lower Limit that a value can drop to.
 		/// </summary>
 		/// <param name="newMin"></param>
 		/// <param name="validate">Do not allow Lower Limit to become higher than the current Upper Limit.</param>
@@ -107,7 +111,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Modify an upper limit by moving it via an offset from current upper limit.
+		///    Modify an upper limit by moving it via an offset from current upper limit.
 		/// </summary>
 		public void ModifyMax(int offsetToUpperLimit, bool allowSameValues = false)
 		{
@@ -115,7 +119,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Modify a lower limit by moving it via an offset from current lower limit.
+		///    Modify a lower limit by moving it via an offset from current lower limit.
 		/// </summary>
 		public void ModifyLowerLimit(int offsetToLowerLimit, bool allowSameValues = false)
 		{
@@ -217,7 +221,7 @@ namespace DLD.Utility
 		public bool IsMinAndMaxSameAndPositive => Min == Max && Min > 0;
 
 		/// <summary>
-		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
+		///    Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
 		/// </summary>
 		public int Random()
 		{
@@ -225,7 +229,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Uses a <see cref="System.Random"/> to generate a random value within the range.
+		///    Uses a <see cref="System.Random"/> to generate a random value within the range.
 		/// </summary>
 		public int Random(System.Random random)
 		{
@@ -319,17 +323,17 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Range of 0 to 1
+		///    Range of 0 to 1
 		/// </summary>
 		public static IntRange MinValue => new IntRange(0, 1);
 
 		/// <summary>
-		/// Range of 0 to 0
+		///    Range of 0 to 0
 		/// </summary>
 		public static IntRange Zero => new IntRange(0, 0, true);
 
 		/// <summary>
-		/// Range of 1 to 1
+		///    Range of 1 to 1
 		/// </summary>
 		public static IntRange One => new IntRange(1, 1, true);
 

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace DLD.Utility
 {
 	/// <summary>
-	/// Same as <see cref="HashSet{T}"/> but implements <see cref="IPooled"/>
-	/// so that you can use <see cref="IoC.GetFromPool{T}()"/> on it.
+	///    Same as <see cref="HashSet{T}"/> but implements <see cref="IPooled"/>
+	///    so that you can use <see cref="IoC.GetFromPool{T}()"/> on it.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class PooledHashSet<T> : HashSet<T>, IPooled

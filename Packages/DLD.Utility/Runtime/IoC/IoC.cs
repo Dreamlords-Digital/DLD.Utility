@@ -5,10 +5,10 @@ using System;
 namespace DLD.Utility
 {
 	/// <summary>
-	/// Inversion of Control.
-	/// Allows retrieval of singletons and pooled objects.
-	/// Works in both runtime and editor scripts.
-	/// Functions as a "static gateway" to a <see cref="DependencyResolver"/>.
+	///    Inversion of Control.
+	///    Allows retrieval of singletons and pooled objects.
+	///    Works in both runtime and editor scripts.
+	///    Functions as a "static gateway" to a <see cref="DependencyResolver"/>.
 	/// </summary>
 	public static class IoC
 	{
@@ -158,7 +158,7 @@ namespace DLD.Utility
 		}
 
 		/// <inheritdoc cref="IDependencyResolver.GetFromPool{T}(System.Type)"/>
-		public static T GetFromPool<T>(System.Type typeToGet) where T : class, IPooled, new()
+		public static T GetFromPool<T>(Type typeToGet) where T : class, IPooled, new()
 		{
 			CreateDefaultDependencyResolverIfNeeded();
 
@@ -168,8 +168,8 @@ namespace DLD.Utility
 		// =======================================================
 
 		/// <summary>
-		/// Can be used to change the resolver, so that the dependency injections
-		/// will return a different set of instances.
+		///    Can be used to change the resolver, so that the dependency injections
+		///    will return a different set of instances.
 		/// </summary>
 		/// <param name="resolver"></param>
 		public static void SetDependencyResolver(IDependencyResolver resolver)

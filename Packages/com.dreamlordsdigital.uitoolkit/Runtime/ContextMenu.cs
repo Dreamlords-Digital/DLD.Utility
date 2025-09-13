@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,21 +30,21 @@ namespace DLD.UIToolkit
 			IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
 
 		/// <summary>
-		/// Show the selected indicator only on the specified item.
-		/// All other items will have their selected indicators cleared.
+		///    Show the selected indicator only on the specified item.
+		///    All other items will have their selected indicators cleared.
 		/// </summary>
 		void ChangeSelected(int newSelectedIdx);
 
 		/// <summary>
-		/// Find the menu item that has the specified userArg1 and
-		/// show the selected indicator on it only.
-		/// All other items will have their selected indicators cleared.
+		///    Find the menu item that has the specified userArg1 and
+		///    show the selected indicator on it only.
+		///    All other items will have their selected indicators cleared.
 		/// </summary>
 		void ChangeSelected(object userArg1);
 
 		/// <summary>
-		/// Show/hide the selected indicator of the specified item.
-		/// Other items are not edited.
+		///    Show/hide the selected indicator of the specified item.
+		///    Other items are not edited.
 		/// </summary>
 		/// <param name="menuIdx">The item to edit, by index.</param>
 		/// <param name="selected">Whether to show the selected indicator or not.</param>

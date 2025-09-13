@@ -16,7 +16,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Add to list only if <see cref="IList{T}.Contains"/> returns false.
+		///    Add to list only if <see cref="IList{T}.Contains"/> returns false.
 		/// </summary>
 		/// <param name="list"></param>
 		/// <param name="valueToAdd"></param>
@@ -94,16 +94,16 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Removes an element then re-inserts it into a new index in the list.
-		/// All the other elements in the list are pushed upwards/downwards as a result.
+		///    Removes an element then re-inserts it into a new index in the list.
+		///    All the other elements in the list are pushed upwards/downwards as a result.
 		/// </summary>
 		/// <param name="list"></param>
 		/// <param name="currentIdx"></param>
 		/// <param name="destinationIdx"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <remarks>
-		/// Note: this doesn't actually call <see cref="System.Collections.Generic.List{T}.Remove"/>
-		/// or <see cref="System.Collections.Generic.List{T}.Insert"/>.
+		///    Note: this doesn't actually call <see cref="System.Collections.Generic.List{T}.Remove"/>
+		///    or <see cref="System.Collections.Generic.List{T}.Insert"/>.
 		/// </remarks>
 		public static void MoveElement<T>(this IList<T> list, int currentIdx, int destinationIdx)
 		{
@@ -335,7 +335,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Is this List of strings empty or entirely composed of null or empty strings?
+		///    Is this List of strings empty or entirely composed of null or empty strings?
 		/// </summary>
 		/// <param name="me"></param>
 		/// <returns></returns>
@@ -363,7 +363,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Is this List of strings empty or entirely composed of null or white space strings?
+		///    Is this List of strings empty or entirely composed of null or white space strings?
 		/// </summary>
 		/// <param name="me"></param>
 		/// <returns></returns>
@@ -391,7 +391,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Is this List empty or entirely composed of null references?
+		///    Is this List empty or entirely composed of null references?
 		/// </summary>
 		/// <param name="me"></param>
 		/// <typeparam name="T"></typeparam>

@@ -6,39 +6,39 @@ using UnityEngine;
 namespace DLD.Utility.Inspector
 {
 	/// <summary>
-	/// Show a FloatRange in a compact format (with two input fields in one line),
-	/// and optionally with custom labels for the input fields.
+	///    Show a FloatRange in a compact format (with two input fields in one line),
+	///    and optionally with custom labels for the input fields.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
 	public class FloatRangeAttribute : PropertyAttribute
 	{
 		/// <summary>
-		/// Custom label on the FloatRange. Can be left at null to use the default (just use the variable name).
+		///    Custom label on the FloatRange. Can be left at null to use the default (just use the variable name).
 		/// </summary>
 		public readonly string Label;
 
 		/// <summary>
-		/// Optional label just before the Range Start's input field.
+		///    Optional label just before the Range Start's input field.
 		/// </summary>
 		public readonly string MinLabel;
 
 		/// <summary>
-		/// Optional label to the right of the Range Start's input field.
+		///    Optional label to the right of the Range Start's input field.
 		/// </summary>
 		public readonly string MinPostLabel;
 
 		/// <summary>
-		/// Optional label just before the Range End's input field.
+		///    Optional label just before the Range End's input field.
 		/// </summary>
 		public readonly string MaxLabel;
 
 		/// <summary>
-		/// Optional label to the right of the Range End's input field.
+		///    Optional label to the right of the Range End's input field.
 		/// </summary>
 		public readonly string MaxPostLabel;
 
 		/// <summary>
-		/// Make the control use all the available width, instead of lining up with other controls.
+		///    Make the control use all the available width, instead of lining up with other controls.
 		/// </summary>
 		public readonly bool UseAllAvailableSpace;
 

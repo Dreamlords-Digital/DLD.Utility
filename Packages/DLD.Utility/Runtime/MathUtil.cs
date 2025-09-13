@@ -75,7 +75,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Projects a vector onto a plane. The output is not normalized.
+		///    Projects a vector onto a plane. The output is not normalized.
 		/// </summary>
 		/// <param name="planeNormal"></param>
 		/// <param name="vector"></param>
@@ -137,10 +137,10 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Given coordinates that represent a 2d direction whose length is at most 1.0,
-		/// this will convert the values so that a direction pointing to
-		/// top-right at its maximum, meaning (0.707, 0.707), becomes (1, 1).
-		/// It will allow the X and Y axes to be able to reach the full value of 1.0 independently of each other.
+		///    Given coordinates that represent a 2d direction whose length is at most 1.0,
+		///    this will convert the values so that a direction pointing to
+		///    top-right at its maximum, meaning (0.707, 0.707), becomes (1, 1).
+		///    It will allow the X and Y axes to be able to reach the full value of 1.0 independently of each other.
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
@@ -176,7 +176,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Check if point is inside an ellipse.
+		///    Check if point is inside an ellipse.
 		/// </summary>
 		/// <param name="point"></param>
 		/// <param name="ellipsePos"></param>
@@ -198,8 +198,8 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Given a point that could be anywhere, this returns the point on the ellipse's border that
-		/// would create a line towards the ellipse's center using those two points.
+		///    Given a point that could be anywhere, this returns the point on the ellipse's border that
+		///    would create a line towards the ellipse's center using those two points.
 		/// </summary>
 		/// <param name="point"></param>
 		/// <param name="ellipsePos"></param>
@@ -227,12 +227,12 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Check if line defined by lineSta and lineEnd passes through
-		/// sphere whose center is at spherePos with the given radius.
+		///    Check if line defined by lineSta and lineEnd passes through
+		///    sphere whose center is at spherePos with the given radius.
 		/// </summary>
 		/// <remarks>
-		/// From https://paulbourke.net/geometry/circlesphere/raysphere.c<br/>
-		/// Explained in https://paulbourke.net/geometry/circlesphere/index.html#linesphere
+		///    From https://paulbourke.net/geometry/circlesphere/raysphere.c<br/>
+		///    Explained in https://paulbourke.net/geometry/circlesphere/index.html#linesphere
 		/// </remarks>
 		/// <param name="lineSta"></param>
 		/// <param name="lineEnd"></param>
@@ -263,19 +263,19 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Get top attainable speed based on force values and rigidbody properties.
+		///    Get top attainable speed based on force values and rigidbody properties.
 		/// </summary>
 		/// <remarks>
-		/// Formula from: https://forum.unity.com/threads/terminal-velocity.34667/#post-1053927
+		///    Formula from: https://forum.unity.com/threads/terminal-velocity.34667/#post-1053927
 		/// </remarks>
 		/// <returns>Speed in meters per second (multiply by 3.6 to get kilometers per hour).</returns>
 		public static float GetSpeed(float force, float drag, float mass) => ((force / drag) - Time.fixedDeltaTime * force) / mass;
 
 		/// <summary>
-		/// Get top attainable speed based on force values and rigidbody properties.
+		///    Get top attainable speed based on force values and rigidbody properties.
 		/// </summary>
 		/// <remarks>
-		/// Formula from: https://forum.unity.com/threads/terminal-velocity.34667/#post-1053927
+		///    Formula from: https://forum.unity.com/threads/terminal-velocity.34667/#post-1053927
 		/// </remarks>
 		/// <returns>Speed in meters per second (multiply by 3.6 to get kilometers per hour).</returns>
 		public static float GetSpeed(float force, Rigidbody rigidbody)

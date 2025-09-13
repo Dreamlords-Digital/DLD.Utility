@@ -9,7 +9,7 @@ namespace DLD.Utility
 	public static class ReflectionUtil
 	{
 		/// <summary>
-		/// Based on: https://stackoverflow.com/a/1799401
+		///    Based on: https://stackoverflow.com/a/1799401
 		/// </summary>
 		public static T GetEnumValueAttribute<T>(this object enumValue) where T : Attribute
 		{
@@ -28,9 +28,9 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Based on:
-		/// https://stackoverflow.com/a/2210327
-		/// https://stackoverflow.com/a/16506710
+		///    Based on:
+		///    https://stackoverflow.com/a/2210327
+		///    https://stackoverflow.com/a/16506710
 		/// </summary>
 		public static bool IsAutoGetProperty(this PropertyInfo propertyInfo)
 		{
@@ -71,15 +71,15 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Based on:
-		/// https://stackoverflow.com/a/2210327
-		/// https://stackoverflow.com/a/16506710
+		///    Based on:
+		///    https://stackoverflow.com/a/2210327
+		///    https://stackoverflow.com/a/16506710
 		/// </summary>
 		/// <remarks>
-		/// Note: Unless the property is declared abstract or extern, it's impossible for a property to be only an auto-set with no get.
-		/// It's only either:
-		/// 1. Property has a non-auto set, and no get (basically like a method that accepts 1 parameter).
-		/// 2. Property has an auto set, and auto get (the typical auto property).
+		///    Note: Unless the property is declared abstract or extern, it's impossible for a property to be only an auto-set with no get.
+		///    It's only either:
+		///    1. Property has a non-auto set, and no get (basically like a method that accepts 1 parameter).
+		///    2. Property has an auto set, and auto get (the typical auto property).
 		/// </remarks>
 		public static bool IsAutoSetProperty(this PropertyInfo propertyInfo)
 		{

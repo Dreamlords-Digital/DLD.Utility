@@ -8,7 +8,7 @@ namespace DLD.Serializer
 {
 
 /// <summary>
-/// Something that can save/load <see cref="ITextData"/> objects to/from different locations in the computer.
+///    Something that can save/load <see cref="ITextData"/> objects to/from different locations in the computer.
 /// </summary>
 public interface ITextDataIO
 {
@@ -22,9 +22,9 @@ public interface ITextDataIO
 	string ToSerializedString<T>(T data, out string hash) where T : ITextData;
 
 	/// <summary>
-	/// Generates a hash out of the binary form of the serializable fields and properties of the passed data.
-	/// That means any variables that are configured to be not serialized are not included in the hash.
-	/// The hash is then converted into a string for ease of use.
+	///    Generates a hash out of the binary form of the serializable fields and properties of the passed data.
+	///    That means any variables that are configured to be not serialized are not included in the hash.
+	///    The hash is then converted into a string for ease of use.
 	/// </summary>
 	/// <param name="data"></param>
 	/// <typeparam name="T"></typeparam>
@@ -52,7 +52,7 @@ public interface ITextDataIO
 
 #if UNITY_EDITOR
 	/// <summary>
-	/// Load file from the project's "Assets/" folder. Only works while in the Unity Editor.
+	///    Load file from the project's "Assets/" folder. Only works while in the Unity Editor.
 	/// </summary>
 	/// <param name="fileAssetsPath"></param>
 	/// <param name="resultingLoadedObject"></param>
@@ -62,7 +62,7 @@ public interface ITextDataIO
 #endif
 
 	/// <summary>
-	/// Load an asset given the absolute path to it.
+	///    Load an asset given the absolute path to it.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="filePath"></param>
@@ -71,9 +71,9 @@ public interface ITextDataIO
 	(LoadResult result, string errorMessage) TryLoadFromLocal<T>(string filePath, ref T resultingLoadedObject) where T : ITextData;
 
 	/// <summary>
-	/// Load an asset, with the specified path being relative to a Resources folder in the project.
-	/// The file's file type should not be included in the specified <see cref="filePath"/>,
-	/// as UnityEngine's Resources.<see cref="UnityEngine.Resources.Load{T}(string)"/> requires.
+	///    Load an asset, with the specified path being relative to a Resources folder in the project.
+	///    The file's file type should not be included in the specified <see cref="filePath"/>,
+	///    as UnityEngine's Resources.<see cref="UnityEngine.Resources.Load{T}(string)"/> requires.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="filePath"></param>
@@ -82,11 +82,11 @@ public interface ITextDataIO
 	(LoadResult result, string errorMessage) TryLoadFromResources<T>(string filePath, ref T resultingLoadedObject) where T : ITextData;
 
 	/// <summary>
-	/// Load a binary file, with the specified path being relative to a Resources folder in the project.
-	/// Loaded using <see cref="UnityEngine.TextAsset"/>, so the file in the project actually needs to
-	/// have the ".bytes" file type (it's the only way Unity will interpret the file as a binary file),
-	/// but the specified <see cref="filePath"/> should not end with ".bytes",
-	/// as UnityEngine's Resources.<see cref="UnityEngine.Resources.Load{T}(string)"/> requires.
+	///    Load a binary file, with the specified path being relative to a Resources folder in the project.
+	///    Loaded using <see cref="UnityEngine.TextAsset"/>, so the file in the project actually needs to
+	///    have the ".bytes" file type (it's the only way Unity will interpret the file as a binary file),
+	///    but the specified <see cref="filePath"/> should not end with ".bytes",
+	///    as UnityEngine's Resources.<see cref="UnityEngine.Resources.Load{T}(string)"/> requires.
 	/// </summary>
 	/// <param name="filePath"></param>
 	/// <param name="resultingLoadedObject"></param>
@@ -95,7 +95,7 @@ public interface ITextDataIO
 	(LoadResult result, string errorMessage) TryLoadBinaryFromResources<T>(string filePath, ref T resultingLoadedObject) where T : IBinaryData;
 
 	/// <summary>
-	/// Load an asset, with the specified path being relative to the project's StreamingAssets path.
+	///    Load an asset, with the specified path being relative to the project's StreamingAssets path.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="filePath"></param>
@@ -107,13 +107,15 @@ public interface ITextDataIO
 	// loading all files in a folder to a list
 
 	/// <summary>
-	/// Load all assets of a certain type found in a folder, given the absolute path to the folder.
-	/// Results will be in the list specified. Note that the list will not be cleared beforehand,
-	/// so results will be appended to the list.
+	///    Load all assets of a certain type found in a folder, given the absolute path to the folder.
+	///    Results will be in the list specified. Note that the list will not be cleared beforehand,
+	///    so results will be appended to the list.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	/// <param name="folderPath">Folder where serialized text files of the type is found.
-	/// This folder will be searched through recursively, so sub-folders will also be looked at.</param>
+	/// <param name="folderPath">
+	///    Folder where serialized text files of the type is found.
+	///    This folder will be searched through recursively, so sub-folders will also be looked at.
+	/// </param>
 	/// <param name="fileType">File type of serialized text file. This is used so it knows which files to attempt deserialization on.</param>
 	/// <param name="outList">Loaded assets will be appended here</param>
 	/// <returns></returns>
@@ -121,9 +123,9 @@ public interface ITextDataIO
 		where T : ITextData;
 
 	/// <summary>
-	/// Load all assets of a certain type found, given the Resources folder to it.
-	/// Results will be in the list specified. Note that the list will not be cleared beforehand,
-	/// so results will be appended to the list.
+	///    Load all assets of a certain type found, given the Resources folder to it.
+	///    Results will be in the list specified. Note that the list will not be cleared beforehand,
+	///    so results will be appended to the list.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="folderPath"></param>
@@ -133,7 +135,7 @@ public interface ITextDataIO
 		where T : ITextData;
 
 	/// <summary>
-	/// Load all assets of a given type, given the folder to it (must be relative to the StreamingAssets path)
+	///    Load all assets of a given type, given the folder to it (must be relative to the StreamingAssets path)
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="folderPath"></param>

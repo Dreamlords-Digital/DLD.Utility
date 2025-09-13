@@ -5,17 +5,17 @@ using UnityEngine.Assertions;
 namespace DLD.Serializer
 {
 	/// <summary>
-	/// Standard serializer for <see cref="ITextData"/>.
-	/// Provides an instance that implements <see cref="ITextDataIO"/>.
-	/// Currently uses JsonFx.
+	///    Standard serializer for <see cref="ITextData"/>.
+	///    Provides an instance that implements <see cref="ITextDataIO"/>.
+	///    Currently uses JsonFx.
 	/// </summary>
 	public class DefaultSerializer
 	{
 		static ITextDataIO _defaultTextDataProvider;
 
 		/// <summary>
-		/// Standard serializer for <see cref="ITextData"/>.
-		/// Currently uses JsonFx.
+		///    Standard serializer for <see cref="ITextData"/>.
+		///    Currently uses JsonFx.
 		/// </summary>
 		public static ITextDataIO Instance
 		{

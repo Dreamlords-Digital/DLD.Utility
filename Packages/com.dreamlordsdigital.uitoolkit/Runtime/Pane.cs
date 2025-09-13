@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +59,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Where the NodeViews for this Behaviour Tree are parented to.
+		///    Where the NodeViews for this Behaviour Tree are parented to.
 		/// </summary>
 		public readonly VisualElement Body;
 
@@ -80,7 +82,7 @@ namespace DLD.UIToolkit
 		T _currentTab;
 
 		/// <summary>
-		/// Where tab bodies will be shown.
+		///    Where tab bodies will be shown.
 		/// </summary>
 		readonly VisualElement _tabBodyContainer;
 
@@ -89,8 +91,8 @@ namespace DLD.UIToolkit
 		readonly EventCallback<ChangeEvent<bool>> _onPressTab;
 		readonly EventCallback<PointerDownEvent> _onPressTabContext;
 
-		System.Action<T> _onTabShown;
-		System.Action<IContextMenu, T> _onTabContext;
+		Action<T> _onTabShown;
+		Action<IContextMenu, T> _onTabContext;
 
 		// =====================================================================
 
@@ -129,7 +131,7 @@ namespace DLD.UIToolkit
 			_contextMenu = contextMenu;
 		}
 
-		public void SetOnTabShown(System.Action<T> onTabShown)
+		public void SetOnTabShown(Action<T> onTabShown)
 		{
 			_onTabShown = onTabShown;
 		}

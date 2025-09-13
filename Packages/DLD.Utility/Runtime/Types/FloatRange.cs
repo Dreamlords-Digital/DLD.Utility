@@ -10,22 +10,22 @@ using Unity.Mathematics;
 namespace DLD.Utility
 {
 	/// <summary>
-	/// Used to express an inclusive range for a float value.
+	///    Used to express an inclusive range for a float value.
 	/// </summary>
 	/// <remarks>
-	/// Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
+	///    Primarily intended for expressing damage (or energy cost, or cooldown rates, etc.) ranges in games.
 	/// </remarks>
 	[Serializable]
 	[JetBrains.Annotations.PublicAPI]
 	public struct FloatRange : IEquatable<FloatRange>
 	{
 		/// <summary>
-		/// The inclusive lower limit to the range.
+		///    The inclusive lower limit to the range.
 		/// </summary>
 		public float Min;
 
 		/// <summary>
-		/// The inclusive upper limit to the range.
+		///    The inclusive upper limit to the range.
 		/// </summary>
 		public float Max;
 
@@ -52,7 +52,7 @@ namespace DLD.Utility
 		public bool IsMinAndMaxSameAndPositive => Mathf.Approximately(Min, Max) && Min > 0;
 
 		/// <summary>
-		/// Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
+		///    Uses Unity's <see cref="UnityEngine.Random"/> to generate a random value within the range.
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public float Random()
@@ -61,17 +61,19 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Uses a <see cref="System.Random"/> to generate a random value within the range.
+		///    Uses a <see cref="System.Random"/> to generate a random value within the range.
 		/// </summary>
 		public float Random(System.Random random)
 		{
 			return Min + ((float)NextDoubleInclusive(random) * (Max - Min));
 		}
 
-		/// <summary>Returns a random floating-point number that is greater than or equal to 0.0,
-		/// and less than or equal to 1.0.</summary>
+		/// <summary>
+		///    Returns a random floating-point number that is greater than or equal to 0.0,
+		///    and less than or equal to 1.0.
+		/// </summary>
 		/// <remarks>
-		/// From https://stackoverflow.com/a/66681312/1377948
+		///    From https://stackoverflow.com/a/66681312/1377948
 		/// </remarks>
 		public static double NextDoubleInclusive(System.Random random)
 		{

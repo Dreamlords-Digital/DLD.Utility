@@ -197,9 +197,10 @@ namespace DLD.Serializer.Tests
 		}
 
 		/// <summary>
-		/// Try deserializing a list of base class, where the elements are different derived types.
-		/// No type hint is included.
+		///    Try deserializing a list of base class, where the elements are different derived types.
+		///    No type hint is included.
 		/// </summary>
+
 		//
 		// Note: I disabled this Test since I know JsonFx can't do this,
 		// it's a nice-to-have, but we don't really need this yet.

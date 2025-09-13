@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,14 +46,14 @@ namespace DLD.UIToolkit
 		public enum OperationMode
 		{
 			/// <summary>
-			/// User is allowed to type in a non-existent filename (if they want to save to a new file).
-			/// Also, the confirm button is renamed to "Save".
+			///    User is allowed to type in a non-existent filename (if they want to save to a new file).
+			///    Also, the confirm button is renamed to "Save".
 			/// </summary>
 			Save,
 
 			/// <summary>
-			/// User is only allowed to choose existing files.
-			/// Also, the confirm button is renamed to "Open".
+			///    User is only allowed to choose existing files.
+			///    Also, the confirm button is renamed to "Open".
 			/// </summary>
 			Open,
 		}
@@ -60,7 +62,7 @@ namespace DLD.UIToolkit
 
 		// -----------------------------------------
 
-		System.Action _cancel;
+		Action _cancel;
 		Action<string> _fileChosen;
 
 		// -----------------------------------------
@@ -68,27 +70,27 @@ namespace DLD.UIToolkit
 		public enum FilterType
 		{
 			/// <summary>
-			/// No filter, show all files.
+			///    No filter, show all files.
 			/// </summary>
 			None,
 
 			/// <summary>
-			/// Show only image files.
+			///    Show only image files.
 			/// </summary>
 			Image,
 
 			/// <summary>
-			/// Show only video files.
+			///    Show only video files.
 			/// </summary>
 			Video,
 
 			/// <summary>
-			/// Show only sound files.
+			///    Show only sound files.
 			/// </summary>
 			Sound,
 
 			/// <summary>
-			/// Use a custom filter (denoted by a string) for what file types to show.
+			///    Use a custom filter (denoted by a string) for what file types to show.
 			/// </summary>
 			Custom,
 		}
@@ -97,7 +99,7 @@ namespace DLD.UIToolkit
 		readonly List<string> _customFileFilters = new();
 
 		/// <summary>
-		/// When in <see cref="OperationMode.Save"/>, this is what the chosen filename's extension will be.
+		///    When in <see cref="OperationMode.Save"/>, this is what the chosen filename's extension will be.
 		/// </summary>
 		string _saveFileExtension;
 
@@ -140,40 +142,40 @@ namespace DLD.UIToolkit
 		enum SpecialFolderType
 		{
 			/// <summary>
-			/// A regular folder that can have files inside it.
+			///    A regular folder that can have files inside it.
 			/// </summary>
 			None,
 
 			/// <summary>
-			/// Not an actual folder on the hard drive.
-			/// This folder is just a representation for the entire computer.
+			///    Not an actual folder on the hard drive.
+			///    This folder is just a representation for the entire computer.
 			/// </summary>
 			System,
 
 			/// <summary>
-			/// Special folder whose files are displayed on the user's desktop.
+			///    Special folder whose files are displayed on the user's desktop.
 			/// </summary>
 			Desktop,
 
 			/// <summary>
-			/// User's My Documents (home folder).
+			///    User's My Documents (home folder).
 			/// </summary>
 			Personal,
 
 			/// <summary>
-			/// Folder of the current Unity project.
+			///    Folder of the current Unity project.
 			/// </summary>
 			UnityProject,
 
 			/// <summary>
-			/// Not an actual folder on the hard drive.
-			/// Serves as a container for paths that the user has marked as favorite.
+			///    Not an actual folder on the hard drive.
+			///    Serves as a container for paths that the user has marked as favorite.
 			/// </summary>
 			Favorites,
 
 			/// <summary>
-			/// Not an actual folder on the hard drive.
-			/// Serves as a container for paths that the user recently used, in case they want to use them again.
+			///    Not an actual folder on the hard drive.
+			///    Serves as a container for paths that the user recently used, in case they want to use them again.
 			/// </summary>
 			Recent,
 		}
@@ -222,23 +224,23 @@ namespace DLD.UIToolkit
 		struct FileSystemEntry
 		{
 			/// <summary>
-			/// Name of folder/file as it appears in the GUI.
-			/// For files, this is the full filename, including the file type extension.
+			///    Name of folder/file as it appears in the GUI.
+			///    For files, this is the full filename, including the file type extension.
 			/// </summary>
 			public string Name;
 
 			/// <summary>
-			/// Whether this is a file or folder.
+			///    Whether this is a file or folder.
 			/// </summary>
 			public FileSystemEntryType EntryType;
 
 			/// <summary>
-			/// File size as displayed in the GUI.
+			///    File size as displayed in the GUI.
 			/// </summary>
 			public string ReadableSize;
 
 			/// <summary>
-			/// Actual value used when sorting by file size.
+			///    Actual value used when sorting by file size.
 			/// </summary>
 			public long SizeBytes;
 		}
@@ -691,7 +693,7 @@ namespace DLD.UIToolkit
 			_fileChosen = callback;
 		}
 
-		public void RegisterCancelCallback(System.Action callback)
+		public void RegisterCancelCallback(Action callback)
 		{
 			_cancel = callback;
 		}
@@ -1134,7 +1136,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when user clicks to select a file/folder in the List View.
+		///    Called when user clicks to select a file/folder in the List View.
 		/// </summary>
 		void OnSelectedFileSystemEntry(IEnumerable<int> selectedIndices)
 		{
@@ -1204,7 +1206,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when user double-clicks on a file/folder in the List View.
+		///    Called when user double-clicks on a file/folder in the List View.
 		/// </summary>
 		void OnChoseFileSystemEntry(IEnumerable<object> objects)
 		{
@@ -1423,9 +1425,9 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when:<br/>
-		/// 1. User presses enter while in the File TextField.<br/>
-		/// 2. User presses the Confirm Button.<br/>
+		///    Called when:<br/>
+		///    1. User presses enter while in the File TextField.<br/>
+		///    2. User presses the Confirm Button.<br/>
 		/// </summary>
 		void ProcessConfirmedFile()
 		{
@@ -1446,8 +1448,8 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when:<br/>
-		/// 1. User double-clicks on a file/folder in the List View.<br/>
+		///    Called when:<br/>
+		///    1. User double-clicks on a file/folder in the List View.<br/>
 		/// </summary>
 		void ProcessChosenFileEntry()
 		{

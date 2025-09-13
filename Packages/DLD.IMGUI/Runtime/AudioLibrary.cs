@@ -18,15 +18,16 @@ using Unity.EditorCoroutines.Editor;
 
 namespace DLD.IMGUI
 {
+
 	/// <summary>
-	/// Holds reference to many AudioClips so they can be retrieved on-demand.
-	/// This class handles loading of the AudioClip, and can work even in the Editor (thanks to UnityEngine.WWW).
+	///    Holds reference to many AudioClips so they can be retrieved on-demand.
+	///    This class handles loading of the AudioClip, and can work even in the Editor (thanks to UnityEngine.WWW).
 	/// </summary>
 	public class AudioLibrary
 	{
 		/// <summary>
-		/// Holds all the loaded AudioClips. Key is filename (absolute path).
-		/// This is a Dictionary for easy getting of the AudioClip, as long as you have the absolute path.
+		///    Holds all the loaded AudioClips. Key is filename (absolute path).
+		///    This is a Dictionary for easy getting of the AudioClip, as long as you have the absolute path.
 		/// </summary>
 		readonly Dictionary<string, AudioClip> _audioClipsPerFilename = new Dictionary<string, AudioClip>();
 
@@ -37,7 +38,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Holds all the loaded AudioClips, but in a list for easy iterating.
+		///    Holds all the loaded AudioClips, but in a list for easy iterating.
 		/// </summary>
 		readonly List<Entry> _audioClipsLoopableList = new List<Entry>();
 

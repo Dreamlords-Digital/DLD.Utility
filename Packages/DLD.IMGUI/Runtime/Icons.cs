@@ -306,7 +306,7 @@ namespace DLD.IMGUI
 		[InitializeOnLoadMethod]
 		static void OnProjectLoadedInEditor()
 		{
-			Initialize(IMGUI.Utility.GetDefaultGUISkin());
+			Initialize(Utility.GetDefaultGUISkin());
 		}
 
 		public static void Initialize(GUISkin guiSkin)

@@ -38,7 +38,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Returns the correct StreamingAssets path of a build output
+		///    Returns the correct StreamingAssets path of a build output
 		/// </summary>
 		/// <param name="outputPath">Value coming from BuildReport.summary.outputPath</param>
 		/// <param name="outputBuildTarget">Value coming from BuildReport.summary.platform</param>

@@ -26,39 +26,39 @@ namespace DLD.IMGUI
 		public enum BrowserType
 		{
 			/// <summary>
-			/// Standard file browser.
+			///    Standard file browser.
 			/// </summary>
 			File,
 
 			/// <summary>
-			/// Restrict the browser to viewing and selecting only folders.
+			///    Restrict the browser to viewing and selecting only folders.
 			/// </summary>
 			Folder,
 
 			/// <summary>
-			/// Restrict the browser to viewing images.
-			/// Will show image thumbnails.
+			///    Restrict the browser to viewing images.
+			///    Will show image thumbnails.
 			/// </summary>
 			Image,
 
 			/// <summary>
-			/// Restrict the browser to viewing sound files.
-			/// Will show play buttons beside the sounds so the user can preview them.
+			///    Restrict the browser to viewing sound files.
+			///    Will show play buttons beside the sounds so the user can preview them.
 			/// </summary>
 			Sound,
 
 			/// <summary>
-			/// Restrict the browser to viewing animation files.
-			/// This can be Unity .anim files, or fbx files.
-			/// Fbx files can be browsed as if they were folders,
-			/// to let the user choose the specific animation clip inside it.
+			///    Restrict the browser to viewing animation files.
+			///    This can be Unity .anim files, or fbx files.
+			///    Fbx files can be browsed as if they were folders,
+			///    to let the user choose the specific animation clip inside it.
 			/// </summary>
 			Animation,
 
 			/// <summary>
-			/// Restrict the browser to viewing prefabs.
-			/// This can be the usual .prefab, fbx files,
-			/// or prefab/fbx files inside AssetBundles.
+			///    Restrict the browser to viewing prefabs.
+			///    This can be the usual .prefab, fbx files,
+			///    or prefab/fbx files inside AssetBundles.
 			/// </summary>
 			Prefab,
 		}
@@ -148,58 +148,58 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Folder that we are currently displaying
+		///    Folder that we are currently displaying
 		/// </summary>
 		string _currentPath;
 
 		/// <summary>
-		/// File in the current path that should be highlighted
-		/// after calling SwitchCurrentPath. This gets set to null
-		/// after the path has been opened and displayed to the user.
+		///    File in the current path that should be highlighted
+		///    after calling SwitchCurrentPath. This gets set to null
+		///    after the path has been opened and displayed to the user.
 		/// </summary>
 		string _fileToSelect;
 
 		/// <summary>
-		/// The name of the file in the current path that we have "entered" into.
-		/// A virtual folder is a file that contains files/assets inside, like archives,
-		/// Asset Bundles, or fbx files that contain animations inside.
+		///    The name of the file in the current path that we have "entered" into.
+		///    A virtual folder is a file that contains files/assets inside, like archives,
+		///    Asset Bundles, or fbx files that contain animations inside.
 		/// </summary>
 		string _currentVirtualFolder;
 
 		/// <summary>
-		/// The path inside the virtual folder that we are displaying.
+		///    The path inside the virtual folder that we are displaying.
 		/// </summary>
 		string _currentVirtualPath;
 
 		struct PathHistoryEntry
 		{
 			/// <summary>
-			/// The path to go to whenever we go back to this history entry.
+			///    The path to go to whenever we go back to this history entry.
 			/// </summary>
 			public string Path;
 
 			/// <summary>
-			/// When viewing the inside of a file (like an archive), this is the filename of that file.
+			///    When viewing the inside of a file (like an archive), this is the filename of that file.
 			/// </summary>
 			public string VirtualFolder;
 
 			/// <summary>
-			/// When viewing the inside of a file (like an archive), this is the path inside that file that we're in.
+			///    When viewing the inside of a file (like an archive), this is the path inside that file that we're in.
 			/// </summary>
 			public string VirtualPath;
 
 			/// <summary>
-			/// Position of the scrollbar when we left this path.
+			///    Position of the scrollbar when we left this path.
 			/// </summary>
 			public float ScrollbarPosition;
 
 			/// <summary>
-			/// Any selected file within that path. -1 if no file selected.
+			///    Any selected file within that path. -1 if no file selected.
 			/// </summary>
 			public int SelectedFileIdx;
 
 			/// <summary>
-			/// Any selected folder within that path. -1 if no folder selected.
+			///    Any selected folder within that path. -1 if no folder selected.
 			/// </summary>
 			public int SelectedFolderIdx;
 		}
@@ -211,25 +211,23 @@ namespace DLD.IMGUI
 
 
 		/// <summary>Optional pattern for filtering selectable files/folders.</summary>
-		///
 		/// <para>example: "*.png;*.jpg;*.jpeg"</para>
-		///
 		/// <para>Split using ; or , or |</para>
-		///
-		/// <para>See references: http://msdn.microsoft.com/en-us/library/wz42302f(v=VS.90).aspx and
-		/// http://msdn.microsoft.com/en-us/library/6ff71z1w(v=VS.90).aspx</para>
+		/// <para>
+		///    See references: http://msdn.microsoft.com/en-us/library/wz42302f(v=VS.90).aspx and
+		///    http://msdn.microsoft.com/en-us/library/6ff71z1w(v=VS.90).aspx
+		/// </para>
 		string _selectionPattern;
 
 		string[] _selectionPatterns;
 
 		/// <summary>Optional pattern for filtering selectable files/folders.</summary>
-		///
 		/// <para>example: "*.png;*.jpg;*.jpeg"</para>
-		///
 		/// <para>Split using ; or , or |</para>
-		///
-		/// <para>See references: http://msdn.microsoft.com/en-us/library/wz42302f(v=VS.90).aspx and
-		/// http://msdn.microsoft.com/en-us/library/6ff71z1w(v=VS.90).aspx</para>
+		/// <para>
+		///    See references: http://msdn.microsoft.com/en-us/library/wz42302f(v=VS.90).aspx and
+		///    http://msdn.microsoft.com/en-us/library/6ff71z1w(v=VS.90).aspx
+		/// </para>
 		public void SetSelectionPattern(string newSelectionPattern)
 		{
 			_selectionPattern = newSelectionPattern;
@@ -277,12 +275,12 @@ namespace DLD.IMGUI
 		BrowserType _browserBrowserType;
 
 		/// <summary>
-		/// Whether we are saving to a file or opening a file.
+		///    Whether we are saving to a file or opening a file.
 		/// </summary>
 		OperationType _operationType;
 
 		/// <summary>
-		/// Set whether we are saving to a file or opening a file.
+		///    Set whether we are saving to a file or opening a file.
 		/// </summary>
 		public void SetOperationType(OperationType newOpType)
 		{
@@ -343,12 +341,12 @@ namespace DLD.IMGUI
 
 
 		/// <summary>
-		/// Folders in the path
+		///    Folders in the path
 		/// </summary>
 		string[] _currentPathParts;
 
 		/// <summary>
-		/// Folders in the path as GUIContent, ready for display to the GUI.
+		///    Folders in the path as GUIContent, ready for display to the GUI.
 		/// </summary>
 		GUIContent[] _currentPathPartsDisplayed;
 
@@ -361,16 +359,16 @@ namespace DLD.IMGUI
 		readonly GUIContent _thisProjectStreamingAssetsLabel = new GUIContent("Streaming Assets");
 
 		/// <summary>
-		/// Which element in <see cref="_files"/> is selected.
-		/// When this is given a value, _selectedFolderIdx will be set to -1.
-		/// Only one of them should have a value at any given time.
+		///    Which element in <see cref="_files"/> is selected.
+		///    When this is given a value, _selectedFolderIdx will be set to -1.
+		///    Only one of them should have a value at any given time.
 		/// </summary>
 		int _selectedFileIdx = -1;
 
 		/// <summary>
-		/// Which element in <see cref="_folders"/> is selected.
-		/// When this is given a value, _selectedFileIdx will be set to -1.
-		/// Only one of them should have a value at any given time.
+		///    Which element in <see cref="_folders"/> is selected.
+		///    When this is given a value, _selectedFileIdx will be set to -1.
+		///    Only one of them should have a value at any given time.
 		/// </summary>
 		int _selectedFolderIdx = -1;
 
@@ -388,38 +386,38 @@ namespace DLD.IMGUI
 		Rect _hoveredFileRect;
 
 		/// <summary>
-		/// Filenames on the current path
+		///    Filenames on the current path
 		/// </summary>
 		string[] _files;
 
 		/// <summary>
-		/// Same as <see cref="_files"/> but as GUIContent with accompanying file icons.
+		///    Same as <see cref="_files"/> but as GUIContent with accompanying file icons.
 		/// </summary>
 		GUIContent[] _filesWithImages;
 
 		/// <summary>
-		/// Used when browsing images, holds the Textures per given filename.
-		/// Key is file absolute path, value is the texture.
+		///    Used when browsing images, holds the Textures per given filename.
+		///    Key is file absolute path, value is the texture.
 		/// </summary>
 		readonly Dictionary<string, Texture2D> _fileThumbnails = new Dictionary<string, Texture2D>();
 
 		/// <summary>
-		/// Filenames on the current path that can't be selected (non-matching files).
+		///    Filenames on the current path that can't be selected (non-matching files).
 		/// </summary>
 		string[] _nonMatchingFiles;
 
 		/// <summary>
-		/// Same as <see cref="_nonMatchingFiles"/> but as GUIContent with accompanying file icons.
+		///    Same as <see cref="_nonMatchingFiles"/> but as GUIContent with accompanying file icons.
 		/// </summary>
 		GUIContent[] _nonMatchingFilesWithImages;
 
 		/// <summary>
-		/// Subfolder names on the current path.
+		///    Subfolder names on the current path.
 		/// </summary>
 		string[] _folders;
 
 		/// <summary>
-		/// Same as <see cref="_folders"/> but as GUIContent with accompanying folder icons.
+		///    Same as <see cref="_folders"/> but as GUIContent with accompanying folder icons.
 		/// </summary>
 		GUIContent[] _foldersWithImages;
 
@@ -728,9 +726,9 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Change which folder the browser is viewing. Needs to be given a full path.
-		/// If the path doesn't exist, it will try to move to the specified parent folder and try that one.
-		/// If the parent path doesn't exist too, it will keep trying by moving to the next parent until the resulting path exists.
+		///    Change which folder the browser is viewing. Needs to be given a full path.
+		///    If the path doesn't exist, it will try to move to the specified parent folder and try that one.
+		///    If the parent path doesn't exist too, it will keep trying by moving to the next parent until the resulting path exists.
 		/// </summary>
 		/// <param name="fullPath"></param>
 		public void SwitchCurrentPath(string fullPath)
@@ -1106,8 +1104,8 @@ namespace DLD.IMGUI
 		// -------------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Will give values to <see cref="_currentPathParts"/>, <see cref="_folders"/>,
-		/// <see cref="_files"/>, and <see cref="_nonMatchingFiles"/>.
+		///    Will give values to <see cref="_currentPathParts"/>, <see cref="_folders"/>,
+		///    <see cref="_files"/>, and <see cref="_nonMatchingFiles"/>.
 		/// </summary>
 		/// <param name="newPathToRead"></param>
 		/// <param name="virtualFolder"></param>
@@ -1671,8 +1669,8 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Ensure that values inside are only filenames (no paths),
-		/// and sort them alphabetically.
+		///    Ensure that values inside are only filenames (no paths),
+		///    and sort them alphabetically.
 		/// </summary>
 		/// <param name="filenameArray"></param>
 		static void FormatFilenameArray(ref string[] filenameArray)
@@ -1741,7 +1739,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Turns list of files and folders into GUIContent.
+		///    Turns list of files and folders into GUIContent.
 		/// </summary>
 		protected void BuildContent()
 		{
@@ -1944,8 +1942,8 @@ namespace DLD.IMGUI
 
 		string _folderRootButtonStyleName = FOLDER_ROOT_DEFAULT_STYLE_NAME;
 		string _folderButtonStyleName = FOLDER_DEFAULT_STYLE_NAME;
-		string _folderRootWithIconButtonStyleName = FOLDER_ROOT_WITH_ICON_DEFAULT_STYLE_NAME;
-		string _folderWithIconButtonStyleName = FOLDER_WITH_ICON_DEFAULT_STYLE_NAME;
+		readonly string _folderRootWithIconButtonStyleName = FOLDER_ROOT_WITH_ICON_DEFAULT_STYLE_NAME;
+		readonly string _folderWithIconButtonStyleName = FOLDER_WITH_ICON_DEFAULT_STYLE_NAME;
 
 		string _listItemStyleName = LIST_ITEM_DEFAULT_STYLE_NAME;
 		string _imageItemStyleName = IMAGE_ITEM_DEFAULT_STYLE_NAME;
@@ -2637,12 +2635,12 @@ Screen.height: {
 		}
 
 		/// <summary>
-		/// Gotten rect for the entire scroll view of the files & folders list.
+		///    Gotten rect for the entire scroll view of the files & folders list.
 		/// </summary>
 		Rect _scrollViewRect;
 
 		/// <summary>
-		/// If hovered file has a prefab preview image or not.
+		///    If hovered file has a prefab preview image or not.
 		/// </summary>
 		HasPreviewStatus _hoveredHasPrefabPreview;
 
@@ -2654,12 +2652,12 @@ Screen.height: {
 		}
 
 		/// <summary>
-		/// Preview image of prefab that's currently shown.
+		///    Preview image of prefab that's currently shown.
 		/// </summary>
 		Texture _prefabPreview;
 
 		/// <summary>
-		/// Path to prefab whose preview is currently shown.
+		///    Path to prefab whose preview is currently shown.
 		/// </summary>
 		string _modelPrefabPreviewPath;
 
@@ -3164,8 +3162,8 @@ Screen.height: {
 
 
 		/// <summary>
-		/// In Windows, this will cause the File Browser to load a list of the computer's drives.
-		/// In Mac OS or Linux, this will move the File Browser to the root.
+		///    In Windows, this will cause the File Browser to load a list of the computer's drives.
+		///    In Mac OS or Linux, this will move the File Browser to the root.
 		/// </summary>
 		public void MoveToRootPath()
 		{
@@ -3208,8 +3206,8 @@ Screen.height: {
 		// ------------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// If the browser is going to open an animation, is the virtual folder specified
-		/// actually an fbx file that we can open, to view the animations inside?
+		///    If the browser is going to open an animation, is the virtual folder specified
+		///    actually an fbx file that we can open, to view the animations inside?
 		/// </summary>
 		/// <param name="realPath"></param>
 		/// <param name="virtualFolder"></param>
@@ -3425,7 +3423,7 @@ Screen.height: {
 		// ---------------------------------------------------------
 
 		/// <summary>
-		/// If present, this delegate is used to get virtual files.
+		///    If present, this delegate is used to get virtual files.
 		/// </summary>
 		Func<string, string[]> _getVirtualFilesCallback;
 
@@ -3445,7 +3443,7 @@ Screen.height: {
 		// ---------------------------------------------------------
 
 		/// <summary>
-		/// If present, this delegate is used to edit a GUIContent with an appropriate label & icon for each matching file.
+		///    If present, this delegate is used to edit a GUIContent with an appropriate label & icon for each matching file.
 		/// </summary>
 		Action<GUIContent, string> _createAssetItemCallback;
 
@@ -3465,7 +3463,7 @@ Screen.height: {
 		// ---------------------------------------------------------
 
 		/// <summary>
-		/// An absolute path. If it is given a value, code will not allow user to go up beyond the lock path.
+		///    An absolute path. If it is given a value, code will not allow user to go up beyond the lock path.
 		/// </summary>
 		string _lockPath;
 
@@ -3483,7 +3481,7 @@ Screen.height: {
 		}
 
 		/// <summary>
-		/// If browser is set to disallow user from going up beyond a certain path.
+		///    If browser is set to disallow user from going up beyond a certain path.
 		/// </summary>
 		bool HasLockPath
 		{

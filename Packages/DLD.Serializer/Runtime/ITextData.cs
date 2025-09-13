@@ -3,7 +3,7 @@
 namespace DLD.Serializer
 {
 	/// <summary>
-	/// Something that can be saved (serialized) to the computer storage as a text file.
+	///    Something that can be saved (serialized) to the computer storage as a text file.
 	/// </summary>
 	public interface ITextData
 	{

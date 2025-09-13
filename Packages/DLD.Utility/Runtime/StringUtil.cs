@@ -121,12 +121,12 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Equality checker for strings but will regard
-		/// null value and an empty string as equivalent.
-		/// For example, if first string is assigned a null
-		/// value while the second string is assigned an
-		/// empty string like "", then this method returns
-		/// true (i.e. they are the same).
+		///    Equality checker for strings but will regard
+		///    null value and an empty string as equivalent.
+		///    For example, if first string is assigned a null
+		///    value while the second string is assigned an
+		///    empty string like "", then this method returns
+		///    true (i.e. they are the same).
 		/// </summary>
 		public static bool IsSameWith(this string first, string second,
 			StringComparison stringComparison = StringComparison.Ordinal)
@@ -142,8 +142,8 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// If the value is positive or zero, this will return the number with a plus symbol ahead.
-		/// If the value is negative, this will return the number with a minus symbol ahead.
+		///    If the value is positive or zero, this will return the number with a plus symbol ahead.
+		///    If the value is negative, this will return the number with a minus symbol ahead.
 		/// </summary>
 		/// <param name="me"></param>
 		/// <returns></returns>
@@ -155,9 +155,9 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// If the value is positive, this will return the number with a plus symbol ahead.
-		/// If the value is negative, this will return the number with a minus symbol ahead.
-		/// If the value is zero, this will return a blank string.
+		///    If the value is positive, this will return the number with a plus symbol ahead.
+		///    If the value is negative, this will return the number with a minus symbol ahead.
+		///    If the value is zero, this will return a blank string.
 		/// </summary>
 		public static string ToPlusMinusNumberNoZero(this int me)
 		{
@@ -167,7 +167,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Returns either "Yes" or "No".
+		///    Returns either "Yes" or "No".
 		/// </summary>
 		public static string ToYesNo(this bool b)
 		{
@@ -175,7 +175,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Returns either "yes" or "no".
+		///    Returns either "yes" or "no".
 		/// </summary>
 		public static string ToYesNoSmall(this bool b)
 		{
@@ -183,7 +183,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// After the first letter, add a space before every capital letter.
+		///    After the first letter, add a space before every capital letter.
 		/// </summary>
 		/// <param name="text"></param>
 		/// <param name="preserveAcronyms">When true, "WindowGUILabel" will become "Window GUI Label" instead of "Window GUILabel".</param>
@@ -223,15 +223,19 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Remove the starting parts of a string.
+		///    Remove the starting parts of a string.
 		/// </summary>
 		/// <param name="text">String that will be edited.</param>
-		/// <param name="subStringToSearch">Substring that will be searched for.
-		///	Everything in the text that came before this substring will be removed.
-		///	The substring itself will not be removed.</param>
-		/// <param name="idxAdjust">Offset to the text that will be removed.
-		///	Use this to partially remove parts of the substring itself from the result.
-		///	If you specify endTextToRemove.Length, then this will remove the substring as well from the result.</param>
+		/// <param name="subStringToSearch">
+		///    Substring that will be searched for.
+		///    Everything in the text that came before this substring will be removed.
+		///    The substring itself will not be removed.
+		/// </param>
+		/// <param name="idxAdjust">
+		///    Offset to the text that will be removed.
+		///    Use this to partially remove parts of the substring itself from the result.
+		///    If you specify endTextToRemove.Length, then this will remove the substring as well from the result.
+		/// </param>
 		/// <returns>The new edited string.</returns>
 		public static string RemoveFromStart(this string text, string subStringToSearch, int idxAdjust = 0)
 		{
@@ -275,7 +279,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// If text is all 1234567890ABCDEF (or abcdef, the check is not case-sensitive)
+		///    If text is all 1234567890ABCDEF (or abcdef, the check is not case-sensitive)
 		/// </summary>
 		/// <param name="text">The string to check.</param>
 		/// <param name="startIdx">Start checking from this character index. Starts at 0. Leave at 0 for default.</param>
@@ -378,7 +382,7 @@ namespace DLD.Utility
 		static readonly char[] Newline = { '\n', '\r' };
 
 		/// <summary>
-		/// If string has spaces or tabs. Does not count newlines as whitespace.
+		///    If string has spaces or tabs. Does not count newlines as whitespace.
 		/// </summary>
 		public static bool HasWhiteSpace(this string text)
 		{

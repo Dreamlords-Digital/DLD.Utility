@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DLD.Utility.Inspector.Editor
 {
 	/// <summary>
-	/// <see cref="PropertyDrawer"/> for a string to force it to be assigned with scene paths only.
+	///    <see cref="PropertyDrawer"/> for a string to force it to be assigned with scene paths only.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(ScenePathAttribute))]
 	public class ScenePathPropertyDrawer : PropertyDrawer

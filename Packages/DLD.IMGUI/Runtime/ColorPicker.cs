@@ -29,7 +29,7 @@ namespace DLD.IMGUI
 
 		static Texture2D _colorMap;
 		static Texture2D _hueBand;
-		static Color32[] _colorMapPixels = new Color32[COLOR_MAP_SIZE * COLOR_MAP_SIZE];
+		static readonly Color32[] _colorMapPixels = new Color32[COLOR_MAP_SIZE * COLOR_MAP_SIZE];
 		static float _hue;
 		static float _sat;
 		static float _brt;

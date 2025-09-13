@@ -24,12 +24,12 @@ namespace DLD.Utility
 
 		public static long GetFileSizeInBytes(string filename)
 		{
-			if (string.IsNullOrEmpty(filename) || !System.IO.File.Exists(filename))
+			if (string.IsNullOrEmpty(filename) || !File.Exists(filename))
 			{
 				return 0;
 			}
 
-			System.IO.FileInfo fi = new System.IO.FileInfo(filename);
+			FileInfo fi = new FileInfo(filename);
 			return fi.Length;
 		}
 
@@ -110,8 +110,8 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Does string end in an image file type that Unity supports?
-		/// (psd, jpg, gif, png, tif, tga, bmp, dds, exr, iff, pict)
+		///    Does string end in an image file type that Unity supports?
+		///    (psd, jpg, gif, png, tif, tga, bmp, dds, exr, iff, pict)
 		/// </summary>
 		/// <param name="file"></param>
 		/// <returns></returns>
@@ -133,8 +133,8 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Does string end in a sound file type that Unity supports?
-		/// (wav, mp3, ogg, aif, xm, mod, it, s3m)
+		///    Does string end in a sound file type that Unity supports?
+		///    (wav, mp3, ogg, aif, xm, mod, it, s3m)
 		/// </summary>
 		/// <param name="file"></param>
 		/// <returns></returns>
@@ -151,7 +151,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Does string end in a video file type that Unity supports?
+		///    Does string end in a video file type that Unity supports?
 		/// </summary>
 		public static bool IsVideoFile(this string file)
 		{
@@ -201,7 +201,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// This gets the name of the deepest subfolder in the specified path.
+		///    This gets the name of the deepest subfolder in the specified path.
 		/// </summary>
 		/// <param name="inFolder"></param>
 		/// <returns></returns>
@@ -239,7 +239,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// If passed string is path to a file, this will remove the file part of the string.
+		///    If passed string is path to a file, this will remove the file part of the string.
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
@@ -261,7 +261,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Removes any non-existent folders from the path. Requires an absolute path.
+		///    Removes any non-existent folders from the path. Requires an absolute path.
 		/// </summary>
 		/// <returns>True if the path was fixed (now points to a folder that exists). False if not.</returns>
 		public static bool FixPath(string path, out string resultingPath)
@@ -334,9 +334,9 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Compare two paths if they are the same.
-		/// Backslash and forward slashes are considered equivalent.
-		/// Trailing slashes on either path are ignored.
+		///    Compare two paths if they are the same.
+		///    Backslash and forward slashes are considered equivalent.
+		///    Trailing slashes on either path are ignored.
 		/// </summary>
 		/// <param name="pathA"></param>
 		/// <param name="pathB"></param>
@@ -375,7 +375,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Combines the strings like <see cref="Path.Combine(string,string)"/>, but always uses forward slash.
+		///    Combines the strings like <see cref="Path.Combine(string,string)"/>, but always uses forward slash.
 		/// </summary>
 		/// <param name="path1"></param>
 		/// <param name="path2"></param>
@@ -435,10 +435,10 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// <para>Changes a string so that it can be used in Resources.Load().</para>
-		/// For example, it will change
-		/// "Assets/Resources/SomePackage/My.Path/Something.prefab" to:
-		/// "SomePackage/My.Path/Something"
+		///    <para>Changes a string so that it can be used in Resources.Load().</para>
+		///    For example, it will change
+		///    "Assets/Resources/SomePackage/My.Path/Something.prefab" to:
+		///    "SomePackage/My.Path/Something"
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
@@ -489,8 +489,8 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Given a full path, return only part of the path that starts with "Assets/",
-		/// as in the project's top-level Assets folder.
+		///    Given a full path, return only part of the path that starts with "Assets/",
+		///    as in the project's top-level Assets folder.
 		/// </summary>
 		/// <param name="absoluteFilePath"></param>
 		/// <returns></returns>
@@ -532,7 +532,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Whether the specified path is the root of the file system ("C:/" or "/")
+		///    Whether the specified path is the root of the file system ("C:/" or "/")
 		/// </summary>
 		public static bool IsPathRoot(this string path)
 		{
@@ -608,7 +608,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Absolute path to Project's folder (without the "/Assets" at the end).
+		///    Absolute path to Project's folder (without the "/Assets" at the end).
 		/// </summary>
 		public static string ProjectPath
 		{
@@ -741,20 +741,23 @@ namespace DLD.Utility
 		enum SLR_FLAGS
 		{
 			/// <summary>
-			/// Do not display a dialog box if the link cannot be resolved. When SLR_NO_UI is set,
-			/// the high-order word of fFlags can be set to a time-out value that specifies the
-			/// maximum amount of time to be spent resolving the link. The function returns if the
-			/// link cannot be resolved within the time-out duration. If the high-order word is set
-			/// to zero, the time-out duration will be set to the default value of 3,000 milliseconds
-			/// (3 seconds). To specify a value, set the high word of fFlags to the desired time-out
-			/// duration, in milliseconds.
+			///    Do not display a dialog box if the link cannot be resolved. When SLR_NO_UI is set,
+			///    the high-order word of fFlags can be set to a time-out value that specifies the
+			///    maximum amount of time to be spent resolving the link. The function returns if the
+			///    link cannot be resolved within the time-out duration. If the high-order word is set
+			///    to zero, the time-out duration will be set to the default value of 3,000 milliseconds
+			///    (3 seconds). To specify a value, set the high word of fFlags to the desired time-out
+			///    duration, in milliseconds.
 			/// </summary>
 			SLR_NO_UI = 0x1,
 			/// <summary>Obsolete and no longer used</summary>
 			SLR_ANY_MATCH = 0x2,
-			/// <summary>If the link object has changed, update its path and list of identifiers.
-			/// If SLR_UPDATE is set, you do not need to call IPersistFile::IsDirty to determine
-			/// whether or not the link object has changed.</summary>
+
+			/// <summary>
+			///    If the link object has changed, update its path and list of identifiers.
+			///    If SLR_UPDATE is set, you do not need to call IPersistFile::IsDirty to determine
+			///    whether or not the link object has changed.
+			/// </summary>
 			SLR_UPDATE = 0x4,
 			/// <summary>Do not update the link information</summary>
 			SLR_NOUPDATE = 0x8,
@@ -762,10 +765,13 @@ namespace DLD.Utility
 			SLR_NOSEARCH = 0x10,
 			/// <summary>Do not use distributed link tracking</summary>
 			SLR_NOTRACK = 0x20,
-			/// <summary>Disable distributed link tracking. By default, distributed link tracking tracks
-			/// removable media across multiple devices based on the volume name. It also uses the
-			/// Universal Naming Convention (UNC) path to track remote file systems whose drive letter
-			/// has changed. Setting SLR_NOLINKINFO disables both types of tracking.</summary>
+
+			/// <summary>
+			///    Disable distributed link tracking. By default, distributed link tracking tracks
+			///    removable media across multiple devices based on the volume name. It also uses the
+			///    Universal Naming Convention (UNC) path to track remote file systems whose drive letter
+			///    has changed. Setting SLR_NOLINKINFO disables both types of tracking.
+			/// </summary>
 			SLR_NOLINKINFO = 0x40,
 			/// <summary>Call the Microsoft Windows Installer</summary>
 			SLR_INVOKE_MSI = 0x80
@@ -934,65 +940,60 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// This is in the game's StreamingAssets folder.
-		/// This is for "core" mod packages that are expected
-		/// to be bundled alongside the game itself when installed.
-		/// Note that this does not include a trailing slash.
+		///    This is in the game's StreamingAssets folder.
+		///    This is for "core" mod packages that are expected
+		///    to be bundled alongside the game itself when installed.
+		///    Note that this does not include a trailing slash.
 		/// </summary>
-		///
 		/// <remarks>
-		/// In Editor, this is: C:/path/to/unity/project/Assets/StreamingAssets<br/>
-		/// In runtime, this is: C:/path/to/standalone/build/buildname_Data/StreamingAssets<br/>
+		///    In Editor, this is: C:/path/to/unity/project/Assets/StreamingAssets<br/>
+		///    In runtime, this is: C:/path/to/standalone/build/buildname_Data/StreamingAssets<br/>
 		/// </remarks>
 		public static string GameInstallFolderPath => Application.streamingAssetsPath;
 
 		/// <summary>
-		/// This is the CommonApplicationData folder path,
-		/// accessible regardless of which user is logged in.
-		/// Note that this does not include a trailing slash.
+		///    This is the CommonApplicationData folder path,
+		///    accessible regardless of which user is logged in.
+		///    Note that this does not include a trailing slash.
 		/// </summary>
-		///
 		/// <remarks>
-		/// <para>Ideal location for 3rd-party mod packages.</para>
-		///
-		/// In Windows, this is C:/ProgramData<br/>
-		/// In Mac and Linux, this is /usr/share<br/>
+		///    <para>Ideal location for 3rd-party mod packages.</para>
+		///    In Windows, this is C:/ProgramData<br/>
+		///    In Mac and Linux, this is /usr/share<br/>
 		/// </remarks>
 		public static string CommonDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData).ConvertBackToForwardSlash();
 
 		/// <summary>
-		/// This is the ideal location for saved game files
-		/// and user settings/preferences.
-		/// Note that this does not include a trailing slash.
+		///    This is the ideal location for saved game files
+		///    and user settings/preferences.
+		///    Note that this does not include a trailing slash.
 		/// </summary>
-		///
 		/// <remarks>
-		/// In Windows, this is C:/Users/<i>username</i>/AppData/Local<br/>
-		/// <br/>
-		/// In Mac, this is /Users/<i>username</i>/.local/share<br/>
-		/// <br/>
-		/// In Linux, this is /home/<i>username</i>/.local/share<br/>
+		///    In Windows, this is C:/Users/<i>username</i>/AppData/Local<br/>
+		///    <br/>
+		///    In Mac, this is /Users/<i>username</i>/.local/share<br/>
+		///    <br/>
+		///    In Linux, this is /home/<i>username</i>/.local/share<br/>
 		/// </remarks>
 		public static string UserFolderPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ConvertBackToForwardSlash();
 
 		/// <summary>
-		/// Will return absolute path to the save location specified.
-		/// Note that the return value includes a trailing slash.
-		///
-		/// <list type="number">
-		/// <item>
-		/// <term>GameInstallFolder: </term>
-		/// <description>The game's StreamingAssets folder</description>
-		/// </item>
-		/// <item>
-		/// <term>CommonDataFolder: </term>
-		/// <description>C:/ProgramData or /usr/share</description>
-		/// </item>
-		/// <item>
-		/// <term>UserFolder: </term>
-		/// <description>C:/Users/<i>username</i>/AppData/Local or /Users/<i>username</i>/.local/share or /home/<i>username</i>/.local/share</description>
-		/// </item>
-		/// </list>
+		///    Will return absolute path to the save location specified.
+		///    Note that the return value includes a trailing slash.
+		///    <list type="number">
+		///       <item>
+		///          <term>GameInstallFolder: </term>
+		///          <description>The game's StreamingAssets folder</description>
+		///       </item>
+		///       <item>
+		///          <term>CommonDataFolder: </term>
+		///          <description>C:/ProgramData or /usr/share</description>
+		///       </item>
+		///       <item>
+		///          <term>UserFolder: </term>
+		///          <description>C:/Users/<i>username</i>/AppData/Local or /Users/<i>username</i>/.local/share or /home/<i>username</i>/.local/share</description>
+		///       </item>
+		///    </list>
 		/// </summary>
 		/// <param name="location"></param>
 		/// <returns></returns>
@@ -1013,53 +1014,51 @@ namespace DLD.Utility
 	}
 
 	/// <summary>
-	/// Possible areas where the game saves/loads Mod Packages, Asset Files, save game files, and other data files.
+	///    Possible areas where the game saves/loads Mod Packages, Asset Files, save game files, and other data files.
 	/// </summary>
 	public enum DataSaveLocation
 	{
 		None,
 
 		/// <summary>
-		/// This is in the game's StreamingAssets folder.
-		/// This is for "core" mod packages that are expected
-		/// to be bundled alongside the game itself when installed.<br/>
-		///
-		/// In Editor, this is: C:/path/to/unity/project/Assets/StreamingAssets/<br/>
-		/// In runtime, this is: C:/path/to/standalone/build/buildname_Data/StreamingAssets/
+		///    This is in the game's StreamingAssets folder.
+		///    This is for "core" mod packages that are expected
+		///    to be bundled alongside the game itself when installed.<br/>
+		///    In Editor, this is: C:/path/to/unity/project/Assets/StreamingAssets/<br/>
+		///    In runtime, this is: C:/path/to/standalone/build/buildname_Data/StreamingAssets/
 		/// </summary>
 		GameInstallFolder,
 
 		/// <summary>
-		/// In Windows, this is C:/ProgramData/<br/>
-		/// In Mac and Linux, this is /usr/share/<br/>
-		/// This is the CommonApplicationData folder path,
-		/// ideal location for 3rd-party mod packages.
-		/// Regardless of the OS user logged-in, the files here
-		/// will always be available.
+		///    In Windows, this is C:/ProgramData/<br/>
+		///    In Mac and Linux, this is /usr/share/<br/>
+		///    This is the CommonApplicationData folder path,
+		///    ideal location for 3rd-party mod packages.
+		///    Regardless of the OS user logged-in, the files here
+		///    will always be available.
 		/// </summary>
 		CommonDataFolder,
 
 		/// <summary>
-		/// In Windows, this is C:/Users/<i>username</i>/AppData/Local/<br/>
-		/// In Mac, this is /Users/<i>username</i>/.local/share/<br/>
-		/// In Linux, this is /home/<i>username</i>/.local/share/<br/>
-		/// This is the ideal location for saved game files,
-		/// user settings/preferences, and game-wide user data (Steam achievement progress).<br/>
-		///
-		/// This folder is unique to each OS user, but when running the game in Steam,
-		/// this merely assumes a 1:1 correspondence between OS user and Steam user account.
-		/// For example, if the Steam user for Bob logs in to Steam in a PC whose Windows is
-		/// logged-in to the Windows account of Ted (who also has his own Steam account),
-		/// this will end up overwriting the saved games and user preferences of Ted.
-		/// The proper thing to do would have been to create a new Windows (local) user account
-		/// for Bob in that PC, so that he has his own separate MyDocs folder in that PC.
+		///    In Windows, this is C:/Users/<i>username</i>/AppData/Local/<br/>
+		///    In Mac, this is /Users/<i>username</i>/.local/share/<br/>
+		///    In Linux, this is /home/<i>username</i>/.local/share/<br/>
+		///    This is the ideal location for saved game files,
+		///    user settings/preferences, and game-wide user data (Steam achievement progress).<br/>
+		///    This folder is unique to each OS user, but when running the game in Steam,
+		///    this merely assumes a 1:1 correspondence between OS user and Steam user account.
+		///    For example, if the Steam user for Bob logs in to Steam in a PC whose Windows is
+		///    logged-in to the Windows account of Ted (who also has his own Steam account),
+		///    this will end up overwriting the saved games and user preferences of Ted.
+		///    The proper thing to do would have been to create a new Windows (local) user account
+		///    for Bob in that PC, so that he has his own separate MyDocs folder in that PC.
 		/// </summary>
 		UserFolder,
 
 		/// <summary>
-		/// In the root path of a drive,
-		/// ideal location for 3rd-party mod packages
-		/// located in removable drives/flash disks.
+		///    In the root path of a drive,
+		///    ideal location for 3rd-party mod packages
+		///    located in removable drives/flash disks.
 		/// </summary>
 		DriveDataFolder,
 	}

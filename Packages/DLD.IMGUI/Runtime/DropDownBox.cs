@@ -275,14 +275,14 @@ namespace DLD.IMGUI
 		// ====================================================================
 
 		/// <summary>
-		/// True when the dropdown box has focus so it can show the choices.
+		///    True when the dropdown box has focus so it can show the choices.
 		/// </summary>
 		bool _showChoices;
 
 		int _currentlySelectedIdx;
 
 		/// <summary>
-		/// Needed so the x, y position of the choices can be determined.
+		///    Needed so the x, y position of the choices can be determined.
 		/// </summary>
 		Rect _buttonRect;
 
@@ -290,8 +290,8 @@ namespace DLD.IMGUI
 		// scrollbar properties
 
 		/// <summary>
-		/// If dropdown box is bigger than this, it will be forced to make use of the scrollbar.
-		/// Set to 0 to disable. Default is 0.
+		///    If dropdown box is bigger than this, it will be forced to make use of the scrollbar.
+		///    Set to 0 to disable. Default is 0.
 		/// </summary>
 		float _maxHeight;
 
@@ -305,14 +305,14 @@ namespace DLD.IMGUI
 		Vector2 _scrollbarPos;
 
 		/// <summary>
-		/// The rect that's used instead of <see cref="_choicesBoxRect"/> if a scrollbar is used.
+		///    The rect that's used instead of <see cref="_choicesBoxRect"/> if a scrollbar is used.
 		/// </summary>
 		Rect _scrollRect;
 
 		// ----------------------------------
 
 		/// <summary>
-		/// Cached value of the choices Rect
+		///    Cached value of the choices Rect
 		/// </summary>
 		Rect _choicesBoxRect;
 
@@ -334,7 +334,7 @@ namespace DLD.IMGUI
 
 		// ----------------------------------------------------------
 
-		GUIContent _noSelection = new GUIContent("<i>Choose...</i>");
+		readonly GUIContent _noSelection = new GUIContent("<i>Choose...</i>");
 
 		GUIStyle _buttonGuiStyle;
 		GUIStyle _entryGuiStyle;
@@ -450,8 +450,8 @@ namespace DLD.IMGUI
 		// ----------------------------------------------------------
 
 		/// <summary>
-		/// If shortening the choices height (happens when the bottom part of the choices rect is beyond the bottom part of the screen)
-		/// will be less than this, the dropdown choices will be shown above the button instead.
+		///    If shortening the choices height (happens when the bottom part of the choices rect is beyond the bottom part of the screen)
+		///    will be less than this, the dropdown choices will be shown above the button instead.
 		/// </summary>
 		const int MIN_HEIGHT_ALLOWED = 220;
 
@@ -1271,7 +1271,7 @@ namespace DLD.IMGUI
 		// The 3 render functions: DrawUnderlay, DrawButton, and DrawOverlayIfNeeded
 
 		/// <summary>
-		/// This is needed to ensure Event input won't be intercepted by widgets above/underneath the dropdown box.
+		///    This is needed to ensure Event input won't be intercepted by widgets above/underneath the dropdown box.
 		/// </summary>
 		/// <param name="selectedValue"></param>
 		/// <param name="offset"></param>
@@ -1289,7 +1289,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Draw the button that will show/hide the dropdown box.
+		///    Draw the button that will show/hide the dropdown box.
 		/// </summary>
 		/// <param name="options"></param>
 		public void DrawButton(params GUILayoutOption[] options)
@@ -1395,7 +1395,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// This is needed to ensure dropdown box is always shown on top of other widgets.
+		///    This is needed to ensure dropdown box is always shown on top of other widgets.
 		/// </summary>
 		/// <param name="offset"></param>
 		public TReturnType DrawOverlayIfNeeded(Vector2 offset = default(Vector2))

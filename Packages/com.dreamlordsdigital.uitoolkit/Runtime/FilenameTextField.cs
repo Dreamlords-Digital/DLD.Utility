@@ -1,10 +1,12 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DLD.UIToolkit
 {
 	/// <summary>
-	/// TextField that displays a non-user-editable file type extension label at the end.
+	///    TextField that displays a non-user-editable file type extension label at the end.
 	/// </summary>
 	[UxmlElement]
 	public partial class FilenameTextField : TextField

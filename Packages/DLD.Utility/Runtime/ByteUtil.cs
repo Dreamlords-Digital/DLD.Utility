@@ -7,17 +7,17 @@ namespace DLD.Utility
 	public static class ByteUtil
 	{
 		/// <summary>
-		/// Given an int that represents a bitmask, find the position of the first bit that is set to 1.
+		///    Given an int that represents a bitmask, find the position of the first bit that is set to 1.
 		/// </summary>
 		/// <param name="n">int value that we're checking.</param>
 		/// <returns>
-		/// A value from 0 to 31. 0 means 1st bit.
-		/// If no bits are set to 1 (passed value is 0), this returns -1.
+		///    A value from 0 to 31. 0 means 1st bit.
+		///    If no bits are set to 1 (passed value is 0), this returns -1.
 		/// </returns>
 		/// <remarks>
-		/// If specified int is not power-of-two, we'll end up returning
-		/// the position of the first (lowest value) bit that is set,
-		/// ignoring the rest.
+		///    If specified int is not power-of-two, we'll end up returning
+		///    the position of the first (lowest value) bit that is set,
+		///    ignoring the rest.
 		/// </remarks>
 		public static int FindBitIndex(this int n)
 		{

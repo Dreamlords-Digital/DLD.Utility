@@ -8,8 +8,8 @@ namespace DLD.Utility
 	public static class TextureUtil
 	{
 		/// <summary>
-		/// Creates a new <see cref="Texture2D"/> given the raw image bytes.
-		/// Uses <see cref="UnityEngine.ImageConversion.LoadImage(Texture2D, byte[], bool)"/> from <see cref="Texture2D"/>.
+		///    Creates a new <see cref="Texture2D"/> given the raw image bytes.
+		///    Uses <see cref="UnityEngine.ImageConversion.LoadImage(Texture2D, byte[], bool)"/> from <see cref="Texture2D"/>.
 		/// </summary>
 		public static bool SetTextureFromBytes(byte[] imageBytes, bool nonReadable, TextureWrapMode wrapMode,
 			out Texture2D texture)
@@ -31,8 +31,8 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Load image from an absolute file path in the computer storage.
-		/// Uses <see cref="UnityEngine.ImageConversion.LoadImage(Texture2D, byte[], bool)"/> from <see cref="Texture2D"/>.
+		///    Load image from an absolute file path in the computer storage.
+		///    Uses <see cref="UnityEngine.ImageConversion.LoadImage(Texture2D, byte[], bool)"/> from <see cref="Texture2D"/>.
 		/// </summary>
 		/// <param name="file"></param>
 		/// <param name="forceReload"></param>
@@ -54,10 +54,14 @@ namespace DLD.Utility
 				{
 #if UNITY_EDITOR
 					if (!UnityEditor.EditorApplication.isPlaying)
+					{
 						Object.DestroyImmediate(registeredTexture);
+					}
 					else
 #endif
+					{
 						Object.Destroy(registeredTexture);
+					}
 
 					IoC.Remove(file);
 				}

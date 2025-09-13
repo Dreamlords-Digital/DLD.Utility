@@ -87,8 +87,8 @@ namespace DLD.IMGUI
 		public const int UNITY_TOP_BAR_HEIGHT = 38;
 
 		/// <summary>
-		/// Converts from a 3d world point to the 2d GUI point.
-		/// Works properly in both Editor and in runtime.
+		///    Converts from a 3d world point to the 2d GUI point.
+		///    Works properly in both Editor and in runtime.
 		/// </summary>
 		public static Vector2 WorldToGuiPoint(Vector3 worldPos)
 		{
@@ -103,9 +103,9 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Converts from a 3d world point to the 2d GUI point.
-		/// Works properly in both Editor and in runtime.
-		/// Use this overload only if you need to specify a camera.
+		///    Converts from a 3d world point to the 2d GUI point.
+		///    Works properly in both Editor and in runtime.
+		///    Use this overload only if you need to specify a camera.
 		/// </summary>
 		/// <param name="cameraUsed">Camera used to determine world to GUI conversion, instead of the default used (Camera.main in runtime)</param>
 		public static Vector2 WorldToGuiPoint(Vector3 worldPos, Camera cameraUsed)
@@ -138,7 +138,7 @@ namespace DLD.IMGUI
 		public static void GetAvailableSize(out int width, out int height)
 		{
 #if UNITY_EDITOR
-			if (UnityEditor.EditorApplication.isPlaying)
+			if (EditorApplication.isPlaying)
 			{
 #endif
 				width = Screen.width;
@@ -150,21 +150,21 @@ namespace DLD.IMGUI
 
 #if UNITY_EDITOR
 			const int SCENE_VIEW_UPPER_BAR_HEIGHT = 17;
-			if (UnityEditor.EditorWindow.focusedWindow != null && UnityEditor.EditorWindow.focusedWindow.GetType() == typeof(UnityEditor.SceneView))
+			if (EditorWindow.focusedWindow != null && EditorWindow.focusedWindow.GetType() == typeof(SceneView))
 			{
 				//return Mathf.RoundToInt(EditorWindow.focusedWindow.position.height) + ALLOWANCE - UPPER_BAR_HEIGHT;
 
-				var size = UnityEditor.EditorWindow.focusedWindow.position;
+				var size = EditorWindow.focusedWindow.position;
 				width = Mathf.RoundToInt(size.width);
 				height = Mathf.RoundToInt(size.height) - SCENE_VIEW_UPPER_BAR_HEIGHT;
 				return;
 			}
-			else if (UnityEditor.SceneView.lastActiveSceneView != null)
+			else if (SceneView.lastActiveSceneView != null)
 			{
 				// SceneView.lastActiveSceneView seems to be buggy, or we are misunderstanding what it means.
 				// if you have two scene views as tabs in the same area, SceneView.lastActiveSceneView seems
 				// to always point to the leftmost one, even if it's not the active/focused scene view.
-				var size = UnityEditor.SceneView.lastActiveSceneView.position;
+				var size = SceneView.lastActiveSceneView.position;
 				width = Mathf.RoundToInt(size.width);
 				height = Mathf.RoundToInt(size.height) - SCENE_VIEW_UPPER_BAR_HEIGHT;
 				return;
@@ -175,14 +175,12 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Fits Rect position into the Screen as much as possible. When in the Unity Editor during Edit Mode, this will use the SceneView window's size
-		/// (minus the height of the SceneView's top toolbar).
-		///
-		/// The Rect's size is expected to be smaller than the screen. If not, set <see cref="allowChangingWidth"/> and <see cref="allowChangingHeight"/> to true to allow
-		/// it to change the Rect's size to fit into the screen.
-		///
-		/// The Rect's initial position values are expected to be global screen coordinates,
-		/// meaning (0, 0) is top-left of entire screen, (width, height) is bottom-right of entire screen.
+		///    Fits Rect position into the Screen as much as possible. When in the Unity Editor during Edit Mode, this will use the SceneView window's size
+		///    (minus the height of the SceneView's top toolbar).
+		///    The Rect's size is expected to be smaller than the screen. If not, set <see cref="allowChangingWidth"/> and <see cref="allowChangingHeight"/> to true to allow
+		///    it to change the Rect's size to fit into the screen.
+		///    The Rect's initial position values are expected to be global screen coordinates,
+		///    meaning (0, 0) is top-left of entire screen, (width, height) is bottom-right of entire screen.
 		/// </summary>
 		/// <param name="rectToAdjust">The Rect values to adjust.</param>
 		/// <param name="screenMarginLeft">Distance from the left edge of the screen to give the tooltip some space, if it was adjusted to be anchored to the left edge of the screen.</param>
@@ -250,16 +248,13 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Fits Rect position into the Screen as much as possible. When in the Unity Editor during Edit Mode, this will use the SceneView window's size
-		/// (minus the height of the SceneView's top toolbar).
-		///
-		/// The Rect's size is expected to be smaller than the screen. If not, set <see cref="allowChangingWidth"/> and <see cref="allowChangingHeight"/> to true to allow
-		/// it to change the Rect's size to fit into the screen.
-		///
-		/// The Rect's initial position values are expected to be global screen coordinates,
-		/// meaning (0, 0) is top-left of entire screen, (width, height) is bottom-right of entire screen.
-		///
-		/// If the Rect's X position needs adjustment, it will move the X position to the specified <see cref="alternativeXPos"/>.
+		///    Fits Rect position into the Screen as much as possible. When in the Unity Editor during Edit Mode, this will use the SceneView window's size
+		///    (minus the height of the SceneView's top toolbar).
+		///    The Rect's size is expected to be smaller than the screen. If not, set <see cref="allowChangingWidth"/> and <see cref="allowChangingHeight"/> to true to allow
+		///    it to change the Rect's size to fit into the screen.
+		///    The Rect's initial position values are expected to be global screen coordinates,
+		///    meaning (0, 0) is top-left of entire screen, (width, height) is bottom-right of entire screen.
+		///    If the Rect's X position needs adjustment, it will move the X position to the specified <see cref="alternativeXPos"/>.
 		/// </summary>
 		/// <param name="rectToAdjust">The Rect values to adjust.</param>
 		/// <param name="alternativeXPos">If after being adjusted, the Rect ends up covering the mouse, it will move the Rect's X position to this value.</param>

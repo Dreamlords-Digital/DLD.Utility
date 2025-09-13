@@ -12,7 +12,7 @@ namespace DLD.Utility
 		// ------------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Return random number between sta and end. Both inclusive.
+		///    Return random number between sta and end. Both inclusive.
 		/// </summary>
 		/// <param name="sta"></param>
 		/// <param name="end"></param>
@@ -85,7 +85,7 @@ namespace DLD.Utility
 		// ------------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Fisher-Yates type of shuffling.
+		///    Fisher-Yates type of shuffling.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="list"></param>
@@ -116,7 +116,6 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		///
 		/// </summary>
 		/// <param name="collection"></param>
 		/// <typeparam name="T"></typeparam>
@@ -160,7 +159,6 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		///
 		/// </summary>
 		/// <param name="collection"></param>
 		/// <typeparam name="T"></typeparam>

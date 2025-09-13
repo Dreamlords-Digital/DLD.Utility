@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace DLD.Utility
 {
 	/// <summary>
-	/// Same as <see cref="Dictionary{TKey,TValue}"/> but implements <see cref="IPooled"/>
-	/// so that you can use <see cref="IoC.GetFromPool{T}()"/> on it.
+	///    Same as <see cref="Dictionary{TKey,TValue}"/> but implements <see cref="IPooled"/>
+	///    so that you can use <see cref="IoC.GetFromPool{T}()"/> on it.
 	/// </summary>
 	/// <typeparam name="TKey"></typeparam>
 	/// <typeparam name="TValue"></typeparam>

@@ -522,7 +522,7 @@ namespace DLD.Utility
 		}
 
 		/// <inheritdoc/>
-		public T GetFromPool<T>(System.Type typeToGet) where T : class, IPooled, new()
+		public T GetFromPool<T>(Type typeToGet) where T : class, IPooled, new()
 		{
 			if (!_poolsInUse.ContainsKey(typeof(T)))
 			{
@@ -546,7 +546,7 @@ namespace DLD.Utility
 					// and that there aren't any pre-existing unused instances yet
 					// so create a new one and return that
 
-					var newInstanceForNewList = (T)System.Activator.CreateInstance(typeToGet);
+					var newInstanceForNewList = (T)Activator.CreateInstance(typeToGet);
 					newInstanceForNewList.OnTakenFromPool();
 					_pools[typeToGet].Add(newInstanceForNewList);
 
@@ -578,7 +578,7 @@ namespace DLD.Utility
 				// so create a new one and return that
 
 				// create an instance of that class using the default parameterless constructor
-				var newInstance = (T)System.Activator.CreateInstance(typeToGet);
+				var newInstance = (T)Activator.CreateInstance(typeToGet);
 
 				newInstance.OnTakenFromPool();
 				pool.Add(newInstance);

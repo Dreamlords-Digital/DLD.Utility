@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System;
 using System.Collections.Generic;
 using DLD.Utility;
@@ -198,7 +200,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Prepare the VisualElement to be able to show a tooltip to its right side, but only if no drag-and-drop is happening.
+		///    Prepare the VisualElement to be able to show a tooltip to its right side, but only if no drag-and-drop is happening.
 		/// </summary>
 		public static void RegisterToRightNoDrag(this VisualElement tooltipDisplayer, ITooltip tooltip)
 		{
@@ -212,7 +214,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Prepare the VisualElement to be able to show a tooltip to its right side.
+		///    Prepare the VisualElement to be able to show a tooltip to its right side.
 		/// </summary>
 		public static void RegisterToRight(this VisualElement tooltipDisplayer, ITooltip tooltip)
 		{

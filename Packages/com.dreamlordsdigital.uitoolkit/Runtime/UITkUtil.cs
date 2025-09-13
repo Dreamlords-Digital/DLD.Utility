@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,22 +15,22 @@ namespace DLD.UIToolkit
 		public const string MOUSE_CURSOR_DRAG_STYLE_CLASS = "dld-mouse-cursor--normal-drag";
 
 		/// <summary>
-		///   <para>Default reference zoom level.</para>
+		///    <para>Default reference zoom level.</para>
 		/// </summary>
 		public static readonly float DefaultReferenceScale = 1f;
 
 		/// <summary>
-		///   <para>Default min zoom level.</para>
+		///    <para>Default min zoom level.</para>
 		/// </summary>
 		public static readonly float DefaultMinScale = 0.25f;
 
 		/// <summary>
-		///   <para>Default max zoom level.</para>
+		///    <para>Default max zoom level.</para>
 		/// </summary>
 		public static readonly float DefaultMaxScale = 1f;
 
 		/// <summary>
-		///   <para>Default zoom step.</para>
+		///    <para>Default zoom step.</para>
 		/// </summary>
 		public static readonly float DefaultScaleStep = 0.15f;
 
@@ -179,7 +181,7 @@ namespace DLD.UIToolkit
 		public static Vector2 GetPosition2(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
 
 		/// <summary>
-		/// Add the specified delta value to the transform's x and y.
+		///    Add the specified delta value to the transform's x and y.
 		/// </summary>
 		public static void AddToPosition(this VisualElement visualElement, Vector2 delta)
 		{

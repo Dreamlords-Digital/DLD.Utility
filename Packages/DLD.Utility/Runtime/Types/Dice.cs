@@ -38,7 +38,7 @@ namespace DLD.Utility
 		// =====================================================================================
 
 		/// <summary>
-		/// Uses Unity's <see cref="UnityEngine.Random"/> to roll the dice and generate a result.
+		///    Uses Unity's <see cref="UnityEngine.Random"/> to roll the dice and generate a result.
 		/// </summary>
 		public int Roll()
 		{
@@ -51,9 +51,9 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Uses a <see cref="System.Random"/> to roll the dice and generate a result.
+		///    Uses a <see cref="System.Random"/> to roll the dice and generate a result.
 		/// </summary>
-		public int Roll(System.Random random)
+		public int Roll(Random random)
 		{
 			int result = 0;
 			for (int n = 0; n < Quantity; ++n)
@@ -66,17 +66,17 @@ namespace DLD.Utility
 		// =====================================================================================
 
 		/// <summary>
-		/// Get the minimum possible result of the dice roll.
+		///    Get the minimum possible result of the dice roll.
 		/// </summary>
 		public int Min => Quantity + Bonus;
 
 		/// <summary>
-		/// Get the max possible result of the dice roll.
+		///    Get the max possible result of the dice roll.
 		/// </summary>
 		public int Max => GetMax(Quantity, NumberOfSides, Bonus);
 
 		/// <summary>
-		/// Get the max possible result of a dice roll.
+		///    Get the max possible result of a dice roll.
 		/// </summary>
 		/// <param name="quantity"></param>
 		/// <param name="numberOfSides"></param>

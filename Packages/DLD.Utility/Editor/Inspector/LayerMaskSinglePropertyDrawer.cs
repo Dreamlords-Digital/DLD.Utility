@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DLD.Utility.Inspector.Editor
 {
 	/// <summary>
-	/// <see cref="PropertyDrawer"/> for <see cref="LayerMask"/> to force it to be assigned with one layer only.
+	///    <see cref="PropertyDrawer"/> for <see cref="LayerMask"/> to force it to be assigned with one layer only.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(LayerMaskSingleAttribute))]
 	public class LayerMaskSinglePropertyDrawer : PropertyDrawer

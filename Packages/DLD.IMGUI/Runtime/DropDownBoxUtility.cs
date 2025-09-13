@@ -7,9 +7,9 @@ namespace DLD.IMGUI
 		public const string SEPARATOR = "----";
 
 		/// <summary>
-		/// The number of opened dropdown boxes. Starts at 1. This is normally only 1.
-		/// And dropdown boxes of different kinds use this to ensure that
-		/// only one is open at any time.
+		///    The number of opened dropdown boxes. Starts at 1. This is normally only 1.
+		///    And dropdown boxes of different kinds use this to ensure that
+		///    only one is open at any time.
 		/// </summary>
 		static int _openDropDownBoxes;
 

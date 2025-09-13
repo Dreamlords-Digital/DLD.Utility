@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -35,21 +37,21 @@ namespace DLD.UIToolkit
 	}
 
 	/// <summary>
-	/// Whether an Enum that has the <see cref="System.FlagsAttribute"/> is treated like a bitmask
-	/// where we allow the user to select multiple values, or we ignore it and
-	/// enforce that only one value is selected.
+	///    Whether an Enum that has the <see cref="System.FlagsAttribute"/> is treated like a bitmask
+	///    where we allow the user to select multiple values, or we ignore it and
+	///    enforce that only one value is selected.
 	/// </summary>
 	public enum DropdownEnumFlagHandling : byte
 	{
 		/// <summary>
-		/// Make the dropdown behave like a ToggleButtonGroup (i.e. allow multiple values to be selected)
-		/// if the Enum has the <see cref="System.FlagsAttribute"/>.
+		///    Make the dropdown behave like a ToggleButtonGroup (i.e. allow multiple values to be selected)
+		///    if the Enum has the <see cref="System.FlagsAttribute"/>.
 		/// </summary>
 		Auto,
 
 		/// <summary>
-		/// Even if the Enum has the <see cref="System.FlagsAttribute"/>, ignore it.
-		/// Dropdown will then enforce that only one value is selected.
+		///    Even if the Enum has the <see cref="System.FlagsAttribute"/>, ignore it.
+		///    Dropdown will then enforce that only one value is selected.
 		/// </summary>
 		ForceIgnore,
 	}
@@ -67,7 +69,7 @@ namespace DLD.UIToolkit
 		readonly Label _label;
 
 		/// <summary>
-		/// Behaves as our "dropdown box".
+		///    Behaves as our "dropdown box".
 		/// </summary>
 		readonly Toggle _toggle;
 
@@ -75,8 +77,8 @@ namespace DLD.UIToolkit
 		readonly TooltipMessage _enumObsoleteTooltip = new(BaseIcons.GENERIC_ERROR);
 
 		/// <summary>
-		/// Icon displayed when the dropdown box is displaying a single value.
-		/// Only used if the value actually has an icon assigned to it.
+		///    Icon displayed when the dropdown box is displaying a single value.
+		///    Only used if the value actually has an icon assigned to it.
 		/// </summary>
 		readonly VisualElement _icon;
 
@@ -90,25 +92,25 @@ namespace DLD.UIToolkit
 		enum Mode : byte
 		{
 			/// <summary>
-			/// Dropdown will show all values of the specified Enum in <see cref="SetItemsFromEnum"/>.
+			///    Dropdown will show all values of the specified Enum in <see cref="SetItemsFromEnum"/>.
 			/// </summary>
 			Enum,
 
 			/// <summary>
-			/// Dropdown will show all values of the specified Enum in <see cref="SetItemsFromEnum"/>.
+			///    Dropdown will show all values of the specified Enum in <see cref="SetItemsFromEnum"/>.
 			/// </summary>
 			/// <remarks>
-			/// In this mode, the user is allowed to select multiple dropdown items.
+			///    In this mode, the user is allowed to select multiple dropdown items.
 			/// </remarks>
 			EnumFlag,
 
 			/// <summary>
-			/// Dropdown will show a list of <see cref="DropdownItem"/>
-			/// that is meant to represent the values of a byte mask
-			/// specified in <see cref="SetValueWithoutNotify(byte)"/>.
+			///    Dropdown will show a list of <see cref="DropdownItem"/>
+			///    that is meant to represent the values of a byte mask
+			///    specified in <see cref="SetValueWithoutNotify(byte)"/>.
 			/// </summary>
 			/// <remarks>
-			/// In this mode, the user is allowed to select multiple dropdown items.
+			///    In this mode, the user is allowed to select multiple dropdown items.
 			/// </remarks>
 			ByteMask
 		}
@@ -118,9 +120,9 @@ namespace DLD.UIToolkit
 		// ==================================================================================
 
 		/// <summary>
-		/// When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
-		/// this is the current Enum value.
-		/// This is the value that we send when we dispatch a ChangeEvent.
+		///    When <see cref="_currentMode"/> is <see cref="Mode.Enum"/> or <see cref="Mode.EnumFlag"/>,
+		///    this is the current Enum value.
+		///    This is the value that we send when we dispatch a ChangeEvent.
 		/// </summary>
 		ulong _currentEnumValue;
 
@@ -128,8 +130,8 @@ namespace DLD.UIToolkit
 		DropdownEnumFlagHandling _enumFlagHandling = DropdownEnumFlagHandling.Auto;
 
 		/// <summary>
-		/// Whether enum values that have the <see cref="System.ObsoleteAttribute"/>
-		/// are included in the dropdown choices or not.
+		///    Whether enum values that have the <see cref="System.ObsoleteAttribute"/>
+		///    are included in the dropdown choices or not.
 		/// </summary>
 		bool _includeObsoleteEnums;
 
@@ -138,44 +140,44 @@ namespace DLD.UIToolkit
 		EnumDropdownItem[] _enumObsoleteItems;
 
 		/// <summary>
-		/// Which element in the <see cref="_enumValues"/> has the 0 value, if any.
-		/// This is usually the first in the list of enum items, but that isn't a guarantee.
+		///    Which element in the <see cref="_enumValues"/> has the 0 value, if any.
+		///    This is usually the first in the list of enum items, but that isn't a guarantee.
 		/// </summary>
 		int _noneIndex;
 
 		// ==================================================================================
 
 		/// <summary>
-		/// Determines whether dropdown will display the
-		/// currently selected values as either labels, shortened labels, or icons.
-		/// Only applicable when dropdown is showing <see cref="Mode.EnumFlag"/> or <see cref="Mode.ByteMask"/>.
+		///    Determines whether dropdown will display the
+		///    currently selected values as either labels, shortened labels, or icons.
+		///    Only applicable when dropdown is showing <see cref="Mode.EnumFlag"/> or <see cref="Mode.ByteMask"/>.
 		/// </summary>
 		DropdownCurrentValueDisplayType _currentValueDisplayType;
 
 		/// <summary>
-		/// Only used when the Dropdown <see cref="_currentMode"/> is in <see cref="Mode.ByteMask"/>.
+		///    Only used when the Dropdown <see cref="_currentMode"/> is in <see cref="Mode.ByteMask"/>.
 		/// </summary>
 		List<DropdownItem> _dropdownItems;
 
 		/// <summary>
-		/// Only used when <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>.<br/><br/>
-		/// true: DropdownItems that are not assigned a label will not be shown in the choices.<br/><br/>
-		/// false: DropdownItems that are not assigned a label will still be shown in the choices.
-		/// Their ordinal positions will be used as their label.
+		///    Only used when <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>.<br/><br/>
+		///    true: DropdownItems that are not assigned a label will not be shown in the choices.<br/><br/>
+		///    false: DropdownItems that are not assigned a label will still be shown in the choices.
+		///    Their ordinal positions will be used as their label.
 		/// </summary>
 		bool _skipBlankValues;
 
 		/// <summary>
-		/// When <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>,
-		/// this is the current byte value.
-		/// This is the value that we send when we dispatch a ChangeEvent.
+		///    When <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>,
+		///    this is the current byte value.
+		///    This is the value that we send when we dispatch a ChangeEvent.
 		/// </summary>
 		byte _currentByteValue;
 
 		/// <summary>
-		/// When <see cref="_currentValueDisplayType"/> is
-		/// <see cref="DropdownCurrentValueDisplayType.Icons"/>,
-		/// these hold the icons being displayed.
+		///    When <see cref="_currentValueDisplayType"/> is
+		///    <see cref="DropdownCurrentValueDisplayType.Icons"/>,
+		///    these hold the icons being displayed.
 		/// </summary>
 		List<VisualElement> _currentValueIcons;
 
@@ -293,7 +295,7 @@ namespace DLD.UIToolkit
 		// ==================================================================================
 
 		/// <summary>
-		/// Called when user clicks on the dropdown box.
+		///    Called when user clicks on the dropdown box.
 		/// </summary>
 		void OnOpen()
 		{

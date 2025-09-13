@@ -9,7 +9,7 @@ namespace DLD.Serializer
 	public class SerializedAttribute : Attribute
 	{
 		/// <summary>
-		/// Name of this field/property when serialized.
+		///    Name of this field/property when serialized.
 		/// </summary>
 		public readonly string Name;
 

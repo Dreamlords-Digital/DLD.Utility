@@ -266,9 +266,9 @@ namespace DLD.Serializer
 		}
 
 		/// <summary>
-		/// Generates an MD5 hash out of the binary form of the serializable fields and properties of the passed data.
-		/// That means any variables that are configured to be not serialized are not included in the hash.
-		/// The hash is then converted into a string for ease of use.
+		///    Generates an MD5 hash out of the binary form of the serializable fields and properties of the passed data.
+		///    That means any variables that are configured to be not serialized are not included in the hash.
+		///    The hash is then converted into a string for ease of use.
 		/// </summary>
 		/// <param name="data"></param>
 		/// <param name="hashAlgorithmName"></param>

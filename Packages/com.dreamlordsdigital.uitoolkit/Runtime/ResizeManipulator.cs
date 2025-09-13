@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -75,7 +77,9 @@ namespace DLD.UIToolkit
 		protected void OnPointerMove(PointerMoveEvent e)
 		{
 			if (!_active || !target.HasPointerCapture(_pointerId))
+			{
 				return;
+			}
 
 			float delta = e.localPosition.x - _start.x;
 			var currentWidth = _moveTarget.style.width;
@@ -125,7 +129,9 @@ namespace DLD.UIToolkit
 		protected void OnPointerUp(PointerUpEvent e)
 		{
 			if (!_active || !target.HasPointerCapture(_pointerId) || !CanStopManipulation(e))
+			{
 				return;
+			}
 
 			_active = false;
 			target.ReleaseMouse();

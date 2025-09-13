@@ -19,9 +19,9 @@ namespace DLD.Utility
 
 		public static Color32 GetRandomColor32()
 		{
-			byte r = (byte)UnityEngine.Random.Range(byte.MinValue, byte.MaxValue);
-			byte g = (byte)UnityEngine.Random.Range(byte.MinValue, byte.MaxValue);
-			byte b = (byte)UnityEngine.Random.Range(byte.MinValue, byte.MaxValue);
+			byte r = (byte)Random.Range(byte.MinValue, byte.MaxValue);
+			byte g = (byte)Random.Range(byte.MinValue, byte.MaxValue);
+			byte b = (byte)Random.Range(byte.MinValue, byte.MaxValue);
 
 			return new Color32(r, g, b, byte.MaxValue);
 		}
@@ -29,9 +29,9 @@ namespace DLD.Utility
 		public static Color32 GetRandomColor32FromHSB()
 		{
 			var newColor = new HSBColor(
-				UnityEngine.Random.value,
-				UnityEngine.Random.Range(0.5f, 1.0f),
-				UnityEngine.Random.Range(0.5f, 1.0f));
+				Random.value,
+				Random.Range(0.5f, 1.0f),
+				Random.Range(0.5f, 1.0f));
 
 			return newColor.ToColor();
 		}

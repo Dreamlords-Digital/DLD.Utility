@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,51 +14,51 @@ namespace DLD.UIToolkit
 	public class PanZoomManipulator : PointerManipulator, IDragStatus
 	{
 		/// <summary>
-		/// The local mouse coordinates when pan started.
+		///    The local mouse coordinates when pan started.
 		/// </summary>
 		/// <remarks>
-		/// Used for calculating proper panning movement delta.
+		///    Used for calculating proper panning movement delta.
 		/// </remarks>
 		Vector2 _panStartPointerPos;
 
 		/// <summary>
-		/// Whether panning is currently active.
+		///    Whether panning is currently active.
 		/// </summary>
 		bool _isPanning;
 
 		/// <summary>
-		/// Whether spacebar is held down or not acts as our modifier key
-		/// (instead of the usual ctrl, alt, shift, etc.)
+		///    Whether spacebar is held down or not acts as our modifier key
+		///    (instead of the usual ctrl, alt, shift, etc.)
 		/// </summary>
 		/// <remarks>
-		/// This is hardcoded for now to only check spacebar, but we can
-		/// look into making this user-changeable in the future.
+		///    This is hardcoded for now to only check spacebar, but we can
+		///    look into making this user-changeable in the future.
 		/// </remarks>
 		bool _spacebarHeld;
 
 		/// <summary>
-		/// Used for zoom-in (ctrl + spacebar then left click is zoom-in).
+		///    Used for zoom-in (ctrl + spacebar then left click is zoom-in).
 		/// </summary>
 		/// <remarks>
-		/// This is hardcoded for now, but we can look into
-		/// making this user-changeable in the future.
+		///    This is hardcoded for now, but we can look into
+		///    making this user-changeable in the future.
 		/// </remarks>
 		bool _ctrl;
 
 		/// <summary>
-		/// Used for zoom-out (alt + spacebar then left click is zoom-out).
+		///    Used for zoom-out (alt + spacebar then left click is zoom-out).
 		/// </summary>
 		/// <remarks>
-		/// This is hardcoded for now, but we can look into
-		/// making this user-changeable in the future.
+		///    This is hardcoded for now, but we can look into
+		///    making this user-changeable in the future.
 		/// </remarks>
 		bool _alt;
 
 		/// <summary>
-		/// Used when dragging to indicate that user doesn't want to parent the dragged element.
+		///    Used when dragging to indicate that user doesn't want to parent the dragged element.
 		/// </summary>
 		/// <remarks>
-		/// For single-click (select) this works as an "add to selection".
+		///    For single-click (select) this works as an "add to selection".
 		/// </remarks>
 		bool _shift;
 
@@ -67,69 +69,69 @@ namespace DLD.UIToolkit
 		int _draggingPointerId = -1;
 
 		/// <summary>
-		/// Where in the dragged element it got clicked on when the dragging started.
+		///    Where in the dragged element it got clicked on when the dragging started.
 		/// </summary>
 		/// <remarks>
-		/// (0, 0) means the mouse was exactly at the element's pivot point.
+		///    (0, 0) means the mouse was exactly at the element's pivot point.
 		/// </remarks>
 		Vector2 _draggedElementStartLocalPos;
 
 		Vector3 _pointerLastKnownLocalPos;
 
 		/// <summary>
-		/// The element that gets panned and zoomed by this manipulator.
+		///    The element that gets panned and zoomed by this manipulator.
 		/// </summary>
 		VisualElement _moveTarget;
 
 		VisualElement _additionalDragContainer;
 
 		/// <summary>
-		/// Specially designated container where dragged element will be in.
-		/// This should be above everything else, so the dragged element is visible above them.
+		///    Specially designated container where dragged element will be in.
+		///    This should be above everything else, so the dragged element is visible above them.
 		/// </summary>
 		VisualElement _draggedElementContainer;
 
 		/// <summary>
-		/// The element where we listen for key-down and key-up events.
+		///    The element where we listen for key-down and key-up events.
 		/// </summary>
 		/// <remarks>
-		/// <para>
-		/// This manipulator's panning is activated only when this element has keyboard focus.
-		/// So for example, if the keyboard focus is elsewhere, say, on a TextField,
-		/// then pressing spacebar just adds spaces to that TextField, and this
-		/// manipulator won't even receive the key-down/key-up events.
-		/// </para>
-		/// <para>
-		/// Note: This element's <see cref="Focusable.focusable"/> needs to be set to true
-		/// in order to receive the key-down and key-up events.
-		/// </para>
-		/// <para>
-		/// Since we use spacebar as if it is a modifier key,
-		/// we have to listen in on key-down and key-up events
-		/// (it's the only way to detect if spacebar is pressed).
-		/// </para>
-		/// <para>
-		/// We can't rely on <see cref="ManipulatorActivationFilter.modifiers"/>
-		/// since those things only detect ctrl, alt, shift, and win key.
-		/// </para>
+		///    <para>
+		///       This manipulator's panning is activated only when this element has keyboard focus.
+		///       So for example, if the keyboard focus is elsewhere, say, on a TextField,
+		///       then pressing spacebar just adds spaces to that TextField, and this
+		///       manipulator won't even receive the key-down/key-up events.
+		///    </para>
+		///    <para>
+		///       Note: This element's <see cref="Focusable.focusable"/> needs to be set to true
+		///       in order to receive the key-down and key-up events.
+		///    </para>
+		///    <para>
+		///       Since we use spacebar as if it is a modifier key,
+		///       we have to listen in on key-down and key-up events
+		///       (it's the only way to detect if spacebar is pressed).
+		///    </para>
+		///    <para>
+		///       We can't rely on <see cref="ManipulatorActivationFilter.modifiers"/>
+		///       since those things only detect ctrl, alt, shift, and win key.
+		///    </para>
 		/// </remarks>
 		VisualElement _keyEventTarget;
 
 		VisualElement _draggedElement;
 
 		/// <summary>
-		/// The element that causes the mouse cursor to change.
+		///    The element that causes the mouse cursor to change.
 		/// </summary>
 		/// <remarks>
-		/// <para>
-		/// We apply a style sheet to this element that changes the cursor.
-		/// So this element needs to be positioned in the same area where
-		/// the <see cref="Manipulator.target"/> is.
-		/// </para>
-		/// <para>
-		/// The act of changing the mouse cursor is used to indicate to the user
-		/// that this manipulator is active.
-		/// </para>
+		///    <para>
+		///       We apply a style sheet to this element that changes the cursor.
+		///       So this element needs to be positioned in the same area where
+		///       the <see cref="Manipulator.target"/> is.
+		///    </para>
+		///    <para>
+		///       The act of changing the mouse cursor is used to indicate to the user
+		///       that this manipulator is active.
+		///    </para>
 		/// </remarks>
 		VisualElement _mouseCursorDisplay;
 
@@ -637,7 +639,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// This method is called the moment that the user moves the mouse while having left mouse button held down on a node.
+		///    This method is called the moment that the user moves the mouse while having left mouse button held down on a node.
 		/// </summary>
 		protected virtual VisualElement OnStartedDrag(PointerMoveEvent e)
 		{
@@ -645,30 +647,30 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when user starts pressing shift, or releases shift.
-		/// Shift is used to indicate a "force move" command where the dragged node will not be parented,
-		/// even if there is a valid destination node under the mouse cursor.
+		///    Called when user starts pressing shift, or releases shift.
+		///    Shift is used to indicate a "force move" command where the dragged node will not be parented,
+		///    even if there is a valid destination node under the mouse cursor.
 		/// </summary>
 		protected virtual void OnForceMoveChanged(Vector2 mousePos)
 		{
 		}
 
 		/// <summary>
-		/// This method is called when the user releases left mouse button on a node without moving the mouse.
+		///    This method is called when the user releases left mouse button on a node without moving the mouse.
 		/// </summary>
 		protected virtual void OnAbortedPotentialDrag(PointerUpEvent e)
 		{
 		}
 
 		/// <summary>
-		/// Called when user releases the left mouse button on a node after having moved it.
+		///    Called when user releases the left mouse button on a node after having moved it.
 		/// </summary>
 		protected virtual void OnEndedDrag(PointerUpEvent e, Vector2 draggedElementEndPos)
 		{
 		}
 
 		/// <summary>
-		/// Called when user presses ESC or Alt + Tabs out while in the middle of a drag-and-drop operation.
+		///    Called when user presses ESC or Alt + Tabs out while in the middle of a drag-and-drop operation.
 		/// </summary>
 		protected virtual void OnCanceledDrag()
 		{

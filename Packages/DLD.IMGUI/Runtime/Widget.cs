@@ -1959,7 +1959,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Allows positive and negative values, and zero.
+		///    Int Field with plus/minus buttons. Allows positive and negative values, and zero.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -1975,7 +1975,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Allows positive and negative values, and zero. Max value is restrained by a parameter.
+		///    Int Field with plus/minus buttons. Allows positive and negative values, and zero. Max value is restrained by a parameter.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -2074,7 +2074,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Allows positive values, and zero. Max value is restrained by a parameter.
+		///    Int Field with plus/minus buttons. Allows positive values, and zero. Max value is restrained by a parameter.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -2162,7 +2162,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Allows any number except zero.
+		///    Int Field with plus/minus buttons. Allows any number except zero.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -2187,7 +2187,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Only allows positive numbers. Zero not allowed.
+		///    Int Field with plus/minus buttons. Only allows positive numbers. Zero not allowed.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -2208,7 +2208,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Only allows positive numbers. Zero not allowed.
+		///    Int Field with plus/minus buttons. Only allows positive numbers. Zero not allowed.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -2221,7 +2221,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Int Field with plus/minus buttons. Only allows positive numbers. Zero not allowed.
+		///    Int Field with plus/minus buttons. Only allows positive numbers. Zero not allowed.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="inValue"></param>
@@ -3350,17 +3350,30 @@ namespace DLD.IMGUI
 
 			Int32.TryParse(s, out temp);
 
-			if (((willUseRepeatButton) ? GUILayout.RepeatButton("+") : GUILayout.Button("+"))) temp += 1;
-			if (((willUseRepeatButton) ? GUILayout.RepeatButton("-") : GUILayout.Button("-"))) temp -= 1;
+			if (((willUseRepeatButton) ? GUILayout.RepeatButton("+") : GUILayout.Button("+")))
+			{
+				temp += 1;
+			}
+
+			if (((willUseRepeatButton) ? GUILayout.RepeatButton("-") : GUILayout.Button("-")))
+			{
+				temp -= 1;
+			}
 
 			GUILayout.EndHorizontal();
 
-			if (!validInput) GUILayout.Label(warningMessage, ERROR_LABEL_STYLE_NAME);
+			if (!validInput)
+			{
+				GUILayout.Label(warningMessage, ERROR_LABEL_STYLE_NAME);
+			}
 
 			// Value has changed
 			if (val != temp)
 			{
-				if (intCallback != null) intCallback(temp);
+				if (intCallback != null)
+				{
+					intCallback(temp);
+				}
 			}
 
 
@@ -3455,7 +3468,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Draw a button that aligns neatly beside a dropdown box.
+		///    Draw a button that aligns neatly beside a dropdown box.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="options"></param>
@@ -3466,7 +3479,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Draw a button that aligns neatly beside a dropdown box.
+		///    Draw a button that aligns neatly beside a dropdown box.
 		/// </summary>
 		/// <param name="guiContent"></param>
 		/// <param name="options"></param>
@@ -3477,7 +3490,7 @@ namespace DLD.IMGUI
 		}
 
 		/// <summary>
-		/// Draw a button that aligns neatly beside a dropdown box.
+		///    Draw a button that aligns neatly beside a dropdown box.
 		/// </summary>
 		/// <param name="guiContent"></param>
 		/// <returns></returns>

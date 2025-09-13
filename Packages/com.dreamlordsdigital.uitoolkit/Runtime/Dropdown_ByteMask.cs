@@ -1,3 +1,5 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using System.Collections.Generic;
 using System.Text;
 using DLD.Utility;
@@ -76,7 +78,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when user clicks on the dropdown box.
+		///    Called when user clicks on the dropdown box.
 		/// </summary>
 		void Open(List<DropdownItem> dropdownItems, byte value)
 		{
@@ -105,7 +107,7 @@ namespace DLD.UIToolkit
 		}
 
 		/// <summary>
-		/// Called when user chooses an item inside the dropdown box.
+		///    Called when user chooses an item inside the dropdown box.
 		/// </summary>
 		void OnDropdownByteMaskChosen(int chosenIndex)
 		{

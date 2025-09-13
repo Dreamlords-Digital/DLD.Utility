@@ -94,7 +94,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Change the image's alpha, but keep its current rgb color value same.
+		///    Change the image's alpha, but keep its current rgb color value same.
 		/// </summary>
 		public static void SetAlpha(this UnityEngine.UI.Graphic g, float a)
 		{
@@ -103,7 +103,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Change alpha of images, but keep their current rgb color value same.
+		///    Change alpha of images, but keep their current rgb color value same.
 		/// </summary>
 		public static void SetAlpha(this IReadOnlyList<UnityEngine.UI.Graphic> g, float a)
 		{
@@ -114,7 +114,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Change the image's rgb color, but keep its current alpha value same.
+		///    Change the image's rgb color, but keep its current alpha value same.
 		/// </summary>
 		public static void SetColorKeepAlpha(this UnityEngine.UI.Graphic g, Color newColor)
 		{
@@ -123,7 +123,7 @@ namespace DLD.Utility
 		}
 
 		/// <summary>
-		/// Change rgb color of images, but keep their current alpha value same.
+		///    Change rgb color of images, but keep their current alpha value same.
 		/// </summary>
 		public static void SetColorKeepAlpha(this IReadOnlyList<UnityEngine.UI.Graphic> g, Color newColor)
 		{

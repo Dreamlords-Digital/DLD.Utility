@@ -114,7 +114,7 @@ namespace DLD.Utility
 		// ====================================================================================
 
 		/// <summary>
-		/// Reset bones of <see cref="SkinnedMeshRenderer"/> back to their original positions.
+		///    Reset bones of <see cref="SkinnedMeshRenderer"/> back to their original positions.
 		/// </summary>
 		/// <remarks>Based on https://forum.unity.com/threads/mesh-bindposes.383752/#post-2953960</remarks>
 		public static void RestoreBindPose(this SkinnedMeshRenderer skinnedMeshRenderer)

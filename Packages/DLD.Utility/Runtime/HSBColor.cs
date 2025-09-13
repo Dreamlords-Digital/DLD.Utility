@@ -27,7 +27,7 @@ namespace DLD.Utility
 			this.h = h;
 			this.s = s;
 			this.b = b;
-			this.a = 1f;
+			a = 1f;
 		}
 
 		public HSBColor(Color col)
@@ -204,9 +204,15 @@ namespace DLD.Utility
 					// works around bug with LerpAngle
 					float angle = Mathf.LerpAngle(a.h * 360f, b.h * 360f, t);
 					while (angle < 0f)
+					{
 						angle += 360f;
+					}
+
 					while (angle > 360f)
+					{
 						angle -= 360f;
+					}
+
 					h = angle / 360f;
 				}
 
