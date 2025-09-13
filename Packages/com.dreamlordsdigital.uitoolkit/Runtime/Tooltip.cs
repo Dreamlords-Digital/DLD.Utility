@@ -83,6 +83,10 @@ namespace DLD.UIToolkit
 			IconClassName = iconClassName;
 			Text = text;
 		}
+
+		public static readonly TooltipMessage Spacer = new(text: "<nobr> </nobr>");
+		public static readonly TooltipMessage JumpToSourceFile = new(BaseIcons.JUMP_TO_SOURCE_FILE, "<i>Left-Click to jump to source file.</i>");
+		public static readonly TooltipMessage OpenLinkInWebBrowser = new(BaseIcons.OPEN_LINK_IN_WEB_BROWSER, "<i>Ctrl + Left-Click to open link.</i>");
 	}
 
 	public static class TooltipUtil
@@ -135,6 +139,26 @@ namespace DLD.UIToolkit
 				return null;
 			}
 
+			(string url, string formattedText) = tooltipText.ExtractHRef(replacementStartTag: BaseStyles.LINK_START_TAGS, replacementEndTag: BaseStyles.LINK_END_TAGS);
+			if (!string.IsNullOrEmpty(url))
+			{
+				tooltipDisplayer.RegisterCallback<ClickEvent, string>((e, gotUrl) =>
+				{
+					if (e.ctrlKey && e.button == 0) // ctrl + left click
+					{
+						Application.OpenURL(gotUrl);
+					}
+				}, url);
+				tooltipDisplayer.userData = new[]
+				{
+					new TooltipMessage(BaseIcons.GENERIC_INFO, formattedText),
+					TooltipMessage.Spacer,
+					TooltipMessage.OpenLinkInWebBrowser,
+				};
+				tooltipDisplayer.Register(tooltip);
+				return formattedText;
+			}
+
 			// If passed tooltipText already has an icon inside, or user doesn't want an icon displayed,
 			// then just use tooltipText as-is.
 			string finalTooltipText = tooltipText.Contains(';') || string.IsNullOrWhiteSpace(iconClassName) ? tooltipText : $"{iconClassName};{tooltipText}";
@@ -144,13 +168,12 @@ namespace DLD.UIToolkit
 			if (pushToStack)
 			{
 				tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
-				tooltipDisplayer.RegisterCallback(Hide, tooltip);
 			}
 			else
 			{
 				tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
-				tooltipDisplayer.RegisterCallback(Hide, tooltip);
 			}
+			tooltipDisplayer.RegisterCallback(Hide, tooltip);
 
 			return finalTooltipText;
 		}

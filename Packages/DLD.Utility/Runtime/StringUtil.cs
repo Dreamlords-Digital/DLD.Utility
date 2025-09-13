@@ -12,6 +12,114 @@ namespace DLD.Utility
 	{
 		public static string ToStringLabel(this object obj) => obj.ToString().AddSpacesToSentence();
 
+		public static (string, string) ExtractHRef(this string stringText, bool onlyGetHttpsLinks = true, string replacementStartTag = null, string replacementEndTag = null)
+		{
+			if (string.IsNullOrEmpty(stringText) || !stringText.Contains("href"))
+			{
+				return (null, null);
+			}
+
+			// For example:
+			// Go to <see href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings">Custom date and time format strings documentation</see> for more info.
+
+			var text = stringText.AsSpan();
+
+			int hrefIdx = text.IndexOf("href");
+			if (hrefIdx == -1)
+			{
+				return (null, null);
+			}
+
+			// Before the "href", there ought to be a "<see".
+			// We check "<" and "see" individually because whitespace is allowed between those two.
+			var beforeHref = text[..hrefIdx].TrimEnd();
+			if (!beforeHref.EndsWith("see"))
+			{
+				return (null, null);
+			}
+			var beforeSee = beforeHref[..^3].Trim();
+			if (!beforeSee.EndsWith("<"))
+			{
+				return (null, null);
+			}
+
+			int beforeSeeIdx = text.IndexOf(beforeSee);
+			var leftOfSee = text.Slice(beforeSeeIdx, beforeSeeIdx + beforeSee.Length-1); // -1 because we don't want "<" to be included
+
+			Span<char> formattedText = null;
+			if (!string.IsNullOrEmpty(replacementStartTag) && !string.IsNullOrEmpty(replacementEndTag))
+			{
+				char[] buffer = new char[stringText.Length + replacementStartTag.Length + replacementEndTag.Length];
+				formattedText = new Span<char>(buffer);
+				leftOfSee.CopyTo(formattedText);
+				replacementStartTag.AsSpan().CopyTo(formattedText.Slice(leftOfSee.Length));
+			}
+
+			text = text[(hrefIdx + "href".Length)..].TrimStart();
+			if (!text.StartsWith("="))
+			{
+				return (null, null);
+			}
+
+			var linkText = text[1..].TrimStart();
+			// We should now have the text without the equals and any whitespace between the equals and the starting quote.
+			// The first character should now be either a double quote or single quote.
+
+			ReadOnlySpan<char> restOfText;
+			int endingQuoteIdx;
+			if (linkText.StartsWith("\""))
+			{
+				linkText = linkText[1..].TrimStart();
+				endingQuoteIdx = linkText.IndexOf("\"");
+				restOfText = linkText;
+				if (endingQuoteIdx != -1)
+				{
+					linkText = linkText[..endingQuoteIdx].Trim();
+				}
+			}
+			else if (linkText.StartsWith("'"))
+			{
+				linkText = linkText[1..].TrimStart();
+				endingQuoteIdx = linkText.IndexOf("'");
+				restOfText = linkText;
+				if (endingQuoteIdx != -1)
+				{
+					linkText = linkText[..endingQuoteIdx].Trim();
+				}
+			}
+			else
+			{
+				// no quote?
+				return (null, null);
+			}
+
+			if (!string.IsNullOrEmpty(replacementStartTag) && !string.IsNullOrEmpty(replacementEndTag))
+			{
+				int endingBracketIdx = restOfText.IndexOf(">");
+				restOfText = restOfText.Slice(endingBracketIdx + 1);
+				int endingSeeTagIdx = restOfText.IndexOf("</see>");
+				var rightOfSee = restOfText.Slice(endingSeeTagIdx + 6);
+				var linkLabel = restOfText.Slice(0, endingSeeTagIdx);
+				linkLabel.CopyTo(formattedText.Slice(leftOfSee.Length + replacementStartTag.Length));
+				replacementEndTag.AsSpan().CopyTo(formattedText.Slice(leftOfSee.Length + replacementStartTag.Length + linkLabel.Length));
+				rightOfSee.CopyTo(formattedText.Slice(leftOfSee.Length + replacementStartTag.Length + linkLabel.Length + replacementEndTag.Length));
+			}
+
+			string foundUrl = linkText.ToString();
+			if (Uri.TryCreate(foundUrl, UriKind.Absolute, out Uri uri) && uri.IsDefaultPort)
+			{
+				if (onlyGetHttpsLinks && uri.Scheme != Uri.UriSchemeHttps)
+				{
+					return (null, null);
+				}
+
+				return (uri.ToString(), formattedText.ToString());
+			}
+
+			// Uri.TryCreate failed
+			return (null, null);
+		}
+
 		/// <summary>
 		/// Equality checker for strings but will regard
 		/// null value and an empty string as equivalent.
