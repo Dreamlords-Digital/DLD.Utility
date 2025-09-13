@@ -755,6 +755,7 @@ namespace DLD.UIToolkit
 				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
 				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
 				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
+				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
 				_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
 				_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 			}
