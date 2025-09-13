@@ -5,119 +5,144 @@ using System.Collections.Generic;
 
 namespace DLD.Serializer.Tests
 {
-	[Serializable]
-	public class BaseClass : ITextData
+
+[Serializable]
+public class BaseClass : ITextData
+{
+	public virtual string MyType
 	{
-		public virtual string MyType
+		get
 		{
-			get { return "Base"; }
-		}
-
-		// -----------------------------
-
-		[Serialized("ID")]
-		string _id;
-
-		public string ID
-		{
-			get { return _id; }
-		}
-
-		public void SetID(string value)
-		{
-			_id = value;
-		}
-
-		// -----------------------------
-
-		public void PostLoad(string fullPath, string filename)
-		{
-		}
-
-		public void PrepareSave()
-		{
+			return "Base";
 		}
 	}
 
+	// -----------------------------
 
-	public class Derived1 : BaseClass
+	[Serialized("ID")]
+	string _id;
+
+	public string ID
 	{
-		public const string DERIVED_1_TYPE = "Derived1";
-
-		public override string MyType
+		get
 		{
-			get { return DERIVED_1_TYPE; }
-		}
-
-		// -----------------------------
-
-		[Serialized("MyField")]
-		int _derived1Field;
-
-		public int MyField
-		{
-			get { return _derived1Field; }
-		}
-
-		public void SetMyField(int value)
-		{
-			_derived1Field = value;
+			return _id;
 		}
 	}
 
-	public class Derived2 : BaseClass
+	public void SetID(string value)
 	{
-		public const string DERIVED_2_TYPE = "Derived2";
+		_id = value;
+	}
 
-		public override string MyType
+	// -----------------------------
+
+	public void PostLoad(string fullPath, string filename)
+	{
+	}
+
+	public void PrepareSave()
+	{
+	}
+}
+
+
+public class Derived1 : BaseClass
+{
+	public const string DERIVED_1_TYPE = "Derived1";
+
+	public override string MyType
+	{
+		get
 		{
-			get { return DERIVED_2_TYPE; }
+			return DERIVED_1_TYPE;
 		}
 	}
 
-	public class Derived3 : BaseClass
-	{
-		public const string DERIVED_3_TYPE = "Derived3";
+	// -----------------------------
 
-		public override string MyType
+	[Serialized("MyField")]
+	int _derived1Field;
+
+	public int MyField
+	{
+		get
 		{
-			get { return DERIVED_3_TYPE; }
+			return _derived1Field;
 		}
 	}
 
-
-
-	[Serializable]
-	public class BaseAndDerivedClassUser : ITextData
+	public void SetMyField(int value)
 	{
-		// -----------------------------
+		_derived1Field = value;
+	}
+}
 
-		[Serialized("List")]
-		readonly List<BaseClass> _list = new List<BaseClass>();
+public class Derived2 : BaseClass
+{
+	public const string DERIVED_2_TYPE = "Derived2";
 
-		public int Count
+	public override string MyType
+	{
+		get
 		{
-			get { return _list.Count; }
-		}
-
-		public BaseClass this[int idx]
-		{
-			get { return _list[idx]; }
-		}
-
-		public void Add(BaseClass newObject)
-		{
-			_list.Add(newObject);
-		}
-
-		// -----------------------------
-
-		public void PostLoad(string fullPath, string filename)
-		{
-		}
-
-		public void PrepareSave()
-		{
+			return DERIVED_2_TYPE;
 		}
 	}
+}
+
+public class Derived3 : BaseClass
+{
+	public const string DERIVED_3_TYPE = "Derived3";
+
+	public override string MyType
+	{
+		get
+		{
+			return DERIVED_3_TYPE;
+		}
+	}
+}
+
+
+[Serializable]
+public class BaseAndDerivedClassUser : ITextData
+{
+	// -----------------------------
+
+	[Serialized("List")]
+	readonly List<BaseClass> _list = new List<BaseClass>();
+
+	public int Count
+	{
+		get
+		{
+			return _list.Count;
+		}
+	}
+
+	public BaseClass this[int idx]
+	{
+		get
+		{
+			return _list[idx];
+		}
+	}
+
+	public void Add(BaseClass newObject)
+	{
+		_list.Add(newObject);
+	}
+
+	// -----------------------------
+
+	public void PostLoad(string fullPath, string filename)
+	{
+	}
+
+	public void PrepareSave()
+	{
+	}
+}
+
 }

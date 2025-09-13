@@ -5,59 +5,61 @@ using UnityEngine;
 
 namespace DLD.Utility.Inspector.Editor
 {
-	[CustomPropertyDrawer(typeof(FloatRangeShowIfAttribute))]
-	public class FloatRangeShowIfPropertyDrawer : PropertyDrawer
+
+[CustomPropertyDrawer(typeof(FloatRangeShowIfAttribute))]
+public class FloatRangeShowIfPropertyDrawer : PropertyDrawer
+{
+	FloatRangeShowIfAttribute _rangeShowIf;
+
+	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		FloatRangeShowIfAttribute _rangeShowIf;
-
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		_rangeShowIf ??= attribute as FloatRangeShowIfAttribute;
+		if (_rangeShowIf == null)
 		{
-			_rangeShowIf ??= attribute as FloatRangeShowIfAttribute;
-			if (_rangeShowIf == null)
-			{
-				return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Min)), label);
-			}
-
-			if (!ShowIfPropertyDrawer.IsConditionMet(property, _rangeShowIf.PropertyToCheck, _rangeShowIf.ValueToCheckAgainst, _rangeShowIf.ComparisonType) &&
-			    _rangeShowIf.HideType == HideType.DoNotDraw)
-			{
-				return -EditorGUIUtility.standardVerticalSpacing;
-			}
-
 			return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Min)), label);
 		}
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+		if (!ShowIfPropertyDrawer.IsConditionMet(property, _rangeShowIf.PropertyToCheck, _rangeShowIf.ValueToCheckAgainst, _rangeShowIf.ComparisonType) &&
+		    _rangeShowIf.HideType == HideType.DoNotDraw)
 		{
-			_rangeShowIf ??= attribute as FloatRangeShowIfAttribute;
-			if (_rangeShowIf == null)
+			return -EditorGUIUtility.standardVerticalSpacing;
+		}
+
+		return EditorGUI.GetPropertyHeight(property.FindPropertyRelative(nameof(FloatRange.Min)), label);
+	}
+
+	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+	{
+		_rangeShowIf ??= attribute as FloatRangeShowIfAttribute;
+		if (_rangeShowIf == null)
+		{
+			return;
+		}
+
+		bool conditionMet = ShowIfPropertyDrawer.IsConditionMet(property, _rangeShowIf.PropertyToCheck,
+			_rangeShowIf.ValueToCheckAgainst, _rangeShowIf.ComparisonType);
+		if (conditionMet || _rangeShowIf.HideType == HideType.ReadOnly)
+		{
+			string originalLabel = label.text;
+			string customLabel = _rangeShowIf.Label;
+			string startLabel = _rangeShowIf.StartLabel;
+			string startPostLabel = _rangeShowIf.StartPostLabel;
+			string endLabel = _rangeShowIf.EndLabel;
+			string endPostLabel = _rangeShowIf.EndPostLabel;
+			bool useAllAvailableSpace = _rangeShowIf.UseAllAvailableSpace;
+
+			bool prevEnabled = GUI.enabled;
+			if (!conditionMet)
 			{
-				return;
+				GUI.enabled = false;
 			}
 
-			bool conditionMet = ShowIfPropertyDrawer.IsConditionMet(property, _rangeShowIf.PropertyToCheck,
-				_rangeShowIf.ValueToCheckAgainst, _rangeShowIf.ComparisonType);
-			if (conditionMet || _rangeShowIf.HideType == HideType.ReadOnly)
-			{
-				string originalLabel = label.text;
-				string customLabel = _rangeShowIf.Label;
-				string startLabel = _rangeShowIf.StartLabel;
-				string startPostLabel = _rangeShowIf.StartPostLabel;
-				string endLabel = _rangeShowIf.EndLabel;
-				string endPostLabel = _rangeShowIf.EndPostLabel;
-				bool useAllAvailableSpace = _rangeShowIf.UseAllAvailableSpace;
+			FloatRangePropertyDrawer.DrawGUI(position, property, label, useAllAvailableSpace,
+				originalLabel, customLabel, startLabel, startPostLabel, endLabel, endPostLabel);
 
-				bool prevEnabled = GUI.enabled;
-				if (!conditionMet)
-				{
-					GUI.enabled = false;
-				}
-
-				FloatRangePropertyDrawer.DrawGUI(position, property, label, useAllAvailableSpace,
-					originalLabel, customLabel, startLabel, startPostLabel, endLabel, endPostLabel);
-
-				GUI.enabled = prevEnabled;
-			}
+			GUI.enabled = prevEnabled;
 		}
 	}
+}
+
 }

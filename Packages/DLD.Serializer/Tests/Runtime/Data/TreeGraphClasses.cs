@@ -5,105 +5,125 @@ using System.Collections.Generic;
 
 namespace DLD.Serializer.Tests.TreeGraph
 {
-	[Serializable]
-	public class BaseNode : ITextData
+
+[Serializable]
+public class BaseNode : ITextData
+{
+	public virtual string MyType
 	{
-		public virtual string MyType
+		get
 		{
-			get { return "Base"; }
-		}
-
-		// -----------------------------
-
-		[Serialized("ID")]
-		string _id;
-
-		public string ID
-		{
-			get { return _id; }
-		}
-
-		public void SetID(string value)
-		{
-			_id = value;
-		}
-
-		// -----------------------------
-
-		[Serialized("Children")]
-		List<BaseNode> _children = new List<BaseNode>();
-
-		public int Count
-		{
-			get
-			{
-				return _children != null ? _children.Count : 0;
-			}
-		}
-
-		public BaseNode this[int idx]
-		{
-			get
-			{
-				return _children != null ? _children[idx] : null;
-			}
-		}
-
-		public void Add(BaseNode newObject)
-		{
-			if (_children == null)
-			{
-				_children = new List<BaseNode>();
-			}
-
-			_children.Add(newObject);
-		}
-
-		// -----------------------------
-
-		public void PostLoad(string fullPath, string filename)
-		{
-		}
-
-		public void PrepareSave()
-		{
+			return "Base";
 		}
 	}
 
+	// -----------------------------
 
-	[Serializable]
-	public class Root : BaseNode
+	[Serialized("ID")]
+	string _id;
+
+	public string ID
 	{
-		public override string MyType
+		get
 		{
-			get { return "Root"; }
+			return _id;
 		}
 	}
 
-	[Serializable]
-	public class Composite : BaseNode
+	public void SetID(string value)
 	{
-		public override string MyType
+		_id = value;
+	}
+
+	// -----------------------------
+
+	[Serialized("Children")]
+	List<BaseNode> _children = new List<BaseNode>();
+
+	public int Count
+	{
+		get
 		{
-			get { return "Composite"; }
+			return _children != null ? _children.Count : 0;
 		}
 	}
 
-	[Serializable]
-	public class Leaf1 : BaseNode
+	public BaseNode this[int idx]
 	{
-		public override string MyType
+		get
 		{
-			get { return "Leaf1"; }
+			return _children != null ? _children[idx] : null;
 		}
 	}
 
-	[Serializable]
-	public class Leaf2 : BaseNode
+	public void Add(BaseNode newObject)
 	{
-		public override string MyType
+		if (_children == null)
 		{
-			get { return "Leaf2"; }
+			_children = new List<BaseNode>();
+		}
+
+		_children.Add(newObject);
+	}
+
+	// -----------------------------
+
+	public void PostLoad(string fullPath, string filename)
+	{
+	}
+
+	public void PrepareSave()
+	{
+	}
+}
+
+
+[Serializable]
+public class Root : BaseNode
+{
+	public override string MyType
+	{
+		get
+		{
+			return "Root";
 		}
 	}
+}
+
+[Serializable]
+public class Composite : BaseNode
+{
+	public override string MyType
+	{
+		get
+		{
+			return "Composite";
+		}
+	}
+}
+
+[Serializable]
+public class Leaf1 : BaseNode
+{
+	public override string MyType
+	{
+		get
+		{
+			return "Leaf1";
+		}
+	}
+}
+
+[Serializable]
+public class Leaf2 : BaseNode
+{
+	public override string MyType
+	{
+		get
+		{
+			return "Leaf2";
+		}
+	}
+}
+
 }

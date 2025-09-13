@@ -2,8 +2,10 @@
 
 namespace DLD.IMGUI
 {
-	public static class OverlayUtility
-	{
-		public static bool IsAnyOverlayOpen => ColorPicker.IsOpen || DropDownBoxUtility.IsAnyDropDownBoxOpen;
-	}
+
+public static class OverlayUtility
+{
+	public static bool IsAnyOverlayOpen => ColorPicker.IsOpen || DropDownBoxUtility.IsAnyDropDownBoxOpen;
+}
+
 }

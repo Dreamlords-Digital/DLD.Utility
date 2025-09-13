@@ -4,11 +4,13 @@ using UnityEngine;
 
 namespace DLD.Utility.Inspector
 {
-	public class GameObjectNotes : MonoBehaviour
-	{
+
+public class GameObjectNotes : MonoBehaviour
+{
 #if UNITY_EDITOR
-		[TextArea(1, 20)]
-		public string Notes;
+	[TextArea(1, 20)]
+	public string Notes;
 #endif
-	}
+}
+
 }

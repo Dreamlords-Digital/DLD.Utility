@@ -5,46 +5,48 @@ using UnityEditor;
 
 namespace DLD.Utility.Inspector.Editor
 {
-	[CustomEditor(typeof(GameObjectNotes))]
-	public class GameObjectNotesInspector : UnityEditor.Editor
+
+[CustomEditor(typeof(GameObjectNotes))]
+public class GameObjectNotesInspector : UnityEditor.Editor
+{
+	SerializedProperty _notesProperty;
+
+	bool _edit;
+
+	readonly GUIContent _labelContent = new();
+	GUIStyle _labelStyle;
+
+	void OnEnable()
 	{
-		SerializedProperty _notesProperty;
+		_notesProperty = serializedObject.FindProperty(nameof(GameObjectNotes.Notes));
 
-		bool _edit;
+		_labelStyle = new GUIStyle(EditorGUIUtility.GetBuiltinSkin(EditorSkin.Game).label);
+		_labelStyle.wordWrap = true;
+	}
 
-		readonly GUIContent _labelContent = new();
-		GUIStyle _labelStyle;
-
-		void OnEnable()
+	public override void OnInspectorGUI()
+	{
+		if (_edit)
 		{
-			_notesProperty = serializedObject.FindProperty(nameof(GameObjectNotes.Notes));
+			if (GUILayout.Button("Done"))
+			{
+				_edit = false;
+			}
 
-			_labelStyle = new GUIStyle(EditorGUIUtility.GetBuiltinSkin(EditorSkin.Game).label);
-			_labelStyle.wordWrap = true;
+			EditorGUIUtility.labelWidth = 0;
+			EditorGUILayout.PropertyField(_notesProperty, _labelContent);
+			serializedObject.ApplyModifiedProperties();
 		}
-
-		public override void OnInspectorGUI()
+		else
 		{
-			if (_edit)
+			if (GUILayout.Button("Edit"))
 			{
-				if (GUILayout.Button("Done"))
-				{
-					_edit = false;
-				}
-
-				EditorGUIUtility.labelWidth = 0;
-				EditorGUILayout.PropertyField(_notesProperty, _labelContent);
-				serializedObject.ApplyModifiedProperties();
+				_edit = true;
 			}
-			else
-			{
-				if (GUILayout.Button("Edit"))
-				{
-					_edit = true;
-				}
 
-				GUILayout.Label(((GameObjectNotes) target).Notes, _labelStyle);
-			}
+			GUILayout.Label(((GameObjectNotes)target).Notes, _labelStyle);
 		}
 	}
+}
+
 }

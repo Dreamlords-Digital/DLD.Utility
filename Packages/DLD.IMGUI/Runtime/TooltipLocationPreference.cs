@@ -2,10 +2,12 @@
 
 namespace DLD.IMGUI
 {
-	public enum TooltipLocationPreference
-	{
-		Left,
-		Right,
-		Bottom
-	}
+
+public enum TooltipLocationPreference
+{
+	Left,
+	Right,
+	Bottom
+}
+
 }

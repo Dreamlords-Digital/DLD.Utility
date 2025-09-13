@@ -31,17 +31,20 @@ public static class ExplorerUtil
 		{
 			macPath = "\"" + macPath;
 		}
+
 		if (!macPath.EndsWith("\""))
 		{
 			macPath = macPath + "\"";
 		}
+
 		string arguments = (openInsidesOfFolder ? "" : "-R ") + macPath;
+
 		//Debug.Log("arguments: " + arguments);
 		try
 		{
 			Process.Start("open", arguments);
 		}
-		catch(System.ComponentModel.Win32Exception e)
+		catch (System.ComponentModel.Win32Exception e)
 		{
 			// tried to open mac finder in windows
 			// just silently skip error
@@ -66,11 +69,12 @@ public static class ExplorerUtil
 		{
 			openInsidesOfFolder = true;
 		}
+
 		try
 		{
 			Process.Start("explorer.exe", (openInsidesOfFolder ? "/root," : "/select,") + winPath);
 		}
-		catch(System.ComponentModel.Win32Exception e)
+		catch (System.ComponentModel.Win32Exception e)
 		{
 			// tried to open win explorer in mac
 			// just silently skip error
@@ -132,17 +136,20 @@ public static class ExplorerUtil
 		{
 			linuxPath = "\"" + linuxPath;
 		}
+
 		if (!linuxPath.EndsWith("\""))
 		{
 			linuxPath = linuxPath + "\"";
 		}
+
 		string arguments = linuxPath;
+
 		//Debug.Log("arguments: " + arguments);
 		try
 		{
 			Process.Start("xdg-open", arguments);
 		}
-		catch(System.ComponentModel.Win32Exception e)
+		catch (System.ComponentModel.Win32Exception e)
 		{
 			e.HelpLink = ""; // do anything with this variable to silence warning about not using it
 		}
@@ -173,5 +180,4 @@ public static class ExplorerUtil
 			OpenInLinuxFileBrowser(path);
 		}
 	}
-
 }
