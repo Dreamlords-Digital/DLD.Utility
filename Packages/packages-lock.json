@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.dreamlordsdigital.buildinfoutil": {
-      "version": "file:DLD.BuildInfoUtil",
+      "version": "file:com.dreamlordsdigital.buildinfoutil",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
@@ -9,7 +9,7 @@
       }
     },
     "com.dreamlordsdigital.easing": {
-      "version": "file:Easing",
+      "version": "file:com.dreamlordsdigital.easing",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -21,13 +21,13 @@
       "dependencies": {}
     },
     "com.dreamlordsdigital.fuzzystring": {
-      "version": "file:FuzzyString",
+      "version": "file:com.dreamlordsdigital.fuzzystring",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.dreamlordsdigital.imgui": {
-      "version": "file:DLD.IMGUI",
+      "version": "file:com.dreamlordsdigital.imgui",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
@@ -46,7 +46,7 @@
       "hash": "34a6efdf9b750c49904d4d8d7ec2333a8a3682e6"
     },
     "com.dreamlordsdigital.serializer": {
-      "version": "file:DLD.Serializer",
+      "version": "file:com.dreamlordsdigital.serializer",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
@@ -64,7 +64,7 @@
       }
     },
     "com.dreamlordsdigital.utility": {
-      "version": "file:DLD.Utility",
+      "version": "file:com.dreamlordsdigital.utility",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
