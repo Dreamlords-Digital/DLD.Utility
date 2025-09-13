@@ -140,7 +140,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 
 	protected ITooltip _tooltip;
 
-	readonly EventCallback<FocusOutEvent> _onFocusOut;
 	readonly EventCallback<KeyDownEvent> _onKeyDown;
 	readonly EventCallback<KeyUpEvent> _onKeyUp;
 	readonly EventCallback<PointerDownEvent> _onPointerDown;
@@ -158,7 +157,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		});
 		_isPanning = false;
 
-		_onFocusOut = OnFocusOut;
 		_onKeyDown = OnKeyDown;
 		_onKeyUp = OnKeyUp;
 		_onPointerDown = OnPointerDown;
@@ -221,7 +219,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 
 	protected override void RegisterCallbacksOnTarget()
 	{
-		_keyEventTarget.RegisterCallback(_onFocusOut);
 		_keyEventTarget.RegisterCallback(_onKeyDown);
 		_keyEventTarget.RegisterCallback(_onKeyUp);
 		target.RegisterCallback(_onPointerDown);
@@ -232,7 +229,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 
 	protected override void UnregisterCallbacksFromTarget()
 	{
-		_keyEventTarget.UnregisterCallback(_onFocusOut);
 		_keyEventTarget.UnregisterCallback(_onKeyDown);
 		_keyEventTarget.UnregisterCallback(_onKeyUp);
 		target.UnregisterCallback(_onPointerDown);
@@ -241,14 +237,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		target.UnregisterCallback(_onWheel);
 	}
 
-	void OnFocusOut(FocusOutEvent e)
+	public void OnLostFocus()
 	{
-		if (e.relatedTarget == _keyEventTarget)
-		{
-			// we're actually moving focus back to the key event listener, which means we're not really losing focus
-			return;
-		}
-
 		// Assuming spacebar is still held, we cannot reliably know when/if user
 		// will release the spacebar when we no longer have keyboard focus
 		// (user might have alt + tabbed) so might as well just assume it's been released.
