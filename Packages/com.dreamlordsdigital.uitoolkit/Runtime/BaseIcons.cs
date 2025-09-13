@@ -11,6 +11,8 @@ namespace DLD.UIToolkit
 		public const string FORCE_MOVE = "dld-icon--force-move";
 		public const string CLOSE = "dld-icon--close";
 		public const string DEBUG = "dld-icon--debug";
+		public const string JUMP_TO_SOURCE_FILE = "dld-icon--jump-to-source-file";
+		public const string OPEN_LINK_IN_WEB_BROWSER = "dld-icon--open-link-in-web-browser";
 		public const string OPEN_FILE_EXPLORER = "dld-icon--open-file-explorer";
 		public const string ADD_TO_FAVORITES = "dld-icon--add-to-favorites";
 		public const string REMOVE_FROM_FAVORITES = "dld-icon--remove-from-favorites";

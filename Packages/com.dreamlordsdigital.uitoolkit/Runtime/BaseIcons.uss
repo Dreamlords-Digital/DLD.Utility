@@ -98,6 +98,14 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-other.png?fileID=2800000&guid=e1a4fca9eedcc484ca6f5320cbf666c9&type=3#applications-other");
 }
 
+.dld-icon--jump-to-source-file {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/emblem-symbolic-link.png?fileID=2800000&guid=e14463249274ee3428b570aa67c29f37&type=3#emblem-symbolic-link");
+}
+
+.dld-icon--open-link-in-web-browser {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/external.png?fileID=2800000&guid=3e8ae92921549fe4da8196eda1cd4343&type=3#external");
+}
+
 .dld-icon--selected-in-dropdown {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/tick.png?fileID=2800000&guid=a8150005769b1ed4cbc62a9d059de829&type=3#tick");
 }
