@@ -12,12 +12,12 @@ public abstract partial class BaseTextDataTests
 	{
 		var result = new PrepareSaveClass();
 
-		Assert.AreEqual(PrepareSaveClass.VALUE_DEFAULT, result.Value);
+		Assert.AreEqual(PrepareSaveClass.ValueDefault, result.Value);
 
-		Assert.AreNotEqual(PrepareSaveClass.VALUE_DEFAULT, valueAfterPrepareSave);
+		Assert.AreNotEqual(PrepareSaveClass.ValueDefault, valueAfterPrepareSave);
 
 		result.SetValueAfterPrepareSave(valueAfterPrepareSave);
-		Assert.AreEqual(PrepareSaveClass.VALUE_DEFAULT, result.Value);
+		Assert.AreEqual(PrepareSaveClass.ValueDefault, result.Value);
 
 		return result;
 	}
@@ -27,8 +27,8 @@ public abstract partial class BaseTextDataTests
 	{
 		// -----------------------------------------------
 
-		const string VALUE_AFTER_TO_SERIALIZED_STRING = "After ToSerializedString";
-		var prep = CreatePrepClass(VALUE_AFTER_TO_SERIALIZED_STRING);
+		const string ValueAfterToSerializedString = "After ToSerializedString";
+		var prep = CreatePrepClass(ValueAfterToSerializedString);
 
 		// -----------------------------------------------
 
@@ -36,7 +36,7 @@ public abstract partial class BaseTextDataTests
 
 		// -----------------------------------------------
 
-		Assert.AreEqual(VALUE_AFTER_TO_SERIALIZED_STRING, prep.Value);
+		Assert.AreEqual(ValueAfterToSerializedString, prep.Value);
 	}
 
 	[Test(Description = "Ensure ITextData.PrepareSave really gets called after call to ITextDataIO.SaveToLocal.")]
@@ -44,8 +44,8 @@ public abstract partial class BaseTextDataTests
 	{
 		// -----------------------------------------------
 
-		const string VALUE_AFTER_TRY_LOAD_FROM_LOCAL = "After TryLoadFromLocal";
-		var prep = CreatePrepClass(VALUE_AFTER_TRY_LOAD_FROM_LOCAL);
+		const string ValueAfterTryLoadFromLocal = "After TryLoadFromLocal";
+		var prep = CreatePrepClass(ValueAfterTryLoadFromLocal);
 
 		// -----------------------------------------------
 
@@ -55,7 +55,7 @@ public abstract partial class BaseTextDataTests
 
 		// -----------------------------------------------
 
-		Assert.AreEqual(VALUE_AFTER_TRY_LOAD_FROM_LOCAL, prep.Value);
+		Assert.AreEqual(ValueAfterTryLoadFromLocal, prep.Value);
 
 		// -----------------------------------------------
 

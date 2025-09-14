@@ -11,7 +11,7 @@ namespace DLD.Utility.Inspector.Editor
 
 public static class Utility
 {
-	const string ARRAY_START_MARKER = ".Array.data[";
+	const string ArrayStartMarker = ".Array.data[";
 
 	static object FindElementInEnumerable(SerializedProperty property)
 	{
@@ -20,7 +20,7 @@ public static class Utility
 
 		string propertyPath = property.propertyPath;
 
-		if (propertyPath.Contains(ARRAY_START_MARKER))
+		if (propertyPath.Contains(ArrayStartMarker))
 		{
 			// We are in an array/list element, so we need to go through the object and
 			// find that array/list element to invoke the property on that specific element.
@@ -47,9 +47,9 @@ public static class Utility
 				var arrayObject = gotFieldInfo.GetValue(unityObject);
 
 				// Using the PropertyPath, we get the element index value we are in
-				int arraySta = propertyPath.LastIndexOf(ARRAY_START_MARKER, StringComparison.Ordinal);
-				int arrayEnd = propertyPath.IndexOf("]", arraySta + ARRAY_START_MARKER.Length, StringComparison.Ordinal);
-				string idxString = propertyPath.Substring(arraySta + ARRAY_START_MARKER.Length, arrayEnd - (arraySta + ARRAY_START_MARKER.Length));
+				int arraySta = propertyPath.LastIndexOf(ArrayStartMarker, StringComparison.Ordinal);
+				int arrayEnd = propertyPath.IndexOf("]", arraySta + ArrayStartMarker.Length, StringComparison.Ordinal);
+				string idxString = propertyPath.Substring(arraySta + ArrayStartMarker.Length, arrayEnd - (arraySta + ArrayStartMarker.Length));
 
 				//Debug.LogError($"arraySta: {arraySta} arrayEnd: {arrayEnd} idxString: {idxString}");
 
@@ -109,7 +109,7 @@ public static class Utility
 		//
 		string propertyPath = property.propertyPath;
 
-		if (propertyPath.Contains(ARRAY_START_MARKER))
+		if (propertyPath.Contains(ArrayStartMarker))
 		{
 			// We are in an array/list element, so we need to go through the object and
 			// find that array/list element to invoke the property on that specific element.
@@ -165,7 +165,7 @@ public static class Utility
 		//
 		string propertyPath = property.propertyPath;
 
-		if (propertyPath.Contains(ARRAY_START_MARKER))
+		if (propertyPath.Contains(ArrayStartMarker))
 		{
 			// We are in an array/list element, so we need to go through the object and
 			// find that array/list element to invoke the property on that specific element.

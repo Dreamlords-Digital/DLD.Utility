@@ -81,25 +81,25 @@ public enum ContextMenuItemStyle : byte
 
 public class ContextMenu : VisualElement, IContextMenu
 {
-	const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenu";
-	const string ENTRY_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntry";
-	const string SEPARATOR_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/ContextMenuEntrySeparator";
-	const string MENU_NAME = "ContextMenuBg";
-	const string SELECTED_INDICATOR_NAME = "SelectedIndicator";
-	const string ICON_NAME = "Icon";
+	const string TemplateResourcesPath = "DLD UIToolkit/ContextMenu";
+	const string EntryTemplateResourcesPath = "DLD UIToolkit/ContextMenuEntry";
+	const string SeparatorTemplateResourcesPath = "DLD UIToolkit/ContextMenuEntrySeparator";
+	const string MenuName = "ContextMenuBg";
+	const string SelectedIndicatorName = "SelectedIndicator";
+	const string IconName = "Icon";
 
-	const string LABEL_STYLE_CLASS = "dld-context-menu-entry-label";
-	const string ENTRY_ALT_STYLE_CLASS = "dld-context-menu-entry-container--alt-bg";
-	const string PRESSED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--active";
-	const string DISABLED_ENTRY_STYLE_CLASS = "dld-context-menu-entry-container--disabled";
-	const string MENU_AS_DROPDOWN_STYLE_CLASS = "dld-context-menu--as-dropdown";
-	const string MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS = "dld-context-menu--as-dropdown--longer";
+	const string LabelStyleClass = "dld-context-menu-entry-label";
+	const string EntryAltStyleClass = "dld-context-menu-entry-container--alt-bg";
+	const string PressedEntryStyleClass = "dld-context-menu-entry-container--active";
+	const string DisabledEntryStyleClass = "dld-context-menu-entry-container--disabled";
+	const string MenuAsDropdownStyleClass = "dld-context-menu--as-dropdown";
+	const string MenuAsDropdownLongerThanButtonStyleClass = "dld-context-menu--as-dropdown--longer";
 
-	const string SELECTED_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--selected";
-	public const string ERROR_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--error";
-	public const string WARNING_ENTRY_LABEL_STYLE_CLASS = "dld-context-menu-entry__label--warning";
+	const string SelectedEntryLabelStyleClass = "dld-context-menu-entry__label--selected";
+	public const string ErrorEntryLabelStyleClass = "dld-context-menu-entry__label--error";
+	public const string WarningEntryLabelStyleClass = "dld-context-menu-entry__label--warning";
 
-	const float DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE = 10;
+	const float DefaultMouseMoveDistanceForInstantClose = 10;
 
 	static readonly CustomStyleProperty<float> DropdownButtonFitWidthAdjust = new("--dropdown--button-fit-width-adjust");
 
@@ -134,12 +134,12 @@ public class ContextMenu : VisualElement, IContextMenu
 	{
 		_delayedFocus = DelayedFocus;
 
-		_entryAsset = Resources.Load<VisualTreeAsset>(ENTRY_TEMPLATE_RESOURCES_PATH);
-		_separatorAsset = Resources.Load<VisualTreeAsset>(SEPARATOR_TEMPLATE_RESOURCES_PATH);
+		_entryAsset = Resources.Load<VisualTreeAsset>(EntryTemplateResourcesPath);
+		_separatorAsset = Resources.Load<VisualTreeAsset>(SeparatorTemplateResourcesPath);
 
 		// -----------------------------------
 
-		var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
+		var asset = Resources.Load<VisualTreeAsset>(TemplateResourcesPath);
 		asset.CloneTree(this);
 		this.RemoveTemplateContainer("ContextMenu");
 
@@ -151,7 +151,7 @@ public class ContextMenu : VisualElement, IContextMenu
 		RegisterCallback<MouseMoveEvent, ContextMenu>((e, c) => c.OnMouseMove(e), this);
 		RegisterCallback<MouseUpEvent, ContextMenu>((e, c) => c.OnMouseUpOutside(e), this);
 
-		_menu = this.Q<VisualElement>(MENU_NAME);
+		_menu = this.Q<VisualElement>(MenuName);
 		_menu.RegisterCallback<MouseDownEvent>(e => e.StopPropagation());
 		_menu.RegisterCallback<GeometryChangedEvent, ContextMenu>((e, c) => c.OnMenuResized(e), this);
 
@@ -202,7 +202,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	public void AddLabel(string text)
 	{
 		var newLabel = new Label(text);
-		newLabel.AddToClassList(LABEL_STYLE_CLASS);
+		newLabel.AddToClassList(LabelStyleClass);
 		_menu.Add(newLabel);
 	}
 
@@ -225,13 +225,13 @@ public class ContextMenu : VisualElement, IContextMenu
 		bool showAsDisabled = (menuItemStyle & ContextMenuItemStyle.Disabled) != 0;
 		if (showAsDisabled)
 		{
-			entryContainer.AddToClassList(DISABLED_ENTRY_STYLE_CLASS);
+			entryContainer.AddToClassList(DisabledEntryStyleClass);
 		}
 
-		var selectedIndicator = entryContainer.Q<VisualElement>(SELECTED_INDICATOR_NAME);
+		var selectedIndicator = entryContainer.Q<VisualElement>(SelectedIndicatorName);
 		selectedIndicator.userData = listener;
 
-		var entryIcon = entryContainer.Q<VisualElement>(ICON_NAME);
+		var entryIcon = entryContainer.Q<VisualElement>(IconName);
 		entryIcon.userData = userArg1;
 
 		var entryLabel = entryContainer.Q<Label>();
@@ -240,18 +240,18 @@ public class ContextMenu : VisualElement, IContextMenu
 
 		if ((menuItemStyle & ContextMenuItemStyle.Error) != 0)
 		{
-			entryLabel.AddToClassList(ERROR_ENTRY_LABEL_STYLE_CLASS);
+			entryLabel.AddToClassList(ErrorEntryLabelStyleClass);
 		}
 		else if ((menuItemStyle & ContextMenuItemStyle.Warning) != 0)
 		{
-			entryLabel.AddToClassList(WARNING_ENTRY_LABEL_STYLE_CLASS);
+			entryLabel.AddToClassList(WarningEntryLabelStyleClass);
 		}
 
 		if ((menuItemStyle & ContextMenuItemStyle.Selected) != 0)
 		{
 			selectedIndicator.style.display = DisplayStyle.Flex;
-			selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-			entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+			selectedIndicator.AddToClassList(BaseIcons.SelectedInDropdown);
+			entryLabel.AddToClassList(SelectedEntryLabelStyleClass);
 		}
 		else
 		{
@@ -264,7 +264,7 @@ public class ContextMenu : VisualElement, IContextMenu
 			{
 				if (e.currentTarget is VisualElement v)
 				{
-					v.AddToClassList(PRESSED_ENTRY_STYLE_CLASS);
+					v.AddToClassList(PressedEntryStyleClass);
 				}
 			});
 
@@ -275,12 +275,12 @@ public class ContextMenu : VisualElement, IContextMenu
 					return;
 				}
 
-				var gotSelectedIndicator = targetElement.Q<VisualElement>(SELECTED_INDICATOR_NAME);
+				var gotSelectedIndicator = targetElement.Q<VisualElement>(SelectedIndicatorName);
 
 				if (gotSelectedIndicator.userData is IContextMenuListener gotListener)
 				{
 					targetElement.Focus();
-					var gotIcon = targetElement.Q<VisualElement>(ICON_NAME);
+					var gotIcon = targetElement.Q<VisualElement>(IconName);
 					var gotLabel = targetElement.Q<Label>();
 					gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel, targetElement.userData, gotIcon.userData, gotLabel.userData);
 				}
@@ -294,7 +294,7 @@ public class ContextMenu : VisualElement, IContextMenu
 
 		if (_doAltBgStyling && _menu.childCount % 2 == 0)
 		{
-			entryContainer.AddToClassList(ENTRY_ALT_STYLE_CLASS);
+			entryContainer.AddToClassList(EntryAltStyleClass);
 		}
 
 		if (!string.IsNullOrEmpty(iconClassStyle))
@@ -342,7 +342,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	{
 		for (int n = 0; n < _menu.childCount; ++n)
 		{
-			var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+			var gotIcon = _menu[n].Q<VisualElement>(IconName);
 			if (gotIcon?.userData != null && gotIcon.userData.Equals(userArg1))
 			{
 				if (!string.IsNullOrEmpty(iconClassStyleToRemove))
@@ -365,7 +365,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	{
 		for (int n = 0; n < _menu.childCount; ++n)
 		{
-			var selectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+			var selectedIndicator = _menu[n].Q<VisualElement>(SelectedIndicatorName);
 			if (selectedIndicator == null)
 			{
 				// we're at a separator, not a menu entry (separators don't have a selected indicator)
@@ -375,13 +375,13 @@ public class ContextMenu : VisualElement, IContextMenu
 			var entryLabel = _menu[n].Q<Label>();
 			if (n == menuIdx)
 			{
-				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+				selectedIndicator.AddToClassList(BaseIcons.SelectedInDropdown);
+				entryLabel.AddToClassList(SelectedEntryLabelStyleClass);
 			}
 			else
 			{
-				selectedIndicator.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-				entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+				selectedIndicator.RemoveFromClassList(BaseIcons.SelectedInDropdown);
+				entryLabel.RemoveFromClassList(SelectedEntryLabelStyleClass);
 			}
 		}
 	}
@@ -390,7 +390,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	{
 		for (int n = 0; n < _menu.childCount; ++n)
 		{
-			var selectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+			var selectedIndicator = _menu[n].Q<VisualElement>(SelectedIndicatorName);
 			if (selectedIndicator == null)
 			{
 				// we're at a separator, not a menu entry (separators don't have a selected indicator)
@@ -398,16 +398,16 @@ public class ContextMenu : VisualElement, IContextMenu
 			}
 
 			var entryLabel = _menu[n].Q<Label>();
-			var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+			var gotIcon = _menu[n].Q<VisualElement>(IconName);
 			if (gotIcon?.userData != null && gotIcon.userData.Equals(userArg1))
 			{
-				selectedIndicator.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-				entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+				selectedIndicator.AddToClassList(BaseIcons.SelectedInDropdown);
+				entryLabel.AddToClassList(SelectedEntryLabelStyleClass);
 			}
 			else
 			{
-				selectedIndicator.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-				entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+				selectedIndicator.RemoveFromClassList(BaseIcons.SelectedInDropdown);
+				entryLabel.RemoveFromClassList(SelectedEntryLabelStyleClass);
 			}
 		}
 	}
@@ -420,17 +420,17 @@ public class ContextMenu : VisualElement, IContextMenu
 			return;
 		}
 
-		var selectedIndicator = _menu[menuIdx].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+		var selectedIndicator = _menu[menuIdx].Q<VisualElement>(SelectedIndicatorName);
 
 		if (selected)
 		{
-			selectedIndicator?.AddToClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-			entryLabel.AddToClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+			selectedIndicator?.AddToClassList(BaseIcons.SelectedInDropdown);
+			entryLabel.AddToClassList(SelectedEntryLabelStyleClass);
 		}
 		else
 		{
-			selectedIndicator?.RemoveFromClassList(BaseIcons.SELECTED_IN_DROPDOWN);
-			entryLabel.RemoveFromClassList(SELECTED_ENTRY_LABEL_STYLE_CLASS);
+			selectedIndicator?.RemoveFromClassList(BaseIcons.SelectedInDropdown);
+			entryLabel.RemoveFromClassList(SelectedEntryLabelStyleClass);
 		}
 	}
 
@@ -482,8 +482,8 @@ public class ContextMenu : VisualElement, IContextMenu
 		_menu.SetPosition(localPos);
 
 		_menu.style.width = StyleKeyword.Null;
-		_menu.AddToClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
-		_menu.RemoveFromClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
+		_menu.AddToClassList(MenuAsDropdownStyleClass);
+		_menu.RemoveFromClassList(MenuAsDropdownLongerThanButtonStyleClass);
 
 		style.display = DisplayStyle.Flex;
 		focusable = true;
@@ -499,7 +499,7 @@ public class ContextMenu : VisualElement, IContextMenu
 		style.display = DisplayStyle.None;
 		_menu.style.width = StyleKeyword.Null;
 		Blur();
-		_menu.RemoveFromClassList(MENU_AS_DROPDOWN_STYLE_CLASS);
+		_menu.RemoveFromClassList(MenuAsDropdownStyleClass);
 		if (_focusTargetAfterClose != null)
 		{
 			_focusTargetAfterClose.Focus();
@@ -548,7 +548,7 @@ public class ContextMenu : VisualElement, IContextMenu
 				}
 				else
 				{
-					_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
+					_menu.AddToClassList(MenuAsDropdownLongerThanButtonStyleClass);
 				}
 
 				break;
@@ -562,7 +562,7 @@ public class ContextMenu : VisualElement, IContextMenu
 				//                |          |
 				//                +----------+
 				//
-				_menu.AddToClassList(MENU_AS_DROPDOWN_LONGER_THAN_BUTTON_STYLE_CLASS);
+				_menu.AddToClassList(MenuAsDropdownLongerThanButtonStyleClass);
 				break;
 
 			// -------------------------------------------------------------------------------------
@@ -632,7 +632,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	void OnMouseUpOutside(MouseUpEvent e)
 	{
 		var mouseDelta = e.localMousePosition - _menu.GetPosition2();
-		bool mouseMovedFarEnough = mouseDelta.sqrMagnitude > (DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE * DEFAULT_MOUSE_MOVE_DISTANCE_FOR_INSTANT_CLOSE);
+		bool mouseMovedFarEnough = mouseDelta.sqrMagnitude > (DefaultMouseMoveDistanceForInstantClose * DefaultMouseMoveDistanceForInstantClose);
 		if (style.display == DisplayStyle.Flex && _mouseMovedDuringMouseDown && mouseMovedFarEnough)
 		{
 			Hide();
@@ -725,7 +725,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					var gotSelectedIndicator = _menu[focusedMenuIdx].Q<VisualElement>("SelectedIndicator");
 					if (gotSelectedIndicator.userData is IContextMenuListener gotListener)
 					{
-						var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(ICON_NAME);
+						var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(IconName);
 						var gotLabel = _menu[focusedMenuIdx].Q<Label>();
 						gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel, _menu[focusedMenuIdx].userData, gotIcon.userData, gotLabel.userData);
 						Hide();
@@ -767,7 +767,7 @@ public class ContextMenu : VisualElement, IContextMenu
 
 		for (int n = 0; n < _menu.childCount; ++n)
 		{
-			var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+			var gotSelectedIndicator = _menu[n].Q<VisualElement>(SelectedIndicatorName);
 			if (gotSelectedIndicator == null)
 			{
 				// we're at a separator, not a menu entry (separators don't have a selected indicator)
@@ -779,7 +779,7 @@ public class ContextMenu : VisualElement, IContextMenu
 				selectedIndicatorShown = true;
 			}
 
-			var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+			var gotIcon = _menu[n].Q<VisualElement>(IconName);
 			if (gotIcon.GetClasses().Count() > 1)
 			{
 				iconsShown = true;
@@ -792,7 +792,7 @@ public class ContextMenu : VisualElement, IContextMenu
 
 		for (int n = 0; n < _menu.childCount; ++n)
 		{
-			var gotSelectedIndicator = _menu[n].Q<VisualElement>(SELECTED_INDICATOR_NAME);
+			var gotSelectedIndicator = _menu[n].Q<VisualElement>(SelectedIndicatorName);
 			if (gotSelectedIndicator == null)
 			{
 				// we're at a separator, not a menu entry (separators don't have a selected indicator)
@@ -801,7 +801,7 @@ public class ContextMenu : VisualElement, IContextMenu
 
 			gotSelectedIndicator.style.display = selectedIndicatorShown || _alwaysLeaveSpaceForSelectedIndicator ? DisplayStyle.Flex : DisplayStyle.None;
 
-			var gotIcon = _menu[n].Q<VisualElement>(ICON_NAME);
+			var gotIcon = _menu[n].Q<VisualElement>(IconName);
 			gotIcon.style.display = iconsShown ? DisplayStyle.Flex : DisplayStyle.None;
 		}
 	}

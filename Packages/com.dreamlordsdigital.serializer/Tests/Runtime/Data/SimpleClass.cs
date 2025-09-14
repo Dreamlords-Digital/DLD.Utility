@@ -59,23 +59,23 @@ public class SimpleClass : ITextData
 
 	// -----------------------------
 
-	public const string SER_PRV_STR_DEFAULT = "Serialized Private String Default Value";
-	public const string SER_PUB_STR_DEFAULT = "Serialized Public String Default Value";
+	public const string SerializedPrivateStringDefault = "Serialized Private String Default Value";
+	public const string SerializedPublicStringDefault = "Serialized Public String Default Value";
 
-	public const string NSR_PRV_STR_DEFAULT = "NonSerialized Private String Default Value";
-	public const string NSR_PUB_STR_DEFAULT = "NonSerialized Public String Default Value";
+	public const string NonSerializedPrivateStringDefault = "NonSerialized Private String Default Value";
+	public const string NonSerializedPublicStringDefault = "NonSerialized Public String Default Value";
 
-	public const int SER_PUB_INT_DEFAULT = -123;
+	public const int SerializedPublicIntDefault = -123;
 
 	public SimpleClass()
 	{
-		_serializedPrivateString = SER_PRV_STR_DEFAULT;
-		SerializedPublicString = SER_PUB_STR_DEFAULT;
+		_serializedPrivateString = SerializedPrivateStringDefault;
+		SerializedPublicString = SerializedPublicStringDefault;
 
-		_nonSerializedPrivateString = NSR_PRV_STR_DEFAULT;
-		NonSerializedPublicString = NSR_PUB_STR_DEFAULT;
+		_nonSerializedPrivateString = NonSerializedPrivateStringDefault;
+		NonSerializedPublicString = NonSerializedPublicStringDefault;
 
-		SerializedPublicInt = SER_PUB_INT_DEFAULT;
+		SerializedPublicInt = SerializedPublicIntDefault;
 	}
 
 	// -----------------------------

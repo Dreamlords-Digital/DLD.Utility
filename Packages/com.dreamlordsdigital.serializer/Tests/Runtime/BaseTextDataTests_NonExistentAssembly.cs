@@ -25,11 +25,11 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "The standard situation where no change to the type hint has been done.")]
 	public void FromSerializedString_CorrectTypeHint_DeserializesProperly()
 	{
-		const string SERIALIZED = "{" +
-		                          "	\"" + BaseTextDataIO.TYPE_HINT_NAME + "\": \"DLD.Serializer.Tests.RenameTest, Assembly-CSharp-Editor\"," +
+		const string Serialized = "{" +
+		                          "	\"" + BaseTextDataIO.TypeHintName + "\": \"DLD.Serializer.Tests.RenameTest, Assembly-CSharp-Editor\"," +
 		                          "	\"Field\": 10" +
 		                          "}";
-		var deserialized = _textDataIO.FromSerializedString<RenameTest>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<RenameTest>(Serialized);
 
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(10, deserialized.Field);
@@ -38,10 +38,10 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a class that has no type hint.")]
 	public void FromSerializedString_NoTypeHint_DeserializesProperly()
 	{
-		const string SERIALIZED = "{" +
+		const string Serialized = "{" +
 		                          "	\"Field\": 10" +
 		                          "}";
-		var deserialized = _textDataIO.FromSerializedString<RenameTest>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<RenameTest>(Serialized);
 
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(10, deserialized.Field);
@@ -50,11 +50,11 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a class where type hint is correct but does not specify an assembly name.")]
 	public void FromSerializedString_TypeHintHasNoAssembly_DeserializesProperly()
 	{
-		const string SERIALIZED = "{" +
-		                          "	\"" + BaseTextDataIO.TYPE_HINT_NAME + "\": \"DLD.Serializer.Tests.RenameTest\"," +
+		const string Serialized = "{" +
+		                          "	\"" + BaseTextDataIO.TypeHintName + "\": \"DLD.Serializer.Tests.RenameTest\"," +
 		                          "	\"Field\": 10" +
 		                          "}";
-		var deserialized = _textDataIO.FromSerializedString<RenameTest>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<RenameTest>(Serialized);
 
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(10, deserialized.Field);
@@ -63,11 +63,11 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a class even though the string is specifying an old assembly name that doesn't exist anymore.")]
 	public void FromSerializedString_TypeHintHasNonExistentAssembly_DeserializesProperly()
 	{
-		const string SERIALIZED = "{" +
-		                          "	\"" + BaseTextDataIO.TYPE_HINT_NAME + "\": \"DLD.Serializer.Tests.RenameTest, NonExistentAssembly\"," +
+		const string Serialized = "{" +
+		                          "	\"" + BaseTextDataIO.TypeHintName + "\": \"DLD.Serializer.Tests.RenameTest, NonExistentAssembly\"," +
 		                          "	\"Field\": 10" +
 		                          "}";
-		var deserialized = _textDataIO.FromSerializedString<RenameTest>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<RenameTest>(Serialized);
 
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(10, deserialized.Field);
@@ -76,11 +76,11 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a class even though the string is specifying an old namespace name that doesn't exist anymore.")]
 	public void FromSerializedString_TypeHintHasNonExistentNamespace_DeserializesProperly()
 	{
-		const string SERIALIZED = "{" +
-		                          "	\"" + BaseTextDataIO.TYPE_HINT_NAME + "\": \"NonExistentNamespace.RenameTest, Assembly-CSharp-Editor\"," +
+		const string Serialized = "{" +
+		                          "	\"" + BaseTextDataIO.TypeHintName + "\": \"NonExistentNamespace.RenameTest, Assembly-CSharp-Editor\"," +
 		                          "	\"Field\": 10" +
 		                          "}";
-		var deserialized = _textDataIO.FromSerializedString<RenameTest>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<RenameTest>(Serialized);
 
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(10, deserialized.Field);
@@ -89,11 +89,11 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a class even though the string is specifying an old class name that doesn't exist anymore.")]
 	public void FromSerializedString_TypeHintHasNonExistentClass_DeserializesProperly()
 	{
-		const string SERIALIZED = "{" +
-		                          "	\"" + BaseTextDataIO.TYPE_HINT_NAME + "\": \"DLD.Utility.UnitTest.NonExistentClass, Assembly-CSharp-Editor\"," +
+		const string Serialized = "{" +
+		                          "	\"" + BaseTextDataIO.TypeHintName + "\": \"DLD.Utility.UnitTest.NonExistentClass, Assembly-CSharp-Editor\"," +
 		                          "	\"Field\": 10" +
 		                          "}";
-		var deserialized = _textDataIO.FromSerializedString<RenameTest>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<RenameTest>(Serialized);
 
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(10, deserialized.Field);
@@ -104,23 +104,23 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a list of base class, where the elements are different derived types. A full type hint is included for each, but with the assembly name is wrong.")]
 	public void FromSerializedString_OnPolymorphicListButWrongAssemblyHint_DeserializesProperly()
 	{
-		const string SERIALIZED = @"
+		const string Serialized = @"
 {
-	""" + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser, Assembly-CSharp-Editor"",
+	""" + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser, Assembly-CSharp-Editor"",
 	""List"":
 	[
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived2, Assembly-CSharp-Editor"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived2, Assembly-CSharp-Editor"",
 			 ""ID"": null
 		 },
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived1, Assembly-CSharp-Editor"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived1, Assembly-CSharp-Editor"",
 			 ""ID"": null,
 			 ""MyField"": 32
 		 }
 	]
 }";
-		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(Serialized);
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(2, deserialized.Count);
 
@@ -136,23 +136,23 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a list of base class, where the elements are different derived types. A full type hint is included for each, but with an assembly that doesn't even exist.")]
 	public void FromSerializedString_OnPolymorphicListButNonExistentAssemblyHint_DeserializesProperly()
 	{
-		const string SERIALIZED = @"
+		const string Serialized = @"
 {
-	""" + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser, NonExistentAssembly"",
+	""" + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser, NonExistentAssembly"",
 	""List"":
 	[
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived2, NonExistentAssembly"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived2, NonExistentAssembly"",
 			 ""ID"": null
 		 },
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived1, NonExistentAssembly"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived1, NonExistentAssembly"",
 			 ""ID"": null,
 			 ""MyField"": 32
 		 }
 	]
 }";
-		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(Serialized);
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(2, deserialized.Count);
 
@@ -168,23 +168,23 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a list of base class, where the elements are different derived types. The type hint included for each doesn't specify the assembly name.")]
 	public void FromSerializedString_OnPolymorphicListButNoAssemblyHint_DeserializesProperly()
 	{
-		const string SERIALIZED = @"
+		const string Serialized = @"
 {
-	""" + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser"",
+	""" + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser"",
 	""List"":
 	[
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived2"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived2"",
 			 ""ID"": null
 		 },
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived1"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived1"",
 			 ""ID"": null,
 			 ""MyField"": 32
 		 }
 	]
 }";
-		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(Serialized);
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(2, deserialized.Count);
 
@@ -208,7 +208,7 @@ public abstract partial class BaseTextDataTests
 	//[Test]
 	public void TestListOfDerivedClass_NoTypeHint()
 	{
-		const string SERIALIZED = @"
+		const string Serialized = @"
 {
 	""List"":
 	[
@@ -221,7 +221,7 @@ public abstract partial class BaseTextDataTests
 		 }
 	]
 }";
-		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(Serialized);
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(2, deserialized.Count);
 

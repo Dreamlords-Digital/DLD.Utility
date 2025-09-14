@@ -9,8 +9,8 @@ namespace DLD.Utility.Inspector.Editor
 [CustomPropertyDrawer(typeof(MessagePropertyAttribute))]
 public class MessagePropertyPropertyDrawer : PropertyDrawer
 {
-	const int SPACING = 3;
-	const float INDENT_WIDTH = 16;
+	const int Spacing = 3;
+	const float IndentWidth = 16;
 
 	static readonly GUIContent GUIContentBuffer = new();
 
@@ -38,7 +38,7 @@ public class MessagePropertyPropertyDrawer : PropertyDrawer
 		GUIContentBuffer.text = result;
 		float messageHeight = EditorStyles.helpBox.CalcHeight(GUIContentBuffer, EditorGUIUtility.currentViewWidth);
 
-		return EditorGUI.GetPropertyHeight(property, label, true) + SPACING + messageHeight + SPACING;
+		return EditorGUI.GetPropertyHeight(property, label, true) + Spacing + messageHeight + Spacing;
 	}
 
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -64,16 +64,16 @@ public class MessagePropertyPropertyDrawer : PropertyDrawer
 			_propertyLabelSize = EditorStyles.label.CalcSize(label);
 		}
 
-		EditorGUIUtility.labelWidth = _propertyLabelSize.x + (EditorGUI.indentLevel * INDENT_WIDTH) + 5;
+		EditorGUIUtility.labelWidth = _propertyLabelSize.x + (EditorGUI.indentLevel * IndentWidth) + 5;
 
 		Rect propertyRect = new Rect(position);
-		propertyRect.height = position.height - SPACING - messageHeight - SPACING;
+		propertyRect.height = position.height - Spacing - messageHeight - Spacing;
 		EditorGUI.PropertyField(propertyRect, property, label, true);
 
 		EditorGUIUtility.labelWidth = 0;
 
 		Rect messageRect = new Rect(position);
-		messageRect.y += propertyRect.height + SPACING;
+		messageRect.y += propertyRect.height + Spacing;
 		messageRect.height = messageHeight;
 		GUI.Label(messageRect, GUIContentBuffer, EditorStyles.helpBox);
 

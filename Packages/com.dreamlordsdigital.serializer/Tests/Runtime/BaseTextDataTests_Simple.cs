@@ -16,11 +16,11 @@ public abstract partial class BaseTextDataTests
 
 		var simple1 = new SimpleClass();
 
-		Assert.AreEqual(SimpleClass.SER_PUB_STR_DEFAULT, simple1.SerializedPublicString);
-		Assert.AreEqual(SimpleClass.SER_PRV_STR_DEFAULT, simple1.SerializedPrivateString);
+		Assert.AreEqual(SimpleClass.SerializedPublicStringDefault, simple1.SerializedPublicString);
+		Assert.AreEqual(SimpleClass.SerializedPrivateStringDefault, simple1.SerializedPrivateString);
 
-		Assert.AreEqual(SimpleClass.NSR_PUB_STR_DEFAULT, simple1.NonSerializedPublicString);
-		Assert.AreEqual(SimpleClass.NSR_PRV_STR_DEFAULT, simple1.NonSerializedPrivateString);
+		Assert.AreEqual(SimpleClass.NonSerializedPublicStringDefault, simple1.NonSerializedPublicString);
+		Assert.AreEqual(SimpleClass.NonSerializedPrivateStringDefault, simple1.NonSerializedPrivateString);
 
 		const string NSR_PRV_STR_NEW_1 = "This should not get saved";
 		simple1.SetNonSerializedPrivateString(NSR_PRV_STR_NEW_1);
@@ -39,11 +39,11 @@ public abstract partial class BaseTextDataTests
 
 		// -----------------------------------------------
 
-		Assert.AreNotEqual(SimpleClass.SER_PUB_STR_DEFAULT, SER_PUB_STR_NEW_1);
-		Assert.AreNotEqual(SimpleClass.SER_PRV_STR_DEFAULT, SER_PRV_STR_NEW_1);
+		Assert.AreNotEqual(SimpleClass.SerializedPublicStringDefault, SER_PUB_STR_NEW_1);
+		Assert.AreNotEqual(SimpleClass.SerializedPrivateStringDefault, SER_PRV_STR_NEW_1);
 
-		Assert.AreNotEqual(SimpleClass.NSR_PUB_STR_DEFAULT, NSR_PUB_STR_NEW_1);
-		Assert.AreNotEqual(SimpleClass.NSR_PRV_STR_DEFAULT, NSR_PRV_STR_NEW_1);
+		Assert.AreNotEqual(SimpleClass.NonSerializedPublicStringDefault, NSR_PUB_STR_NEW_1);
+		Assert.AreNotEqual(SimpleClass.NonSerializedPrivateStringDefault, NSR_PRV_STR_NEW_1);
 
 		// -----------------------------------------------
 
@@ -70,11 +70,11 @@ public abstract partial class BaseTextDataTests
 		Assert.AreEqual(simple1.SerializedPublicInt, deserializedSimple1.SerializedPublicInt);
 
 		Assert.AreEqual(NSR_PUB_STR_NEW_1, simple1.NonSerializedPublicString);
-		Assert.AreEqual(SimpleClass.NSR_PUB_STR_DEFAULT, deserializedSimple1.NonSerializedPublicString);
+		Assert.AreEqual(SimpleClass.NonSerializedPublicStringDefault, deserializedSimple1.NonSerializedPublicString);
 		Assert.AreNotEqual(simple1.NonSerializedPublicString, deserializedSimple1.NonSerializedPublicString);
 
 		Assert.AreEqual(NSR_PRV_STR_NEW_1, simple1.NonSerializedPrivateString);
-		Assert.AreEqual(SimpleClass.NSR_PRV_STR_DEFAULT, deserializedSimple1.NonSerializedPrivateString);
+		Assert.AreEqual(SimpleClass.NonSerializedPrivateStringDefault, deserializedSimple1.NonSerializedPrivateString);
 		Assert.AreNotEqual(simple1.NonSerializedPrivateString, deserializedSimple1.NonSerializedPrivateString);
 
 		// -----------------------------------------------
@@ -101,11 +101,11 @@ public abstract partial class BaseTextDataTests
 		Assert.AreEqual(simple1.SerializedPublicInt, deserializedFromFileSimple1.SerializedPublicInt);
 
 		Assert.AreEqual(NSR_PUB_STR_NEW_1, simple1.NonSerializedPublicString);
-		Assert.AreEqual(SimpleClass.NSR_PUB_STR_DEFAULT, deserializedFromFileSimple1.NonSerializedPublicString);
+		Assert.AreEqual(SimpleClass.NonSerializedPublicStringDefault, deserializedFromFileSimple1.NonSerializedPublicString);
 		Assert.AreNotEqual(simple1.NonSerializedPublicString, deserializedFromFileSimple1.NonSerializedPublicString);
 
 		Assert.AreEqual(NSR_PRV_STR_NEW_1, simple1.NonSerializedPrivateString);
-		Assert.AreEqual(SimpleClass.NSR_PRV_STR_DEFAULT, deserializedFromFileSimple1.NonSerializedPrivateString);
+		Assert.AreEqual(SimpleClass.NonSerializedPrivateStringDefault, deserializedFromFileSimple1.NonSerializedPrivateString);
 		Assert.AreNotEqual(simple1.NonSerializedPrivateString, deserializedFromFileSimple1.NonSerializedPrivateString);
 
 		// -----------------------------------------------

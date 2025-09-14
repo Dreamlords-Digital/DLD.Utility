@@ -258,8 +258,8 @@ public abstract partial class BaseTextDataTests
 		// the object now, the deserialized will get a copy of
 		// how it was before serialization.
 		var newMatrixValueAfter = new Matrix4x4();
-		const float COS_45 = 0.70710678118654752440084436210485f;
-		newMatrixValueAfter.SetTRS(new Vector3(1, 1, 0), new Quaternion(0, COS_45, 0, COS_45), new Vector3(2, 1, 1));
+		const float Cos45 = 0.70710678118654752440084436210485f;
+		newMatrixValueAfter.SetTRS(new Vector3(1, 1, 0), new Quaternion(0, Cos45, 0, Cos45), new Vector3(2, 1, 1));
 		unityClass.SetMatrix(newMatrixValueAfter);
 
 		var deserialized = _textDataIO.FromSerializedString<UnityDataTypesClass>(serialized);

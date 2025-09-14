@@ -27,13 +27,13 @@ public class PrepareSaveClass : ITextData
 
 	// -----------------------------
 
-	public const string VALUE_DEFAULT = "Nothing";
-	public const string VALUE_AFTER_PREPARE_SAVE_DEFAULT = "qw";
+	public const string ValueDefault = "Nothing";
+	public const string ValueAfterPrepareSaveDefault = "qw";
 
 	public PrepareSaveClass()
 	{
-		_value = VALUE_DEFAULT;
-		_valueAfterPrepareSave = VALUE_AFTER_PREPARE_SAVE_DEFAULT;
+		_value = ValueDefault;
+		_valueAfterPrepareSave = ValueAfterPrepareSaveDefault;
 	}
 
 	// -----------------------------

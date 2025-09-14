@@ -11,7 +11,7 @@ public abstract partial class BaseTextDataTests
 {
 	// ==========================================================
 
-	const string GAME_MOD_PACKAGE_SUB_PATH = "Dreamlords Digital/GwP/UnitTest/";
+	const string GameModPackageSubPath = "Dreamlords Digital/GwP/UnitTest/";
 
 	string _pathInCommonFolder;
 
@@ -21,7 +21,7 @@ public abstract partial class BaseTextDataTests
 		{
 			if (string.IsNullOrEmpty(_pathInCommonFolder))
 			{
-				_pathInCommonFolder = $"{FileUtil.CommonDataFolder}/{GAME_MOD_PACKAGE_SUB_PATH}";
+				_pathInCommonFolder = $"{FileUtil.CommonDataFolder}/{GameModPackageSubPath}";
 			}
 
 			return _pathInCommonFolder;

@@ -67,19 +67,19 @@ public static class LoadResultUtility
 
 public abstract class BaseTextDataIO : ITextDataIO
 {
-	public const string TYPE_HINT_NAME = "$type";
+	public const string TypeHintName = "$type";
 
 	protected abstract string GetFileContents(string filePath);
 
 	protected abstract (LoadResult result, string errorMessage) DeserializeObjectFromFile<T>(string filePath, out T returnValue) where T : ITextData;
 	protected abstract void SerializeObjectToFile<T>(T data, string filePath);
 
-	protected abstract void SerializeObjectToFile<T>(T data, string filePath, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM);
+	protected abstract void SerializeObjectToFile<T>(T data, string filePath, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm);
 
 	protected abstract T DeserializeObject<T>(string fileText) where T : ITextData;
 	protected abstract string SerializeObject<T>(T data);
 
-	protected abstract string SerializeObject<T>(T data, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM);
+	protected abstract string SerializeObject<T>(T data, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm);
 
 	/// <summary>
 	///    Generates a hash out of the binary form of the serializable fields and properties of the passed data.
@@ -93,7 +93,7 @@ public abstract class BaseTextDataIO : ITextDataIO
 	/// </param>
 	/// <typeparam name="T"></typeparam>
 	/// <returns></returns>
-	protected abstract string GetObjectHash<T>(T data, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM);
+	protected abstract string GetObjectHash<T>(T data, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm);
 
 	protected abstract Task<(T, LoadResult)> DeserializeObjectFromFileAsync<T>(string filePath);
 
@@ -434,18 +434,18 @@ public abstract class BaseTextDataIO : ITextDataIO
 	// ----------------------------------------------------------------------------------------------
 
 #if UNITY_EDITOR
-	public void SaveToAssets<T>(string saveFileAssetsPath, T data, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM) where T : ITextData
+	public void SaveToAssets<T>(string saveFileAssetsPath, T data, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm) where T : ITextData
 	{
 		SaveToLocal($"{FileUtil.ProjectPath}/{saveFileAssetsPath}", data, out hash, hashAlgorithmName);
 	}
 #endif
 
-	public void SaveToStreamingAssets<T>(string fileAssetsPath, T data, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM) where T : ITextData
+	public void SaveToStreamingAssets<T>(string fileAssetsPath, T data, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm) where T : ITextData
 	{
 		SaveToLocal($"{Application.streamingAssetsPath}/{fileAssetsPath}", data, out hash, hashAlgorithmName);
 	}
 
-	public void SaveToLocal<T>(string saveFilePath, T data, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM) where T : ITextData
+	public void SaveToLocal<T>(string saveFilePath, T data, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm) where T : ITextData
 	{
 		if (string.IsNullOrEmpty(saveFilePath))
 		{

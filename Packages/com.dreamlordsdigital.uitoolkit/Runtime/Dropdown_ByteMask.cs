@@ -20,7 +20,7 @@ public partial class Dropdown
 		while (_currentValueIcons.Count < iconCount)
 		{
 			var newIcon = new VisualElement();
-			newIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+			newIcon.AddToClassList(BaseIcons.IconStyleClass);
 			_currentValueIcons.Add(newIcon);
 			newIcon.name = $"Icon{_currentValueIcons.Count}";
 		}
@@ -142,7 +142,7 @@ public partial class Dropdown
 				_currentValueIcons[i].ClearClassList();
 				if (currentByteValue.GetFlag(i))
 				{
-					_currentValueIcons[i].AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+					_currentValueIcons[i].AddToClassList(BaseIcons.IconStyleClass);
 					_currentValueIcons[i].AddToClassList(_dropdownItems[i].IconClassName);
 				}
 			}

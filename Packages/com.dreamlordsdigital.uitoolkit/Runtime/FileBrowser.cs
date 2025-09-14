@@ -14,33 +14,33 @@ namespace DLD.UIToolkit
 [UxmlElement]
 public partial class FileBrowser : VisualElement, IContextMenuListener
 {
-	const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/FileBrowser";
+	const string TemplateResourcesPath = "DLD UIToolkit/FileBrowser";
 
-	const string OPEN_ICON_STYLE_CLASS = "dld-icon--title--open";
-	const string SAVE_ICON_STYLE_CLASS = "dld-icon--title--save";
+	const string OpenIconStyleClass = "dld-icon--title--open";
+	const string SaveIconStyleClass = "dld-icon--title--save";
 
-	const string FILE_SYSTEM_NAME_GROUP_STYLE_CLASS = "dld-file-entry__name-group";
-	const string FILE_SYSTEM_ICON_STYLE_CLASS = "dld-file-entry__icon";
-	const string FILE_SYSTEM_NAME_STYLE_CLASS = "dld-file-entry__filename";
-	const string TOOLBAR_BUTTON_PRESSED_STYLE_CLASS = "dld-toolbar-button--pressed";
-	const string LIST_VIEW_ENTRY_STYLE_CLASS = "dld-list-view-entry-group";
+	const string FileSystemNameGroupStyleClass = "dld-file-entry__name-group";
+	const string FileSystemIconStyleClass = "dld-file-entry__icon";
+	const string FileSystemNameStyleClass = "dld-file-entry__filename";
+	const string ToolbarButtonPressedStyleClass = "dld-toolbar-button--pressed";
+	const string ListViewEntryStyleClass = "dld-list-view-entry-group";
 
-	const string HERE_INDICATOR_STYLE_CLASS = "dld-icon--here";
+	const string HereIndicatorStyleClass = "dld-icon--here";
 
-	const string FILE_SYSTEM_ENTRIES_VIEW_NAME_COLUMN = "Name";
-	const string FILE_SYSTEM_ENTRIES_VIEW_SIZE_COLUMN = "Size";
-	const string FILE_SYSTEM_ENTRIES_VIEW_ICON = "Icon";
-	const string FILE_SYSTEM_ENTRIES_VIEW_NAME = "Name";
+	const string FileSystemEntriesViewNameColumn = "Name";
+	const string FileSystemEntriesViewSizeColumn = "Size";
+	const string FileSystemEntriesViewIcon = "Icon";
+	const string FileSystemEntriesViewName = "Name";
 
-	const float BUTTON_MENU_DEFAULT_HOLD_DOWN_DURATION = 0.4f;
+	const float ButtonMenuDefaultHoldDownDuration = 0.4f;
 
-	const int USER_FAVORITES_ID_START = 100;
-	const int RECENT_ENTRIES_ID_START = 200;
+	const int UserFavoritesIDStart = 100;
+	const int RecentEntriesIDStart = 200;
 
-	const string CONTEXT_MENU_REMOVE_FROM_FAVORITES = "REMOVE_FAVORITE";
-	const string CONTEXT_MENU_ADD_FAVORITE = "ADD_FAVORITE";
-	const string CONTEXT_MENU_OPEN_FILE_EXPLORER = "OPEN_FILE_EXPLORER";
-	const string CONTEXT_MENU_OPEN_USING_ASSOCIATED = "OPEN_USING_ASSOCIATED";
+	const string ContextMenuRemoveFromFavorites = "RemoveFromFavorites";
+	const string ContextMenuAddFavorite = "AddFavorite";
+	const string ContextMenuOpenFileExplorer = "OpenFileExplorer";
+	const string ContextMenuOpenUsingAssociated = "OpenUsingAssociated";
 
 	// -----------------------------------------
 
@@ -202,7 +202,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	readonly List<TreeViewItemData<JumpMenuEntry>> _userFavoritesEntries = new();
 	readonly List<TreeViewItemData<JumpMenuEntry>> _recentEntries = new();
 
-	int _nextFreeFavoriteEntryId = USER_FAVORITES_ID_START + 1;
+	int _nextFreeFavoriteEntryId = UserFavoritesIDStart + 1;
 
 	static string UserFavoritesSavePath
 	{
@@ -252,7 +252,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	public FileBrowser()
 	{
-		var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
+		var asset = Resources.Load<VisualTreeAsset>(TemplateResourcesPath);
 		asset.CloneTree(this);
 
 		var titleBar = this.Q<VisualElement>("TitleBar");
@@ -323,7 +323,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		_pathHistoryListView.itemsSource = _pathHistoryEntries;
 		_pathHistoryListView.Clear();
 
-		const string HERE_INDICATOR_NAME = "Here";
+		const string HereIndicatorName = "Here";
 
 		_pathHistoryListView.makeItem = () =>
 		{
@@ -332,11 +332,11 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			var hereIndicator = new VisualElement();
 			var label = new Label();
 
-			hereIndicator.name = HERE_INDICATOR_NAME;
+			hereIndicator.name = HereIndicatorName;
 
-			group.AddToClassList(LIST_VIEW_ENTRY_STYLE_CLASS);
-			hereIndicator.AddToClassList(FILE_SYSTEM_ICON_STYLE_CLASS);
-			label.AddToClassList(FILE_SYSTEM_NAME_STYLE_CLASS);
+			group.AddToClassList(ListViewEntryStyleClass);
+			hereIndicator.AddToClassList(FileSystemIconStyleClass);
+			label.AddToClassList(FileSystemNameStyleClass);
 
 			group.Add(hereIndicator);
 			group.Add(label);
@@ -348,14 +348,14 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			var label = visualElement.Q<Label>();
 			label.text = _pathHistoryEntries[idx].GetShortFolderName();
 
-			var hereIndicator = visualElement.Q<VisualElement>(HERE_INDICATOR_NAME);
+			var hereIndicator = visualElement.Q<VisualElement>(HereIndicatorName);
 			if (idx == _pathHistoryIdx)
 			{
-				hereIndicator.AddToClassList(HERE_INDICATOR_STYLE_CLASS);
+				hereIndicator.AddToClassList(HereIndicatorStyleClass);
 			}
 			else
 			{
-				hereIndicator.RemoveFromClassList(HERE_INDICATOR_STYLE_CLASS);
+				hereIndicator.RemoveFromClassList(HereIndicatorStyleClass);
 			}
 		};
 
@@ -378,14 +378,14 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			var icon = new VisualElement();
 			var label = new Label();
 
-			icon.name = FILE_SYSTEM_ENTRIES_VIEW_ICON;
+			icon.name = FileSystemEntriesViewIcon;
 
 			group.Add(icon);
 			group.Add(label);
 
-			group.AddToClassList(LIST_VIEW_ENTRY_STYLE_CLASS);
-			icon.AddToClassList(FILE_SYSTEM_ICON_STYLE_CLASS);
-			label.AddToClassList(FILE_SYSTEM_NAME_STYLE_CLASS);
+			group.AddToClassList(ListViewEntryStyleClass);
+			icon.AddToClassList(FileSystemIconStyleClass);
+			label.AddToClassList(FileSystemNameStyleClass);
 
 			label.displayTooltipWhenElided = true;
 
@@ -409,7 +409,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 			label.tooltip = properTooltip;
 
-			var icon = visualElement.Q<VisualElement>(FILE_SYSTEM_ENTRIES_VIEW_ICON);
+			var icon = visualElement.Q<VisualElement>(FileSystemEntriesViewIcon);
 			if (icon != null)
 			{
 				string iconStyleClass = jumpMenuEntry.SpecialFolderType switch
@@ -426,14 +426,14 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 				icon.tooltip = properTooltip;
 			}
 
-			if (jumpMenuEntryId > USER_FAVORITES_ID_START && jumpMenuEntryId < RECENT_ENTRIES_ID_START)
+			if (jumpMenuEntryId > UserFavoritesIDStart && jumpMenuEntryId < RecentEntriesIDStart)
 			{
 				// add Context Menu to allow user to remove this Favorite Entry
 				visualElement.RegisterCallback((ContextClickEvent e, IContextMenu c) =>
 				{
 					c.ClearMenu();
 					c.AddMenu("Remove from Favorites",
-						listener: this, userArg1: CONTEXT_MENU_REMOVE_FROM_FAVORITES, userArg2: jumpMenuEntry.Path);
+						listener: this, userArg1: ContextMenuRemoveFromFavorites, userArg2: jumpMenuEntry.Path);
 					c.Show(e);
 				}, _contextMenu, TrickleDown.TrickleDown);
 			}
@@ -441,11 +441,11 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 		_jumpMenuTreeView.unbindItem = (visualElement, idx) =>
 		{
-			var icon = visualElement.Q<VisualElement>(FILE_SYSTEM_ENTRIES_VIEW_ICON);
+			var icon = visualElement.Q<VisualElement>(FileSystemEntriesViewIcon);
 			if (icon != null)
 			{
 				icon.ClearClassList();
-				icon.AddToClassList(FILE_SYSTEM_ICON_STYLE_CLASS);
+				icon.AddToClassList(FileSystemIconStyleClass);
 			}
 		};
 
@@ -463,21 +463,21 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 		// ---------------------------------------------------
 
-		var nameColumn = _fileSystemEntriesView.columns[FILE_SYSTEM_ENTRIES_VIEW_NAME_COLUMN];
+		var nameColumn = _fileSystemEntriesView.columns[FileSystemEntriesViewNameColumn];
 		nameColumn.makeCell = () =>
 		{
 			var group = new VisualElement();
 			var icon = new VisualElement();
 			var fileNameLabel = new Label();
 
-			icon.name = FILE_SYSTEM_ENTRIES_VIEW_ICON;
+			icon.name = FileSystemEntriesViewIcon;
 
 			group.Add(icon);
 			group.Add(fileNameLabel);
 
-			group.AddToClassList(FILE_SYSTEM_NAME_GROUP_STYLE_CLASS);
-			icon.AddToClassList(FILE_SYSTEM_ICON_STYLE_CLASS);
-			fileNameLabel.AddToClassList(FILE_SYSTEM_NAME_STYLE_CLASS);
+			group.AddToClassList(FileSystemNameGroupStyleClass);
+			icon.AddToClassList(FileSystemIconStyleClass);
+			fileNameLabel.AddToClassList(FileSystemNameStyleClass);
 
 			fileNameLabel.displayTooltipWhenElided = true;
 
@@ -499,7 +499,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 				filename.text = fileSysEntry.Name;
 			}
 
-			var icon = visualElement.Q<VisualElement>(FILE_SYSTEM_ENTRIES_VIEW_ICON);
+			var icon = visualElement.Q<VisualElement>(FileSystemEntriesViewIcon);
 			if (icon != null)
 			{
 				string iconStyleClass = GetIconStyleClass(fileSysEntry.Name, fileSysEntry.EntryType);
@@ -508,11 +508,11 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		};
 		nameColumn.unbindCell = (visualElement, idx) =>
 		{
-			var icon = visualElement.Q<VisualElement>(FILE_SYSTEM_ENTRIES_VIEW_ICON);
+			var icon = visualElement.Q<VisualElement>(FileSystemEntriesViewIcon);
 			if (icon != null)
 			{
 				icon.ClearClassList();
-				icon.AddToClassList(FILE_SYSTEM_ICON_STYLE_CLASS);
+				icon.AddToClassList(FileSystemIconStyleClass);
 			}
 		};
 		nameColumn.optional = false;
@@ -522,7 +522,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 		// ---------------------------------------------------
 
-		var sizeColumn = _fileSystemEntriesView.columns[FILE_SYSTEM_ENTRIES_VIEW_SIZE_COLUMN];
+		var sizeColumn = _fileSystemEntriesView.columns[FileSystemEntriesViewSizeColumn];
 		sizeColumn.makeCell = () =>
 		{
 			var sizeLabel = new Label();
@@ -578,17 +578,17 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		_currentOperationMode = newMode;
 
 		_titleIcon.ClearClassList();
-		_titleIcon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+		_titleIcon.AddToClassList(BaseIcons.IconStyleClass);
 
 		switch (_currentOperationMode)
 		{
 			case OperationMode.Open:
 				_confirmButton.text = "Open";
-				_titleIcon.AddToClassList(OPEN_ICON_STYLE_CLASS);
+				_titleIcon.AddToClassList(OpenIconStyleClass);
 				break;
 			case OperationMode.Save:
 				_confirmButton.text = "Save";
-				_titleIcon.AddToClassList(SAVE_ICON_STYLE_CLASS);
+				_titleIcon.AddToClassList(SaveIconStyleClass);
 				break;
 			default:
 				_confirmButton.text = "Ok";
@@ -704,12 +704,12 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		if (!_pathHistoryListShown)
 		{
 			if (_backButtonHoldTimeStart > 0 &&
-			    Time.realtimeSinceStartup - _backButtonHoldTimeStart >= BUTTON_MENU_DEFAULT_HOLD_DOWN_DURATION)
+			    Time.realtimeSinceStartup - _backButtonHoldTimeStart >= ButtonMenuDefaultHoldDownDuration)
 			{
 				ShowPathHistoryListPopUp(_backButton);
 			}
 			else if (_forwardButtonHoldTimeStart > 0 &&
-			         Time.realtimeSinceStartup - _forwardButtonHoldTimeStart >= BUTTON_MENU_DEFAULT_HOLD_DOWN_DURATION)
+			         Time.realtimeSinceStartup - _forwardButtonHoldTimeStart >= ButtonMenuDefaultHoldDownDuration)
 			{
 				ShowPathHistoryListPopUp(_forwardButton);
 			}
@@ -1058,17 +1058,17 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 			if (IsPathInFavorites(_currentPath))
 			{
-				_contextMenu.AddMenu("Remove Current Path from Favorites", iconClassStyle: BaseIcons.REMOVE_FROM_FAVORITES,
-					listener: this, userArg1: CONTEXT_MENU_REMOVE_FROM_FAVORITES, userArg2: _currentPath);
+				_contextMenu.AddMenu("Remove Current Path from Favorites", iconClassStyle: BaseIcons.RemoveFromFavorites,
+					listener: this, userArg1: ContextMenuRemoveFromFavorites, userArg2: _currentPath);
 			}
 			else
 			{
-				_contextMenu.AddMenu("Add Current Path to Favorites", iconClassStyle: BaseIcons.ADD_TO_FAVORITES,
-					listener: this, userArg1: CONTEXT_MENU_ADD_FAVORITE, userArg2: _currentPath);
+				_contextMenu.AddMenu("Add Current Path to Favorites", iconClassStyle: BaseIcons.AddToFavorites,
+					listener: this, userArg1: ContextMenuAddFavorite, userArg2: _currentPath);
 			}
 
-			_contextMenu.AddMenu("Explore Here", iconClassStyle: BaseIcons.OPEN_FILE_EXPLORER,
-				listener: this, userArg1: CONTEXT_MENU_OPEN_FILE_EXPLORER, userArg2: _currentPath);
+			_contextMenu.AddMenu("Explore Here", iconClassStyle: BaseIcons.OpenFileExplorer,
+				listener: this, userArg1: ContextMenuOpenFileExplorer, userArg2: _currentPath);
 
 			_contextMenu.Show(contextMenuMousePos);
 		}
@@ -1089,24 +1089,24 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 		if (IsPathInFavorites(_currentPath))
 		{
-			_contextMenu.AddMenu("Remove Current Path from Favorites", iconClassStyle: BaseIcons.REMOVE_FROM_FAVORITES,
-				listener: this, userArg1: CONTEXT_MENU_REMOVE_FROM_FAVORITES, userArg2: _currentPath);
+			_contextMenu.AddMenu("Remove Current Path from Favorites", iconClassStyle: BaseIcons.RemoveFromFavorites,
+				listener: this, userArg1: ContextMenuRemoveFromFavorites, userArg2: _currentPath);
 		}
 		else
 		{
-			_contextMenu.AddMenu("Add Current Path to Favorites", iconClassStyle: BaseIcons.ADD_TO_FAVORITES,
-				listener: this, userArg1: CONTEXT_MENU_ADD_FAVORITE, userArg2: _currentPath);
+			_contextMenu.AddMenu("Add Current Path to Favorites", iconClassStyle: BaseIcons.AddToFavorites,
+				listener: this, userArg1: ContextMenuAddFavorite, userArg2: _currentPath);
 		}
 
 		string clickedFileFullPath = FileUtil.CombinePath(_currentPath, _fileSystemEntries[idx].Name);
 
-		_contextMenu.AddMenu("Explore Here", iconClassStyle: BaseIcons.OPEN_FILE_EXPLORER,
-			listener: this, userArg1: CONTEXT_MENU_OPEN_FILE_EXPLORER, userArg2: clickedFileFullPath);
+		_contextMenu.AddMenu("Explore Here", iconClassStyle: BaseIcons.OpenFileExplorer,
+			listener: this, userArg1: ContextMenuOpenFileExplorer, userArg2: clickedFileFullPath);
 
 		if (_fileSystemEntries[idx].EntryType == FileSystemEntryType.File)
 		{
-			_contextMenu.AddMenu("Open with Associated Program", iconClassStyle: BaseIcons.OPEN_USING_ASSOCIATED,
-				listener: this, userArg1: CONTEXT_MENU_OPEN_USING_ASSOCIATED, userArg2: clickedFileFullPath);
+			_contextMenu.AddMenu("Open with Associated Program", iconClassStyle: BaseIcons.OpenUsingAssociated,
+				listener: this, userArg1: ContextMenuOpenUsingAssociated, userArg2: clickedFileFullPath);
 		}
 
 		_contextMenu.Show(e);
@@ -1117,16 +1117,16 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	{
 		switch (userArg1 as string)
 		{
-			case CONTEXT_MENU_REMOVE_FROM_FAVORITES:
+			case ContextMenuRemoveFromFavorites:
 				RemoveFromFavorites(userArg2 as string);
 				break;
-			case CONTEXT_MENU_ADD_FAVORITE:
+			case ContextMenuAddFavorite:
 				AddToFavorites(userArg2 as string);
 				break;
-			case CONTEXT_MENU_OPEN_FILE_EXPLORER:
+			case ContextMenuOpenFileExplorer:
 				ExplorerUtil.OpenInFileBrowser(userArg2 as string);
 				break;
-			case CONTEXT_MENU_OPEN_USING_ASSOCIATED:
+			case ContextMenuOpenUsingAssociated:
 				ExplorerUtil.OpenWithDefaultProgram(userArg2 as string);
 				break;
 		}
@@ -1246,7 +1246,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	void ShowPathHistoryListPopUp(VisualElement button)
 	{
-		button.AddToClassList(TOOLBAR_BUTTON_PRESSED_STYLE_CLASS);
+		button.AddToClassList(ToolbarButtonPressedStyleClass);
 
 		var buttonRect = button.ChangeCoordinatesTo(this, button.contentRect);
 		_pathHistory.style.left = buttonRect.x;
@@ -1268,8 +1268,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		_forwardButtonHoldTimeStart = -1;
 
 		_jumpButton.value = false;
-		_backButton.RemoveFromClassList(TOOLBAR_BUTTON_PRESSED_STYLE_CLASS);
-		_forwardButton.RemoveFromClassList(TOOLBAR_BUTTON_PRESSED_STYLE_CLASS);
+		_backButton.RemoveFromClassList(ToolbarButtonPressedStyleClass);
+		_forwardButton.RemoveFromClassList(ToolbarButtonPressedStyleClass);
 	}
 
 	void ReloadCurrentPath()
@@ -1400,7 +1400,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		{
 			switch (sortedColumn.columnName)
 			{
-				case FILE_SYSTEM_ENTRIES_VIEW_NAME_COLUMN:
+				case FileSystemEntriesViewNameColumn:
 					if (sortedColumn.direction == SortDirection.Ascending)
 					{
 						_fileSystemEntries.Sort(SortByNameAsc);
@@ -1411,7 +1411,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 					}
 
 					return true;
-				case FILE_SYSTEM_ENTRIES_VIEW_SIZE_COLUMN:
+				case FileSystemEntriesViewSizeColumn:
 					if (sortedColumn.direction == SortDirection.Ascending)
 					{
 						_fileSystemEntries.Sort(SortBySizeAsc);
@@ -1498,7 +1498,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			file = $"{file}{_saveFileExtension}";
 		}
 
-		var newRecentEntry = new TreeViewItemData<JumpMenuEntry>(RECENT_ENTRIES_ID_START + 1 + _recentEntries.Count,
+		var newRecentEntry = new TreeViewItemData<JumpMenuEntry>(RecentEntriesIDStart + 1 + _recentEntries.Count,
 			new JumpMenuEntry()
 			{
 				Label = _currentPath.GetShortFolderName(),
@@ -1507,7 +1507,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			});
 
 		// AddItem() causes _recentEntries to be modified
-		_jumpMenuTreeView.AddItem(newRecentEntry, RECENT_ENTRIES_ID_START);
+		_jumpMenuTreeView.AddItem(newRecentEntry, RecentEntriesIDStart);
 
 		_fileChosen?.Invoke(file);
 	}
@@ -1583,7 +1583,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 				}
 			}
 		}
-		_jumpMenuEntries.Add(new TreeViewItemData<JumpMenuEntry>(USER_FAVORITES_ID_START, favorites, _userFavoritesEntries));
+		_jumpMenuEntries.Add(new TreeViewItemData<JumpMenuEntry>(UserFavoritesIDStart, favorites, _userFavoritesEntries));
 
 		// ---------------------------------------------------
 
@@ -1592,7 +1592,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			Label = "Recent",
 			SpecialFolderType = SpecialFolderType.Recent
 		};
-		_jumpMenuEntries.Add(new TreeViewItemData<JumpMenuEntry>(RECENT_ENTRIES_ID_START, recent, _recentEntries));
+		_jumpMenuEntries.Add(new TreeViewItemData<JumpMenuEntry>(RecentEntriesIDStart, recent, _recentEntries));
 	}
 
 	bool IsPathInFavorites(string pathToCheck)
@@ -1659,7 +1659,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		});
 
 		// AddItem() causes _userFavoritesEntries to be modified
-		_jumpMenuTreeView.AddItem(newFavorite, USER_FAVORITES_ID_START);
+		_jumpMenuTreeView.AddItem(newFavorite, UserFavoritesIDStart);
 
 		// Save the new favorite entry
 		string userFavoritesPath = UserFavoritesSavePath;
@@ -1716,8 +1716,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	// =====================================================================
 
-	const int A_FIRST_THEN_B = -1;
-	const int B_FIRST_THEN_A = +1;
+	const int AFirstThenB = -1;
+	const int BFirstThenA = +1;
 
 	static readonly Comparison<FileSystemEntry> SortByNameAsc = _SortByNameAsc;
 
@@ -1726,23 +1726,23 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		// the special "To Parent Folder" always comes first
 		if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		// folders come first before files
 		if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		return string.Compare(a.Name, b.Name, StringComparison.Ordinal);
@@ -1755,23 +1755,23 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		// the special "To Parent Folder" always comes first
 		if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		// folders come first before files
 		if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		return string.Compare(b.Name, a.Name, StringComparison.Ordinal);
@@ -1784,23 +1784,23 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		// the special "To Parent Folder" always comes first
 		if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		// folders come first before files
 		if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.Folder)
@@ -1820,23 +1820,23 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		// the special "To Parent Folder" always comes first
 		if (a.EntryType == FileSystemEntryType.ToParentFolder && b.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.ToParentFolder && a.EntryType != FileSystemEntryType.ToParentFolder)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		// folders come first before files
 		if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.File)
 		{
-			return A_FIRST_THEN_B;
+			return AFirstThenB;
 		}
 
 		if (b.EntryType == FileSystemEntryType.Folder && a.EntryType == FileSystemEntryType.File)
 		{
-			return B_FIRST_THEN_A;
+			return BFirstThenA;
 		}
 
 		if (a.EntryType == FileSystemEntryType.Folder && b.EntryType == FileSystemEntryType.Folder)

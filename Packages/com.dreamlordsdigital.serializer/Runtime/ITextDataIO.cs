@@ -12,7 +12,7 @@ namespace DLD.Serializer
 /// </summary>
 public interface ITextDataIO
 {
-	public const string DEFAULT_HASH_ALGORITHM = "MD5";
+	public const string DefaultHashAlgorithm = "MD5";
 
 	// ------------------------------------------------------------------------------------------------------
 	// de/serializing to/from strings
@@ -36,14 +36,14 @@ public interface ITextDataIO
 
 #if UNITY_EDITOR
 	void SaveToAssets<T>(string saveFileAssetsPath, T data) where T : ITextData;
-	void SaveToAssets<T>(string saveFileAssetsPath, T data, out string hash, string hashAlgorithmName = DEFAULT_HASH_ALGORITHM) where T : ITextData;
+	void SaveToAssets<T>(string saveFileAssetsPath, T data, out string hash, string hashAlgorithmName = DefaultHashAlgorithm) where T : ITextData;
 #endif
 
 	void SaveToLocal<T>(string saveFilePath, T data) where T : ITextData;
-	void SaveToLocal<T>(string saveFilePath, T data, out string hash, string hashAlgorithmName = DEFAULT_HASH_ALGORITHM) where T : ITextData;
+	void SaveToLocal<T>(string saveFilePath, T data, out string hash, string hashAlgorithmName = DefaultHashAlgorithm) where T : ITextData;
 	void SaveBinaryToLocal<T>(string saveFilePath, T data) where T : IBinaryData;
 	void SaveToStreamingAssets<T>(string saveFileAssetsPath, T data) where T : ITextData;
-	void SaveToStreamingAssets<T>(string saveFileAssetsPath, T data, out string hash, string hashAlgorithmName = DEFAULT_HASH_ALGORITHM) where T : ITextData;
+	void SaveToStreamingAssets<T>(string saveFileAssetsPath, T data, out string hash, string hashAlgorithmName = DefaultHashAlgorithm) where T : ITextData;
 
 	// ======================================================================================================
 	// load functions

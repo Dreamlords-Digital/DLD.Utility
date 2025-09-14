@@ -12,8 +12,8 @@ namespace DLD.Utility.Inspector.Editor
 [CustomPropertyDrawer(typeof(ScenePathAttribute))]
 public class ScenePathPropertyDrawer : PropertyDrawer
 {
-	const float ERROR_MESSAGE_SPACING = 1;
-	const float ERROR_MESSAGE_HEIGHT = 25;
+	const float ErrorMessageSpacing = 1;
+	const float ErrorMessageHeight = 25;
 
 	ScenePathAttribute _scenePathAttribute;
 
@@ -24,7 +24,7 @@ public class ScenePathPropertyDrawer : PropertyDrawer
 		var currentScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(property.stringValue);
 		if (currentScene == null)
 		{
-			return baseHeight + ERROR_MESSAGE_SPACING + ERROR_MESSAGE_HEIGHT;
+			return baseHeight + ErrorMessageSpacing + ErrorMessageHeight;
 		}
 
 		return baseHeight;
@@ -58,8 +58,8 @@ public class ScenePathPropertyDrawer : PropertyDrawer
 			GUI.color = prevColor;
 
 			Rect errorMessageRect = new Rect(position);
-			errorMessageRect.y += fieldRect.height + ERROR_MESSAGE_SPACING;
-			errorMessageRect.height = ERROR_MESSAGE_HEIGHT;
+			errorMessageRect.y += fieldRect.height + ErrorMessageSpacing;
+			errorMessageRect.height = ErrorMessageHeight;
 			errorMessageRect.xMin += EditorGUIUtility.labelWidth;
 
 			string message;

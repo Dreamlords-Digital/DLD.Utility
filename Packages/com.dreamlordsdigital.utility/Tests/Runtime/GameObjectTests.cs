@@ -14,20 +14,20 @@ public class GameObjectTests
 	{
 		// We'll only test the built-in layers, since they have the same name on all projects.
 
-		const int FIRST_BIT_SET = 0b00000001;
-		Assert.AreEqual("Default", LayerMask.LayerToName(FIRST_BIT_SET.FindBitIndex()));
+		const int FirstBitSet = 0b00000001;
+		Assert.AreEqual("Default", LayerMask.LayerToName(FirstBitSet.FindBitIndex()));
 
-		const int SECOND_BIT_SET = 0b00000010;
-		Assert.AreEqual("TransparentFX", LayerMask.LayerToName(SECOND_BIT_SET.FindBitIndex()));
+		const int SecondBitSet = 0b00000010;
+		Assert.AreEqual("TransparentFX", LayerMask.LayerToName(SecondBitSet.FindBitIndex()));
 
-		const int THIRD_BIT_SET = 0b00000100;
-		Assert.AreEqual("Ignore Raycast", LayerMask.LayerToName(THIRD_BIT_SET.FindBitIndex()));
+		const int ThirdBitSet = 0b00000100;
+		Assert.AreEqual("Ignore Raycast", LayerMask.LayerToName(ThirdBitSet.FindBitIndex()));
 
-		const int FIFTH_BIT_SET = 0b00010000;
-		Assert.AreEqual("Water", LayerMask.LayerToName(FIFTH_BIT_SET.FindBitIndex()));
+		const int FifthBitSet = 0b00010000;
+		Assert.AreEqual("Water", LayerMask.LayerToName(FifthBitSet.FindBitIndex()));
 
-		const int SIXTH_BIT_SET = 0b00100000;
-		Assert.AreEqual("UI", LayerMask.LayerToName(SIXTH_BIT_SET.FindBitIndex()));
+		const int SixthBitSet = 0b00100000;
+		Assert.AreEqual("UI", LayerMask.LayerToName(SixthBitSet.FindBitIndex()));
 	}
 }
 

@@ -49,13 +49,13 @@ public class BaseClass : ITextData
 
 public class Derived1 : BaseClass
 {
-	public const string DERIVED_1_TYPE = "Derived1";
+	public const string Derived1Type = "Derived1";
 
 	public override string MyType
 	{
 		get
 		{
-			return DERIVED_1_TYPE;
+			return Derived1Type;
 		}
 	}
 
@@ -80,26 +80,26 @@ public class Derived1 : BaseClass
 
 public class Derived2 : BaseClass
 {
-	public const string DERIVED_2_TYPE = "Derived2";
+	public const string Derived2Type = "Derived2";
 
 	public override string MyType
 	{
 		get
 		{
-			return DERIVED_2_TYPE;
+			return Derived2Type;
 		}
 	}
 }
 
 public class Derived3 : BaseClass
 {
-	public const string DERIVED_3_TYPE = "Derived3";
+	public const string Derived3Type = "Derived3";
 
 	public override string MyType
 	{
 		get
 		{
-			return DERIVED_3_TYPE;
+			return Derived3Type;
 		}
 	}
 }

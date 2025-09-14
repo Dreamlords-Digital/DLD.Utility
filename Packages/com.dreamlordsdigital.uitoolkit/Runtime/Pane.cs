@@ -10,7 +10,7 @@ namespace DLD.UIToolkit
 
 public class TabbedContent
 {
-	const string TAB_BODY_STYLE_CLASS = "dld-tab__body";
+	const string TabBodyStyleClass = "dld-tab__body";
 
 	public TabbedContent()
 	{
@@ -18,7 +18,7 @@ public class TabbedContent
 		Body = new VisualElement();
 
 		Body.style.display = DisplayStyle.None; // hide at first
-		Body.AddToClassList(TAB_BODY_STYLE_CLASS);
+		Body.AddToClassList(TabBodyStyleClass);
 	}
 
 	public void Init(RadioButton newTabButton)
@@ -72,11 +72,11 @@ public class TabbedContent
 [UxmlElement]
 public partial class Pane<T> : VisualElement, IContextMenuListener where T : TabbedContent, new()
 {
-	const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Pane";
+	const string TemplateResourcesPath = "DLD UIToolkit/Pane";
 
-	const string CONTEXT_MENU_CLOSE_TAB = "CLOSE_TAB";
-	const string CONTEXT_MENU_CLOSE_OTHER_TABS = "CLOSE_OTHER_TABS";
-	const string CONTEXT_MENU_CLOSE_ALL_TABS = "CLOSE_ALL_TABS";
+	const string ContextMenuCloseTab = "CloseTab";
+	const string ContextMenuCloseOtherTabs = "CloseOtherTabs";
+	const string ContextMenuCloseAllTabs = "CloseAllTabs";
 
 	readonly VisualElement _tabContainer;
 	readonly List<T> _tabList = new();
@@ -99,17 +99,17 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	public Pane()
 	{
-		var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
+		var asset = Resources.Load<VisualTreeAsset>(TemplateResourcesPath);
 		asset.CloneTree(this);
 		this.RemoveTemplateContainer("Pane");
 
 		// -----------------------------------
 
-		const string TABS_LIST_ELEMENT_NAME = "Tabs";
-		_tabContainer = this.Q<VisualElement>(TABS_LIST_ELEMENT_NAME);
+		const string TabsListElementName = "Tabs";
+		_tabContainer = this.Q<VisualElement>(TabsListElementName);
 
-		const string TAB_BODY_CONTAINER_ELEMENT_NAME = "TabBodyContainer";
-		_tabBodyContainer = this.Q<VisualElement>(TAB_BODY_CONTAINER_ELEMENT_NAME);
+		const string TabBodyContainerElementName = "TabBodyContainer";
+		_tabBodyContainer = this.Q<VisualElement>(TabBodyContainerElementName);
 
 		// -----------------------------------
 
@@ -144,11 +144,11 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	public T CreateTab(string tabName)
 	{
-		const string TAB_TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Tab";
-		var tabTemplate = Resources.Load<VisualTreeAsset>(TAB_TEMPLATE_RESOURCES_PATH);
+		const string TabTemplateResourcesPath = "DLD UIToolkit/Tab";
+		var tabTemplate = Resources.Load<VisualTreeAsset>(TabTemplateResourcesPath);
 		var newTabFromTemplate = tabTemplate.Instantiate();
-		const string TAB_ELEMENT_NAME = "Tab";
-		var newTabButton = newTabFromTemplate.Q<RadioButton>(TAB_ELEMENT_NAME);
+		const string TabElementName = "Tab";
+		var newTabButton = newTabFromTemplate.Q<RadioButton>(TabElementName);
 		newTabButton.label = tabName;
 		newTabButton.labelElement.pickingMode = PickingMode.Ignore;
 		_tabContainer.Add(newTabButton);
@@ -231,12 +231,12 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		_contextMenu.DoAltBgStyling(false);
 		_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(false);
 		_contextMenu.ClearMenu();
-		_contextMenu.AddMenu("Close", iconClassStyle: BaseIcons.CLOSE,
-			listener: this, userArg1: CONTEXT_MENU_CLOSE_TAB, userArg2: clickedTabContent);
-		_contextMenu.AddMenu("Close Other Tabs", iconClassStyle: BaseIcons.CLOSE, menuItemStyle: _tabList.Count == 1 ? ContextMenuItemStyle.Disabled : ContextMenuItemStyle.Standard,
-			listener: this, userArg1: CONTEXT_MENU_CLOSE_OTHER_TABS, userArg2: clickedTabContent);
-		_contextMenu.AddMenu("Close All Tabs", iconClassStyle: BaseIcons.CLOSE,
-			listener: this, userArg1: CONTEXT_MENU_CLOSE_ALL_TABS);
+		_contextMenu.AddMenu("Close", iconClassStyle: BaseIcons.Close,
+			listener: this, userArg1: ContextMenuCloseTab, userArg2: clickedTabContent);
+		_contextMenu.AddMenu("Close Other Tabs", iconClassStyle: BaseIcons.Close, menuItemStyle: _tabList.Count == 1 ? ContextMenuItemStyle.Disabled : ContextMenuItemStyle.Standard,
+			listener: this, userArg1: ContextMenuCloseOtherTabs, userArg2: clickedTabContent);
+		_contextMenu.AddMenu("Close All Tabs", iconClassStyle: BaseIcons.Close,
+			listener: this, userArg1: ContextMenuCloseAllTabs);
 		_onTabContext?.Invoke(_contextMenu, clickedTabContent);
 		_contextMenu.Show(e);
 	}
@@ -245,14 +245,14 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 	{
 		switch (userArg1 as string)
 		{
-			case CONTEXT_MENU_CLOSE_TAB:
+			case ContextMenuCloseTab:
 				CloseTab(userArg2 as T);
 				break;
-			case CONTEXT_MENU_CLOSE_OTHER_TABS:
+			case ContextMenuCloseOtherTabs:
 				var thisTab = userArg2 as T;
 				Debug.LogError($"Close Other Tabs for {thisTab?.TabLabel}, not yet implemented");
 				break;
-			case CONTEXT_MENU_CLOSE_ALL_TABS:
+			case ContextMenuCloseAllTabs:
 				Debug.LogError("Close All Tabs not yet implemented");
 				break;
 		}

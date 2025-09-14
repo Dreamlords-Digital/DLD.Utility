@@ -12,16 +12,16 @@ namespace DLD.Utility
 
 public static class FileUtil
 {
-	public const string RESOURCES_FOLDER = "/Resources/";
-	public const int ENTERED_FBX_FILE_LEN = 5;
-	public const int FBX_FILE_EXTENSION_LEN = 4;
+	public const string ResourcesFolder = "/Resources/";
+	public const int EnteredFbxFileLen = 5;
+	public const int FbxFileExtensionLen = 4;
 
-	public const string FBX_FILE_EXTENSION = ".fbx";
-	public const string ENTERED_FBX_FILE = ".fbx:";
-	public const string ANIM_FILE_EXTENSION = ".anim";
-	public const string PREFAB_FILE_EXTENSION = ".prefab";
-	public const string ASSET_BUNDLE_FILE_EXTENSION = ".asset";
-	public const string ENTERED_ASSET_BUNDLE_FILE = ".asset:";
+	public const string FbxFileExtension = ".fbx";
+	public const string EnteredFbxFile = ".fbx:";
+	public const string AnimFileExtension = ".anim";
+	public const string PrefabFileExtension = ".prefab";
+	public const string AssetBundleFileExtension = ".asset";
+	public const string EnteredAssetBundleFile = ".asset:";
 
 	public static long GetFileSizeInBytes(string filename)
 	{
@@ -39,10 +39,10 @@ public static class FileUtil
 		return MyFileSizeReadable(bytes);
 	}
 
-	const double ONE_TERABYTE = 1099511627776.0;
-	const double ONE_GIGABYTE = 1073741824.0;
-	const double ONE_MEGABYTE = 1048576.0;
-	const double ONE_KILOBYTE = 1024.0;
+	const double OneTerabyte = 1099511627776.0;
+	const double OneGigabyte = 1073741824.0;
+	const double OneMegabyte = 1048576.0;
+	const double OneKilobyte = 1024.0;
 
 	static string MyFileSizeReadable(long bytes)
 	{
@@ -54,24 +54,24 @@ public static class FileUtil
 		double converted = bytes;
 		string units = "B";
 
-		if (bytes >= ONE_TERABYTE)
+		if (bytes >= OneTerabyte)
 		{
-			converted = bytes / ONE_TERABYTE;
+			converted = bytes / OneTerabyte;
 			units = "TB";
 		}
-		else if (bytes >= ONE_GIGABYTE)
+		else if (bytes >= OneGigabyte)
 		{
-			converted = bytes / ONE_GIGABYTE;
+			converted = bytes / OneGigabyte;
 			units = "GB";
 		}
-		else if (bytes >= ONE_MEGABYTE)
+		else if (bytes >= OneMegabyte)
 		{
-			converted = bytes / ONE_MEGABYTE;
+			converted = bytes / OneMegabyte;
 			units = "MB";
 		}
-		else if (bytes >= ONE_KILOBYTE)
+		else if (bytes >= OneKilobyte)
 		{
-			converted = bytes / ONE_KILOBYTE;
+			converted = bytes / OneKilobyte;
 			units = "KB";
 		}
 
@@ -457,15 +457,15 @@ public static class FileUtil
 
 		// -----------------------------------------
 
-		const string RESOURCES_FOLDER_NAME = "/Resources/";
-		const int RESOURCES_FOLDER_NAME_LENGTH = 11;
+		const string ResourcesFolderName = "/Resources/";
+		const int ResourcesFolderNameLength = 11;
 
-		var lastResources = path.LastIndexOf(RESOURCES_FOLDER_NAME, StringComparison.OrdinalIgnoreCase);
+		var lastResources = path.LastIndexOf(ResourcesFolderName, StringComparison.OrdinalIgnoreCase);
 
 		string result;
 		if (lastResources >= 0)
 		{
-			result = path.Substring(lastResources + RESOURCES_FOLDER_NAME_LENGTH);
+			result = path.Substring(lastResources + ResourcesFolderNameLength);
 		}
 		else
 		{
@@ -474,8 +474,8 @@ public static class FileUtil
 
 		// -----------------------------------------
 
-		var hasEnteredFbxFile = result.Contains(ENTERED_FBX_FILE, StringComparison.OrdinalIgnoreCase);
-		var hasEnteredAssetBundleFile = result.Contains(ENTERED_ASSET_BUNDLE_FILE, StringComparison.OrdinalIgnoreCase);
+		var hasEnteredFbxFile = result.Contains(EnteredFbxFile, StringComparison.OrdinalIgnoreCase);
+		var hasEnteredAssetBundleFile = result.Contains(EnteredAssetBundleFile, StringComparison.OrdinalIgnoreCase);
 
 		if (!hasEnteredFbxFile && !hasEnteredAssetBundleFile)
 		{

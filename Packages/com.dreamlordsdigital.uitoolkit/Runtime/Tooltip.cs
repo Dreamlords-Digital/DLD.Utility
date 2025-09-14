@@ -88,8 +88,8 @@ public class TooltipMessage
 	}
 
 	public static readonly TooltipMessage Spacer = new(text: "<nobr> </nobr>");
-	public static readonly TooltipMessage JumpToSourceFile = new(BaseIcons.JUMP_TO_SOURCE_FILE, "<i>Left-Click to jump to source file.</i>");
-	public static readonly TooltipMessage OpenLinkInWebBrowser = new(BaseIcons.OPEN_LINK_IN_WEB_BROWSER, "<i>Ctrl + Left-Click to open link.</i>");
+	public static readonly TooltipMessage JumpToSourceFile = new(BaseIcons.JumpToSourceFile, "<i>Left-Click to jump to source file.</i>");
+	public static readonly TooltipMessage OpenLinkInWebBrowser = new(BaseIcons.OpenLinkInWebBrowser, "<i>Ctrl + Left-Click to open link.</i>");
 }
 
 public static class TooltipUtil
@@ -102,36 +102,36 @@ public static class TooltipUtil
 	static readonly EventCallback<PointerEnterEvent, ITooltip> ShowTooltipFromUserDataPushToStack = _ShowTooltipFromUserDataPushToStack;
 	static readonly EventCallback<PointerLeaveEvent, ITooltip> HideTooltipIfContextIs = _HideTooltipIfContextIs;
 
-	const string DEFAULT_OBSOLETE_MESSAGE = "Marked as obsolete";
+	const string DefaultObsoleteMessage = "Marked as obsolete";
 
-	public static TooltipMessage[] CreateTooltipMessages(DropdownItem item, EnumDropdownItem obsoleteItem, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+	public static TooltipMessage[] CreateTooltipMessages(DropdownItem item, EnumDropdownItem obsoleteItem, string obsoleteMessageToUseIfNull = DefaultObsoleteMessage)
 	{
 		return new TooltipMessage[]
 		{
-			new(BaseIcons.GENERIC_INFO, item.Tooltip),
-			new(obsoleteItem.Obsolete == EnumObsoleteType.ObsoleteError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING, obsoleteItem.ObsoleteMessage ?? obsoleteMessageToUseIfNull),
+			new(BaseIcons.GenericInfo, item.Tooltip),
+			new(obsoleteItem.Obsolete == EnumObsoleteType.ObsoleteError ? BaseIcons.GenericError : BaseIcons.GenericWarning, obsoleteItem.ObsoleteMessage ?? obsoleteMessageToUseIfNull),
 		};
 	}
 
-	public static string CreateObsoleteTooltip(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+	public static string CreateObsoleteTooltip(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DefaultObsoleteMessage)
 	{
-		return $"{(item.Obsolete == EnumObsoleteType.ObsoleteError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING)};{item.ObsoleteMessage ?? obsoleteMessageToUseIfNull}";
+		return $"{(item.Obsolete == EnumObsoleteType.ObsoleteError ? BaseIcons.GenericError : BaseIcons.GenericWarning)};{item.ObsoleteMessage ?? obsoleteMessageToUseIfNull}";
 	}
 
 	public static string CreateObsoleteTooltipIcon(EnumObsoleteType obsoleteType)
 	{
-		return obsoleteType == EnumObsoleteType.ObsoleteError ? BaseIcons.GENERIC_ERROR : BaseIcons.GENERIC_WARNING;
+		return obsoleteType == EnumObsoleteType.ObsoleteError ? BaseIcons.GenericError : BaseIcons.GenericWarning;
 	}
 
-	public static string CreateObsoleteTooltipText(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE) =>
+	public static string CreateObsoleteTooltipText(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DefaultObsoleteMessage) =>
 		!string.IsNullOrWhiteSpace(item.ObsoleteMessage) ? item.ObsoleteMessage : obsoleteMessageToUseIfNull;
 
-	public static TooltipMessage CreateObsoleteTooltipMessage(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DEFAULT_OBSOLETE_MESSAGE)
+	public static TooltipMessage CreateObsoleteTooltipMessage(EnumDropdownItem item, string obsoleteMessageToUseIfNull = DefaultObsoleteMessage)
 	{
 		return new TooltipMessage(CreateObsoleteTooltipIcon(item.Obsolete), CreateObsoleteTooltipText(item, obsoleteMessageToUseIfNull));
 	}
 
-	public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GENERIC_INFO, bool pushToStack = false)
+	public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GenericInfo, bool pushToStack = false)
 	{
 		if (tooltipDisplayer == null)
 		{
@@ -143,7 +143,7 @@ public static class TooltipUtil
 			return null;
 		}
 
-		(string url, string formattedText) = tooltipText.ExtractHRef(replacementStartTag: BaseStyles.LINK_START_TAGS, replacementEndTag: BaseStyles.LINK_END_TAGS);
+		(string url, string formattedText) = tooltipText.ExtractHRef(replacementStartTag: BaseStyles.LinkStartTags, replacementEndTag: BaseStyles.LinkEndTags);
 		if (!string.IsNullOrEmpty(url))
 		{
 			tooltipDisplayer.RegisterCallback<ClickEvent, string>((e, gotUrl) =>
@@ -155,7 +155,7 @@ public static class TooltipUtil
 			}, url);
 			tooltipDisplayer.userData = new[]
 			{
-				new TooltipMessage(BaseIcons.GENERIC_INFO, formattedText),
+				new TooltipMessage(BaseIcons.GenericInfo, formattedText),
 				TooltipMessage.Spacer,
 				TooltipMessage.OpenLinkInWebBrowser,
 			};
@@ -431,10 +431,10 @@ public static class TooltipUtil
 [UxmlElement]
 public partial class Tooltip : VisualElement
 {
-	const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Tooltip";
-	const string FOLLOW_MOUSE_STYLE_CLASS = "dld-tooltip__bg--follow-mouse";
-	const string FOLLOW_ELEMENT_STYLE_CLASS = "dld-tooltip__bg--follow-element";
-	const string TOOLTIP_ICON_STYLE_CLASS = "dld-tooltip__icon";
+	const string TemplateResourcesPath = "DLD UIToolkit/Tooltip";
+	const string FollowMouseStyleClass = "dld-tooltip__bg--follow-mouse";
+	const string FollowElementStyleClass = "dld-tooltip__bg--follow-element";
+	const string TooltipIconStyleClass = "dld-tooltip__icon";
 
 	enum ShowType
 	{
@@ -464,7 +464,7 @@ public partial class Tooltip : VisualElement
 
 	public Tooltip()
 	{
-		var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
+		var asset = Resources.Load<VisualTreeAsset>(TemplateResourcesPath);
 		asset.CloneTree(this);
 		this.RemoveTemplateContainer("Tooltip");
 
@@ -502,8 +502,8 @@ public partial class Tooltip : VisualElement
 
 		_lastAnchorPoint = ElementAnchorPoint.Mouse;
 		_showType = ShowType.FollowMouseCursor;
-		RemoveFromClassList(FOLLOW_ELEMENT_STYLE_CLASS);
-		AddToClassList(FOLLOW_MOUSE_STYLE_CLASS);
+		RemoveFromClassList(FollowElementStyleClass);
+		AddToClassList(FollowMouseStyleClass);
 		style.display = DisplayStyle.Flex;
 	}
 
@@ -534,8 +534,8 @@ public partial class Tooltip : VisualElement
 		this.SetPosition(localPos);
 
 		_showType = ShowType.AttachToVisualElement;
-		RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
-		AddToClassList(FOLLOW_ELEMENT_STYLE_CLASS);
+		RemoveFromClassList(FollowMouseStyleClass);
+		AddToClassList(FollowElementStyleClass);
 		style.display = DisplayStyle.Flex;
 	}
 
@@ -581,8 +581,8 @@ public partial class Tooltip : VisualElement
 	void _Hide()
 	{
 		_showType = ShowType.None;
-		RemoveFromClassList(FOLLOW_MOUSE_STYLE_CLASS);
-		RemoveFromClassList(FOLLOW_ELEMENT_STYLE_CLASS);
+		RemoveFromClassList(FollowMouseStyleClass);
+		RemoveFromClassList(FollowElementStyleClass);
 		style.display = DisplayStyle.None;
 
 		if (_messageRowCountUsed > 0)
@@ -746,7 +746,7 @@ public partial class Tooltip : VisualElement
 		var newIcon = new VisualElement();
 		if (!string.IsNullOrEmpty(iconClassName))
 		{
-			newIcon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
+			newIcon.AddToClassList(TooltipIconStyleClass);
 			newIcon.AddToClassList(iconClassName);
 		}
 
@@ -787,7 +787,7 @@ public partial class Tooltip : VisualElement
 				{
 					nextAvailable.Icon.style.display = DisplayStyle.Flex;
 					nextAvailable.Icon.ClearClassList();
-					nextAvailable.Icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
+					nextAvailable.Icon.AddToClassList(TooltipIconStyleClass);
 					nextAvailable.Icon.AddToClassList(iconClassName);
 				}
 				else
@@ -831,7 +831,7 @@ public partial class Tooltip : VisualElement
 			{
 				lastMessage.Icon.style.display = DisplayStyle.Flex;
 				lastMessage.Icon.ClearClassList();
-				lastMessage.Icon.AddToClassList(TOOLTIP_ICON_STYLE_CLASS);
+				lastMessage.Icon.AddToClassList(TooltipIconStyleClass);
 				lastMessage.Icon.AddToClassList(iconClassName);
 			}
 			else

@@ -246,10 +246,10 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		_isPanning = false;
 
 		// Also reset the mouse cursor.
-		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
-		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
-		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
+		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanDragStyleClass);
 		_mouseCursorDisplay.style.display = DisplayStyle.None;
 
 		// If drag-and-drop was happening, cancel it.
@@ -336,8 +336,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 					// Spacebar was released while dragging.
 					// That means user wants to stop panning while dragging.
 					// And we switch back to just dragging.
-					_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
-					_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
+					_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanDragStyleClass);
+					_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
 				}
 
 				break;
@@ -697,7 +697,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		{
 			if (_shift)
 			{
-				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.FORCE_MOVE, mousePos);
+				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.ForceMove, mousePos);
 			}
 			else
 			{
@@ -707,58 +707,58 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 
 		if (_isPanning)
 		{
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-			_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorDragStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+			_mouseCursorDisplay.AddToClassList(UITkUtil.MouseCursorPanDragStyleClass);
 			_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 		}
 		else if (_isDragging && _spacebarHeld)
 		{
 			// temporarily panning while dragging
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-			_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorDragStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+			_mouseCursorDisplay.AddToClassList(UITkUtil.MouseCursorPanDragStyleClass);
 			_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 		}
 		else if (_isDragging)
 		{
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanDragStyleClass);
+			_mouseCursorDisplay.AddToClassList(UITkUtil.MouseCursorDragStyleClass);
 			_mouseCursorDisplay.style.display = DisplayStyle.None;
 		}
 		else if (_ctrl && _spacebarHeld)
 		{
 			// zoom in
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
-			_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorDragStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+			_mouseCursorDisplay.AddToClassList(UITkUtil.MouseCursorZoomInStyleClass);
 			_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 		}
 		else if (_alt && _spacebarHeld)
 		{
 			// zoom out
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
-			_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorDragStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+			_mouseCursorDisplay.AddToClassList(UITkUtil.MouseCursorZoomOutStyleClass);
 			_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 		}
 		else if (_spacebarHeld)
 		{
 			// pan
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS);
-			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS);
-			_mouseCursorDisplay.AddToClassList(UITkUtil.MOUSE_CURSOR_PAN_STYLE_CLASS);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorDragStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+			_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanDragStyleClass);
+			_mouseCursorDisplay.AddToClassList(UITkUtil.MouseCursorPanStyleClass);
 			_mouseCursorDisplay.style.display = DisplayStyle.Flex;
 		}
 		else

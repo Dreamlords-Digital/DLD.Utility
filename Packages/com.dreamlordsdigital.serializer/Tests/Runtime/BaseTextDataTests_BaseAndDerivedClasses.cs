@@ -43,14 +43,14 @@ public abstract partial class BaseTextDataTests
 	{
 		Assert.AreEqual(8, deserialized.Count);
 
-		Assert.AreEqual(Derived2.DERIVED_2_TYPE, deserialized[0].MyType);
-		Assert.AreEqual(Derived1.DERIVED_1_TYPE, deserialized[1].MyType);
-		Assert.AreEqual(Derived2.DERIVED_2_TYPE, deserialized[2].MyType);
-		Assert.AreEqual(Derived1.DERIVED_1_TYPE, deserialized[3].MyType);
-		Assert.AreEqual(Derived3.DERIVED_3_TYPE, deserialized[4].MyType);
-		Assert.AreEqual(Derived2.DERIVED_2_TYPE, deserialized[5].MyType);
-		Assert.AreEqual(Derived1.DERIVED_1_TYPE, deserialized[6].MyType);
-		Assert.AreEqual(Derived1.DERIVED_1_TYPE, deserialized[7].MyType);
+		Assert.AreEqual(Derived2.Derived2Type, deserialized[0].MyType);
+		Assert.AreEqual(Derived1.Derived1Type, deserialized[1].MyType);
+		Assert.AreEqual(Derived2.Derived2Type, deserialized[2].MyType);
+		Assert.AreEqual(Derived1.Derived1Type, deserialized[3].MyType);
+		Assert.AreEqual(Derived3.Derived3Type, deserialized[4].MyType);
+		Assert.AreEqual(Derived2.Derived2Type, deserialized[5].MyType);
+		Assert.AreEqual(Derived1.Derived1Type, deserialized[6].MyType);
+		Assert.AreEqual(Derived1.Derived1Type, deserialized[7].MyType);
 
 		Assert.IsInstanceOf<Derived2>(deserialized[0]);
 		Assert.IsInstanceOf<Derived1>(deserialized[1]);
@@ -97,11 +97,11 @@ public abstract partial class BaseTextDataTests
 		// different kinds of derived types, will get deserialized
 		// properly (using ITextDataIO.FromSerializedString)
 
-		const int DERIVED11_NEW_FIELD_VALUE = 34;
-		const int DERIVED12_NEW_FIELD_VALUE = 7;
-		const int DERIVED13_NEW_FIELD_VALUE = -56;
+		const int Derived11NewFieldValue = 34;
+		const int Derived12NewFieldValue = 7;
+		const int Derived13NewFieldValue = -56;
 
-		var stuff = SetUpBaseAndDerivedList(DERIVED11_NEW_FIELD_VALUE, DERIVED12_NEW_FIELD_VALUE, DERIVED13_NEW_FIELD_VALUE);
+		var stuff = SetUpBaseAndDerivedList(Derived11NewFieldValue, Derived12NewFieldValue, Derived13NewFieldValue);
 
 		// --------------------------------------------
 
@@ -112,18 +112,18 @@ public abstract partial class BaseTextDataTests
 		// --------------------------------------------
 
 		AssertBaseAndDerivedList(stuff, deserialized,
-			DERIVED11_NEW_FIELD_VALUE, DERIVED12_NEW_FIELD_VALUE, DERIVED13_NEW_FIELD_VALUE);
+			Derived11NewFieldValue, Derived12NewFieldValue, Derived13NewFieldValue);
 	}
 
 
 	[Test(Description = "Ensure that a List of base type, but whose elements are different kinds of derived types, will get deserialized properly (using ITextDataIO.TryLoadFromLocal).")]
 	public void TryLoadFromLocal_OnPolymorphicList_DeserializesProperly()
 	{
-		const int DERIVED11_NEW_FIELD_VALUE = 48;
-		const int DERIVED12_NEW_FIELD_VALUE = -547;
-		const int NICE = 69;
+		const int Derived11NewFieldValue = 48;
+		const int Derived12NewFieldValue = -547;
+		const int Nice = 69;
 
-		var stuff = SetUpBaseAndDerivedList(DERIVED11_NEW_FIELD_VALUE, DERIVED12_NEW_FIELD_VALUE, NICE);
+		var stuff = SetUpBaseAndDerivedList(Derived11NewFieldValue, Derived12NewFieldValue, Nice);
 
 		// --------------------------------------------
 
@@ -134,7 +134,7 @@ public abstract partial class BaseTextDataTests
 		// --------------------------------------------
 
 		AssertBaseAndDerivedList(stuff, deserialized,
-			DERIVED11_NEW_FIELD_VALUE, DERIVED12_NEW_FIELD_VALUE, NICE);
+			Derived11NewFieldValue, Derived12NewFieldValue, Nice);
 
 		// done with our temporary serialized class,
 		// delete its file so it doesn't waste space
@@ -171,23 +171,23 @@ public abstract partial class BaseTextDataTests
 	[Test(Description = "Try deserializing a list of base class, where the elements are different derived types. A full type hint is included for each.")]
 	public void FromSerializedString_OnPolymorphicListWithFullTypeHint_DeserializesProperly()
 	{
-		const string SERIALIZED = @"
+		const string Serialized = @"
 {
-	""" + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser, DLD.Serializer.Tests"",
+	""" + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.BaseAndDerivedClassUser, DLD.Serializer.Tests"",
 	""List"":
 	[
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived2, DLD.Serializer.Tests"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived2, DLD.Serializer.Tests"",
 			 ""ID"": null
 		 },
 		 {
-			 """ + BaseTextDataIO.TYPE_HINT_NAME + @""": ""DLD.Serializer.Tests.Derived1, DLD.Serializer.Tests"",
+			 """ + BaseTextDataIO.TypeHintName + @""": ""DLD.Serializer.Tests.Derived1, DLD.Serializer.Tests"",
 			 ""ID"": null,
 			 ""MyField"": 32
 		 }
 	]
 }";
-		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(SERIALIZED);
+		var deserialized = _textDataIO.FromSerializedString<BaseAndDerivedClassUser>(Serialized);
 		Assert.IsNotNull(deserialized);
 		Assert.AreEqual(2, deserialized.Count);
 

@@ -9,7 +9,7 @@ namespace DLD.Utility.Inspector.Editor
 [CustomPropertyDrawer(typeof(FixedTimestepInfoAttribute))]
 public class FixedTimestepInfoPropertyDrawer : PropertyDrawer
 {
-	const int SPACING = 3;
+	const int Spacing = 3;
 
 	static readonly GUIContent GUIContentBuffer = new();
 
@@ -36,7 +36,7 @@ public class FixedTimestepInfoPropertyDrawer : PropertyDrawer
 		GUIContentBuffer.text = message;
 		float messageHeight = EditorStyles.helpBox.CalcHeight(GUIContentBuffer, EditorGUIUtility.currentViewWidth);
 
-		return EditorGUI.GetPropertyHeight(property, label, true) + SPACING + messageHeight + SPACING;
+		return EditorGUI.GetPropertyHeight(property, label, true) + Spacing + messageHeight + Spacing;
 	}
 
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -60,12 +60,12 @@ public class FixedTimestepInfoPropertyDrawer : PropertyDrawer
 
 
 		Rect propertyRect = new Rect(position);
-		propertyRect.height = position.height - SPACING - messageHeight - SPACING;
+		propertyRect.height = position.height - Spacing - messageHeight - Spacing;
 		EditorGUI.PropertyField(propertyRect, property, label, true);
 
 
 		Rect messageRect = new Rect(position);
-		messageRect.y += propertyRect.height + SPACING;
+		messageRect.y += propertyRect.height + Spacing;
 		messageRect.height = messageHeight;
 		GUI.Label(messageRect, GUIContentBuffer, EditorStyles.helpBox);
 	}

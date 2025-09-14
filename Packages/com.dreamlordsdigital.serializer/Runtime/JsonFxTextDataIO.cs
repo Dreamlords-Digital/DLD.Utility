@@ -86,7 +86,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 	{
 		readerSettings.AllowNullValueTypes = true;
 		readerSettings.AllowUnquotedObjectKeys = true;
-		readerSettings.TypeHintName = TYPE_HINT_NAME;
+		readerSettings.TypeHintName = TypeHintName;
 		readerSettings.SetFieldSerializationRule(Rule);
 		readerSettings.SetFieldSerializedName(Name);
 		AdditionalReaderInitialization(readerSettings);
@@ -102,7 +102,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 		{
 			_writerSettings.PrettyPrint = true;
 			_writerSettings.Tab = "  ";
-			_writerSettings.TypeHintName = TYPE_HINT_NAME;
+			_writerSettings.TypeHintName = TypeHintName;
 			_writerSettings.TypeHintsOnlyWhenNeeded = true;
 			_writerSettings.SetFieldSerializationRule(Rule);
 			_writerSettings.SetFieldSerializedName(Name);
@@ -211,7 +211,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 		writer.Write(data);
 	}
 
-	protected override void SerializeObjectToFile<T>(T data, string filePath, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM)
+	protected override void SerializeObjectToFile<T>(T data, string filePath, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm)
 	{
 		InitializeWriterIfNeeded();
 		using var writer = new JsonWriterWithHasher(filePath, _writerSettings, hashAlgorithmName);
@@ -246,7 +246,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 		return returnValue;
 	}
 
-	protected override string SerializeObject<T>(T data, out string hash, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM)
+	protected override string SerializeObject<T>(T data, out string hash, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm)
 	{
 		InitializeWriterIfNeeded();
 		TextWriter stringWriter = new StringWriter();
@@ -276,7 +276,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 	/// <param name="hashAlgorithmName"></param>
 	/// <typeparam name="T"></typeparam>
 	/// <returns></returns>
-	protected override string GetObjectHash<T>(T data, string hashAlgorithmName = ITextDataIO.DEFAULT_HASH_ALGORITHM)
+	protected override string GetObjectHash<T>(T data, string hashAlgorithmName = ITextDataIO.DefaultHashAlgorithm)
 	{
 		InitializeWriterIfNeeded();
 		var hashGenerator = new HashGenerator(_writerSettings, hashAlgorithmName);

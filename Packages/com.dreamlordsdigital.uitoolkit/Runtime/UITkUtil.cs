@@ -9,11 +9,11 @@ namespace DLD.UIToolkit
 
 public static class UITkUtil
 {
-	public const string MOUSE_CURSOR_PAN_STYLE_CLASS = "dld-mouse-cursor--pan";
-	public const string MOUSE_CURSOR_PAN_DRAG_STYLE_CLASS = "dld-mouse-cursor--pan-drag";
-	public const string MOUSE_CURSOR_ZOOM_IN_STYLE_CLASS = "dld-mouse-cursor--zoom-in";
-	public const string MOUSE_CURSOR_ZOOM_OUT_STYLE_CLASS = "dld-mouse-cursor--zoom-out";
-	public const string MOUSE_CURSOR_DRAG_STYLE_CLASS = "dld-mouse-cursor--normal-drag";
+	public const string MouseCursorPanStyleClass = "dld-mouse-cursor--pan";
+	public const string MouseCursorPanDragStyleClass = "dld-mouse-cursor--pan-drag";
+	public const string MouseCursorZoomInStyleClass = "dld-mouse-cursor--zoom-in";
+	public const string MouseCursorZoomOutStyleClass = "dld-mouse-cursor--zoom-out";
+	public const string MouseCursorDragStyleClass = "dld-mouse-cursor--normal-drag";
 
 	/// <summary>
 	///    <para>Default reference zoom level.</para>
@@ -145,11 +145,11 @@ public static class UITkUtil
 		}
 
 		var icon = new VisualElement();
-		icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+		icon.AddToClassList(BaseIcons.IconStyleClass);
 		icon.AddToClassList(iconClassName);
 
 		button.Add(icon);
-		button.AddToClassList(BaseStyles.TOGGLE_WITH_ICON_STYLE_CLASS);
+		button.AddToClassList(BaseStyles.ToggleWithIconStyleClass);
 
 		if (!string.IsNullOrWhiteSpace(label))
 		{

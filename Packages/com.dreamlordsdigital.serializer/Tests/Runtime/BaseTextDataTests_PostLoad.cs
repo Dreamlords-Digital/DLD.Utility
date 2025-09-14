@@ -15,7 +15,7 @@ public abstract partial class BaseTextDataTests
 
 		post.ID = id;
 		Assert.AreEqual(0, post.TimesPostLoadGotCalled);
-		Assert.AreEqual(PostLoadClass.FILENAME_GOT_DEFAULT, post.FilenameGotFromPostLoad);
+		Assert.AreEqual(PostLoadClass.FilenameGotDefault, post.FilenameGotFromPostLoad);
 
 		return post;
 	}
@@ -40,7 +40,7 @@ public abstract partial class BaseTextDataTests
 		// PostLoad() was called on the deserialized copy, not the original
 		// the original should not have had their PostLoad() called
 		Assert.AreEqual(0, post.TimesPostLoadGotCalled);
-		Assert.AreEqual(PostLoadClass.FILENAME_GOT_DEFAULT, post.FilenameGotFromPostLoad);
+		Assert.AreEqual(PostLoadClass.FilenameGotDefault, post.FilenameGotFromPostLoad);
 	}
 
 	[Test(Description = "Ensure ITextData.PostLoad really gets called on deserialized objects after call to ITextDataIO.TryLoadFromLocal.")]
@@ -64,7 +64,7 @@ public abstract partial class BaseTextDataTests
 		// PostLoad() was called on the deserialized copy, not the original
 		// the original should not have had their PostLoad() called
 		Assert.AreEqual(0, post.TimesPostLoadGotCalled);
-		Assert.AreEqual(PostLoadClass.FILENAME_GOT_DEFAULT, post.FilenameGotFromPostLoad);
+		Assert.AreEqual(PostLoadClass.FilenameGotDefault, post.FilenameGotFromPostLoad);
 
 		// -----------------------------------------------
 
@@ -78,24 +78,24 @@ public abstract partial class BaseTextDataTests
 	{
 		// -----------------------------------------------
 
-		const string POST1 = "post1";
-		const string POST2 = "post2";
-		const string POST3 = "post3";
+		const string Post1 = "post1";
+		const string Post2 = "post2";
+		const string Post3 = "post3";
 
-		var post1 = CreatePostLoadClass(POST1);
-		var post2 = CreatePostLoadClass(POST2);
-		var post3 = CreatePostLoadClass(POST3);
+		var post1 = CreatePostLoadClass(Post1);
+		var post2 = CreatePostLoadClass(Post2);
+		var post3 = CreatePostLoadClass(Post3);
 
 		// -----------------------------------------------
 
 		var savePath = string.Format("{0}PostFiles/", SavePath);
 
-		const string POST1_FILENAME = "postLoadA1.txt";
-		const string POST2_FILENAME = "postLoad2B.txt";
-		const string POST3_FILENAME = "postLoad9C.txt";
-		var post1SavePath = string.Format("{0}{1}", savePath, POST1_FILENAME);
-		var post2SavePath = string.Format("{0}{1}", savePath, POST2_FILENAME);
-		var post3SavePath = string.Format("{0}{1}", savePath, POST3_FILENAME);
+		const string Post1Filename = "postLoadA1.txt";
+		const string Post2Filename = "postLoad2B.txt";
+		const string Post3Filename = "postLoad9C.txt";
+		var post1SavePath = string.Format("{0}{1}", savePath, Post1Filename);
+		var post2SavePath = string.Format("{0}{1}", savePath, Post2Filename);
+		var post3SavePath = string.Format("{0}{1}", savePath, Post3Filename);
 
 		_textDataIO.SaveToLocal(post1SavePath, post1);
 		_textDataIO.SaveToLocal(post2SavePath, post2);
@@ -135,30 +135,30 @@ public abstract partial class BaseTextDataTests
 		{
 			Assert.AreEqual(1, outputList[n].TimesPostLoadGotCalled);
 
-			if (outputList[n].ID == POST1)
+			if (outputList[n].ID == Post1)
 			{
-				Assert.AreEqual(POST1_FILENAME, outputList[n].FilenameGotFromPostLoad);
+				Assert.AreEqual(Post1Filename, outputList[n].FilenameGotFromPostLoad);
 			}
-			else if (outputList[n].ID == POST2)
+			else if (outputList[n].ID == Post2)
 			{
-				Assert.AreEqual(POST2_FILENAME, outputList[n].FilenameGotFromPostLoad);
+				Assert.AreEqual(Post2Filename, outputList[n].FilenameGotFromPostLoad);
 			}
-			else if (outputList[n].ID == POST3)
+			else if (outputList[n].ID == Post3)
 			{
-				Assert.AreEqual(POST3_FILENAME, outputList[n].FilenameGotFromPostLoad);
+				Assert.AreEqual(Post3Filename, outputList[n].FilenameGotFromPostLoad);
 			}
 		}
 
 		// PostLoad() was called on the deserialized copies, not the original objects
 		// the originals should not have had their PostLoad() called
 		Assert.AreEqual(0, post1.TimesPostLoadGotCalled);
-		Assert.AreEqual(PostLoadClass.FILENAME_GOT_DEFAULT, post1.FilenameGotFromPostLoad);
+		Assert.AreEqual(PostLoadClass.FilenameGotDefault, post1.FilenameGotFromPostLoad);
 
 		Assert.AreEqual(0, post2.TimesPostLoadGotCalled);
-		Assert.AreEqual(PostLoadClass.FILENAME_GOT_DEFAULT, post2.FilenameGotFromPostLoad);
+		Assert.AreEqual(PostLoadClass.FilenameGotDefault, post2.FilenameGotFromPostLoad);
 
 		Assert.AreEqual(0, post3.TimesPostLoadGotCalled);
-		Assert.AreEqual(PostLoadClass.FILENAME_GOT_DEFAULT, post3.FilenameGotFromPostLoad);
+		Assert.AreEqual(PostLoadClass.FilenameGotDefault, post3.FilenameGotFromPostLoad);
 
 		// -----------------------------------------------
 

@@ -10,14 +10,14 @@ namespace DLD.Utility
 
 public static class BuildInfoUtil
 {
-	public const string BUILD_DATE_TIME_FILENAME = "BuildDateTime.txt";
-	public const string BUILD_COMMIT_HASH_FILENAME = "CommitHash.txt";
-	public const string DISPLAY_DATE_TIME_FORMAT = "yyyy MMM dd ddd hh:mm:ss tt UTCz";
+	public const string BuildDateTimeFilename = "BuildDateTime.txt";
+	public const string BuildCommitHashFilename = "CommitHash.txt";
+	public const string DisplayDateTimeFormat = "yyyy MMM dd ddd hh:mm:ss tt UTCz";
 
 	public static (string, string) GetBuildDateAndCommitHash()
 	{
 #if UNITY_EDITOR
-		return (System.DateTime.UtcNow.ToLocalTime().ToString(DISPLAY_DATE_TIME_FORMAT),
+		return (System.DateTime.UtcNow.ToLocalTime().ToString(DisplayDateTimeFormat),
 			GitCommands.GetCurrentCommitHashWithUncommittedChanges());
 #else
 			string streamingAssetsPath = Application.streamingAssetsPath;
@@ -34,10 +34,10 @@ public static class BuildInfoUtil
 				return (null, null);
 			}
 
-			string buildDateTimeFilePath = Path.Combine(streamingAssetsPath, BUILD_DATE_TIME_FILENAME);
+			string buildDateTimeFilePath = Path.Combine(streamingAssetsPath, BuildDateTimeFilename);
 			string buildDateTimeValue = File.Exists(buildDateTimeFilePath) ? File.ReadAllText(buildDateTimeFilePath) : null;
 
-			string buildCommitHashFilePath = Path.Combine(streamingAssetsPath, BUILD_COMMIT_HASH_FILENAME);
+			string buildCommitHashFilePath = Path.Combine(streamingAssetsPath, BuildCommitHashFilename);
 			string buildCommitHashValue = File.Exists(buildCommitHashFilePath) ? File.ReadAllText(buildCommitHashFilePath) : null;
 
 			return (buildDateTimeValue, buildCommitHashValue);

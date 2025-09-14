@@ -32,11 +32,11 @@ public class PostLoadClass : ITextData
 
 	// -----------------------------
 
-	public const string FILENAME_GOT_DEFAULT = "No Value";
+	public const string FilenameGotDefault = "No Value";
 
 	public PostLoadClass()
 	{
-		_filenameGotFromPostLoad = FILENAME_GOT_DEFAULT;
+		_filenameGotFromPostLoad = FilenameGotDefault;
 	}
 
 	// -----------------------------

@@ -153,9 +153,9 @@ public static class StringUtil
 	/// <returns></returns>
 	public static string ToPlusMinusNumber(this int me)
 	{
-		const string FORMAT = "+#;-#;0";
+		const string Format = "+#;-#;0";
 
-		return me.ToString(FORMAT, CultureInfo.InvariantCulture);
+		return me.ToString(Format, CultureInfo.InvariantCulture);
 	}
 
 	/// <summary>
@@ -165,9 +165,9 @@ public static class StringUtil
 	/// </summary>
 	public static string ToPlusMinusNumberNoZero(this int me)
 	{
-		const string FORMAT = "+#;-#; ";
+		const string Format = "+#;-#; ";
 
-		return me.ToString(FORMAT, CultureInfo.InvariantCulture);
+		return me.ToString(Format, CultureInfo.InvariantCulture);
 	}
 
 	/// <summary>

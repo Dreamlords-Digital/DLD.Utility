@@ -29,13 +29,13 @@ public class ShowIfPropertyDrawer : PropertyDrawer
 		return EditorGUI.GetPropertyHeight(property, label, true);
 	}
 
-	const string ARRAY_START_MARKER = ".Array.data[";
+	const string ArrayStartMarker = ".Array.data[";
 
 	public static bool IsConditionMet(SerializedProperty property, string propertyNameToCheck, object valueToCheckAgainst, ComparisonType comparisonType)
 	{
 		SerializedProperty fieldToCheck;
 
-		if (property.propertyPath.Contains(ARRAY_START_MARKER))
+		if (property.propertyPath.Contains(ArrayStartMarker))
 		{
 			string relativePath =
 				property.propertyPath.Substring(0, property.propertyPath.LastIndexOf(".", StringComparison.Ordinal));

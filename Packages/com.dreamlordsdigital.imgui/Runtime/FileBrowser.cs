@@ -679,12 +679,12 @@ public partial class FileBrowser
 	bool IsFilenameAnAssetBundle(string filename)
 	{
 		return filename != null &&
-		       filename.EndsWith(FileUtil.ASSET_BUNDLE_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase);
+		       filename.EndsWith(FileUtil.AssetBundleFileExtension, StringComparison.OrdinalIgnoreCase);
 	}
 
 	int GetAnimationClipCount(string animationFullPath)
 	{
-		if (animationFullPath.Contains(FileUtil.RESOURCES_FOLDER, StringComparison.OrdinalIgnoreCase))
+		if (animationFullPath.Contains(FileUtil.ResourcesFolder, StringComparison.OrdinalIgnoreCase))
 		{
 			// fbx to "open" is in a Resources folder
 
@@ -772,9 +772,9 @@ public partial class FileBrowser
 
 
 		// check for indications that the path specifies a virtual folder
-		var enteredFbxIdx = fullPath.IndexOf(FileUtil.ENTERED_FBX_FILE, StringComparison.OrdinalIgnoreCase);
+		var enteredFbxIdx = fullPath.IndexOf(FileUtil.EnteredFbxFile, StringComparison.OrdinalIgnoreCase);
 		var enteredAssetBundleIdx =
-			fullPath.IndexOf(FileUtil.ENTERED_ASSET_BUNDLE_FILE, StringComparison.OrdinalIgnoreCase);
+			fullPath.IndexOf(FileUtil.EnteredAssetBundleFile, StringComparison.OrdinalIgnoreCase);
 		if (enteredFbxIdx > 0 || enteredAssetBundleIdx > 0)
 		{
 			if (enteredAssetBundleIdx > 0)
@@ -811,14 +811,14 @@ public partial class FileBrowser
 
 					// the fbx filename (without any path)
 					virtualFolderSpecified = fullPath.Substring(lastFolderIdx + 1,
-						(enteredFbxIdx + FileUtil.FBX_FILE_EXTENSION_LEN) - lastFolderIdx - 1);
+						(enteredFbxIdx + FileUtil.FbxFileExtensionLen) - lastFolderIdx - 1);
 
 					// anything after the colon. this is the animation clip name
-					virtualFileSpecified = fullPath.Substring(enteredFbxIdx + FileUtil.ENTERED_FBX_FILE_LEN);
+					virtualFileSpecified = fullPath.Substring(enteredFbxIdx + FileUtil.EnteredFbxFileLen);
 
 					// from the real (absolute) path up to the fbx file, without the colon
 					virtualFolderSpecifiedAbsPath =
-						fullPath.Substring(0, enteredFbxIdx + FileUtil.FBX_FILE_EXTENSION_LEN);
+						fullPath.Substring(0, enteredFbxIdx + FileUtil.FbxFileExtensionLen);
 
 					// the real (absolute) path but only folders, not including the fbx filename or anything after that
 					fullPath = fullPath.Substring(0, lastFolderIdx);
@@ -887,7 +887,7 @@ public partial class FileBrowser
 			}
 			else if (IsBrowserTypeForAnimations)
 			{
-				if (fullPath.EndsWith(FileUtil.FBX_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+				if (fullPath.EndsWith(FileUtil.FbxFileExtension, StringComparison.OrdinalIgnoreCase))
 				{
 					// going inside fbx file to view animation clips inside
 
@@ -1266,7 +1266,7 @@ public partial class FileBrowser
 						// note: this method only works in editor (not runtime)
 						// for runtime, animations have to be contained inside an AssetBundle
 
-						if (newPathToRead.Contains(FileUtil.RESOURCES_FOLDER, StringComparison.OrdinalIgnoreCase))
+						if (newPathToRead.Contains(FileUtil.ResourcesFolder, StringComparison.OrdinalIgnoreCase))
 						{
 							// fbx to "open" is in a Resources folder
 
@@ -1364,7 +1364,7 @@ public partial class FileBrowser
 							}
 
 							if (matchingFilesFromPattern[0]
-							    .EndsWith(FileUtil.FBX_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+							    .EndsWith(FileUtil.FbxFileExtension, StringComparison.OrdinalIgnoreCase))
 							{
 								// these are fbx files
 								for (int n = 0, len = matchingFilesFromPattern.Length; n < len; ++n)
@@ -1725,7 +1725,7 @@ public partial class FileBrowser
 				icon = _unityProjectFolderImage;
 			}
 			else if (folderName != null &&
-			         folderName.EndsWith(FileUtil.FBX_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+			         folderName.EndsWith(FileUtil.FbxFileExtension, StringComparison.OrdinalIgnoreCase))
 			{
 				icon = _prefabImage;
 			}
@@ -1784,7 +1784,7 @@ public partial class FileBrowser
 					_currentPathPartsDisplayed[n].image = _unityProjectFolderImage;
 				}
 				else if (_currentPathParts[n] != null &&
-				         _currentPathParts[n].EndsWith(FileUtil.FBX_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+				         _currentPathParts[n].EndsWith(FileUtil.FbxFileExtension, StringComparison.OrdinalIgnoreCase))
 				{
 					_currentPathPartsDisplayed[n].image = _prefabImage;
 				}
@@ -1833,11 +1833,11 @@ public partial class FileBrowser
 				}
 				else if (_files[i] != null)
 				{
-					if (_files[i].EndsWith(FileUtil.FBX_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+					if (_files[i].EndsWith(FileUtil.FbxFileExtension, StringComparison.OrdinalIgnoreCase))
 					{
 						icon = _prefabImage;
 					}
-					else if (_files[i].EndsWith(FileUtil.ANIM_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+					else if (_files[i].EndsWith(FileUtil.AnimFileExtension, StringComparison.OrdinalIgnoreCase))
 					{
 						icon = _animationClipImage;
 					}
@@ -3221,7 +3221,7 @@ Screen.height: {
 		       _operationType == OperationType.Open &&
 		       realPath.Contains(Application.dataPath, StringComparison.OrdinalIgnoreCase) &&
 		       !string.IsNullOrEmpty(virtualFolder) &&
-		       virtualFolder.EndsWith(FileUtil.FBX_FILE_EXTENSION,
+		       virtualFolder.EndsWith(FileUtil.FbxFileExtension,
 			       StringComparison.OrdinalIgnoreCase);
 	}
 
@@ -3230,7 +3230,7 @@ Screen.height: {
 		// note: this only works in editor time because Application.dataPath doesn't have the project path in runtime
 		return path.Contains(Application.dataPath, StringComparison.OrdinalIgnoreCase) &&
 		       Application.isEditor &&
-		       path.Contains(FileUtil.RESOURCES_FOLDER, StringComparison.OrdinalIgnoreCase);
+		       path.Contains(FileUtil.ResourcesFolder, StringComparison.OrdinalIgnoreCase);
 	}
 
 	protected void FileDoubleClickCallback(int idxOfSelectedItem, string label)
@@ -3245,7 +3245,7 @@ Screen.height: {
 				// if the fbx only has 1 animation inside, then don't bother going inside it,
 				// just select that 1 animation already
 
-				if (_currentPath.Contains(FileUtil.RESOURCES_FOLDER, StringComparison.OrdinalIgnoreCase))
+				if (_currentPath.Contains(FileUtil.ResourcesFolder, StringComparison.OrdinalIgnoreCase))
 				{
 					// fbx to "open" is in a Resources folder
 

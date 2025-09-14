@@ -11,54 +11,54 @@ public class ByteTests
 	[Test(Description = "FindBitIndex returns correct value.")]
 	public void FindBitIndex_Works()
 	{
-		const int NO_BIT_SET = 0;
-		Assert.AreEqual(-1, NO_BIT_SET.FindBitIndex());
+		const int NoBitSet = 0;
+		Assert.AreEqual(-1, NoBitSet.FindBitIndex());
 
-		const int FIRST_BIT_SET = 0b00000001;
-		Assert.AreEqual(0, FIRST_BIT_SET.FindBitIndex());
+		const int FirstBitSet = 0b00000001;
+		Assert.AreEqual(0, FirstBitSet.FindBitIndex());
 
-		const int SECOND_BIT_SET = 0b00000010;
-		Assert.AreEqual(1, SECOND_BIT_SET.FindBitIndex());
+		const int SecondBitSet = 0b00000010;
+		Assert.AreEqual(1, SecondBitSet.FindBitIndex());
 
-		const int THIRD_BIT_SET = 0b00000100;
-		Assert.AreEqual(2, THIRD_BIT_SET.FindBitIndex());
+		const int ThirdBitSet = 0b00000100;
+		Assert.AreEqual(2, ThirdBitSet.FindBitIndex());
 
-		const int LAST_BIT = 1 << 31;
-		Assert.AreEqual(31, LAST_BIT.FindBitIndex());
+		const int LastBit = 1 << 31;
+		Assert.AreEqual(31, LastBit.FindBitIndex());
 	}
 
 	[Test(Description = "FindBitIndex returns correct value.")]
 	public void FindBitIndex_OnNonPowerOfTwo_ReturnsFirstBitSet()
 	{
-		const int BIT_1_AND_3_SET = 0b00000101;
-		Assert.AreEqual(0, BIT_1_AND_3_SET.FindBitIndex());
+		const int Bit1And3Set = 0b00000101;
+		Assert.AreEqual(0, Bit1And3Set.FindBitIndex());
 
-		const int BIT_5_AND_ABOVE_SET = 0b01110000;
-		Assert.AreEqual(4, BIT_5_AND_ABOVE_SET.FindBitIndex());
+		const int Bit5AndAboveSet = 0b01110000;
+		Assert.AreEqual(4, Bit5AndAboveSet.FindBitIndex());
 	}
 
 	[Test(Description = "GetFlag returns correct value for 8-bit integer (byte).")]
 	public void GetFlag_For8BitInt_Works()
 	{
-		const byte BIT_1_AND_3_SET = 0b00000101;
-		Assert.AreEqual(true, BIT_1_AND_3_SET.GetFlag(0));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(1));
-		Assert.AreEqual(true, BIT_1_AND_3_SET.GetFlag(2));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(3));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(4));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(5));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(6));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(7));
+		const byte Bit1And3Set = 0b00000101;
+		Assert.AreEqual(true, Bit1And3Set.GetFlag(0));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(1));
+		Assert.AreEqual(true, Bit1And3Set.GetFlag(2));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(3));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(4));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(5));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(6));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(7));
 
-		const byte LAST_BIT = 0b10000000;
-		Assert.AreEqual(false, LAST_BIT.GetFlag(0));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(1));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(2));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(3));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(4));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(5));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(6));
-		Assert.AreEqual(true, LAST_BIT.GetFlag(7));
+		const byte LastBit = 0b10000000;
+		Assert.AreEqual(false, LastBit.GetFlag(0));
+		Assert.AreEqual(false, LastBit.GetFlag(1));
+		Assert.AreEqual(false, LastBit.GetFlag(2));
+		Assert.AreEqual(false, LastBit.GetFlag(3));
+		Assert.AreEqual(false, LastBit.GetFlag(4));
+		Assert.AreEqual(false, LastBit.GetFlag(5));
+		Assert.AreEqual(false, LastBit.GetFlag(6));
+		Assert.AreEqual(true, LastBit.GetFlag(7));
 	}
 
 	[Test(Description = "SetFlag returns correct value for unsigned 8-bit integer (byte).")]
@@ -77,73 +77,73 @@ public class ByteTests
 	[Test(Description = "GetFlag returns correct value for 32-bit integer (int).")]
 	public void GetFlag_For32BitInt_Works()
 	{
-		const int BIT_1_AND_3_SET = 0b0000101;
-		Assert.AreEqual(true, BIT_1_AND_3_SET.GetFlag(0));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(1));
-		Assert.AreEqual(true, BIT_1_AND_3_SET.GetFlag(2));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(3));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(4));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(5));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(6));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(7));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(8));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(9));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(10));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(11));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(12));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(13));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(14));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(15));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(16));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(17));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(18));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(19));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(20));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(21));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(22));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(23));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(24));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(25));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(26));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(27));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(28));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(29));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(30));
-		Assert.AreEqual(false, BIT_1_AND_3_SET.GetFlag(31));
+		const int Bit1And3Set = 0b0000101;
+		Assert.AreEqual(true, Bit1And3Set.GetFlag(0));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(1));
+		Assert.AreEqual(true, Bit1And3Set.GetFlag(2));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(3));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(4));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(5));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(6));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(7));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(8));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(9));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(10));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(11));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(12));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(13));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(14));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(15));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(16));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(17));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(18));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(19));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(20));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(21));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(22));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(23));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(24));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(25));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(26));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(27));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(28));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(29));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(30));
+		Assert.AreEqual(false, Bit1And3Set.GetFlag(31));
 
-		const int LAST_BIT = 1 << 31;
-		Assert.AreEqual(false, LAST_BIT.GetFlag(0));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(1));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(2));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(3));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(4));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(5));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(6));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(7));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(8));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(9));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(10));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(11));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(12));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(13));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(14));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(15));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(16));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(17));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(18));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(19));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(20));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(21));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(22));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(23));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(24));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(25));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(26));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(27));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(28));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(29));
-		Assert.AreEqual(false, LAST_BIT.GetFlag(30));
-		Assert.AreEqual(true, LAST_BIT.GetFlag(31));
+		const int LastBit = 1 << 31;
+		Assert.AreEqual(false, LastBit.GetFlag(0));
+		Assert.AreEqual(false, LastBit.GetFlag(1));
+		Assert.AreEqual(false, LastBit.GetFlag(2));
+		Assert.AreEqual(false, LastBit.GetFlag(3));
+		Assert.AreEqual(false, LastBit.GetFlag(4));
+		Assert.AreEqual(false, LastBit.GetFlag(5));
+		Assert.AreEqual(false, LastBit.GetFlag(6));
+		Assert.AreEqual(false, LastBit.GetFlag(7));
+		Assert.AreEqual(false, LastBit.GetFlag(8));
+		Assert.AreEqual(false, LastBit.GetFlag(9));
+		Assert.AreEqual(false, LastBit.GetFlag(10));
+		Assert.AreEqual(false, LastBit.GetFlag(11));
+		Assert.AreEqual(false, LastBit.GetFlag(12));
+		Assert.AreEqual(false, LastBit.GetFlag(13));
+		Assert.AreEqual(false, LastBit.GetFlag(14));
+		Assert.AreEqual(false, LastBit.GetFlag(15));
+		Assert.AreEqual(false, LastBit.GetFlag(16));
+		Assert.AreEqual(false, LastBit.GetFlag(17));
+		Assert.AreEqual(false, LastBit.GetFlag(18));
+		Assert.AreEqual(false, LastBit.GetFlag(19));
+		Assert.AreEqual(false, LastBit.GetFlag(20));
+		Assert.AreEqual(false, LastBit.GetFlag(21));
+		Assert.AreEqual(false, LastBit.GetFlag(22));
+		Assert.AreEqual(false, LastBit.GetFlag(23));
+		Assert.AreEqual(false, LastBit.GetFlag(24));
+		Assert.AreEqual(false, LastBit.GetFlag(25));
+		Assert.AreEqual(false, LastBit.GetFlag(26));
+		Assert.AreEqual(false, LastBit.GetFlag(27));
+		Assert.AreEqual(false, LastBit.GetFlag(28));
+		Assert.AreEqual(false, LastBit.GetFlag(29));
+		Assert.AreEqual(false, LastBit.GetFlag(30));
+		Assert.AreEqual(true, LastBit.GetFlag(31));
 	}
 
 	[Test(Description = "SetFlag returns correct value for signed 32-bit integer (int).")]

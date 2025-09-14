@@ -111,13 +111,13 @@ public abstract partial class BaseTextDataTests
 		// -----------------------------------------------
 
 		var savePath = string.Format("{0}TreeGraphs/", SavePath);
-		const string ROOT1_FILENAME = "Root1.txt";
-		const string ROOT2_FILENAME = "Root2.txt";
-		const string ROOT3_FILENAME = "Root3.txt";
+		const string Root1Filename = "Root1.txt";
+		const string Root2Filename = "Root2.txt";
+		const string Root3Filename = "Root3.txt";
 
-		var root1SavePath = string.Format("{0}{1}", savePath, ROOT1_FILENAME);
-		var root2SavePath = string.Format("{0}{1}", savePath, ROOT2_FILENAME);
-		var root3SavePath = string.Format("{0}{1}", savePath, ROOT3_FILENAME);
+		var root1SavePath = string.Format("{0}{1}", savePath, Root1Filename);
+		var root2SavePath = string.Format("{0}{1}", savePath, Root2Filename);
+		var root3SavePath = string.Format("{0}{1}", savePath, Root3Filename);
 
 		_textDataIO.SaveToLocal(root1SavePath, root1);
 		_textDataIO.SaveToLocal(root2SavePath, root2);

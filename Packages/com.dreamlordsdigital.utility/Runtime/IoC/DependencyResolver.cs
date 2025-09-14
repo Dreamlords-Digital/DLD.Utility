@@ -16,30 +16,30 @@ public class DependencyResolver : IDependencyResolver
 {
 	// ======================================================================================
 
-	const int SINGLETON_INITIAL_SIZE = 20;
-	const int POOL_INITIAL_SIZE = 5;
-	const int POOL_LIST_INITIAL_SIZE = 5;
+	const int SingletonInitialSize = 20;
+	const int PoolInitialSize = 5;
+	const int PoolListInitialSize = 5;
 
 	// ======================================================================================
 
 	readonly IDictionary<Type, object> _singletons =
-		new Dictionary<Type, object>(SINGLETON_INITIAL_SIZE);
+		new Dictionary<Type, object>(SingletonInitialSize);
 
 	readonly IDictionary<string, object> _singletonsWithId =
-		new Dictionary<string, object>(SINGLETON_INITIAL_SIZE);
+		new Dictionary<string, object>(SingletonInitialSize);
 
 	readonly IDictionary<Type, IList<IPooled>> _pools =
-		new Dictionary<Type, IList<IPooled>>(POOL_INITIAL_SIZE);
+		new Dictionary<Type, IList<IPooled>>(PoolInitialSize);
 
 	readonly IDictionary<string, IList<IPooled>> _poolsWithId =
-		new Dictionary<string, IList<IPooled>>(POOL_INITIAL_SIZE);
+		new Dictionary<string, IList<IPooled>>(PoolInitialSize);
 
 
 	readonly IDictionary<Type, object> _poolsInUse =
-		new Dictionary<Type, object>(POOL_INITIAL_SIZE);
+		new Dictionary<Type, object>(PoolInitialSize);
 
 	readonly IDictionary<string, object> _poolsWithIdInUse =
-		new Dictionary<string, object>(POOL_INITIAL_SIZE);
+		new Dictionary<string, object>(PoolInitialSize);
 
 	// ======================================================================================
 
@@ -299,7 +299,7 @@ public class DependencyResolver : IDependencyResolver
 
 			if (!_pools.ContainsKey(typeof(T)))
 			{
-				_pools[typeof(T)] = new List<IPooled>(POOL_LIST_INITIAL_SIZE);
+				_pools[typeof(T)] = new List<IPooled>(PoolListInitialSize);
 
 				// since this is a new list, we already know it's empty
 				// and that there aren't any pre-existing unused instances yet
@@ -364,7 +364,7 @@ public class DependencyResolver : IDependencyResolver
 
 			if (!_poolsWithId.ContainsKey(id))
 			{
-				_poolsWithId[id] = new List<IPooled>(POOL_LIST_INITIAL_SIZE);
+				_poolsWithId[id] = new List<IPooled>(PoolListInitialSize);
 
 				T newInstanceForNewList = new T();
 
@@ -422,7 +422,7 @@ public class DependencyResolver : IDependencyResolver
 
 			if (!_pools.ContainsKey(typeof(T)))
 			{
-				_pools[typeof(T)] = new List<IPooled>(POOL_LIST_INITIAL_SIZE);
+				_pools[typeof(T)] = new List<IPooled>(PoolListInitialSize);
 
 				T newInstanceForNewList = constructor();
 
@@ -480,7 +480,7 @@ public class DependencyResolver : IDependencyResolver
 #endif
 			if (!_poolsWithId.ContainsKey(id))
 			{
-				_poolsWithId[id] = new List<IPooled>(POOL_LIST_INITIAL_SIZE);
+				_poolsWithId[id] = new List<IPooled>(PoolListInitialSize);
 
 				T newInstanceForNewList = constructor();
 
@@ -541,7 +541,7 @@ public class DependencyResolver : IDependencyResolver
 
 			if (!_pools.ContainsKey(typeToGet))
 			{
-				_pools[typeToGet] = new List<IPooled>(POOL_LIST_INITIAL_SIZE);
+				_pools[typeToGet] = new List<IPooled>(PoolListInitialSize);
 
 				// since this is a new list, we already know it's empty
 				// and that there aren't any pre-existing unused instances yet

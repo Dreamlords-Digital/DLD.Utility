@@ -60,10 +60,10 @@ public enum DropdownEnumFlagHandling : byte
 [UxmlElement]
 public partial class Dropdown : VisualElement, IContextMenuListener
 {
-	const string TEMPLATE_RESOURCES_PATH = "DLD UIToolkit/Dropdown";
-	const string ARROW_STYLE_CLASS = "dld-dropdown__arrow";
-	const string DROPDOWN_BOX_WARNING_STYLE_CLASS = "dld-box--warning";
-	const string DROPDOWN_BOX_ERROR_STYLE_CLASS = "dld-box--error";
+	const string TemplateResourcesPath = "DLD UIToolkit/Dropdown";
+	const string ArrowStyleClass = "dld-dropdown__arrow";
+	const string DropdownBoxWarningStyleClass = "dld-box--warning";
+	const string DropdownBoxErrorStyleClass = "dld-box--error";
 
 	// ==================================================================================
 
@@ -74,8 +74,8 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	/// </summary>
 	readonly Toggle _toggle;
 
-	readonly TooltipMessage _enumValueTooltip = new(BaseIcons.GENERIC_INFO);
-	readonly TooltipMessage _enumObsoleteTooltip = new(BaseIcons.GENERIC_ERROR);
+	readonly TooltipMessage _enumValueTooltip = new(BaseIcons.GenericInfo);
+	readonly TooltipMessage _enumObsoleteTooltip = new(BaseIcons.GenericError);
 
 	/// <summary>
 	///    Icon displayed when the dropdown box is displaying a single value.
@@ -186,7 +186,7 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 
 	public Dropdown()
 	{
-		var asset = Resources.Load<VisualTreeAsset>(TEMPLATE_RESOURCES_PATH);
+		var asset = Resources.Load<VisualTreeAsset>(TemplateResourcesPath);
 		asset.CloneTree(this);
 		this.RemoveTemplateContainer("Dropdown");
 
@@ -197,7 +197,7 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 		_icon.name = "SingleValueIcon";
 
 		var arrow = new VisualElement();
-		arrow.AddToClassList(ARROW_STYLE_CLASS);
+		arrow.AddToClassList(ArrowStyleClass);
 		_toggle.Add(arrow);
 
 		_toggle.Insert(0, _icon);
@@ -277,20 +277,20 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 
 	public void ShowErrorIndication()
 	{
-		_toggle.AddToClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
+		_toggle.AddToClassList(DropdownBoxErrorStyleClass);
 
 		// error indication is higher priority than warning
-		_toggle.RemoveFromClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+		_toggle.RemoveFromClassList(DropdownBoxWarningStyleClass);
 	}
 
 	public void ShowWarningIndication()
 	{
-		_toggle.AddToClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+		_toggle.AddToClassList(DropdownBoxWarningStyleClass);
 	}
 
 	public void HideErrorIndication()
 	{
-		_toggle.RemoveFromClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
+		_toggle.RemoveFromClassList(DropdownBoxErrorStyleClass);
 	}
 
 	// ==================================================================================

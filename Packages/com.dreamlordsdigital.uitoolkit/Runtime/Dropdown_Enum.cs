@@ -108,7 +108,7 @@ public partial class Dropdown
 				{
 					// two tooltip messages immediately: the tooltip from the _enumItems, and the message from _enumObsoleteItems
 
-					itemTooltips.Add(new TooltipMessage(BaseIcons.GENERIC_INFO, _enumItems[n].Tooltip));
+					itemTooltips.Add(new TooltipMessage(BaseIcons.GenericInfo, _enumItems[n].Tooltip));
 					itemTooltips.Add(TooltipUtil.CreateObsoleteTooltipMessage(_enumObsoleteItems?[n] ?? EnumDropdownItem.Empty));
 
 					_contextMenu.AddMenu(_enumItems[n].Label, itemTooltips, _enumItems[n].IconClassName, menuItemStyle,
@@ -127,7 +127,7 @@ public partial class Dropdown
 			{
 				if (!string.IsNullOrEmpty(_enumItems[n].Tooltip))
 				{
-					itemTooltips.Add(new TooltipMessage(BaseIcons.GENERIC_INFO, _enumItems[n].Tooltip));
+					itemTooltips.Add(new TooltipMessage(BaseIcons.GenericInfo, _enumItems[n].Tooltip));
 				}
 
 				_contextMenu.AddMenu(_enumItems[n].Label, itemTooltips, _enumItems[n].IconClassName, menuItemStyle,
@@ -159,15 +159,15 @@ public partial class Dropdown
 		UpdateCurrentValueIcon(chosenEnumIndex);
 		UpdateTooltip(chosenEnumIndex);
 
-		_toggle.RemoveFromClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
-		_toggle.RemoveFromClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
-		if (chosenItemLabel.ClassListContains(ContextMenu.ERROR_ENTRY_LABEL_STYLE_CLASS))
+		_toggle.RemoveFromClassList(DropdownBoxErrorStyleClass);
+		_toggle.RemoveFromClassList(DropdownBoxWarningStyleClass);
+		if (chosenItemLabel.ClassListContains(ContextMenu.ErrorEntryLabelStyleClass))
 		{
-			_toggle.AddToClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
+			_toggle.AddToClassList(DropdownBoxErrorStyleClass);
 		}
-		else if (chosenItemLabel.ClassListContains(ContextMenu.WARNING_ENTRY_LABEL_STYLE_CLASS))
+		else if (chosenItemLabel.ClassListContains(ContextMenu.WarningEntryLabelStyleClass))
 		{
-			_toggle.AddToClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+			_toggle.AddToClassList(DropdownBoxWarningStyleClass);
 		}
 
 		panel.visualTree.SendEvent(changeEvent);
@@ -185,17 +185,17 @@ public partial class Dropdown
 		UpdateCurrentValueIcon(currentValueIdx);
 		UpdateTooltip(currentValueIdx);
 
-		_toggle.RemoveFromClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
-		_toggle.RemoveFromClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+		_toggle.RemoveFromClassList(DropdownBoxErrorStyleClass);
+		_toggle.RemoveFromClassList(DropdownBoxWarningStyleClass);
 
 		var obsoleteType = _enumObsoleteItems?[currentValueIdx].Obsolete ?? EnumObsoleteType.None;
 		switch (obsoleteType)
 		{
 			case EnumObsoleteType.ObsoleteError:
-				_toggle.AddToClassList(DROPDOWN_BOX_ERROR_STYLE_CLASS);
+				_toggle.AddToClassList(DropdownBoxErrorStyleClass);
 				break;
 			case EnumObsoleteType.ObsoleteWarning:
-				_toggle.AddToClassList(DROPDOWN_BOX_WARNING_STYLE_CLASS);
+				_toggle.AddToClassList(DropdownBoxWarningStyleClass);
 				break;
 		}
 	}
@@ -203,7 +203,7 @@ public partial class Dropdown
 	void UpdateCurrentValueIcon(int index)
 	{
 		_icon.ClearClassList();
-		_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+		_icon.AddToClassList(BaseIcons.IconStyleClass);
 		if (!string.IsNullOrEmpty(_enumItems[index].IconClassName))
 		{
 			_icon.style.display = DisplayStyle.Flex;
@@ -299,7 +299,7 @@ public partial class Dropdown
 				{
 					_icon.style.display = DisplayStyle.Flex;
 					_icon.ClearClassList();
-					_icon.AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+					_icon.AddToClassList(BaseIcons.IconStyleClass);
 					_icon.AddToClassList(_enumItems[_noneIndex].IconClassName);
 
 					_enumValueTooltip.Text = _enumItems[_noneIndex].Tooltip;
@@ -342,7 +342,7 @@ public partial class Dropdown
 					_currentValueIcons[n].ClearClassList();
 					if (currentEnumFlagValue.HasFlag(enumValue) && enumValue != 0)
 					{
-						_currentValueIcons[n].AddToClassList(BaseIcons.ICON_STYLE_CLASS);
+						_currentValueIcons[n].AddToClassList(BaseIcons.IconStyleClass);
 						_currentValueIcons[n].AddToClassList(_enumItems[n].IconClassName);
 					}
 				}

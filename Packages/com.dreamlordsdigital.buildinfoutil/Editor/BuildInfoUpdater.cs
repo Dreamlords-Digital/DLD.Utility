@@ -26,10 +26,10 @@ public class BuildInfoUpdater : IPreprocessBuildWithReport
 
 		var dateTimeNow = DateTime.UtcNow;
 
-		string buildDateAndTimeFilePath = Path.Combine(streamingAssetsPath, BuildInfoUtil.BUILD_DATE_TIME_FILENAME);
-		string buildDateAndTimeValue = dateTimeNow.ToLocalTime().ToString(BuildInfoUtil.DISPLAY_DATE_TIME_FORMAT);
+		string buildDateAndTimeFilePath = Path.Combine(streamingAssetsPath, BuildInfoUtil.BuildDateTimeFilename);
+		string buildDateAndTimeValue = dateTimeNow.ToLocalTime().ToString(BuildInfoUtil.DisplayDateTimeFormat);
 
-		string commitHashFilePath = Path.Combine(streamingAssetsPath, BuildInfoUtil.BUILD_COMMIT_HASH_FILENAME);
+		string commitHashFilePath = Path.Combine(streamingAssetsPath, BuildInfoUtil.BuildCommitHashFilename);
 		string commitHashValue = GitCommands.GetCurrentCommitHashWithUncommittedChanges();
 
 		Debug.Log($"BuildInfoUpdater: Build Date and Time:\n{buildDateAndTimeFilePath}\n{buildDateAndTimeValue}");

@@ -114,8 +114,8 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 
 		// -----------------------
 
-		const float SPACE_BETWEEN_LOWER_LIMIT_AND_TO = 8;
-		const float SPACE_BETWEEN_FIELD_AND_POST_LABEL = 2;
+		const float SpaceBetweenLowerLimitAndTo = 8;
+		const float SpaceBetweenFieldAndPostLabel = 2;
 
 		float end;
 
@@ -130,7 +130,7 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 
 			var minRect = new Rect(position);
 			minRect.x = indentedRect.xMax;
-			minRect.width = minLabelSize.x + inputFieldWidth - SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
+			minRect.width = minLabelSize.x + inputFieldWidth - SpaceBetweenLowerLimitAndTo;
 
 			EditorGUIUtility.labelWidth = minLabelSize.x + 3;
 
@@ -143,7 +143,7 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 		else
 		{
 			var minRect = new Rect(position);
-			minRect.width = labelSize.x + inputFieldWidth - SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
+			minRect.width = labelSize.x + inputFieldWidth - SpaceBetweenLowerLimitAndTo;
 
 			label.text = hasLabel ? customLabel : originalLabel;
 			EditorGUI.PropertyField(minRect, minProperty, label);
@@ -156,7 +156,7 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 		if (hasMinPostLabel)
 		{
 			var minPostRect = new Rect(position);
-			minPostRect.x = end + SPACE_BETWEEN_FIELD_AND_POST_LABEL;
+			minPostRect.x = end + SpaceBetweenFieldAndPostLabel;
 			minPostRect.width = minPostLabelSize.x;
 
 			label.text = minPostLabel;
@@ -166,7 +166,7 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 		}
 		else
 		{
-			end += SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
+			end += SpaceBetweenLowerLimitAndTo;
 		}
 
 		// -----------------------
@@ -176,7 +176,7 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 
 		var maxRect = new Rect(position);
 		maxRect.x = end;
-		maxRect.width = maxLabelSize.x + inputFieldWidth - SPACE_BETWEEN_LOWER_LIMIT_AND_TO;
+		maxRect.width = maxLabelSize.x + inputFieldWidth - SpaceBetweenLowerLimitAndTo;
 
 		EditorGUIUtility.labelWidth = maxLabelSize.x + 3;
 
@@ -190,7 +190,7 @@ public class FloatRangePropertyDrawer : PropertyDrawer
 		if (hasMaxPostLabel)
 		{
 			var maxPostLabelRect = new Rect(position);
-			maxPostLabelRect.x = maxRect.xMax + SPACE_BETWEEN_FIELD_AND_POST_LABEL;
+			maxPostLabelRect.x = maxRect.xMax + SpaceBetweenFieldAndPostLabel;
 			maxPostLabelRect.width = maxPostLabelSize.x;
 
 			label.text = maxPostLabel;

@@ -19,12 +19,12 @@ namespace DLD.UIToolkit
 	[UxmlElement]
 	public partial class SearchTextField : TextField, IContextMenuListener
 	{
-		const string SEARCH_TYPE_SIMPLE = "SEARCH_TYPE_SIMPLE";
-		const string SEARCH_TYPE_FUZZY = "SEARCH_TYPE_FUZZY";
-		const string SEARCH_TYPE_REGEX = "SEARCH_TYPE_REGEX";
-		const string MATCH_CASE = "MATCH_CASE";
+		const string SearchTypeSimple = "SearchTypeSimple";
+		const string SearchTypeFuzzy = "SearchTypeFuzzy";
+		const string SearchTypeRegex = "SearchTypeRegex";
+		const string MatchCase = "MatchCase";
 
-		const float DEFAULT_SEARCH_DELAY = 0.33f;
+		const float DefaultSearchDelay = 0.33f;
 
 		// =====================================================================
 
@@ -94,7 +94,7 @@ namespace DLD.UIToolkit
 
 		void OnImmediateChange(ChangeEvent<string> e)
 		{
-			_searchDelayRemaining = DEFAULT_SEARCH_DELAY;
+			_searchDelayRemaining = DefaultSearchDelay;
 		}
 
 		void OnFocusOut(FocusOutEvent e)
@@ -150,17 +150,17 @@ namespace DLD.UIToolkit
 			_contextMenu.AddLabel("Search Type:");
 			_contextMenu.AddMenu("Simple", tooltip: "Use * as wildcard.",
 				menuItemStyle: searchTypeIsSimple ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
-				listener: this, userArg1: SEARCH_TYPE_SIMPLE);
+				listener: this, userArg1: SearchTypeSimple);
 			_contextMenu.AddMenu("Fuzzy", tooltip: "Use fuzzy search algorithm. Fuzzy search is lenient on wrong spellings.",
 				menuItemStyle: _searchType == SearchType.Fuzzy ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
-				listener: this, userArg1: SEARCH_TYPE_FUZZY);
+				listener: this, userArg1: SearchTypeFuzzy);
 			_contextMenu.AddMenu("Regex", tooltip: "Use regular expression.",
 				menuItemStyle: _searchType == SearchType.Regex ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
-				listener: this, userArg1: SEARCH_TYPE_REGEX);
+				listener: this, userArg1: SearchTypeRegex);
 			_contextMenu.AddSeparator();
 			_contextMenu.AddMenu("Match Case", tooltip: matchCaseTooltip,
 				menuItemStyle: matchCaseStyle,
-				listener: this, userArg1: MATCH_CASE);
+				listener: this, userArg1: MatchCase);
 			_contextMenu.Show(this, ElementAnchorPoint.LowerRight, listener: this);
 		}
 
@@ -168,28 +168,28 @@ namespace DLD.UIToolkit
 		{
 			switch (userArg1 as string)
 			{
-				case SEARCH_TYPE_SIMPLE:
+				case SearchTypeSimple:
 					if (_searchType is SearchType.SimpleNotMatchCase or SearchType.SimpleMatchCase)
 					{
 						return;
 					}
 					_searchType = _matchCase ? SearchType.SimpleMatchCase : SearchType.SimpleNotMatchCase;
 					break;
-				case SEARCH_TYPE_FUZZY:
+				case SearchTypeFuzzy:
 					if (_searchType == SearchType.Fuzzy)
 					{
 						return;
 					}
 					_searchType = SearchType.Fuzzy;
 					break;
-				case SEARCH_TYPE_REGEX:
+				case SearchTypeRegex:
 					if (_searchType == SearchType.Regex)
 					{
 						return;
 					}
 					_searchType = SearchType.Regex;
 					break;
-				case MATCH_CASE:
+				case MatchCase:
 					_matchCase = !_matchCase;
 					if (_searchType is SearchType.SimpleNotMatchCase or SearchType.SimpleMatchCase)
 					{
