@@ -79,6 +79,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 
 	Vector3 _pointerLastKnownLocalPos;
 
+	Vector3 _moveTargetInitialPos;
+
 	/// <summary>
 	///    The element that gets panned and zoomed by this manipulator.
 	/// </summary>
@@ -243,7 +245,12 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		// will release the spacebar when we no longer have keyboard focus
 		// (user might have alt + tabbed) so might as well just assume it's been released.
 		_spacebarHeld = false;
-		_isPanning = false;
+
+		if (_isPanning)
+		{
+			_isPanning = false;
+			_moveTarget.SetPosition(_moveTargetInitialPos);
+		}
 
 		// Also reset the mouse cursor.
 		_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
@@ -279,15 +286,30 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 				_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, _pointerLastKnownLocalPos);
 			}
 		}
-		else if (e.keyCode == KeyCode.Escape && _isDragging)
+		else if (e.keyCode == KeyCode.Escape)
 		{
-			changeDetected = true;
+			if (_isDragging)
+			{
+				changeDetected = true;
 
-			// User pressed Escape while dragging.
-			// Interpret this as a cancel to the drag-and-drop operation.
-			// Abort it, even if the pointer is still held down.
+				// User pressed Escape while dragging.
+				// Interpret this as a cancel to the drag-and-drop operation.
+				// Abort it, even if the pointer is still held down.
 
-			CancelDrag();
+				CancelDrag();
+			}
+			else if (_isPanning)
+			{
+				_isPanning = false;
+				_moveTarget.SetPosition(_moveTargetInitialPos);
+
+				// Also reset the mouse cursor.
+				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomInStyleClass);
+				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorZoomOutStyleClass);
+				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanStyleClass);
+				_mouseCursorDisplay.RemoveFromClassList(UITkUtil.MouseCursorPanDragStyleClass);
+				_mouseCursorDisplay.style.display = DisplayStyle.None;
+			}
 		}
 
 		// We check this way instead of checking the keyCode because these are the latest values
@@ -429,6 +451,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 			_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, e.localPosition);
 
 			_isPanning = true;
+			_moveTargetInitialPos = _moveTarget.GetPosition2();
 			target.CapturePointer(e.pointerId);
 			e.StopPropagation();
 
