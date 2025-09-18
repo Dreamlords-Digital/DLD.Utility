@@ -78,6 +78,33 @@ public class StringUtilTests
 		Assert.AreEqual("ATMMachine Activated", text.AddSpacesToSentence(false));
 	}
 
+	[Test]
+	public void AddSpacesToSentence_TreatNumbersAsWords_Works()
+	{
+		const string Text = "Xbox360";
+		Assert.AreEqual("Xbox 360", Text.AddSpacesToSentence());
+
+		const string Text2 = "Xbox360Series";
+		Assert.AreEqual("Xbox 360 Series", Text2.AddSpacesToSentence());
+	}
+
+	[Test]
+	public void AddSpacesToSentence_PreserveAcronymsAndTreatNumbersAsWords_Works()
+	{
+		const string Text = "XBOX360";
+		Assert.AreEqual("XBOX 360", Text.AddSpacesToSentence());
+
+		const string Text2 = "XBOX360Series";
+		Assert.AreEqual("XBOX 360 Series", Text2.AddSpacesToSentence());
+	}
+
+	[Test]
+	public void AddSpacesToSentence_DoNotTreatNumbersAsWords_Works()
+	{
+		const string Text = "Xbox360";
+		Assert.AreEqual("Xbox360", Text.AddSpacesToSentence(treatNumbersAsWords: false));
+	}
+
 	// ----------------------------------------------------
 
 	[Test]

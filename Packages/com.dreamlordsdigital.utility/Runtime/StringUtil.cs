@@ -191,8 +191,9 @@ public static class StringUtil
 	/// </summary>
 	/// <param name="text"></param>
 	/// <param name="preserveAcronyms">When true, "WindowGUILabel" will become "Window GUI Label" instead of "Window GUILabel".</param>
+	/// <param name="treatNumbersAsWords">When true, "Xbox360" will become "Xbox 360" instead of "Xbox360".</param>
 	/// <returns></returns>
-	public static string AddSpacesToSentence(this string text, bool preserveAcronyms = true)
+	public static string AddSpacesToSentence(this string text, bool preserveAcronyms = true, bool treatNumbersAsWords = true)
 	{
 		if (text == null)
 		{
@@ -205,17 +206,24 @@ public static class StringUtil
 		}
 
 		StringBuilder newText = new StringBuilder(text.Length * 2);
-		newText.Append(text[0]);
+		newText.Append(text[0]); // first letter is always inserted as-is (we don't want to insert a space before the first letter)
 		for (int i = 1; i < text.Length; i++)
 		{
-			if (char.IsUpper(text[i]))
+			if (char.IsUpper(text[i])) // current char is uppercase (or digit if treatNumbersAsWords is active)
 			{
-				if ((text[i - 1] != ' ' && !char.IsUpper(text[i - 1])) ||
-				    (preserveAcronyms &&
-				     char.IsUpper(text[i - 1]) &&
-				     i < text.Length - 1 &&
-				     !char.IsUpper(text[i + 1])))
+				// we want to insert a space before we insert this uppercase, but we need to check if it's the right situation to do so
+				if ((text[i - 1] != ' ' && !char.IsUpper(text[i - 1])) || // previous char is not uppercase (this will be true if we are currently at 'S' of "CoolSpot")
+				     (preserveAcronyms && char.IsUpper(text[i - 1]) && i < text.Length - 1 && !char.IsUpper(text[i + 1]) && (!treatNumbersAsWords || !char.IsDigit(text[i + 1])))) // previous char is uppercase and next char is lowercase or some other symbol (this will be true if we are currently at 'L' of "GUILabel")
 				{
+					// right situation to insert a space before the uppercase letter
+					newText.Append(' ');
+				}
+			}
+			else if (treatNumbersAsWords && char.IsDigit(text[i])) // current char is digit
+			{
+				if (text[i - 1] != ' ' && !char.IsDigit(text[i - 1]))
+				{
+					// right situation to insert a space before the digit
 					newText.Append(' ');
 				}
 			}
