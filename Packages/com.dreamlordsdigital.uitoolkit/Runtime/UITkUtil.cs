@@ -97,6 +97,25 @@ public static class UITkUtil
 		}
 	}
 
+	/// <summary>
+	/// Call <see cref="VisualElement.AddToClassList"/> or <see cref="VisualElement.RemoveFromClassList"/>
+	/// depending on value of <paramref name="set"/>.
+	/// </summary>
+	/// <param name="me"></param>
+	/// <param name="set"></param>
+	/// <param name="className"></param>
+	public static void SetInClassList(this VisualElement me, bool set, string className)
+	{
+		if (set)
+		{
+			me.AddToClassList(className);
+		}
+		else
+		{
+			me.RemoveFromClassList(className);
+		}
+	}
+
 	public static void RemoveTemplateContainer(this VisualElement me, string childRootName)
 	{
 		var clonedRoot = me.Q<VisualElement>(childRootName);
@@ -115,6 +134,32 @@ public static class UITkUtil
 		}
 
 		clonedRoot.RemoveFromHierarchy();
+	}
+
+	/// <summary>
+	/// Like Q, but only performing the search through the VisualElement's ancestry.
+	/// </summary>
+	/// <param name="e"></param>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
+	public static T Qup<T>(this VisualElement e) where T : VisualElement
+	{
+		if (e is T foundSelf)
+		{
+			return foundSelf;
+		}
+
+		VisualElement search = e.parent;
+		while (search != null)
+		{
+			if (search is T found)
+			{
+				return found;
+			}
+			search = search.parent;
+		}
+
+		return null;
 	}
 
 	public static bool IsOrAncestorOf(this VisualElement ancestor, VisualElement child)
