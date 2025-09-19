@@ -65,6 +65,15 @@ public partial class Dropdown
 		{
 			_dropdownItems = new List<DropdownItem>();
 		}
+
+		if (_dropdownItemTooltips != null)
+		{
+			_dropdownItemTooltips.Clear();
+		}
+		else
+		{
+			_dropdownItemTooltips = new List<DropdownItemTooltip>();
+		}
 	}
 
 	public void AddDropdownItem(string label, string shortLabel = null, string tooltipText = null, string iconClassName = null)
@@ -73,15 +82,18 @@ public partial class Dropdown
 		{
 			Label = label,
 			ShortLabel = shortLabel,
-			Tooltip = tooltipText,
 			IconClassName = iconClassName
+		});
+		_dropdownItemTooltips.Add(new DropdownItemTooltip()
+		{
+			Tooltip = tooltipText,
 		});
 	}
 
 	/// <summary>
 	///    Called when user clicks on the dropdown box.
 	/// </summary>
-	void Open(List<DropdownItem> dropdownItems, byte value)
+	void Open(List<DropdownItem> dropdownItems, List<DropdownItemTooltip> tooltips, byte value)
 	{
 		_contextMenu.DoAltBgStyling(_doAltBgStyling);
 		_contextMenu.SetAlwaysLeaveSpaceForSelectedIndicator(true);
@@ -102,7 +114,7 @@ public partial class Dropdown
 
 			var menuItemStyle = value.GetFlag(n) ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard;
 
-			_contextMenu.AddMenu(label, item.Tooltip, item.IconClassName, menuItemStyle,
+			_contextMenu.AddMenu(label, tooltips[n].Tooltip, item.IconClassName, menuItemStyle,
 				listener: this, userArg1: n);
 		}
 

@@ -12,11 +12,12 @@ namespace DLD.UIToolkit
 public partial class Dropdown
 {
 	public void SetItemsFromEnum(
-		ulong[] values, DropdownItem[] items, EnumDropdownItem[] obsoleteItems, bool enumUsesFlags,
+		ulong[] values, DropdownItem[] items, DropdownItemTooltip[] tooltips, EnumDropdownItem[] obsoleteItems, bool enumUsesFlags,
 		DropdownEnumFlagHandling newEnumFlagHandling, bool includeObsoleteEnums)
 	{
 		_enumValues = values;
 		_enumItems = items;
+		_enumItemTooltips = tooltips;
 		_enumObsoleteItems = obsoleteItems;
 		_enumFlagHandling = newEnumFlagHandling;
 		_includeObsoleteEnums = includeObsoleteEnums;
@@ -38,13 +39,13 @@ public partial class Dropdown
 		}
 
 		int maxTooltipNum = 1; // start with 1 for the basic info
-		foreach (var enumItem in _enumItems)
+		foreach (var enumItemTooltip in _enumItemTooltips)
 		{
-			if (enumItem.Tooltips != null)
+			if (enumItemTooltip.Tooltips != null)
 			{
-				maxTooltipNum = Mathf.Max(maxTooltipNum, enumItem.Tooltips.Length);
+				maxTooltipNum = Mathf.Max(maxTooltipNum, enumItemTooltip.Tooltips.Length);
 			}
-			else if (!string.IsNullOrEmpty(enumItem.Tooltip))
+			else if (!string.IsNullOrEmpty(enumItemTooltip.Tooltip))
 			{
 				maxTooltipNum = Mathf.Max(maxTooltipNum, 1);
 			}
@@ -126,13 +127,13 @@ public partial class Dropdown
 
 			// ----------------------------------------------------------------
 
-			if (_enumItems[n].Tooltips != null)
+			if (_enumItemTooltips[n].Tooltips != null)
 			{
-				itemTooltips.AddRange(_enumItems[n].Tooltips);
+				itemTooltips.AddRange(_enumItemTooltips[n].Tooltips);
 			}
-			else if (!string.IsNullOrEmpty(_enumItems[n].Tooltip))
+			else if (!string.IsNullOrEmpty(_enumItemTooltips[n].Tooltip))
 			{
-				itemTooltips.Add(new TooltipMessage(text: _enumItems[n].Tooltip));
+				itemTooltips.Add(new TooltipMessage(text: _enumItemTooltips[n].Tooltip));
 			}
 
 			if (obsoleteType != EnumObsoleteType.None)
@@ -237,16 +238,16 @@ public partial class Dropdown
 
 		ClearEnumValueTooltips();
 
-		if (_enumItems[index].Tooltips != null)
+		if (_enumItemTooltips[index].Tooltips != null)
 		{
-			foreach (var enumTooltip in _enumItems[index].Tooltips)
+			foreach (var enumTooltip in _enumItemTooltips[index].Tooltips)
 			{
 				AddEnumValueTooltip(enumTooltip.Text, enumTooltip.IconClassName);
 			}
 		}
-		else if (!string.IsNullOrWhiteSpace(_enumItems[index].Tooltip))
+		else if (!string.IsNullOrWhiteSpace(_enumItemTooltips[index].Tooltip))
 		{
-			AddEnumValueTooltip(_enumItems[index].Tooltip, null);
+			AddEnumValueTooltip(_enumItemTooltips[index].Tooltip, null);
 		}
 
 		if (_enumObsoleteItems != null && obsoleteType != EnumObsoleteType.None)
@@ -339,7 +340,7 @@ public partial class Dropdown
 					_icon.AddToClassList(BaseIcons.IconStyleClass);
 					_icon.AddToClassList(_enumItems[_noneIndex].IconClassName);
 
-					AddEnumValueTooltip(_enumItems[_noneIndex].Tooltip);
+					AddEnumValueTooltip(_enumItemTooltips[_noneIndex].Tooltip);
 
 					// Note: Assigning to _toggle.label actually causes the label to be re-inserted
 					// back as the first child of _toggle.

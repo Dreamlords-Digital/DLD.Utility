@@ -11,9 +11,13 @@ public struct DropdownItem
 {
 	public string Label;
 	public string ShortLabel;
+	public string IconClassName;
+}
+
+public struct DropdownItemTooltip
+{
 	public string Tooltip;
 	public TooltipMessage[] Tooltips;
-	public string IconClassName;
 }
 
 public struct EnumDropdownItem
@@ -140,6 +144,7 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 
 	ulong[] _enumValues;
 	DropdownItem[] _enumItems;
+	DropdownItemTooltip[] _enumItemTooltips;
 	EnumDropdownItem[] _enumObsoleteItems;
 
 	/// <summary>
@@ -161,6 +166,7 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	///    Only used when the Dropdown <see cref="_currentMode"/> is in <see cref="Mode.ByteMask"/>.
 	/// </summary>
 	List<DropdownItem> _dropdownItems;
+	List<DropdownItemTooltip> _dropdownItemTooltips;
 
 	/// <summary>
 	///    Only used when <see cref="_currentMode"/> is <see cref="Mode.ByteMask"/>.<br/><br/>
@@ -324,7 +330,7 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 				break;
 			case Mode.ByteMask:
 				Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
-				Open(_dropdownItems, _currentByteValue);
+				Open(_dropdownItems, _dropdownItemTooltips, _currentByteValue);
 				break;
 		}
 	}

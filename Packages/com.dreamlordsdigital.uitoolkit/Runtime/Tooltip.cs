@@ -125,7 +125,7 @@ public static class TooltipUtil
 
 	const string DefaultObsoleteMessage = "Marked as obsolete";
 
-	public static TooltipMessage[] CreateTooltipMessages(DropdownItem item, EnumDropdownItem obsoleteItem, string obsoleteMessageToUseIfNull = DefaultObsoleteMessage)
+	public static TooltipMessage[] CreateTooltipMessages(DropdownItemTooltip item, EnumDropdownItem obsoleteItem, string obsoleteMessageToUseIfNull = DefaultObsoleteMessage)
 	{
 		return new TooltipMessage[]
 		{
