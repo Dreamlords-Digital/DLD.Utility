@@ -195,12 +195,30 @@
     background-repeat: space no-repeat;
     color: var(--dld-color-label-link);
     -unity-background-image-tint-color: var(--dld-color-label-link);
+    -unity-slice-bottom: 4;
 }
 
 .dld-label--link:hover {
-    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Point.png?fileID=2800000&guid=eb4a51b21c37dd841be3d960ab614491&type=3#Hand-Point") 8 3;
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Point.png?fileID=2800000&guid=eb4a51b21c37dd841be3d960ab614491&type=3#Hand-Point") 7 4;
     color: var(--dld-color-label-link-hovered);
     -unity-background-image-tint-color: var(--dld-color-label-link-hovered);
+}
+
+.dld-label--ctrl-link {
+}
+
+.dld-label--ctrl-link:hover {
+    color: var(--dld-color-label-link-hovered);
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Point.png?fileID=2800000&guid=eb4a51b21c37dd841be3d960ab614491&type=3#Hand-Point") 7 4;
+}
+
+.dld-label--ctrl-link--hover {
+    color: var(--dld-color-label-link-hovered);
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Point.png?fileID=2800000&guid=eb4a51b21c37dd841be3d960ab614491&type=3#Hand-Point") 7 4;
+}
+
+.dld-icon--ctrl-link--hover {
+    cursor: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/OpenZone/White/Hand-Point.png?fileID=2800000&guid=eb4a51b21c37dd841be3d960ab614491&type=3#Hand-Point") 7 4;
 }
 
 FilenameTextField > #unity-text-input > TextElement {

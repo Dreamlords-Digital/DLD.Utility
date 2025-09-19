@@ -12,7 +12,13 @@ public interface IDragStatus
 	bool IsDragging { get; }
 }
 
-public class PanZoomManipulator : PointerManipulator, IDragStatus
+public interface ICtrlLinkRegister
+{
+	void OnHoverEnterCtrlLink(PointerEnterEvent e);
+	void OnHoverExitCtrlLink(PointerLeaveEvent e);
+}
+
+public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister
 {
 	/// <summary>
 	///    The local mouse coordinates when pan started.
@@ -139,6 +145,9 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 	VisualElement _mouseCursorDisplay;
 
 	Vector2 _lastKnownMousePos;
+
+	ICtrlHoverable _ctrlHoverableElement;
+	VisualElement _hoveredCtrlLinkElement;
 
 	protected ITooltip _tooltip;
 
@@ -319,6 +328,15 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		{
 			changeDetected = true;
 			_ctrl = e.ctrlKey;
+			if (_ctrl)
+			{
+				_hoveredCtrlLinkElement?.AddToClassList(BaseStyles.LabelCtrlLinkStyleClass);
+			}
+			else
+			{
+				_hoveredCtrlLinkElement?.RemoveFromClassList(BaseStyles.LabelCtrlLinkStyleClass);
+			}
+			_ctrlHoverableElement?.OnCtrlHover(_ctrl);
 		}
 
 		if (_alt != e.altKey)
@@ -366,6 +384,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 			case KeyCode.LeftControl:
 			case KeyCode.RightControl:
 				_ctrl = false;
+				_hoveredCtrlLinkElement?.RemoveFromClassList(BaseStyles.LabelCtrlLinkStyleClass);
+				_ctrlHoverableElement?.OnCtrlHover(_ctrl);
 				break;
 			case KeyCode.LeftAlt:
 			case KeyCode.RightAlt:
@@ -383,6 +403,42 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		{
 			OnForceMoveChanged(_lastKnownMousePos);
 		}
+	}
+
+	public void OnHoverEnterCtrlLink(PointerEnterEvent e)
+	{
+		_ctrl = e.ctrlKey;
+
+		if (e.target is ICtrlHoverable ctrlHoverable)
+		{
+			ctrlHoverable.OnCtrlHover(_ctrl);
+
+			_ctrlHoverableElement = ctrlHoverable;
+			_hoveredCtrlLinkElement = null;
+		}
+		else if (e.target is VisualElement hoveredElement)
+		{
+			if (_ctrl)
+			{
+				hoveredElement.AddToClassList(BaseStyles.LabelCtrlLinkStyleClass);
+			}
+			else
+			{
+				hoveredElement.RemoveFromClassList(BaseStyles.LabelCtrlLinkStyleClass);
+			}
+
+			_ctrlHoverableElement = null;
+			_hoveredCtrlLinkElement = hoveredElement;
+		}
+	}
+
+	public void OnHoverExitCtrlLink(PointerLeaveEvent e)
+	{
+		_ctrlHoverableElement?.OnCtrlHover(false);
+		_hoveredCtrlLinkElement?.RemoveFromClassList(BaseStyles.LabelCtrlLinkStyleClass);
+
+		_ctrlHoverableElement = null;
+		_hoveredCtrlLinkElement = null;
 	}
 
 	void OnPointerDown(PointerDownEvent e)
@@ -415,6 +471,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus
 		{
 			_ctrl = false;
 			RefreshMouseCursor(e.position);
+			_hoveredCtrlLinkElement?.RemoveFromClassList(BaseStyles.LabelCtrlLinkStyleClass);
+			_ctrlHoverableElement?.OnCtrlHover(_ctrl);
 		}
 
 		if (!e.altKey && _alt)

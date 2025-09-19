@@ -1,13 +1,15 @@
 // COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
-using UnityEngine;
-
 namespace DLD.UIToolkit
 {
 
 public static class BaseStyles
 {
 	public const string LabelLinkStyleClass = "dld-label--link";
+	public const string LabelCtrlLinkStyleClass = "dld-label--ctrl-link";
+	public const string LabelCtrlLinkForcedHoverStyleClass = "dld-label--ctrl-link--hover";
+	public const string IconCtrlLinkForcedHoverStyleClass = "dld-icon--ctrl-link--hover";
+
 	public const string BoxWithWarningStyleClass = "dld-box--warning";
 	public const string BoxWithErrorStyleClass = "dld-box--error";
 	public const string TextFieldWithErrorStyleClass = "dld-text-field--error";
