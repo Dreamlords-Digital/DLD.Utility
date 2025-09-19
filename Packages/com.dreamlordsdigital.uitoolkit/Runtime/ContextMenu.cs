@@ -311,7 +311,7 @@ public class ContextMenu : VisualElement, IContextMenu
 		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
 	{
 		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
-		entryContainer.Register(_tooltip, menuTooltip);
+		entryContainer.RegisterTooltipDisplayer(_tooltip, menuTooltip, anchorPoint: ElementAnchorPoint.Right);
 	}
 
 	public void AddMenu(
@@ -322,7 +322,7 @@ public class ContextMenu : VisualElement, IContextMenu
 		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
 
 		entryContainer.userData = menuTooltip;
-		entryContainer.Register(_tooltip);
+		entryContainer.RegisterTooltipDisplayer(_tooltip, anchorPoint: ElementAnchorPoint.Right);
 	}
 
 	public void AddMenu(
@@ -333,7 +333,7 @@ public class ContextMenu : VisualElement, IContextMenu
 		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
 
 		entryContainer.userData = menuTooltip;
-		entryContainer.Register(_tooltip);
+		entryContainer.RegisterTooltipDisplayer(_tooltip, anchorPoint: ElementAnchorPoint.Right);
 	}
 
 	// ==================================================================================

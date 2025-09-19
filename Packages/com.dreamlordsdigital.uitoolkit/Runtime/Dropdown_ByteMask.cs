@@ -148,14 +148,18 @@ public partial class Dropdown
 			}
 
 			// Get the long label and use it as the tooltip
+			ClearEnumValueTooltips();
+			string valueText;
 			if (currentByteValue > 0)
 			{
-				_enumValueTooltip.Text = GetByteMaskAsLabel(_dropdownItems, currentByteValue, DropdownCurrentValueDisplayType.Labels);
+				valueText = GetByteMaskAsLabel(_dropdownItems, currentByteValue, DropdownCurrentValueDisplayType.Labels);
 			}
 			else
 			{
-				_enumValueTooltip.Text = _labelToDisplayWhenNoneSelected;
+				valueText = _labelToDisplayWhenNoneSelected;
 			}
+
+			AddEnumValueTooltip(valueText);
 		}
 		else
 		{

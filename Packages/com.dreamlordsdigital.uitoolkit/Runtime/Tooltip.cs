@@ -22,7 +22,7 @@ public interface ITooltip
 	/// <param name="pushToStack">Whether the tooltip text specified will be added to the existing text already on the tooltip, or not.</param>
 	void ShowTooltipAtMouse(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
 
-	void ShowTooltipAt(VisualElement context, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false);
+	void ShowTooltipAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false);
 
 	/// <summary>
 	///    Add another message to the tooltip, assuming it's already shown.
@@ -87,20 +87,41 @@ public class TooltipMessage
 		Text = text;
 	}
 
-	public static readonly TooltipMessage Spacer = new(text: "<nobr> </nobr>");
 	public static readonly TooltipMessage JumpToSourceFile = new(BaseIcons.JumpToSourceFile, "<i>Left-Click to jump to source file.</i>");
 	public static readonly TooltipMessage OpenLinkInWebBrowser = new(BaseIcons.OpenLinkInWebBrowser, "<i>Ctrl + Left-Click to open link.</i>");
 }
 
+public class TooltipCollection
+{
+	public TooltipMessage[] Tooltips;
+	public VisualElement TooltipAnchor;
+}
+
+public class TooltipWithAnchor
+{
+	public TooltipMessage Tooltip;
+	public VisualElement TooltipAnchor;
+}
+
+[Flags]
+public enum TooltipShowMode
+{
+	Normal = 0,
+	AppendToExisting = 1 << 0,
+	DoNotShowWhenUserIsDragging = 1 << 1,
+}
+
 public static class TooltipUtil
 {
-	public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowFromUserData = _ShowTooltipFromUserData;
-	public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRightNoDragFromUserData = _ShowTooltipAtRightNoDragFromUserData;
-	public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRightFromUserData = _ShowTooltipAtRightFromUserData;
+	public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtMouse = _ShowAtMouse;
+	public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRightNoDrag = _ShowAtRightNoDrag;
+	public static readonly EventCallback<PointerEnterEvent, ITooltip> ShowAtRight = _ShowAtRight;
 	public static readonly EventCallback<PointerLeaveEvent, ITooltip> Hide = _HideTooltip;
+	public static readonly EventCallback<PointerLeaveEvent, ITooltip> RemoveTooltipsOfMatchingContext = _RemoveTooltipsOfMatchingContext;
 
-	static readonly EventCallback<PointerEnterEvent, ITooltip> ShowTooltipFromUserDataPushToStack = _ShowTooltipFromUserDataPushToStack;
-	static readonly EventCallback<PointerLeaveEvent, ITooltip> HideTooltipIfContextIs = _HideTooltipIfContextIs;
+	static readonly EventCallback<PointerEnterEvent, ITooltip> AppendAtMouse = _AppendAtMouse;
+	static readonly EventCallback<PointerEnterEvent, ITooltip> AppendAtRightNoDrag = _AppendAtRightNoDrag;
+	static readonly EventCallback<PointerEnterEvent, ITooltip> AppendAtRight = _AppendAtRight;
 
 	const string DefaultObsoleteMessage = "Marked as obsolete";
 
@@ -131,18 +152,83 @@ public static class TooltipUtil
 		return new TooltipMessage(CreateObsoleteTooltipIcon(item.Obsolete), CreateObsoleteTooltipText(item, obsoleteMessageToUseIfNull));
 	}
 
-	public static string Register(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GenericInfo, bool pushToStack = false)
+	public static void RegisterTooltipDisplayer(this VisualElement tooltipDisplayer, ITooltip tooltip, string tooltipText, string iconClassName = BaseIcons.GenericInfo,
+		TooltipShowMode tooltipShowMode = TooltipShowMode.Normal, ElementAnchorPoint anchorPoint = ElementAnchorPoint.Mouse)
 	{
 		if (tooltipDisplayer == null)
 		{
-			return null;
+			return;
 		}
 
 		if (string.IsNullOrWhiteSpace(tooltipText))
 		{
-			return null;
+			return;
 		}
 
+		tooltipDisplayer.PrepareTooltipText(tooltipText, iconClassName);
+		tooltipDisplayer.RegisterTooltipDisplayer(tooltip, tooltipShowMode, anchorPoint);
+	}
+
+	public static void RegisterTooltipDisplayer(this VisualElement tooltipDisplayer, ITooltip tooltip,
+		TooltipShowMode tooltipShowMode = TooltipShowMode.Normal, ElementAnchorPoint anchorPoint = ElementAnchorPoint.Mouse)
+	{
+		if (tooltipDisplayer == null)
+		{
+			return;
+		}
+
+		if (anchorPoint == ElementAnchorPoint.Mouse)
+		{
+			tooltipDisplayer.RegisterCallback(
+				(tooltipShowMode | TooltipShowMode.AppendToExisting) == TooltipShowMode.AppendToExisting
+					? AppendAtMouse
+					: ShowAtMouse, tooltip);
+		}
+		else if (anchorPoint == ElementAnchorPoint.Right)
+		{
+			if ((tooltipShowMode | TooltipShowMode.DoNotShowWhenUserIsDragging) == TooltipShowMode.DoNotShowWhenUserIsDragging)
+			{
+				tooltipDisplayer.RegisterCallback(
+					(tooltipShowMode | TooltipShowMode.AppendToExisting) == TooltipShowMode.AppendToExisting
+						? AppendAtRightNoDrag
+						: ShowAtRightNoDrag, tooltip);
+			}
+			else
+			{
+				tooltipDisplayer.RegisterCallback(
+					(tooltipShowMode | TooltipShowMode.AppendToExisting) == TooltipShowMode.AppendToExisting
+						? AppendAtRight
+						: ShowAtRight, tooltip);
+			}
+		}
+
+		tooltipDisplayer.RegisterCallback(
+			(tooltipShowMode | TooltipShowMode.AppendToExisting) == TooltipShowMode.AppendToExisting
+				? RemoveTooltipsOfMatchingContext
+				: Hide, tooltip);
+	}
+
+	public static (string, TooltipMessage) CreateClickableLinkTooltip(string tooltipText, string iconClassName = BaseIcons.GenericInfo)
+	{
+		if (string.IsNullOrWhiteSpace(tooltipText))
+		{
+			return (null, null);
+		}
+
+		(string url, string formattedText) = tooltipText.ExtractHRef(replacementStartTag: BaseStyles.LinkStartTags, replacementEndTag: BaseStyles.LinkEndTags);
+		if (!string.IsNullOrEmpty(url))
+		{
+			return (url, new TooltipMessage(iconClassName, formattedText));
+		}
+		else
+		{
+			return (null, new TooltipMessage(iconClassName, tooltipText));
+		}
+	}
+
+	static string PrepareTooltipText(this VisualElement tooltipDisplayer, string tooltipText, string iconClassName = BaseIcons.GenericInfo)
+	{
+		string finalTooltipText;
 		(string url, string formattedText) = tooltipText.ExtractHRef(replacementStartTag: BaseStyles.LinkStartTags, replacementEndTag: BaseStyles.LinkEndTags);
 		if (!string.IsNullOrEmpty(url))
 		{
@@ -151,98 +237,43 @@ public static class TooltipUtil
 				if (e.ctrlKey && e.button == 0) // ctrl + left click
 				{
 					Application.OpenURL(gotUrl);
+					e.StopImmediatePropagation();
 				}
 			}, url);
+
 			tooltipDisplayer.userData = new[]
 			{
 				new TooltipMessage(BaseIcons.GenericInfo, formattedText),
-				TooltipMessage.Spacer,
 				TooltipMessage.OpenLinkInWebBrowser,
 			};
-			tooltipDisplayer.Register(tooltip);
-			return formattedText;
-		}
 
-		// If passed tooltipText already has an icon inside, or user doesn't want an icon displayed,
-		// then just use tooltipText as-is.
-		string finalTooltipText = tooltipText.Contains(';') || string.IsNullOrWhiteSpace(iconClassName) ? tooltipText : $"{iconClassName};{tooltipText}";
-
-		tooltipDisplayer.userData = finalTooltipText;
-
-		if (pushToStack)
-		{
-			tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
+			finalTooltipText = formattedText;
 		}
 		else
 		{
-			tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
-		}
+			// If passed tooltipText already has an icon inside, or user doesn't want an icon displayed,
+			// then just use tooltipText as-is.
+			finalTooltipText = tooltipText.Contains(';') || string.IsNullOrWhiteSpace(iconClassName) ? tooltipText : $"{iconClassName};{tooltipText}";
 
-		tooltipDisplayer.RegisterCallback(Hide, tooltip);
+			tooltipDisplayer.userData = finalTooltipText;
+		}
 
 		return finalTooltipText;
 	}
 
-	public static void Register(this VisualElement tooltipDisplayer, ITooltip tooltip, bool pushToStack = false)
-	{
-		if (tooltipDisplayer == null)
-		{
-			return;
-		}
-
-		if (pushToStack)
-		{
-			tooltipDisplayer.RegisterCallback(ShowTooltipFromUserDataPushToStack, tooltip);
-			tooltipDisplayer.RegisterCallback(Hide, tooltip);
-		}
-		else
-		{
-			tooltipDisplayer.RegisterCallback(ShowFromUserData, tooltip);
-			tooltipDisplayer.RegisterCallback(Hide, tooltip);
-		}
-	}
-
-	/// <summary>
-	///    Prepare the VisualElement to be able to show a tooltip to its right side, but only if no drag-and-drop is happening.
-	/// </summary>
-	public static void RegisterToRightNoDrag(this VisualElement tooltipDisplayer, ITooltip tooltip)
-	{
-		if (tooltipDisplayer == null)
-		{
-			return;
-		}
-
-		tooltipDisplayer.RegisterCallback(ShowAtRightNoDragFromUserData, tooltip);
-		tooltipDisplayer.RegisterCallback(Hide, tooltip);
-	}
-
-	/// <summary>
-	///    Prepare the VisualElement to be able to show a tooltip to its right side.
-	/// </summary>
-	public static void RegisterToRight(this VisualElement tooltipDisplayer, ITooltip tooltip)
-	{
-		if (tooltipDisplayer == null)
-		{
-			return;
-		}
-
-		tooltipDisplayer.RegisterCallback(ShowAtRightFromUserData, tooltip);
-		tooltipDisplayer.RegisterCallback(Hide, tooltip);
-	}
-
-	static void _ShowTooltipFromUserData(PointerEnterEvent e, ITooltip t)
+	static void _ShowAtMouse(PointerEnterEvent e, ITooltip t)
 	{
 		var eventTarget = (VisualElement)e.target;
 		_Show(eventTarget, t, e.position, false, ElementAnchorPoint.Mouse);
 	}
 
-	static void _ShowTooltipFromUserDataPushToStack(PointerEnterEvent e, ITooltip t)
+	static void _AppendAtMouse(PointerEnterEvent e, ITooltip t)
 	{
 		var eventTarget = (VisualElement)e.target;
 		_Show(eventTarget, t, e.position, true, ElementAnchorPoint.Mouse);
 	}
 
-	static void _ShowTooltipAtRightNoDragFromUserData(PointerEnterEvent e, ITooltip t)
+	static void _ShowAtRightNoDrag(PointerEnterEvent e, ITooltip t)
 	{
 		if (t.IsDragging)
 		{
@@ -253,10 +284,27 @@ public static class TooltipUtil
 		_Show(eventTarget, t, e.position, false, ElementAnchorPoint.Right);
 	}
 
-	static void _ShowTooltipAtRightFromUserData(PointerEnterEvent e, ITooltip t)
+	static void _ShowAtRight(PointerEnterEvent e, ITooltip t)
 	{
 		var eventTarget = (VisualElement)e.target;
 		_Show(eventTarget, t, e.position, false, ElementAnchorPoint.Right);
+	}
+
+	static void _AppendAtRightNoDrag(PointerEnterEvent e, ITooltip t)
+	{
+		if (t.IsDragging)
+		{
+			return;
+		}
+
+		var eventTarget = (VisualElement)e.target;
+		_Show(eventTarget, t, e.position, true, ElementAnchorPoint.Right);
+	}
+
+	static void _AppendAtRight(PointerEnterEvent e, ITooltip t)
+	{
+		var eventTarget = (VisualElement)e.target;
+		_Show(eventTarget, t, e.position, true, ElementAnchorPoint.Right);
 	}
 
 	public static (string, string) GetTooltipText(string tooltip)
@@ -302,7 +350,7 @@ public static class TooltipUtil
 						t.ShowTooltipAtMouse(eventTarget, tooltipText, iconClassName, mousePos, pushToStack);
 						break;
 					default:
-						t.ShowTooltipAt(eventTarget, tooltipText, iconClassName, anchorPoint, pushToStack);
+						t.ShowTooltipAt(eventTarget, eventTarget, tooltipText, iconClassName, anchorPoint, pushToStack);
 						break;
 				}
 
@@ -323,52 +371,41 @@ public static class TooltipUtil
 						t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
 						break;
 					default:
-						t.ShowTooltipAt(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, anchorPoint, pushToStack);
+						t.ShowTooltipAt(eventTarget, eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, anchorPoint, pushToStack);
 						break;
 				}
 
 				break;
 			}
-			case TooltipMessage[] tooltipMessageArray:
+			case TooltipWithAnchor tooltipWithAnchor:
 			{
-				if (tooltipMessageArray.Length == 0)
+				if (string.IsNullOrWhiteSpace(tooltipWithAnchor.Tooltip.Text))
 				{
-					t.SetContext(eventTarget);
+					// nothing to show
+					t.SetContext(anchorPoint == ElementAnchorPoint.Mouse ? eventTarget : tooltipWithAnchor.TooltipAnchor);
 					return;
-				}
-
-				if (!pushToStack)
-				{
-					t.ClearTooltipMessages();
-				}
-
-				bool addedAtLeastOne = false;
-				for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
-				{
-					if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
-					{
-						continue;
-					}
-
-					addedAtLeastOne = true;
-					t.AddToTooltip(eventTarget, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
-				}
-
-				if (!addedAtLeastOne)
-				{
-					t.SetContext(eventTarget);
 				}
 
 				switch (anchorPoint)
 				{
 					case ElementAnchorPoint.Mouse:
-						t.ShowAtMouseCursor(mousePos);
+						t.ShowTooltipAtMouse(eventTarget, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, mousePos, pushToStack);
 						break;
 					default:
-						t.ShowAt(eventTarget, anchorPoint);
+						t.ShowTooltipAt(eventTarget, tooltipWithAnchor.TooltipAnchor, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, anchorPoint, pushToStack);
 						break;
 				}
 
+				break;
+			}
+			case TooltipCollection tooltipCollection:
+			{
+				UseTooltipMessageArray(tooltipCollection.Tooltips, tooltipCollection.TooltipAnchor);
+				break;
+			}
+			case TooltipMessage[] tooltipMessageArray:
+			{
+				UseTooltipMessageArray(tooltipMessageArray, eventTarget);
 				break;
 			}
 			case List<TooltipMessage> tooltipMessageList:
@@ -414,6 +451,49 @@ public static class TooltipUtil
 				break;
 			}
 		}
+
+		return;
+
+		void UseTooltipMessageArray(TooltipMessage[] tooltipMessageArray, VisualElement anchor)
+		{
+			if (tooltipMessageArray.Length == 0)
+			{
+				t.SetContext(anchorPoint == ElementAnchorPoint.Mouse ? eventTarget : anchor);
+				return;
+			}
+
+			if (!pushToStack)
+			{
+				t.ClearTooltipMessages();
+			}
+
+			bool addedAtLeastOne = false;
+			for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+			{
+				if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
+				{
+					continue;
+				}
+
+				addedAtLeastOne = true;
+				t.AddToTooltip(eventTarget, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+			}
+
+			if (!addedAtLeastOne)
+			{
+				t.SetContext(eventTarget);
+			}
+
+			switch (anchorPoint)
+			{
+				case ElementAnchorPoint.Mouse:
+					t.ShowAtMouseCursor(mousePos);
+					break;
+				default:
+					t.ShowAt(anchor, anchorPoint);
+					break;
+			}
+		}
 	}
 
 	static void _HideTooltip(PointerLeaveEvent e, ITooltip t)
@@ -421,7 +501,7 @@ public static class TooltipUtil
 		t.HideTooltip();
 	}
 
-	static void _HideTooltipIfContextIs(PointerLeaveEvent e, ITooltip t)
+	static void _RemoveTooltipsOfMatchingContext(PointerLeaveEvent e, ITooltip t)
 	{
 		var eventTarget = (VisualElement)e.target;
 		t.HideTooltipIfContextIs(eventTarget, true);
@@ -518,19 +598,25 @@ public partial class Tooltip : VisualElement
 		this.SetPosition(mousePos);
 	}
 
-	public void ShowAt(VisualElement context, ElementAnchorPoint anchorPoint)
+	public void ShowAt(VisualElement anchorElement, ElementAnchorPoint anchorPoint)
 	{
 		_lastAnchorPoint = anchorPoint;
-		Rect contextRect = context.layout;
+
+		if (_messageRowCountUsed == 0)
+		{
+			return;
+		}
+
+		Rect anchorRect = anchorElement.layout;
 		var anchorPos = anchorPoint switch
 		{
-			ElementAnchorPoint.LowerRight => new Vector2(contextRect.width, contextRect.height),
+			ElementAnchorPoint.LowerRight => new Vector2(anchorRect.width, anchorRect.height),
 			ElementAnchorPoint.Left => new Vector2(0, 0),
-			ElementAnchorPoint.Right => new Vector2(contextRect.width, 0),
-			_ => new Vector2(0, contextRect.height), // default is Bottom
+			ElementAnchorPoint.Right => new Vector2(anchorRect.width, 0),
+			_ => new Vector2(0, anchorRect.height), // default is Bottom
 		};
-		var contextWorldPos = context.LocalToWorld(anchorPos);
-		var localPos = parent.WorldToLocal(contextWorldPos);
+		var anchorWorldPos = anchorElement.LocalToWorld(anchorPos);
+		var localPos = parent.WorldToLocal(anchorWorldPos);
 		this.SetPosition(localPos);
 
 		_showType = ShowType.AttachToVisualElement;
@@ -543,21 +629,43 @@ public partial class Tooltip : VisualElement
 	{
 		_lastContext = context;
 		Set(context, text, iconClassName, pushToStack);
+
+		if (pushToStack && style.display == DisplayStyle.Flex)
+		{
+			// tooltip is already shown
+			// do not change where it is shown
+			return;
+		}
 		ShowAtMouseCursor();
 	}
 
 	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
 	{
 		_lastContext = context;
+		bool alreadyShown = pushToStack && style.display == DisplayStyle.Flex;
+
 		ShowAtMouseCursor(context, text, iconClassName, pushToStack);
+
+		if (alreadyShown)
+		{
+			return;
+		}
+
 		this.SetPosition(mousePos);
 	}
 
-	public void ShowAt(VisualElement context, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false)
+	public void ShowAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false)
 	{
 		_lastContext = context;
 		Set(context, text, iconClassName, pushToStack);
-		ShowAt(context, anchorPoint);
+
+		if (pushToStack && style.display == DisplayStyle.Flex)
+		{
+			// tooltip is already shown
+			// do not change where it is shown
+			return;
+		}
+		ShowAt(anchorElement, anchorPoint);
 	}
 
 	public void ClearTooltipMessages()
@@ -674,6 +782,29 @@ public partial class Tooltip : VisualElement
 
 				break;
 			}
+			case TooltipWithAnchor tooltipWithAnchor:
+			{
+				if (!string.IsNullOrWhiteSpace(tooltipWithAnchor.Tooltip.Text))
+				{
+					PushToStack(context, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName);
+				}
+				break;
+			}
+			case TooltipCollection tooltipCollection:
+			{
+				TooltipMessage[] tooltipMessageArray = tooltipCollection.Tooltips;
+				for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+				{
+					if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
+					{
+						continue;
+					}
+
+					PushToStack(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+				}
+
+				break;
+			}
 			case TooltipMessage[] tooltipMessageArray:
 			{
 				for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
@@ -766,6 +897,8 @@ public partial class Tooltip : VisualElement
 	{
 		if (pushToStack)
 		{
+			// todo: check if this tooltip is already in the stack
+
 			if (_messageRows.Count == _messageRowCountUsed) // used up all existing rows, make a new one
 			{
 				var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);

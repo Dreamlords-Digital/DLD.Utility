@@ -12,6 +12,7 @@ public struct DropdownItem
 	public string Label;
 	public string ShortLabel;
 	public string Tooltip;
+	public TooltipMessage[] Tooltips;
 	public string IconClassName;
 }
 
@@ -74,7 +75,8 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	/// </summary>
 	readonly Toggle _toggle;
 
-	readonly TooltipMessage _enumValueTooltip = new(BaseIcons.GenericInfo);
+	readonly List<TooltipMessage> _enumValueTooltips = new();
+	int _usedEnumValueTooltipCount = 0;
 	readonly TooltipMessage _enumObsoleteTooltip = new(BaseIcons.GenericError);
 
 	/// <summary>
@@ -144,7 +146,7 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	///    Which element in the <see cref="_enumValues"/> has the 0 value, if any.
 	///    This is usually the first in the list of enum items, but that isn't a guarantee.
 	/// </summary>
-	int _noneIndex;
+	int _noneIndex = -1;
 
 	// ==================================================================================
 
@@ -227,18 +229,32 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 
 	public Label LabelElement => _label;
 
+	public List<TooltipMessage> EnumValueTooltips => _enumValueTooltips;
+
+	public TooltipMessage EnumObsoleteTooltip => _enumObsoleteTooltip;
+
 	public void SetContextMenu(IContextMenu contextMenu)
 	{
 		_contextMenu = contextMenu;
 	}
 
-	public void SetTooltip(ITooltip newTooltip, TooltipMessage additionalTooltip = null)
+	public void SetTooltip(ITooltip newTooltip, TooltipMessage additionalTooltip1 = null, TooltipMessage additionalTooltip2 = null)
 	{
 		// Prepare the dropdown box to allow it to display tooltips.
-		_toggle.RegisterCallback(TooltipUtil.ShowFromUserData, newTooltip);
+		_toggle.RegisterCallback(TooltipUtil.ShowAtRight, newTooltip);
 		_toggle.RegisterCallback(TooltipUtil.Hide, newTooltip);
 
-		_toggle.userData = new[] { additionalTooltip, _enumValueTooltip, _enumObsoleteTooltip };
+		var tooltips = new TooltipMessage[_enumValueTooltips.Count + 3];
+		for (int i = 0; i < _enumValueTooltips.Count; ++i)
+		{
+			tooltips[i] = _enumValueTooltips[i];
+		}
+
+		tooltips[^3] = _enumObsoleteTooltip;
+		tooltips[^2] = additionalTooltip1;
+		tooltips[^1] = additionalTooltip2;
+
+		_toggle.userData = tooltips;
 	}
 
 	public bool HasAnyErrorTooltip => !string.IsNullOrWhiteSpace(_enumObsoleteTooltip.Text);
