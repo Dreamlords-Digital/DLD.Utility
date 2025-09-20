@@ -58,7 +58,15 @@ public struct FloatRange : IEquatable<FloatRange>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public float Random()
 	{
-		return UnityEngine.Random.Range(Min, Max);
+		if (IsMinAndMaxSame)
+		{
+			return Min;
+		}
+
+		float actualMin = Mathf.Min(Min, Max);
+		float actualMax = Mathf.Max(Min, Max);
+
+		return UnityEngine.Random.Range(actualMin, actualMax);
 	}
 
 	/// <summary>
@@ -66,7 +74,15 @@ public struct FloatRange : IEquatable<FloatRange>
 	/// </summary>
 	public float Random(System.Random random)
 	{
-		return Min + ((float)NextDoubleInclusive(random) * (Max - Min));
+		if (IsMinAndMaxSame)
+		{
+			return Min;
+		}
+
+		float actualMin = Mathf.Min(Min, Max);
+		float actualMax = Mathf.Max(Min, Max);
+
+		return actualMin + ((float)NextDoubleInclusive(random) * (actualMax - actualMin));
 	}
 
 	/// <summary>

@@ -226,7 +226,15 @@ public struct IntRange : IEquatable<IntRange>
 	/// </summary>
 	public int Random()
 	{
-		return UnityEngine.Random.Range(Min, Max + 1);
+		if (Min == Max)
+		{
+			return Min;
+		}
+
+		int actualMin = Mathf.Min(Min, Max);
+		int actualMax = Mathf.Max(Min, Max);
+
+		return UnityEngine.Random.Range(actualMin, actualMax + 1);
 	}
 
 	/// <summary>
@@ -234,7 +242,15 @@ public struct IntRange : IEquatable<IntRange>
 	/// </summary>
 	public int Random(System.Random random)
 	{
-		return random.Next(Min, Max + 1);
+		if (Min == Max)
+		{
+			return Min;
+		}
+
+		int actualMin = Mathf.Min(Min, Max);
+		int actualMax = Mathf.Max(Min, Max);
+
+		return random.Next(actualMin, actualMax + 1);
 	}
 
 	public float Lerp(float t)
