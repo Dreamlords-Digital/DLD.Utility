@@ -33,8 +33,8 @@ public partial class Tooltip : VisualElement
 	}
 
 	readonly List<TooltipRow> _messageRows = new(10);
-	int _messageRowCountUsed;
 	VisualElement _lastContext;
+	VisualElement _lastAnchorElement;
 	ElementAnchorPoint _lastAnchorPoint;
 
 	readonly EventCallback<PointerMoveEvent> _onPointerMove;
@@ -66,15 +66,15 @@ public partial class Tooltip : VisualElement
 
 	public bool IsDragging => _dragStatus != null && _dragStatus.IsDragging;
 
-	public void Append(VisualElement context, string text, string iconClassName = null)
+	public void Append(VisualElement context, string text, string iconClassName = null, int indexToInsertInto = -1)
 	{
 		_lastContext = context;
-		Set(context, text, iconClassName, true);
+		Set(context, text, iconClassName, true, indexToInsertInto);
 	}
 
 	public void ShowAtMouseCursor()
 	{
-		if (_messageRowCountUsed == 0)
+		if (_messageRows.Count == 0)
 		{
 			return;
 		}
@@ -88,7 +88,7 @@ public partial class Tooltip : VisualElement
 
 	public void ShowAtMouseCursor(Vector2 mousePos)
 	{
-		if (_messageRowCountUsed == 0)
+		if (_messageRows.Count == 0)
 		{
 			return;
 		}
@@ -100,8 +100,9 @@ public partial class Tooltip : VisualElement
 	public void ShowAt(VisualElement anchorElement, ElementAnchorPoint anchorPoint)
 	{
 		_lastAnchorPoint = anchorPoint;
+		_lastAnchorElement = anchorElement;
 
-		if (_messageRowCountUsed == 0)
+		if (_messageRows.Count == 0)
 		{
 			return;
 		}
@@ -170,7 +171,7 @@ public partial class Tooltip : VisualElement
 	public void ClearTooltipMessages()
 	{
 		Clear();
-		_messageRowCountUsed = 0;
+		_messageRows.Clear();
 	}
 
 	public void SetContext(VisualElement context)
@@ -192,10 +193,10 @@ public partial class Tooltip : VisualElement
 		RemoveFromClassList(FollowElementStyleClass);
 		style.display = DisplayStyle.None;
 
-		if (_messageRowCountUsed > 0)
+		if (_messageRows.Count > 0)
 		{
 			Clear();
-			_messageRowCountUsed = 0;
+			_messageRows.Clear();
 		}
 	}
 
@@ -203,20 +204,23 @@ public partial class Tooltip : VisualElement
 	{
 		if (removeOnlyLastMessagesWithMatchingContext)
 		{
-			// keep removing last tooltip message if context is same
-			while (_messageRowCountUsed > 0 && _messageRows[_messageRowCountUsed - 1].Context == context)
+			// remove all messages that match the specified context
+			for (int n = _messageRows.Count - 1; n >= 0; --n)
 			{
-				Debug.Assert(ReferenceEquals(_messageRows[_messageRowCountUsed - 1].Container, this[_messageRowCountUsed - 1]),
-					$"_messageRows[{_messageRowCountUsed - 1}]: \"{_messageRows[_messageRowCountUsed - 1].Text.text}\", this[0]: \"{this[_messageRowCountUsed - 1].Q<Label>().text}\"");
+				if (_messageRows[n].Context == context)
+				{
+					Debug.Assert(ReferenceEquals(_messageRows[n].Container, this[n]),
+						$"Refreshing for {context.name ?? context.GetType().Name}: _messageRows[{n}]: \"{_messageRows[n].Text.text}\" {_messageRows[n].Container.name}, this[{n}]: \"{this[n].Q<Label>().text}\" {this[n].name}");
 
-				RemoveAt(_messageRowCountUsed-1);
-				--_messageRowCountUsed;
+					RemoveAt(n);
+					_messageRows.RemoveAt(n);
+				}
 			}
 
-			Debug.Assert(_messageRowCountUsed == childCount,
-				$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+			Debug.Assert(_messageRows.Count == childCount,
+				$"_messageRows.Count: {_messageRows.Count} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 
-			if (_messageRowCountUsed == 0)
+			if (_messageRows.Count == 0)
 			{
 				_Hide();
 			}
@@ -224,7 +228,7 @@ public partial class Tooltip : VisualElement
 		else
 		{
 			// check only topmost message, if context matches, hide
-			if (_messageRowCountUsed > 0 && _messageRows[_messageRowCountUsed - 1].Context == context)
+			if (_messageRows.Count > 0 && _messageRows[^1].Context == context)
 			{
 				_Hide();
 			}
@@ -239,7 +243,7 @@ public partial class Tooltip : VisualElement
 		bool foundInAtLeastOneContext = context == _lastContext;
 		if (!foundInAtLeastOneContext)
 		{
-			for (int n = 0; n < _messageRowCountUsed; ++n)
+			for (int n = 0; n < _messageRows.Count; ++n)
 			{
 				if (context == _messageRows[n].Context)
 				{
@@ -255,14 +259,15 @@ public partial class Tooltip : VisualElement
 			return;
 		}
 
-		if (_messageRowCountUsed > 0)
+		int firstIdxFound = -1;
+		if (_messageRows.Count > 0)
 		{
 			// remove all messages that match the specified context
 
-			Debug.Assert(_messageRowCountUsed == childCount,
-				$"Refreshing for {context.name ?? context.GetType().Name}: _messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+			Debug.Assert(_messageRows.Count == childCount,
+				$"Refreshing for {context.name ?? context.GetType().Name}: _messageRows.Count: {_messageRows.Count} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 
-			for (int n = _messageRowCountUsed - 1; n >= 0; --n)
+			for (int n = _messageRows.Count - 1; n >= 0; --n)
 			{
 				if (_messageRows[n].Context == context)
 				{
@@ -270,13 +275,14 @@ public partial class Tooltip : VisualElement
 						$"Refreshing for {context.name ?? context.GetType().Name}: _messageRows[{n}]: \"{_messageRows[n].Text.text}\" {_messageRows[n].Container.name}, this[{n}]: \"{this[n].Q<Label>().text}\" {this[n].name}");
 
 					RemoveAt(n);
-					--_messageRowCountUsed;
+					_messageRows.RemoveAt(n);
+					firstIdxFound = n;
 				}
 			}
 		}
 
-		Debug.Assert(_messageRowCountUsed == childCount,
-			$"Refreshing for {context.name ?? context.GetType().Name}: _messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+		Debug.Assert(_messageRows.Count == childCount,
+			$"Refreshing for {context.name ?? context.GetType().Name}: _messageRows.Count: {_messageRows.Count} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 
 		switch (context.userData)
 		{
@@ -285,7 +291,7 @@ public partial class Tooltip : VisualElement
 				if (!string.IsNullOrWhiteSpace(tooltipText))
 				{
 					(string updatedTooltipText, string iconClassName) = TooltipUtil.GetTooltipText(tooltipText);
-					Append(context, updatedTooltipText, iconClassName);
+					Append(context, updatedTooltipText, iconClassName, firstIdxFound);
 				}
 
 				break;
@@ -294,7 +300,7 @@ public partial class Tooltip : VisualElement
 			{
 				if (!string.IsNullOrWhiteSpace(tooltipMessage.Text))
 				{
-					Append(context, tooltipMessage.Text, tooltipMessage.IconClassName);
+					Append(context, tooltipMessage.Text, tooltipMessage.IconClassName, firstIdxFound);
 				}
 
 				break;
@@ -303,7 +309,7 @@ public partial class Tooltip : VisualElement
 			{
 				if (!string.IsNullOrWhiteSpace(tooltipWithAnchor.Tooltip.Text))
 				{
-					Append(context, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName);
+					Append(context, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, firstIdxFound);
 				}
 				break;
 			}
@@ -317,7 +323,7 @@ public partial class Tooltip : VisualElement
 						continue;
 					}
 
-					Append(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					Append(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName, firstIdxFound++);
 				}
 
 				break;
@@ -331,7 +337,7 @@ public partial class Tooltip : VisualElement
 						continue;
 					}
 
-					Append(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					Append(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName, firstIdxFound++);
 				}
 
 				break;
@@ -345,17 +351,17 @@ public partial class Tooltip : VisualElement
 						continue;
 					}
 
-					Append(context, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
+					Append(context, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName, firstIdxFound++);
 				}
 
 				break;
 			}
 		}
 
-		Debug.Assert(_messageRowCountUsed == childCount,
-			$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+		Debug.Assert(_messageRows.Count == childCount,
+			$"_messageRows.Count: {_messageRows.Count} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 
-		if (_messageRowCountUsed == 0)
+		if (_messageRows.Count == 0)
 		{
 			_Hide();
 		}
@@ -367,7 +373,7 @@ public partial class Tooltip : VisualElement
 					ShowAtMouseCursor();
 					break;
 				default:
-					ShowAt(context, _lastAnchorPoint);
+					ShowAt(_lastAnchorElement, _lastAnchorPoint);
 					break;
 			}
 		}
@@ -410,45 +416,23 @@ public partial class Tooltip : VisualElement
 		};
 	}
 
-	void Set(VisualElement context, string text, string iconClassName = null, bool append = false)
+	void Set(VisualElement context, string text, string iconClassName = null, bool append = false, int indexToInsertInto = -1)
 	{
 		if (append)
 		{
 			// todo: check if a tooltip with same context, text, and icon is already in the list?
 
-			if (_messageRows.Count == _messageRowCountUsed) // used up all existing rows, make a new one
-			{
-				var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
+			var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
 
+			if (indexToInsertInto == -1 || indexToInsertInto >= _messageRows.Count)
+			{
 				_messageRows.Add(newTooltipRow);
-				_messageRowCountUsed += 1;
-				newTooltipRow.Container.name = $"{_messageRowCountUsed}";
 				Add(newTooltipRow.Container);
 			}
-			else // reuse an existing row
+			else
 			{
-				var nextAvailable = _messageRows[_messageRowCountUsed];
-				{
-					// update context
-					nextAvailable.Context = context;
-					_messageRows[_messageRowCountUsed] = nextAvailable;
-				}
-				nextAvailable.Text.text = text;
-				if (!string.IsNullOrEmpty(iconClassName))
-				{
-					nextAvailable.Icon.style.display = DisplayStyle.Flex;
-					nextAvailable.Icon.ClearClassList();
-					nextAvailable.Icon.AddToClassList(TooltipIconStyleClass);
-					nextAvailable.Icon.AddToClassList(iconClassName);
-				}
-				else
-				{
-					nextAvailable.Icon.style.display = DisplayStyle.None;
-				}
-
-				Add(nextAvailable.Container);
-				_messageRowCountUsed += 1;
-				nextAvailable.Container.name = $"{_messageRowCountUsed}";
+				_messageRows.Insert(indexToInsertInto, newTooltipRow);
+				Insert(indexToInsertInto, newTooltipRow.Container);
 			}
 		}
 		else
@@ -457,28 +441,15 @@ public partial class Tooltip : VisualElement
 
 			// Remove all existing TooltipRow.Containers currently parented to the Tooltip.
 			Clear();
-
-			// _messageRowCountUsed might have been 0,
-			// so ensure it is now 1.
-			_messageRowCountUsed = 1;
+			_messageRows.Clear();
 
 			// --------------------------------------------------------------------
 
 			// Put in a single TooltipRow.Container into the Tooltip.
-			if (_messageRows.Count == 0)
-			{
-				// first ever message to be added
-				var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
-				_messageRows.Add(newTooltipRow);
-				Add(newTooltipRow.Container);
-				newTooltipRow.Container.name = "1";
-			}
-			else
-			{
-				// reuse existing first message struct
-				Add(_messageRows[0].Container);
-				_messageRows[0].Container.name = "1";
-			}
+
+			var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
+			_messageRows.Add(newTooltipRow);
+			Add(newTooltipRow.Container);
 
 			// --------------------------------------------------------------------
 
@@ -501,8 +472,8 @@ public partial class Tooltip : VisualElement
 			_messageRows[0] = firstMessage;
 		}
 
-		Debug.Assert(_messageRowCountUsed == childCount,
-			$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+		Debug.Assert(_messageRows.Count == childCount,
+			$"Mismatch on message count and child count. _messageRows.Count: {_messageRows.Count} childCount: {childCount} _messageRows.Count: {_messageRows.Count}\nWhen adding tooltip \"{text}\"");
 	}
 }
 
