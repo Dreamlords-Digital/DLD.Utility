@@ -13,22 +13,42 @@ public interface ITooltip
 {
 	/// <summary>
 	///    Show a tooltip message that follows the mouse cursor.
-	///    It will not hide until <see cref="HideTooltip"/> or <see cref="HideTooltipIfContextIs"/> is called.
 	/// </summary>
 	/// <param name="context">The thing that caused the tooltip to be shown.</param>
-	/// <param name="text"></param>
+	/// <param name="text">Text to be shown as the tooltip message.</param>
 	/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
-	/// <param name="mousePos">Initial mouse position. This ensures the tooltip is at the correct position at the start.</param>
-	/// <param name="pushToStack">Whether the tooltip text specified will be added to the existing text already on the tooltip, or not.</param>
-	void ShowTooltipAtMouse(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false);
-
-	void ShowTooltipAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false);
+	/// <param name="mousePos">Initial mouse position. This ensures the tooltip is at the correct position the moment it appears.</param>
+	/// <param name="append">
+	///    When set to true, the specified tooltip text will be added below all other currently shown text already on the tooltip.
+	///    When set to false, the specified tooltip text will replace all other currently shown text in the tooltip.
+	/// </param>
+	/// <remarks>
+	///    Call <see cref="HideTooltip"/> or <see cref="HideTooltipIfContextIs"/> to hide it.
+	/// </remarks>
+	void ShowTooltipAtMouse(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool append = false);
 
 	/// <summary>
-	///    Add another message to the tooltip, assuming it's already shown.
+	///    Show a tooltip message that is anchored to a <see cref="VisualElement"/>.
+	/// </summary>
+	/// <param name="context">The thing that caused the tooltip to be shown.</param>
+	/// <param name="anchorElement">Where to anchor the tooltip.</param>
+	/// <param name="text">Text to be shown as the tooltip message.</param>
+	/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
+	/// <param name="anchorPoint">In what position the tooltip should be in, relative to the anchor.</param>
+	/// <param name="append">
+	///    When set to true, the specified tooltip text will be added below all other currently shown text already on the tooltip.
+	///    When set to false, the specified tooltip text will replace all other currently shown text in the tooltip.
+	/// </param>
+	/// <remarks>
+	///    Call <see cref="HideTooltip"/> or <see cref="HideTooltipIfContextIs"/> to hide it.
+	/// </remarks>
+	void ShowTooltipAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool append = false);
+
+	/// <summary>
+	///    Add another message to the tooltip.
 	/// </summary>
 	/// <remarks>
-	///    The new message will be shown above and all the existing messages will be moved downward.
+	///    The new message will be shown below all the existing messages.
 	/// </remarks>
 	/// <param name="context">The thing that caused the tooltip to be shown.</param>
 	/// <param name="text"></param>
@@ -38,33 +58,82 @@ public interface ITooltip
 	void HideTooltip();
 
 	/// <summary>
-	///    Remove all messages in the tooltip, without hiding it (if it's shown).
+	///    Remove all messages in the tooltip, without hiding it (assuming it's currently shown).
 	/// </summary>
 	void ClearTooltipMessages();
 
+	/// <summary>
+	///    Show the tooltip and make it follow the mouse cursor.
+	/// </summary>
+	/// <remarks>
+	///    <para>
+	///       This is meant to be called after calling <see cref="AddToTooltip"/> multiple times.
+	///    </para>
+	///    <para>
+	///       Call <see cref="HideTooltip"/> or <see cref="HideTooltipIfContextIs"/> to hide it.
+	///    </para>
+	/// </remarks>
 	void ShowAtMouseCursor(Vector2 mousePos);
 
+	/// <summary>
+	///    Show the tooltip and make it anchored to a <see cref="VisualElement"/>.
+	/// </summary>
+	/// <param name="context">The thing that caused the tooltip to be shown.</param>
+	/// <param name="anchorPoint">In what position the tooltip should be in, relative to the anchor.</param>
+	/// <remarks>
+	///    <para>
+	///       This is meant to be called after calling <see cref="AddToTooltip"/> multiple times.
+	///    </para>
+	///    <para>
+	///       Call <see cref="HideTooltip"/> or <see cref="HideTooltipIfContextIs"/> to hide it.
+	///    </para>
+	///    <para>
+	///       If the <paramref name="context"/> has a <see cref="TooltipCollection"/> assigned to its <see cref="VisualElement.userData"/>,
+	///       then the anchor specified in <see cref="TooltipCollection.TooltipAnchor"/> will be used as the anchor.
+	///       Otherwise, the <paramref name="context"/> will be used as the anchor.
+	///    </para>
+	/// </remarks>
 	void ShowAt(VisualElement context, ElementAnchorPoint anchorPoint);
 
-	void SetContext(VisualElement eventTarget);
+	/// <summary>
+	///    Assign an "owner" to the tooltip even if no tooltip text is currently shown.
+	/// </summary>
+	/// <param name="context"></param>
+	/// <remarks>
+	///    <para>
+	///       This is used when the mouse is currently on a <see cref="VisualElement"/> that usually would display
+	///       a tooltip, but currently isn't showing any.
+	///    </para>
+	///    <para>
+	///       For example, let's say the mouse cursor moves into a textbox that shows an error tooltip message
+	///       only when the text inside fails a regex. If the text inside didn't fail the regex, then no
+	///       error tooltip will be shown, but <see cref="SetContext"/> should still be called.
+	///       <see cref="RefreshTooltipsOfContext"/> would then be called afterwards when the conditions
+	///       are met (e.g. mouse cursor never left the textbox, but the text inside the textbox has changed)
+	///       to make any relevant tooltips show up.
+	///    </para>
+	/// </remarks>
+	void SetContext(VisualElement context);
 
 	/// <summary>
 	///    If the context that was last assigned to the tooltip matches the one specified, the tooltip is hidden.
 	/// </summary>
-	/// <remarks>
-	///    Basically, this ensures a VisualElement that showed a tooltip
-	///    will hide it only if the tooltip is still showing its message.
-	/// </remarks>
-	/// <param name="context"></param>
-	/// <param name="popFromStack">
-	///    Only remove the most recent tooltip message (if it's showing multiple tooltip messages),
-	///    instead of hiding the entire tooltip.
+	/// <param name="context">The thing that caused the tooltip to be shown with a specific text and icon.</param>
+	/// <param name="removeOnlyLastMessagesWithMatchingContext">
+	///    Only remove the most recent tooltip messages (if it's showing multiple tooltip messages)
+	///    that the <paramref name="context"/> owns, instead of hiding the entire tooltip.
 	/// </param>
-	void HideTooltipIfContextIs(VisualElement context, bool popFromStack = false);
+	/// <remarks>
+	///    Basically, this ensures a <see cref="VisualElement"/> that showed a tooltip
+	///    will hide the tooltip only if the tooltip is still showing that VisualElement's message.
+	///    If the tooltip happened to be showing the text given by a different VisualElement already at that point,
+	///    then it won't be hidden.
+	/// </remarks>
+	void HideTooltipIfContextIs(VisualElement context, bool removeOnlyLastMessagesWithMatchingContext = false);
 
 	/// <summary>
-	///    Removes all currently displayed messages of the specified context,
-	///    then re-adds the up-to-date messages given by the specified context.
+	///    Removes all currently displayed messages of the specified <paramref name="context"/>,
+	///    then re-adds the up-to-date messages provided by the specified <paramref name="context"/>.
 	/// </summary>
 	/// <remarks>
 	///    If the tooltip isn't shown on the specified context, then this aborts.<br/>
@@ -73,6 +142,13 @@ public interface ITooltip
 	/// </remarks>
 	void RefreshTooltipsOfContext(VisualElement context);
 
+	/// <summary>
+	///    Whether the user is currently performing a drag-and-drop operation or not.
+	/// </summary>
+	/// <remarks>
+	///    This is used by tooltip displayers that do not want their tooltip to be shown
+	///    when the user is performing a drag-and-drop operation.
+	/// </remarks>
 	bool IsDragging { get; }
 }
 
@@ -329,7 +405,7 @@ public static class TooltipUtil
 		return (tooltip, iconClassName);
 	}
 
-	static void _Show(VisualElement eventTarget, ITooltip t, Vector2 mousePos, bool pushToStack, ElementAnchorPoint anchorPoint)
+	static void _Show(VisualElement eventTarget, ITooltip t, Vector2 mousePos, bool append, ElementAnchorPoint anchorPoint)
 	{
 		switch (eventTarget.userData)
 		{
@@ -347,10 +423,10 @@ public static class TooltipUtil
 				switch (anchorPoint)
 				{
 					case ElementAnchorPoint.Mouse:
-						t.ShowTooltipAtMouse(eventTarget, tooltipText, iconClassName, mousePos, pushToStack);
+						t.ShowTooltipAtMouse(eventTarget, tooltipText, iconClassName, mousePos, append);
 						break;
 					default:
-						t.ShowTooltipAt(eventTarget, eventTarget, tooltipText, iconClassName, anchorPoint, pushToStack);
+						t.ShowTooltipAt(eventTarget, eventTarget, tooltipText, iconClassName, anchorPoint, append);
 						break;
 				}
 
@@ -368,10 +444,10 @@ public static class TooltipUtil
 				switch (anchorPoint)
 				{
 					case ElementAnchorPoint.Mouse:
-						t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, pushToStack);
+						t.ShowTooltipAtMouse(eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, mousePos, append);
 						break;
 					default:
-						t.ShowTooltipAt(eventTarget, eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, anchorPoint, pushToStack);
+						t.ShowTooltipAt(eventTarget, eventTarget, tooltipMessage.Text, tooltipMessage.IconClassName, anchorPoint, append);
 						break;
 				}
 
@@ -389,10 +465,10 @@ public static class TooltipUtil
 				switch (anchorPoint)
 				{
 					case ElementAnchorPoint.Mouse:
-						t.ShowTooltipAtMouse(eventTarget, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, mousePos, pushToStack);
+						t.ShowTooltipAtMouse(eventTarget, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, mousePos, append);
 						break;
 					default:
-						t.ShowTooltipAt(eventTarget, tooltipWithAnchor.TooltipAnchor, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, anchorPoint, pushToStack);
+						t.ShowTooltipAt(eventTarget, tooltipWithAnchor.TooltipAnchor, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName, anchorPoint, append);
 						break;
 				}
 
@@ -416,13 +492,13 @@ public static class TooltipUtil
 					return;
 				}
 
-				if (!pushToStack)
+				if (!append)
 				{
 					t.ClearTooltipMessages();
 				}
 
 				bool addedAtLeastOne = false;
-				for (int i = tooltipMessageList.Count - 1; i >= 0; --i)
+				for (int i = 0; i < tooltipMessageList.Count; ++i)
 				{
 					if (tooltipMessageList[i] == null || string.IsNullOrWhiteSpace(tooltipMessageList[i].Text))
 					{
@@ -436,6 +512,10 @@ public static class TooltipUtil
 				if (!addedAtLeastOne)
 				{
 					t.SetContext(eventTarget);
+					if (!append)
+					{
+						return;
+					}
 				}
 
 				switch (anchorPoint)
@@ -462,13 +542,13 @@ public static class TooltipUtil
 				return;
 			}
 
-			if (!pushToStack)
+			if (!append)
 			{
 				t.ClearTooltipMessages();
 			}
 
 			bool addedAtLeastOne = false;
-			for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+			for (int i = 0; i < tooltipMessageArray.Length; ++i)
 			{
 				if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
 				{
@@ -482,6 +562,10 @@ public static class TooltipUtil
 			if (!addedAtLeastOne)
 			{
 				t.SetContext(eventTarget);
+				if (!append)
+				{
+					return;
+				}
 			}
 
 			switch (anchorPoint)
@@ -567,7 +651,7 @@ public partial class Tooltip : VisualElement
 
 	public bool IsDragging => _dragStatus != null && _dragStatus.IsDragging;
 
-	public void PushToStack(VisualElement context, string text, string iconClassName = null)
+	public void Append(VisualElement context, string text, string iconClassName = null)
 	{
 		_lastContext = context;
 		Set(context, text, iconClassName, true);
@@ -625,12 +709,12 @@ public partial class Tooltip : VisualElement
 		style.display = DisplayStyle.Flex;
 	}
 
-	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName = null, bool pushToStack = false)
+	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName = null, bool append = false)
 	{
 		_lastContext = context;
-		Set(context, text, iconClassName, pushToStack);
+		Set(context, text, iconClassName, append);
 
-		if (pushToStack && style.display == DisplayStyle.Flex)
+		if (append && style.display == DisplayStyle.Flex)
 		{
 			// tooltip is already shown
 			// do not change where it is shown
@@ -639,12 +723,12 @@ public partial class Tooltip : VisualElement
 		ShowAtMouseCursor();
 	}
 
-	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool pushToStack = false)
+	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool append = false)
 	{
 		_lastContext = context;
-		bool alreadyShown = pushToStack && style.display == DisplayStyle.Flex;
+		bool alreadyShown = append && style.display == DisplayStyle.Flex;
 
-		ShowAtMouseCursor(context, text, iconClassName, pushToStack);
+		ShowAtMouseCursor(context, text, iconClassName, append);
 
 		if (alreadyShown)
 		{
@@ -654,12 +738,12 @@ public partial class Tooltip : VisualElement
 		this.SetPosition(mousePos);
 	}
 
-	public void ShowAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool pushToStack = false)
+	public void ShowAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool append = false)
 	{
 		_lastContext = context;
-		Set(context, text, iconClassName, pushToStack);
+		Set(context, text, iconClassName, append);
 
-		if (pushToStack && style.display == DisplayStyle.Flex)
+		if (append && style.display == DisplayStyle.Flex)
 		{
 			// tooltip is already shown
 			// do not change where it is shown
@@ -700,17 +784,18 @@ public partial class Tooltip : VisualElement
 		}
 	}
 
-	public void HideIfContextIs(VisualElement context, bool popFromStack = false)
+	public void HideIfContextIs(VisualElement context, bool removeOnlyLastMessagesWithMatchingContext = false)
 	{
-		if (popFromStack)
+		if (removeOnlyLastMessagesWithMatchingContext)
 		{
+			// keep removing last tooltip message if context is same
 			while (_messageRowCountUsed > 0 && _messageRows[_messageRowCountUsed - 1].Context == context)
 			{
-				Debug.Assert(ReferenceEquals(_messageRows[_messageRowCountUsed - 1].Container, this[0]),
-					$"_messageRows[{_messageRowCountUsed - 1}]: \"{_messageRows[_messageRowCountUsed - 1].Text.text}\", this[0]: \"{this[0].Q<Label>().text}\"");
+				Debug.Assert(ReferenceEquals(_messageRows[_messageRowCountUsed - 1].Container, this[_messageRowCountUsed - 1]),
+					$"_messageRows[{_messageRowCountUsed - 1}]: \"{_messageRows[_messageRowCountUsed - 1].Text.text}\", this[0]: \"{this[_messageRowCountUsed - 1].Q<Label>().text}\"");
 
-				RemoveAt(0);
-				_messageRowCountUsed -= 1;
+				RemoveAt(_messageRowCountUsed-1);
+				--_messageRowCountUsed;
 			}
 
 			Debug.Assert(_messageRowCountUsed == childCount,
@@ -731,35 +816,52 @@ public partial class Tooltip : VisualElement
 		}
 	}
 
+	/// <inheritdoc cref="ITooltip.RefreshTooltipsOfContext"/>
 	public void RefreshTooltipsOfContext(VisualElement context)
 	{
 		Debug.Assert(context != null, "RefreshTooltipsOfContext: Passed context is null");
-		if (_lastContext != context)
+
+		bool foundInAtLeastOneContext = context == _lastContext;
+		if (!foundInAtLeastOneContext)
 		{
+			for (int n = 0; n < _messageRowCountUsed; ++n)
+			{
+				if (context == _messageRows[n].Context)
+				{
+					foundInAtLeastOneContext = true;
+					break;
+				}
+			}
+		}
+
+		if (!foundInAtLeastOneContext)
+		{
+			// no longer relevant because tooltip is now at a different context
 			return;
 		}
 
 		if (_messageRowCountUsed > 0)
 		{
+			// remove all messages that match the specified context
+
 			Debug.Assert(_messageRowCountUsed == childCount,
-				$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+				$"Refreshing for {context.name ?? context.GetType().Name}: _messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 
 			for (int n = _messageRowCountUsed - 1; n >= 0; --n)
 			{
 				if (_messageRows[n].Context == context)
 				{
-					int reversedIndex = _messageRowCountUsed - (n + 1);
-					Debug.Assert(ReferenceEquals(_messageRows[n].Container, this[reversedIndex]),
-						$"_messageRows[{n}]: \"{_messageRows[n].Text.text}\", this[{reversedIndex}]: \"{this[reversedIndex].Q<Label>().text}\"");
+					Debug.Assert(ReferenceEquals(_messageRows[n].Container, this[n]),
+						$"Refreshing for {context.name ?? context.GetType().Name}: _messageRows[{n}]: \"{_messageRows[n].Text.text}\" {_messageRows[n].Container.name}, this[{n}]: \"{this[n].Q<Label>().text}\" {this[n].name}");
 
-					RemoveAt(reversedIndex);
+					RemoveAt(n);
 					--_messageRowCountUsed;
 				}
 			}
 		}
 
 		Debug.Assert(_messageRowCountUsed == childCount,
-			$"_messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
+			$"Refreshing for {context.name ?? context.GetType().Name}: _messageRowCountUsed: {_messageRowCountUsed} childCount: {childCount} _messageRows.Count: {_messageRows.Count}");
 
 		switch (context.userData)
 		{
@@ -768,7 +870,7 @@ public partial class Tooltip : VisualElement
 				if (!string.IsNullOrWhiteSpace(tooltipText))
 				{
 					(string updatedTooltipText, string iconClassName) = TooltipUtil.GetTooltipText(tooltipText);
-					PushToStack(context, updatedTooltipText, iconClassName);
+					Append(context, updatedTooltipText, iconClassName);
 				}
 
 				break;
@@ -777,7 +879,7 @@ public partial class Tooltip : VisualElement
 			{
 				if (!string.IsNullOrWhiteSpace(tooltipMessage.Text))
 				{
-					PushToStack(context, tooltipMessage.Text, tooltipMessage.IconClassName);
+					Append(context, tooltipMessage.Text, tooltipMessage.IconClassName);
 				}
 
 				break;
@@ -786,49 +888,49 @@ public partial class Tooltip : VisualElement
 			{
 				if (!string.IsNullOrWhiteSpace(tooltipWithAnchor.Tooltip.Text))
 				{
-					PushToStack(context, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName);
+					Append(context, tooltipWithAnchor.Tooltip.Text, tooltipWithAnchor.Tooltip.IconClassName);
 				}
 				break;
 			}
 			case TooltipCollection tooltipCollection:
 			{
 				TooltipMessage[] tooltipMessageArray = tooltipCollection.Tooltips;
-				for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+				for (int i = 0; i < tooltipMessageArray.Length; ++i)
 				{
 					if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
 					{
 						continue;
 					}
 
-					PushToStack(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					Append(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
 				}
 
 				break;
 			}
 			case TooltipMessage[] tooltipMessageArray:
 			{
-				for (int i = tooltipMessageArray.Length - 1; i >= 0; --i)
+				for (int i = 0; i < tooltipMessageArray.Length; ++i)
 				{
 					if (tooltipMessageArray[i] == null || string.IsNullOrWhiteSpace(tooltipMessageArray[i].Text))
 					{
 						continue;
 					}
 
-					PushToStack(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
+					Append(context, tooltipMessageArray[i].Text, tooltipMessageArray[i].IconClassName);
 				}
 
 				break;
 			}
 			case List<TooltipMessage> tooltipMessageList:
 			{
-				for (int i = tooltipMessageList.Count - 1; i >= 0; --i)
+				for (int i = 0; i < tooltipMessageList.Count; ++i)
 				{
 					if (tooltipMessageList[i] == null || string.IsNullOrWhiteSpace(tooltipMessageList[i].Text))
 					{
 						continue;
 					}
 
-					PushToStack(context, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
+					Append(context, tooltipMessageList[i].Text, tooltipMessageList[i].IconClassName);
 				}
 
 				break;
@@ -893,11 +995,11 @@ public partial class Tooltip : VisualElement
 		};
 	}
 
-	void Set(VisualElement context, string text, string iconClassName = null, bool pushToStack = false)
+	void Set(VisualElement context, string text, string iconClassName = null, bool append = false)
 	{
-		if (pushToStack)
+		if (append)
 		{
-			// todo: check if this tooltip is already in the stack
+			// todo: check if a tooltip with same context, text, and icon is already in the list?
 
 			if (_messageRows.Count == _messageRowCountUsed) // used up all existing rows, make a new one
 			{
@@ -905,7 +1007,8 @@ public partial class Tooltip : VisualElement
 
 				_messageRows.Add(newTooltipRow);
 				_messageRowCountUsed += 1;
-				Insert(0, newTooltipRow.Container);
+				newTooltipRow.Container.name = $"{_messageRowCountUsed}";
+				Add(newTooltipRow.Container);
 			}
 			else // reuse an existing row
 			{
@@ -928,49 +1031,59 @@ public partial class Tooltip : VisualElement
 					nextAvailable.Icon.style.display = DisplayStyle.None;
 				}
 
-				Insert(0, nextAvailable.Container);
+				Add(nextAvailable.Container);
 				_messageRowCountUsed += 1;
+				nextAvailable.Container.name = $"{_messageRowCountUsed}";
 			}
 		}
 		else
 		{
-			while (_messageRowCountUsed > 1)
-			{
-				RemoveAt(0);
-				--_messageRowCountUsed;
-			}
+			// No append means we replace entire list of tooltip messages with only one.
 
+			// Remove all existing TooltipRow.Containers currently parented to the Tooltip.
+			Clear();
+
+			// _messageRowCountUsed might have been 0,
+			// so ensure it is now 1.
 			_messageRowCountUsed = 1;
+
+			// --------------------------------------------------------------------
+
+			// Put in a single TooltipRow.Container into the Tooltip.
 			if (_messageRows.Count == 0)
 			{
+				// first ever message to be added
 				var newTooltipRow = CreateNewTooltipRow(context, text, iconClassName);
 				_messageRows.Add(newTooltipRow);
-				Insert(0, newTooltipRow.Container);
+				Add(newTooltipRow.Container);
+				newTooltipRow.Container.name = "1";
 			}
 			else
 			{
-				Insert(0, _messageRows[0].Container);
+				// reuse existing first message struct
+				Add(_messageRows[0].Container);
+				_messageRows[0].Container.name = "1";
 			}
 
-			var lastMessage = _messageRows[0];
-			{
-				// update context
-				lastMessage.Context = context;
-				_messageRows[0] = lastMessage;
-			}
+			// --------------------------------------------------------------------
 
-			lastMessage.Text.text = text;
+			var firstMessage = _messageRows[0];
+			firstMessage.Context = context;
+			firstMessage.Text.text = text;
 			if (!string.IsNullOrWhiteSpace(iconClassName))
 			{
-				lastMessage.Icon.style.display = DisplayStyle.Flex;
-				lastMessage.Icon.ClearClassList();
-				lastMessage.Icon.AddToClassList(TooltipIconStyleClass);
-				lastMessage.Icon.AddToClassList(iconClassName);
+				firstMessage.Icon.style.display = DisplayStyle.Flex;
+				firstMessage.Icon.ClearClassList();
+				firstMessage.Icon.AddToClassList(TooltipIconStyleClass);
+				firstMessage.Icon.AddToClassList(iconClassName);
 			}
 			else
 			{
-				lastMessage.Icon.style.display = DisplayStyle.None;
+				firstMessage.Icon.style.display = DisplayStyle.None;
 			}
+
+			// ensure our List is updated with the new values we assigned
+			_messageRows[0] = firstMessage;
 		}
 
 		Debug.Assert(_messageRowCountUsed == childCount,
