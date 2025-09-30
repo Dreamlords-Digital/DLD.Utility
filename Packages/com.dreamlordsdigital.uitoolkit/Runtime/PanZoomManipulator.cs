@@ -679,9 +679,14 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 				droppedInAdditional = _additionalDragContainer.ContainsPoint(draggedElementEndLocalPosInAdditional);
 			}
 
+			if (_isDraggingClonedElement)
+			{
+				_draggedElement.RemoveFromHierarchy();
+			}
+
 			if (droppedInAdditional)
 			{
-				// todo: delete the node
+				// todo: turn the node into a template
 			}
 			else
 			{
@@ -690,10 +695,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			}
 
 			_tooltip?.HideTooltip();
-			if (_isDraggingClonedElement)
-			{
-				_draggedElement.RemoveFromHierarchy();
-			}
 
 			_draggingPointerId = -1;
 			_draggedElement = null;
