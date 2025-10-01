@@ -687,6 +687,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			if (droppedInAdditional)
 			{
 				// todo: turn the node into a template
+				OnCanceledDrag();
 			}
 			else
 			{
