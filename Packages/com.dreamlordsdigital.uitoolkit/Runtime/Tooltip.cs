@@ -55,6 +55,7 @@ public partial class Tooltip : VisualElement
 
 		RegisterCallback<AttachToPanelEvent, Tooltip>((e, t) => e.destinationPanel.visualTree.RegisterCallback(t._onPointerMove), this);
 		RegisterCallback<DetachFromPanelEvent, Tooltip>((e, t) => e.originPanel?.visualTree.UnregisterCallback(t._onPointerMove), this);
+		RegisterCallback<GeometryChangedEvent, Tooltip>((e, t) => t.OnResized(e), this);
 	}
 
 	// ==================================================================================================
@@ -97,7 +98,8 @@ public partial class Tooltip : VisualElement
 		this.SetPosition(mousePos);
 	}
 
-	public void ShowAt(VisualElement anchorElement, ElementAnchorPoint anchorPoint)
+	public void ShowAt(
+		VisualElement anchorElement, ElementAnchorPoint anchorPoint, bool adjustForSizeImmediately = false)
 	{
 		_lastAnchorPoint = anchorPoint;
 		_lastAnchorElement = anchorElement;
@@ -123,6 +125,11 @@ public partial class Tooltip : VisualElement
 		RemoveFromClassList(FollowMouseStyleClass);
 		AddToClassList(FollowElementStyleClass);
 		style.display = DisplayStyle.Flex;
+
+		if (adjustForSizeImmediately)
+		{
+			AdjustPositionWithSize();
+		}
 	}
 
 	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName = null, bool append = false)
@@ -139,7 +146,8 @@ public partial class Tooltip : VisualElement
 		ShowAtMouseCursor();
 	}
 
-	public void ShowAtMouseCursor(VisualElement context, string text, string iconClassName, Vector2 mousePos, bool append = false)
+	public void ShowAtMouseCursor(
+		VisualElement context, string text, string iconClassName, Vector2 mousePos, bool append = false)
 	{
 		_lastContext = context;
 		bool alreadyShown = append && style.display == DisplayStyle.Flex;
@@ -154,7 +162,9 @@ public partial class Tooltip : VisualElement
 		this.SetPosition(mousePos);
 	}
 
-	public void ShowAt(VisualElement context, VisualElement anchorElement, string text, string iconClassName, ElementAnchorPoint anchorPoint, bool append = false)
+	public void ShowAt(
+		VisualElement context, VisualElement anchorElement, string text, string iconClassName,
+		ElementAnchorPoint anchorPoint, bool append = false)
 	{
 		_lastContext = context;
 		Set(context, text, iconClassName, append);
@@ -373,7 +383,7 @@ public partial class Tooltip : VisualElement
 					ShowAtMouseCursor();
 					break;
 				default:
-					ShowAt(_lastAnchorElement, _lastAnchorPoint);
+					ShowAt(_lastAnchorElement, _lastAnchorPoint, style.display == DisplayStyle.Flex);
 					break;
 			}
 		}
@@ -381,11 +391,41 @@ public partial class Tooltip : VisualElement
 
 	// ==================================================================================================
 
+	void OnResized(GeometryChangedEvent e)
+	{
+		if (e.newRect.width == 0 || e.newRect.height == 0)
+		{
+			return;
+		}
+
+		AdjustPositionWithSize();
+	}
+
 	void OnPointerMove(PointerMoveEvent e)
 	{
 		if (_showType is ShowType.FollowMouseCursor or ShowType.None)
 		{
 			this.SetPosition(e.position);
+		}
+	}
+
+	void AdjustPositionWithSize()
+	{
+		Rect tooltipRect = worldBound;
+		Rect windowRect = panel.visualTree.layout;
+
+		switch (_lastAnchorPoint)
+		{
+			case ElementAnchorPoint.Left:
+				this.AddToPosition(new Vector2(-tooltipRect.width, 0));
+				break;
+			case ElementAnchorPoint.Right:
+				if (tooltipRect.xMax > windowRect.xMax)
+				{
+					// anchor tooltip to left instead
+					ShowAt(_lastAnchorElement, ElementAnchorPoint.Left, true);
+				}
+				break;
 		}
 	}
 
