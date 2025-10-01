@@ -83,7 +83,7 @@
 }
 
 .dld-icon--debug {
-    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/applications-system.png?fileID=2800000&guid=bc90a63feda7e7f4fa01ee335aa0f4dc&type=3#applications-system");
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/utilities-terminal.png?fileID=2800000&guid=64f60385cee9cf84e829c234c15ffaf5&type=3#utilities-terminal");
 }
 
 .dld-icon--add-to-favorites {
