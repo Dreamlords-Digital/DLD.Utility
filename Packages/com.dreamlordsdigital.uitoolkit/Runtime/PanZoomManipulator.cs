@@ -243,6 +243,10 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	public bool IsDragging => _isDragging;
 
+	public bool AllowPanning { get; set; } = true;
+	public bool AllowZooming { get; set; } = true;
+	public bool AllowDragging { get; set; } = true;
+
 	protected void AddToPointerMoveEvent(CallbackEventHandler c)
 	{
 		c.RegisterCallback(_onPointerMove);
@@ -513,23 +517,26 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			OnForceMoveChanged(e.position);
 		}
 
-		if (_ctrl && _spacebarHeld)
+		if (AllowZooming)
 		{
-			// zoom in
-			_moveTarget.SetScaleByZoom(6, target, e.localPosition);
-			return;
-		}
+			if (_ctrl && _spacebarHeld)
+			{
+				// zoom in
+				_moveTarget.SetScaleByZoom(6, target, e.localPosition);
+				return;
+			}
 
-		if (_alt && _spacebarHeld)
-		{
-			// zoom out
-			_moveTarget.SetScaleByZoom(-6, target, e.localPosition);
-			return;
+			if (_alt && _spacebarHeld)
+			{
+				// zoom out
+				_moveTarget.SetScaleByZoom(-6, target, e.localPosition);
+				return;
+			}
 		}
 
 		// ---------------------------------------------------
 
-		if ((_spacebarHeld && e.button == 0) || e.button == 2) // pan: spacebar + left-click, or middle-click
+		if (AllowPanning && ((_spacebarHeld && e.button == 0) || e.button == 2)) // pan: spacebar + left-click, or middle-click
 		{
 			_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, e.localPosition);
 
@@ -729,6 +736,11 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	void OnWheel(WheelEvent e)
 	{
+		if (!AllowZooming)
+		{
+			return;
+		}
+
 		_moveTarget.SetScaleByZoom(-e.delta.y, target, e.localMousePosition);
 		e.StopPropagation();
 	}
