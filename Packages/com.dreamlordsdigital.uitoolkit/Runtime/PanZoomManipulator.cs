@@ -20,6 +20,13 @@ public interface ICtrlLinkRegister
 
 public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister
 {
+	// ==================================================================================
+	// Dependencies
+
+	protected ITooltip _tooltip;
+
+	// ==================================================================================
+
 	/// <summary>
 	///    The local mouse coordinates when pan started.
 	/// </summary>
@@ -69,11 +76,36 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	/// </remarks>
 	bool _shift;
 
+	/// <summary>
+	///    Position of panning before a new pan operation is performed.
+	///    This is used to pan position back to its former value in case user cancelled the pan operation.
+	/// </summary>
+	Vector3 _moveTargetInitialPos;
+
+	/// <summary>
+	///    The element that gets panned and zoomed by this manipulator.
+	/// </summary>
+	VisualElement _moveTarget;
+
+	// -------------------------------------------------
+	// Drag-and-drop
+
 	bool _draggedElementHasBeenMoved;
 	bool _isDragging;
 	bool _isDraggingClonedElement;
 
 	int _draggingPointerId = -1;
+
+	/// <summary>
+	///    VisualElement that the user is dragging.
+	/// </summary>
+	VisualElement _draggedElement;
+
+	/// <summary>
+	///    Specially designated container where <see cref="_draggedElement"/> will be in.
+	///    This should be above everything else, so the dragged element is visible above them.
+	/// </summary>
+	VisualElement _draggedElementContainer;
 
 	/// <summary>
 	///    Where in the dragged element it got clicked on when the dragging started.
@@ -83,22 +115,13 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	/// </remarks>
 	Vector2 _draggedElementStartLocalPos;
 
-	Vector3 _pointerLastKnownLocalPos;
-
-	Vector3 _moveTargetInitialPos;
-
 	/// <summary>
-	///    The element that gets panned and zoomed by this manipulator.
+	///    Last known local-position of the mouse given by <see cref="OnPointerMove"/> while user is dragging.
+	///    This is used by events that do not have access to the mouse position, like key press events.
 	/// </summary>
-	VisualElement _moveTarget;
+	Vector3 _draggingPointerLastKnownLocalPos;
 
-	VisualElement _additionalDragContainer;
-
-	/// <summary>
-	///    Specially designated container where dragged element will be in.
-	///    This should be above everything else, so the dragged element is visible above them.
-	/// </summary>
-	VisualElement _draggedElementContainer;
+	// -------------------------------------------------
 
 	/// <summary>
 	///    The element where we listen for key-down and key-up events.
@@ -126,8 +149,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	/// </remarks>
 	VisualElement _keyEventTarget;
 
-	VisualElement _draggedElement;
-
 	/// <summary>
 	///    The element that causes the mouse cursor to change.
 	/// </summary>
@@ -144,12 +165,19 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	/// </remarks>
 	VisualElement _mouseCursorDisplay;
 
+	/// <summary>
+	///    Last known position of the mouse given by <see cref="OnPointerMove"/>.
+	///    This is used by events that do not have access to the mouse position, like key press events.
+	/// </summary>
 	Vector2 _lastKnownMousePos;
+
+	// -------------------------------------------------
 
 	ICtrlHoverable _ctrlHoverableElement;
 	VisualElement _hoveredCtrlLinkElement;
 
-	protected ITooltip _tooltip;
+	// ==================================================================================
+	// Event Callbacks
 
 	readonly EventCallback<KeyDownEvent> _onKeyDown;
 	readonly EventCallback<KeyUpEvent> _onKeyUp;
@@ -158,7 +186,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	readonly EventCallback<PointerUpEvent> _onPointerUp;
 	readonly EventCallback<WheelEvent> _onWheel;
 
-	// ==================================================================================================
+	// ==================================================================================
 
 	public PanZoomManipulator()
 	{
@@ -176,8 +204,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		_onWheel = OnWheel;
 	}
 
-	public bool IsDoingForceMove => _shift;
-
 	/// <inheritdoc cref="_moveTarget"/>
 	public void SetMoveTarget(VisualElement newMoveTarget)
 	{
@@ -187,19 +213,6 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		}
 
 		_moveTarget = newMoveTarget;
-	}
-
-	public void AddDragContainer(VisualElement newContainer)
-	{
-		_additionalDragContainer = newContainer;
-		_additionalDragContainer.RegisterCallback(_onPointerMove);
-		_additionalDragContainer.RegisterCallback(_onPointerUp);
-	}
-
-	public void RemoveDragContainer(VisualElement newContainer)
-	{
-		newContainer.UnregisterCallback(_onPointerMove);
-		newContainer.UnregisterCallback(_onPointerUp);
 	}
 
 	public void SetDraggedElementContainer(VisualElement newContainer)
@@ -226,7 +239,19 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	// ==================================================================================================
 
+	public bool IsDoingForceMove => _shift;
+
 	public bool IsDragging => _isDragging;
+
+	protected void AddToPointerMoveEvent(CallbackEventHandler c)
+	{
+		c.RegisterCallback(_onPointerMove);
+	}
+
+	protected void AddToPointerUpEvent(CallbackEventHandler c)
+	{
+		c.RegisterCallback(_onPointerUp);
+	}
 
 	protected override void RegisterCallbacksOnTarget()
 	{
@@ -292,7 +317,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			{
 				// Spacebar started getting pressed while dragging.
 				// That means user wants to start panning while dragging.
-				_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, _pointerLastKnownLocalPos);
+				_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, _draggingPointerLastKnownLocalPos);
 			}
 		}
 		else if (e.keyCode == KeyCode.Escape)
@@ -619,11 +644,10 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 				{
 					// convert mouse pos to be relative to the Tab Body
 					Vector2 localPointer;
-					if (_additionalDragContainer.IsOrAncestorOf(targetElement))
+					(bool gotCustomDragPosition, Vector2 customDragPosition) = GetCustomDragPosition(e, targetElement, _draggedElementContainer.contentContainer);
+					if (gotCustomDragPosition)
 					{
-						// PointerMoveEvent happened on the _additionalDragContainer
-						// convert the event's mouse position to our special container for dragged elements
-						localPointer = _additionalDragContainer.ChangeCoordinatesTo(_draggedElementContainer.contentContainer, e.localPosition);
+						localPointer = customDragPosition;
 					}
 					else if (target.IsOrAncestorOf(targetElement)) // note: target is the TabBodyContainer of the Pane
 					{
@@ -639,7 +663,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 					_draggedElement.SetPosition(localPointer.x - _draggedElementStartLocalPos.x, localPointer.y - _draggedElementStartLocalPos.y);
 				}
 
-				_pointerLastKnownLocalPos = e.localPosition;
+				_draggingPointerLastKnownLocalPos = e.localPosition;
 			}
 		}
 
@@ -672,24 +696,13 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		{
 			Vector2 draggedElementEndPos = _draggedElement.resolvedStyle.translate;
 			Vector2 draggedElementEndWorldPos = _draggedElementContainer.LocalToWorld(draggedElementEndPos);
-
-			bool droppedInAdditional;
-			{
-				Vector2 draggedElementEndLocalPosInAdditional = _additionalDragContainer.WorldToLocal(draggedElementEndWorldPos);
-				droppedInAdditional = _additionalDragContainer.ContainsPoint(draggedElementEndLocalPosInAdditional);
-			}
-
 			if (_isDraggingClonedElement)
 			{
 				_draggedElement.RemoveFromHierarchy();
 			}
 
-			if (droppedInAdditional)
-			{
-				// todo: turn the node into a template
-				OnCanceledDrag();
-			}
-			else
+			bool dropWasHandledByCustom = HandleCustomDragAndDropEnd(draggedElementEndWorldPos);
+			if (!dropWasHandledByCustom)
 			{
 				Vector2 draggedElementEndLocalPos = _moveTarget.WorldToLocal(draggedElementEndWorldPos);
 				OnEndedDrag(e, draggedElementEndLocalPos);
@@ -721,12 +734,18 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	}
 
 	/// <summary>
-	///    This method is called the moment that the user moves the mouse while having left mouse button held down on a node.
+	///    This method is called the moment that the user moves the mouse
+	///    while having left mouse button held down on a node.
 	/// </summary>
-	protected virtual VisualElement OnStartedDrag(PointerMoveEvent e)
+	protected virtual VisualElement OnStartedDrag(PointerMoveEvent e) => null;
+
+	protected virtual (bool, Vector2) GetCustomDragPosition(
+		PointerMoveEvent e, VisualElement elementHovered, VisualElement draggedElementContainer)
 	{
-		return null;
+		return (false, Vector2.zero);
 	}
+
+	protected virtual bool HandleCustomDragAndDropEnd(Vector2 draggedElementEndWorldPos) => false;
 
 	/// <summary>
 	///    Called when user starts pressing shift, or releases shift.
