@@ -190,6 +190,8 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	/// </summary>
 	List<VisualElement> _currentValueIcons;
 
+	bool _isReadOnly;
+
 	// ==================================================================================
 
 	public Dropdown()
@@ -214,12 +216,22 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 		_label = this.Q<Label>(null, "dld-dropdown__label");
 		_label.RegisterCallback<MouseDownEvent, Dropdown>((e, d) =>
 		{
+			if (d._isReadOnly)
+			{
+				return;
+			}
+
 			d._toggle.value = true;
 			e.StopPropagation();
 		}, this);
 
 		_toggle.RegisterCallback<ChangeEvent<bool>, Dropdown>((e, d) =>
 		{
+			if (d._isReadOnly)
+			{
+				return;
+			}
+
 			if (!e.previousValue && e.newValue)
 			{
 				d.OnOpen();
@@ -238,6 +250,14 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	public List<TooltipMessage> EnumValueTooltips => _enumValueTooltips;
 
 	public TooltipMessage EnumObsoleteTooltip => _enumObsoleteTooltip;
+
+	public void SetReadOnly(bool readOnly, string readOnlyStyleClass)
+	{
+		_isReadOnly = readOnly;
+
+		_toggle.enabledSelf = !_isReadOnly;
+		_toggle.EnableInClassList(readOnlyStyleClass, _isReadOnly);
+	}
 
 	public void SetContextMenu(IContextMenu contextMenu)
 	{
@@ -322,6 +342,11 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 	/// </summary>
 	void OnOpen()
 	{
+		if (_isReadOnly)
+		{
+			return;
+		}
+
 		switch (_currentMode)
 		{
 			case Mode.Enum:
