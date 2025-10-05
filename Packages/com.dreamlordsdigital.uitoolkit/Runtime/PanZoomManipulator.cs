@@ -23,6 +23,9 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	// ==================================================================================
 	// Dependencies
 
+	/// <summary>
+	///    Used for showing tooltips while dragging.
+	/// </summary>
 	protected ITooltip _tooltip;
 
 	// ==================================================================================
@@ -234,6 +237,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		_mouseCursorDisplay = newMouseCursorDisplay;
 	}
 
+	/// <inheritdoc cref="_tooltip"/>
 	public void SetTooltip(ITooltip tooltip)
 	{
 		_tooltip = tooltip;
@@ -247,7 +251,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	public bool AllowPanning { get; set; } = true;
 	public bool AllowZooming { get; set; } = true;
-	public bool AllowDragging { get; set; } = true;
+	public bool AllowDragAndDrop { get; set; } = true;
 
 	public void SetZoom(float zoomLevel)
 	{
