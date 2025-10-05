@@ -76,6 +76,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	/// </remarks>
 	bool _shift;
 
+	bool _pointerDownOnEmptyBackground;
+
 	/// <summary>
 	///    Position of panning before a new pan operation is performed.
 	///    This is used to pan position back to its former value in case user cancelled the pan operation.
@@ -485,11 +487,12 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 		if (!_spacebarHeld && e.button == 0)
 		{
-			Debug.Log($"NodeDragAndDrop OnPointerDown {e.position} Clicked on empty background");
 			_mouseCursorDisplay.style.display = DisplayStyle.None;
-
+			_pointerDownOnEmptyBackground = true;
 			return;
 		}
+
+		_pointerDownOnEmptyBackground = false;
 
 		// ---------------------------------------------------
 		// Zoom controls take precedence over pan
@@ -692,6 +695,14 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			return;
 		}
 
+		if (!_isDragging && !_isPanning && !_spacebarHeld && _pointerDownOnEmptyBackground)
+		{
+			_pointerDownOnEmptyBackground = false;
+			OnClickEmptyBackground();
+			RefreshMouseCursor(e.position);
+			return;
+		}
+
 		if (!_draggedElementHasBeenMoved && e.pointerId == _draggingPointerId)
 		{
 			_draggingPointerId = -1;
@@ -743,6 +754,10 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 		_moveTarget.SetScaleByZoom(-e.delta.y, target, e.localMousePosition);
 		e.StopPropagation();
+	}
+
+	protected virtual void OnClickEmptyBackground()
+	{
 	}
 
 	/// <summary>
