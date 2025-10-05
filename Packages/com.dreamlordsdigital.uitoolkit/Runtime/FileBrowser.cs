@@ -118,13 +118,13 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	readonly ListView _pathHistoryListView;
 	readonly VisualElement _jumpMenu;
 	readonly TreeView _jumpMenuTreeView;
-	readonly MultiColumnListView _fileSystemEntriesView;
+	protected readonly MultiColumnListView _fileSystemEntriesView;
 	readonly Button _backButton;
 	readonly Button _forwardButton;
 	readonly Toggle _jumpButton;
 	readonly Button _exploreButton;
 	readonly TextField _currentPathTextField;
-	readonly FilenameTextField _filenameTextField;
+	protected readonly FilenameTextField _filenameTextField;
 	readonly Button _confirmButton;
 
 	IContextMenu _contextMenu;
@@ -208,7 +208,9 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	{
 		get
 		{
+			// the hash is for in case the user has multiple projects with the same name
 			string projectPathHash = StringUtil.ComputeMD5Hash(Application.dataPath);
+
 			return $"{FileUtil.UserFolderPath}/DLD/{FileUtil.ProjectFolderName}-{projectPathHash}/FileBrowserFavorites.txt";
 		}
 	}
@@ -1289,95 +1291,110 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			});
 		}
 
-		foreach (string subFolder in Directory.EnumerateDirectories(_currentPath))
+		if (Directory.Exists(_currentPath))
 		{
-			string subFolderName = Path.GetFileName(subFolder);
+			foreach (string subFolder in Directory.EnumerateDirectories(_currentPath))
+			{
+				string subFolderName = Path.GetFileName(subFolder);
 
-			// The "System Volume Information" is something we can't access anyway.
-			if (_currentPathIsRoot && subFolderName == "System Volume Information")
-			{
-				continue;
-			}
-
-			try
-			{
-				Directory.EnumerateDirectories(subFolder);
-			}
-			catch (UnauthorizedAccessException)
-			{
-				// If we get an UnauthorizedAccessException exception, that means
-				// we don't have permission to access the folder.
-				// Just silently skip it.
-				continue;
-			}
-			catch (Exception e)
-			{
-				Debug.LogException(e);
-				continue;
-			}
-
-			_fileSystemEntries.Add(new FileSystemEntry()
-			{
-				Name = subFolderName,
-				EntryType = FileSystemEntryType.Folder,
-				ReadableSize = string.Empty,
-				SizeBytes = 0
-			});
-		}
-
-		foreach (string file in Directory.EnumerateFiles(_currentPath))
-		{
-			bool matchedFileFilter;
-			switch (_currentFilterType)
-			{
-				case FilterType.Custom:
+				// The "System Volume Information" is something we can't access anyway.
+				if (_currentPathIsRoot && subFolderName == "System Volume Information")
 				{
-					matchedFileFilter = false;
-					for (int i = 0; i < _customFileFilters.Count; i++)
-					{
-						if (file.EndsWith(_customFileFilters[i], StringComparison.OrdinalIgnoreCase))
-						{
-							matchedFileFilter = true;
-							break;
-						}
-					}
-
-					break;
+					continue;
 				}
-				case FilterType.Video:
-					matchedFileFilter = file.IsVideoFile();
-					break;
-				case FilterType.Image:
-					matchedFileFilter = file.IsImageFile();
-					break;
-				case FilterType.Sound:
-					matchedFileFilter = file.IsSoundFile();
-					break;
-				default: // FilterType.None
-					matchedFileFilter = true;
-					break;
+
+				try
+				{
+					Directory.EnumerateDirectories(subFolder);
+				}
+				catch (UnauthorizedAccessException)
+				{
+					// If we get an UnauthorizedAccessException exception, that means
+					// we don't have permission to access the folder.
+					// Just silently skip it.
+					continue;
+				}
+				catch (Exception e)
+				{
+					Debug.LogException(e);
+					continue;
+				}
+
+				_fileSystemEntries.Add(new FileSystemEntry()
+				{
+					Name = subFolderName,
+					EntryType = FileSystemEntryType.Folder,
+					ReadableSize = string.Empty,
+					SizeBytes = 0
+				});
 			}
 
-			if (!matchedFileFilter)
+			foreach (string file in Directory.EnumerateFiles(_currentPath))
 			{
-				continue;
+				bool matchedFileFilter;
+				switch (_currentFilterType)
+				{
+					case FilterType.Custom:
+					{
+						matchedFileFilter = false;
+						for (int i = 0; i < _customFileFilters.Count; i++)
+						{
+							if (file.EndsWith(_customFileFilters[i], StringComparison.OrdinalIgnoreCase))
+							{
+								matchedFileFilter = true;
+								break;
+							}
+						}
+
+						break;
+					}
+					case FilterType.Video:
+						matchedFileFilter = file.IsVideoFile();
+						break;
+					case FilterType.Image:
+						matchedFileFilter = file.IsImageFile();
+						break;
+					case FilterType.Sound:
+						matchedFileFilter = file.IsSoundFile();
+						break;
+					default: // FilterType.None
+						matchedFileFilter = true;
+						break;
+				}
+
+				if (!matchedFileFilter)
+				{
+					continue;
+				}
+
+				long sizeBytes = FileUtil.GetFileSizeInBytes(file);
+				_fileSystemEntries.Add(new FileSystemEntry()
+				{
+					Name = Path.GetFileName(file),
+					EntryType = FileSystemEntryType.File,
+					ReadableSize = FileUtil.GetBytesReadable(sizeBytes),
+					SizeBytes = sizeBytes
+				});
 			}
 
-			long sizeBytes = FileUtil.GetFileSizeInBytes(file);
-			_fileSystemEntries.Add(new FileSystemEntry()
+			bool sorted = RefreshSorting();
+			if (!sorted)
 			{
-				Name = Path.GetFileName(file),
-				EntryType = FileSystemEntryType.File,
-				ReadableSize = FileUtil.GetBytesReadable(sizeBytes),
-				SizeBytes = sizeBytes
-			});
+				// there's no way to set the initial sorting so we'll just have to manually sort it
+				_fileSystemEntries.Sort(SortByNameAsc);
+			}
+
+			_fileSystemEntriesView.horizontalScrollingEnabled = true;
+			var listScrollView = _fileSystemEntriesView.Q<ScrollView>(className: BaseVerticalCollectionView.listScrollViewUssClassName);
+			listScrollView.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
+			listScrollView.horizontalScrollerVisibility = ScrollerVisibility.Auto;
 		}
-
-		bool sorted = RefreshSorting();
-		if (!sorted)
+		else
 		{
-			// there's no way to set the initial sorting so we'll just have to manually sort it
-			_fileSystemEntries.Sort(SortByNameAsc);
+			_fileSystemEntriesView.horizontalScrollingEnabled = false;
+			var listScrollView = _fileSystemEntriesView.Q<ScrollView>(className: BaseVerticalCollectionView.listScrollViewUssClassName);
+			listScrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+			listScrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
 		}
 
 		_fileSystemEntriesView.Rebuild();
@@ -1428,6 +1445,27 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		}
 
 		return false;
+	}
+
+	protected void AddFileToPath(string file)
+	{
+		string newPath = FileUtil.CombinePath(_currentPath, file);
+
+		_currentPath = newPath;
+		_currentPathTextField.value = _currentPath;
+
+		if (_pathHistoryIdx != -1 && _pathHistoryIdx != _pathHistoryEntries.Count - 1)
+		{
+			_pathHistoryEntries.RemoveRange(_pathHistoryIdx + 1, _pathHistoryEntries.Count - 1 - _pathHistoryIdx);
+		}
+
+		_pathHistoryEntries.Add(_currentPath);
+		_pathHistoryIdx = _pathHistoryEntries.Count - 1;
+
+		_backButton.SetEnabled(_pathHistoryIdx > 0);
+		_forwardButton.SetEnabled(false);
+
+		ReloadCurrentPath();
 	}
 
 	/// <summary>
@@ -1490,7 +1528,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		}
 	}
 
-	void ProcessChosenFile(string file)
+	protected virtual void ProcessChosenFile(string file)
 	{
 		if (_currentOperationMode == OperationMode.Save && !file.EndsWith(_saveFileExtension, StringComparison.OrdinalIgnoreCase))
 		{

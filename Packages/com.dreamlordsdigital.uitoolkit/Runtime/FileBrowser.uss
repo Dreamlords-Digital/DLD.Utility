@@ -3,6 +3,7 @@
     border-top-width: 1px;
     border-top-color: rgb(35, 35, 35);
     margin-right: -1px;
+    min-height: 40px;
 }
 
 .dld-file-entry__name-group {
@@ -39,4 +40,12 @@
 
 .unity-multi-column-view__row-container:checked .dld-file-entry__filename {
     color: rgb(255, 255, 255);
+}
+
+#unity-multi-column-view__header-container {
+    min-height: 20px;
+}
+
+#unity-content-and-vertical-scroll-container {
+    min-height: 20px;
 }

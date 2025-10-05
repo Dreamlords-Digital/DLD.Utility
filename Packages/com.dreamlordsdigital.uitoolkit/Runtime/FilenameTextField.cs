@@ -100,6 +100,7 @@ public partial class FilenameTextField : TextField
 	{
 		FullValue = fullFilename;
 		value = filenameNoExtension;
+		_fileExtensionLabel.style.marginLeft = StyleKeyword.Null;
 	}
 
 	public void SetFilename(string fullFilename, string filenameNoExtension, string extension)
@@ -107,6 +108,14 @@ public partial class FilenameTextField : TextField
 		FullValue = fullFilename;
 		value = filenameNoExtension;
 		Extension = extension;
+		_fileExtensionLabel.style.marginLeft = StyleKeyword.Null;
+	}
+
+	public void SetText(string newText, string extraData)
+	{
+		value = newText;
+		Extension = extraData;
+		_fileExtensionLabel.style.marginLeft = 6;
 	}
 
 	public void SetEditCallback(System.Action<string> newCallback)
