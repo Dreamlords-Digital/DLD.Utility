@@ -249,6 +249,11 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	public bool AllowZooming { get; set; } = true;
 	public bool AllowDragging { get; set; } = true;
 
+	public void SetZoom(float zoomLevel)
+	{
+		_moveTarget.style.scale = Vector3.one * zoomLevel;
+	}
+
 	protected void AddToPointerMoveEvent(CallbackEventHandler c)
 	{
 		c.RegisterCallback(_onPointerMove);
