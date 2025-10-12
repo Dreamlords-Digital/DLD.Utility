@@ -1402,7 +1402,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		_fileSystemEntriesView.ScrollToItem(0);
 	}
 
-	void MoveToParentFolder()
+	protected virtual void MoveToParentFolder()
 	{
 		string parentFolder = Path.GetDirectoryName(_currentPath).ConvertBackToForwardSlash();
 		if (!string.IsNullOrEmpty(parentFolder))
