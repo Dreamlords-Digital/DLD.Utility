@@ -5,55 +5,55 @@
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseIcons.uss?fileID=7433441132597879392&amp;guid=823f1eed85f57214796265fd88417ad2&amp;type=3#BaseIcons"/>
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/FileIcons.uss?fileID=7433441132597879392&amp;guid=fe7202f8ea9c11f46a6f4f35330725c2&amp;type=3#FileIcons"/>
     <ui:VisualElement name="TitleBar">
-        <ui:VisualElement name="Icon" class="dld-icon" />
-        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" text="Open" />
+        <ui:VisualElement name="Icon" class="dld-icon"/>
+        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" text="Open"/>
     </ui:VisualElement>
     <ui:VisualElement name="Toolbar">
         <ui:Button name="Back" class="dld-toolbar-button">
-            <ui:VisualElement class="dld-icon dld-icon--navigate-back" />
-            <ui:Label tabindex="-1" text="Back" parse-escape-sequences="true" display-tooltip-when-elided="false" />
+            <ui:VisualElement class="dld-icon dld-icon--navigate-back"/>
+            <ui:Label tabindex="-1" text="Back" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
         <ui:Button name="Forward" class="dld-toolbar-button">
-            <ui:VisualElement class="dld-icon dld-icon--navigate-forward" />
-            <ui:Label tabindex="-1" text="Forward" parse-escape-sequences="true" display-tooltip-when-elided="false" />
+            <ui:VisualElement class="dld-icon dld-icon--navigate-forward"/>
+            <ui:Label tabindex="-1" text="Forward" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
         <ui:Toggle name="Jump" class="dld-toolbar-button">
-            <ui:VisualElement class="dld-icon dld-icon--file-navigate-jump" />
-            <ui:Label tabindex="-1" text="Jump" />
+            <ui:VisualElement class="dld-icon dld-icon--file-navigate-jump"/>
+            <ui:Label tabindex="-1" text="Jump"/>
         </ui:Toggle>
         <ui:Button name="EditPath" class="dld-toolbar-button" style="display: none;">
-            <ui:VisualElement class="dld-icon dld-icon--edit-file-path" />
-            <ui:Label tabindex="-1" text="Edit Path" parse-escape-sequences="true" display-tooltip-when-elided="false" />
+            <ui:VisualElement class="dld-icon dld-icon--edit-file-path"/>
+            <ui:Label tabindex="-1" text="Edit Path" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
         <ui:Button name="Explore" class="dld-toolbar-button" style="display: flex;">
-            <ui:VisualElement class="dld-icon dld-icon--open-file-explorer" />
-            <ui:Label tabindex="-1" text="Explore" parse-escape-sequences="true" display-tooltip-when-elided="false" />
+            <ui:VisualElement class="dld-icon dld-icon--open-file-explorer"/>
+            <ui:Label tabindex="-1" text="Explore" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
     </ui:VisualElement>
     <ui:VisualElement name="Body">
-        <ui:TextField picking-mode="Ignore" value="C:/Projects/Unity/INTLord" name="PathTextField" class="dld-text-field" />
+        <ui:TextField picking-mode="Ignore" value="C:/Projects/Unity/INTLord" name="PathTextField" class="dld-text-field"/>
         <ui:MultiColumnListView name="FileSystemEntries" fixed-item-height="20" show-alternating-row-backgrounds="ContentOnly" sorting-enabled="true">
             <ui:Columns>
-                <ui:Column name="Name" title="Name" />
-                <ui:Column name="Size" title="Size" />
+                <ui:Column name="Name" title="Name"/>
+                <ui:Column name="Size" title="Size"/>
             </ui:Columns>
         </ui:MultiColumnListView>
         <ui:VisualElement name="ConfirmPanel">
-            <DLD.UIToolkit.FilenameTextField class="dld-text-field" />
+            <DLD.UIToolkit.FilenameTextField class="dld-text-field"/>
             <ui:VisualElement name="Buttons" class="dld-button-row">
                 <ui:VisualElement>
-                    <ui:Button text="Ok" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Confirm" class="dld-button--operation" />
-                    <ui:Button text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cancel" class="dld-button--operation" />
+                    <ui:Button text="Ok" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Confirm" class="dld-button--operation"/>
+                    <ui:Button text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cancel" class="dld-button--operation"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="PopUpMenuOutside" class="dld-modal-dialog-outside">
         <ui:VisualElement name="PathHistory" class="dld-popup-menu__bg">
-            <ui:ListView />
+            <ui:ListView/>
         </ui:VisualElement>
         <ui:VisualElement name="JumpMenu" class="dld-popup-menu__bg">
-            <ui:TreeView show-alternating-row-backgrounds="ContentOnly" auto-expand="true" />
+            <ui:TreeView show-alternating-row-backgrounds="ContentOnly" auto-expand="true"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

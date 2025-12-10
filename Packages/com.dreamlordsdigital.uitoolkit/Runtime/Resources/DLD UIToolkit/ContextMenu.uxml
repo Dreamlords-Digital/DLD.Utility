@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseStyles.uss?fileID=7433441132597879392&amp;guid=f7fc98db420be0e418d51a3e79579bf9&amp;type=3#BaseStyles" />
-    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ContextMenu.uss?fileID=7433441132597879392&amp;guid=65fe3e65cd5272d4b800d24be6a0860b&amp;type=3#ContextMenu" />
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseStyles.uss?fileID=7433441132597879392&amp;guid=f7fc98db420be0e418d51a3e79579bf9&amp;type=3#BaseStyles"/>
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ContextMenu.uss?fileID=7433441132597879392&amp;guid=65fe3e65cd5272d4b800d24be6a0860b&amp;type=3#ContextMenu"/>
     <ui:VisualElement name="ContextMenu" focusable="true" class="dld-context__outside">
-        <ui:VisualElement name="ContextMenuBg" class="dld-context-menu" />
+        <ui:VisualElement name="ContextMenuBg" class="dld-context-menu"/>
     </ui:VisualElement>
 </ui:UXML>

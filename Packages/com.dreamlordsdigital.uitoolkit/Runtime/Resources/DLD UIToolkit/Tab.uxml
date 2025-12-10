@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:RadioButton name="Tab" focusable="false" class="dld-tab">
-        <ui:VisualElement name="Outline" picking-mode="Ignore" class="dld-tab__outline" />
-        <ui:VisualElement name="ModifiedIndicator" picking-mode="Ignore" class="dld-icon--modified dld-tab__modified-indication" />
+        <ui:VisualElement name="Outline" picking-mode="Ignore" class="dld-tab__outline"/>
+        <ui:VisualElement name="ModifiedIndicator" picking-mode="Ignore" class="dld-icon--modified dld-tab__modified-indication"/>
     </ui:RadioButton>
 </ui:UXML>
