@@ -570,7 +570,7 @@ public static class FileUtil
 		return true;
 	}
 
-	public static (bool success, string modifiedPath) NormalizePath(this string path)
+	public static (bool success, string modifiedPath) FixPath(this string path)
 	{
 		// ensure drive letter is capitalized
 		if (path.Length >= 2 && char.IsLower(path[0]) && path[1] == ':')
@@ -612,6 +612,32 @@ public static class FileUtil
 		}
 
 		return (true, path);
+	}
+
+	public static string NormalizePath(this string path)
+	{
+		// ensure drive letter is capitalized
+		if (path.Length >= 2 && char.IsLower(path[0]) && path[1] == ':')
+		{
+			path = char.ToUpper(path[0]) + path[1..];
+		}
+
+		path = path.ConvertBackToForwardSlash();
+
+		// Remove trailing slash if present,
+		// this is to make the path values consistent.
+		// Only time we don't do this is for root "C:/" or "/"
+		if (!path.IsPathRoot() && path[^1] == '/')
+		{
+			path = path[..^1];
+		}
+		else if (path.Length == 2 && char.IsLetter(path[0]) && path[1] == ':')
+		{
+			// change "C:" to "C:/"
+			path += "/";
+		}
+
+		return path;
 	}
 
 	/// <summary>

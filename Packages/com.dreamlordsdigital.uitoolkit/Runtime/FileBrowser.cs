@@ -250,6 +250,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	readonly List<FileSystemEntry> _fileSystemEntries = new();
 
+	protected string CurrentPath => _currentPath;
+
 	// -----------------------------------------
 
 	public FileBrowser()
@@ -661,7 +663,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			return false;
 		}
 
-		(bool success, string normalizedPath) = newPath.NormalizePath();
+		(bool success, string normalizedPath) = newPath.FixPath();
 		if (!success)
 		{
 			return false;
@@ -1473,7 +1475,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	///    1. User presses enter while in the File TextField.<br/>
 	///    2. User presses the Confirm Button.<br/>
 	/// </summary>
-	void ProcessConfirmedFile()
+	protected virtual void ProcessConfirmedFile()
 	{
 		if (string.IsNullOrWhiteSpace(_filenameTextField.FullValue))
 		{
@@ -1606,7 +1608,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 						continue;
 					}
 
-					(bool success, string normalizedPath) = line.NormalizePath();
+					(bool success, string normalizedPath) = line.FixPath();
 					if (!success)
 					{
 						continue;
