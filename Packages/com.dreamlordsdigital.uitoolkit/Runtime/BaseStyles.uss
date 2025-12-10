@@ -374,3 +374,12 @@ FilenameTextField > #unity-text-input > Label {
 .dld-search-text-field__search-button > .unity-toggle__input {
     display: none;
 }
+
+.dld-two-column {
+    flex-direction: row;
+}
+
+.dld-right-aligner {
+    flex-grow: 1;
+    flex-direction: row-reverse;
+}

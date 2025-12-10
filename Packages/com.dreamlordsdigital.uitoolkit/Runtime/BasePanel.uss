@@ -217,6 +217,7 @@
     padding-bottom: 3px;
     border-top-width: 1px;
     border-top-color: rgb(48, 48, 48);
+    flex-shrink: 0;
 }
 
 .dld-button--operation {
