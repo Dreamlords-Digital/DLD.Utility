@@ -67,6 +67,10 @@ public class TabbedContent
 	public RadioButton Tab { get; private set; }
 
 	VisualElement _modifiedIndicator;
+
+	public virtual void OnClose()
+	{
+	}
 }
 
 [UxmlElement]
@@ -206,6 +210,8 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 				}
 			}
 		}
+
+		tabToClose.OnClose();
 
 		_tabContainer.Remove(tabToClose.Tab);
 		_tabBodyContainer.Remove(tabToClose.Body);
