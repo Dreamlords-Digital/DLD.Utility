@@ -425,6 +425,13 @@ public partial class Tooltip : VisualElement
 					// anchor tooltip to left instead
 					ShowAt(_lastAnchorElement, ElementAnchorPoint.Left, true);
 				}
+
+				// if tooltip's bottom is too low, push it up
+				if (tooltipRect.yMax > windowRect.yMax)
+				{
+					float yDelta = tooltipRect.yMax - windowRect.yMax;
+					this.AddToPosition(new Vector2(0, -yDelta));
+				}
 				break;
 		}
 	}
