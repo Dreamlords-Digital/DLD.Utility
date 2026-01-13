@@ -6,7 +6,7 @@ namespace DLD.UIToolkit
 {
 
 [Flags]
-public enum TooltipShowMode
+public enum TooltipShowMode : byte
 {
 	Normal = 0,
 	AppendToExisting = 1 << 0,

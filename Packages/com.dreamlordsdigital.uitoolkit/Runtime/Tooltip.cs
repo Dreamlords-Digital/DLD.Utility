@@ -15,7 +15,7 @@ public partial class Tooltip : VisualElement
 	const string FollowElementStyleClass = "dld-tooltip__bg--follow-element";
 	const string TooltipIconStyleClass = "dld-tooltip__icon";
 
-	enum ShowType
+	enum ShowType : byte
 	{
 		None,
 		FollowMouseCursor,

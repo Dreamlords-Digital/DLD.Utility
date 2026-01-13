@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DLD.Utility.Inspector
 {
 
-public enum ComparisonType
+public enum ComparisonType : byte
 {
 	Equals,
 	NotEqual,
@@ -29,7 +29,7 @@ public enum ComparisonType
 	LesserThanOrEqual,
 }
 
-public enum HideType
+public enum HideType : byte
 {
 	ReadOnly,
 	DoNotDraw

@@ -1080,7 +1080,7 @@ public static class FileUtil
 /// <summary>
 ///    Possible areas where the game saves/loads Mod Packages, Asset Files, save game files, and other data files.
 /// </summary>
-public enum DataSaveLocation
+public enum DataSaveLocation : byte
 {
 	None,
 

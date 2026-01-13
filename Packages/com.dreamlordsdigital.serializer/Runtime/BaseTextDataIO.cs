@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 namespace DLD.Serializer
 {
 
-public enum LoadResult
+public enum LoadResult : byte
 {
 	Success,
 	EmptyPathGiven,

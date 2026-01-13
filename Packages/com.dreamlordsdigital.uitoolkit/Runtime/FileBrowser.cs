@@ -44,7 +44,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	// -----------------------------------------
 
-	public enum OperationMode
+	public enum OperationMode : byte
 	{
 		/// <summary>
 		///    User is allowed to type in a non-existent filename (if they want to save to a new file).
@@ -68,7 +68,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	// -----------------------------------------
 
-	public enum FilterType
+	public enum FilterType : byte
 	{
 		/// <summary>
 		///    No filter, show all files.
@@ -140,7 +140,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	// -----------------------------------------
 
-	enum SpecialFolderType
+	enum SpecialFolderType : byte
 	{
 		/// <summary>
 		///    A regular folder that can have files inside it.
@@ -217,7 +217,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	// -----------------------------------------
 
-	enum FileSystemEntryType
+	enum FileSystemEntryType : byte
 	{
 		File,
 		Folder,

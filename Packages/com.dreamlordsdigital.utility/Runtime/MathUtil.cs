@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DLD.Utility
 {
 
-public enum DerivativeType
+public enum DerivativeType : byte
 {
 	ErrorRateOfChange,
 	ValueRateOfChange,
