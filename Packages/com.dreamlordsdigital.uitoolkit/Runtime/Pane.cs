@@ -167,6 +167,19 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		return newTabbedContent;
 	}
 
+	public T GetTabFromBody(VisualElement body)
+	{
+		for (int n = 0; n < _tabList.Count; ++n)
+		{
+			if (_tabList[n].Body == body)
+			{
+				return _tabList[n];
+			}
+		}
+
+		return null;
+	}
+
 	void CloseTab(T tabToClose)
 	{
 		if (tabToClose.ShowModifiedIndicator)
