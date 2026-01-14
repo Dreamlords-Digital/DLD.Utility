@@ -53,4 +53,6 @@
     -unity-text-align: lower-left;
     max-width: 300px;
     white-space: pre-wrap;
+    -unity-paragraph-spacing: 50px;
+    -unity-text-generator: standard;
 }
