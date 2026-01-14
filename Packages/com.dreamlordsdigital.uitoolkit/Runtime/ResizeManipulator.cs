@@ -6,20 +6,27 @@ using UnityEngine.UIElements;
 namespace DLD.UIToolkit
 {
 
+public interface IResizeManipulatorListener
+{
+	void OnResized(float newWidth);
+}
+
 public class ResizeManipulator : PointerManipulator
 {
 	Vector2 _start;
 	bool _active;
 	int _pointerId;
 	readonly VisualElement _moveTarget;
-	readonly Length _minWidth = 100;
+	readonly Length _minWidth;
 	readonly Length _maxWidth;
 
 	readonly EventCallback<PointerDownEvent> _onPointerDown;
 	readonly EventCallback<PointerMoveEvent> _onPointerMove;
 	readonly EventCallback<PointerUpEvent> _onPointerUp;
 
-	public ResizeManipulator(VisualElement newMoveTarget, Length minWidth, Length maxWidth)
+	IResizeManipulatorListener _listener;
+
+	public ResizeManipulator(VisualElement newMoveTarget, Length minWidth, Length maxWidth, IResizeManipulatorListener newListener = null)
 	{
 		_moveTarget = newMoveTarget;
 		_minWidth = minWidth;
@@ -35,6 +42,13 @@ public class ResizeManipulator : PointerManipulator
 		_onPointerDown = OnPointerDown;
 		_onPointerMove = OnPointerMove;
 		_onPointerUp = OnPointerUp;
+
+		_listener = newListener;
+	}
+
+	public void SetListener(IResizeManipulatorListener newListener)
+	{
+		_listener = newListener;
 	}
 
 	protected override void RegisterCallbacksOnTarget()
@@ -139,6 +153,8 @@ public class ResizeManipulator : PointerManipulator
 		_active = false;
 		target.ReleaseMouse();
 		e.StopPropagation();
+
+		_listener?.OnResized(_moveTarget.style.width.value.value);
 	}
 }
 
