@@ -718,6 +718,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			_draggedElement = null;
 			OnAbortedPotentialDrag(e);
 			Debug.Assert(!_isDragging);
+			e.StopPropagation();
 		}
 		else if (_isDragging && e.pointerId == _draggingPointerId)
 		{
@@ -742,6 +743,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			_isDragging = false;
 
 			RefreshMouseCursor(e.position);
+			e.StopPropagation();
 		}
 
 		if (_isPanning && target.HasPointerCapture(e.pointerId))
