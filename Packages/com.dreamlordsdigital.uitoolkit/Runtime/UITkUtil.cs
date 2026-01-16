@@ -98,8 +98,8 @@ public static class UITkUtil
 	}
 
 	/// <summary>
-	/// Call <see cref="VisualElement.AddToClassList"/> or <see cref="VisualElement.RemoveFromClassList"/>
-	/// depending on value of <paramref name="set"/>.
+	///    Call <see cref="VisualElement.AddToClassList"/> or <see cref="VisualElement.RemoveFromClassList"/>
+	///    depending on value of <paramref name="set"/>.
 	/// </summary>
 	/// <param name="me"></param>
 	/// <param name="set"></param>
@@ -137,7 +137,7 @@ public static class UITkUtil
 	}
 
 	/// <summary>
-	/// Like Q, but only performing the search through the VisualElement's ancestry.
+	///    Like Q, but only performing the search through the VisualElement's ancestry.
 	/// </summary>
 	/// <param name="e"></param>
 	/// <typeparam name="T"></typeparam>

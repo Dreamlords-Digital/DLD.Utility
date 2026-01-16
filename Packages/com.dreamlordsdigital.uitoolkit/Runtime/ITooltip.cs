@@ -7,7 +7,7 @@ namespace DLD.UIToolkit
 {
 
 /// <summary>
-/// Allows you to show a tooltip.
+///    Allows you to show a tooltip.
 /// </summary>
 public interface ITooltip
 {
