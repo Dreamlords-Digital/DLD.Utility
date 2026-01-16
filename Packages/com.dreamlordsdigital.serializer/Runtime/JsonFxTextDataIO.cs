@@ -179,7 +179,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 			}
 
 			string errorMsg = e.ToString();
-			Debug.LogError($"Error in {filePath} for {typeof(T).Name}:\n{errorMsg}");
+			Debug.LogError($"Error in {filePath} for {typeof(T).Name}: {errorMsg}\n\n");
 			return (LoadResult.OtherError, errorMsg);
 		}
 		catch (Exception e)
@@ -194,7 +194,7 @@ public class JsonFxTextDataIO : BaseTextDataIO
 			}
 
 			string errorMsg = e.ToString();
-			Debug.LogError($"Error in {filePath} for {typeof(T).Name}:\n{errorMsg}");
+			Debug.LogError($"Error in {filePath} for {typeof(T).Name}: {errorMsg}\n\n");
 			return (LoadResult.OtherError, errorMsg);
 		}
 
