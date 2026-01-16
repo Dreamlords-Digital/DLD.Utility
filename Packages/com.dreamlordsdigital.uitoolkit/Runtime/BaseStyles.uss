@@ -383,3 +383,16 @@ FilenameTextField > #unity-text-input > Label {
     flex-grow: 1;
     flex-direction: row-reverse;
 }
+
+.dld-box-selection {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(65, 105, 225);
+    border-right-color: rgb(65, 105, 225);
+    border-top-color: rgb(65, 105, 225);
+    border-bottom-color: rgb(65, 105, 225);
+    position: absolute;
+    background-color: rgba(0, 108, 255, 0.16);
+}

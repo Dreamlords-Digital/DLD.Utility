@@ -18,7 +18,12 @@ public interface ICtrlLinkRegister
 	void OnHoverExitCtrlLink(PointerLeaveEvent e);
 }
 
-public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister
+public interface IBoxSelection
+{
+	void StartBoxSelection(PointerDownEvent e);
+}
+
+public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
 {
 	// ==================================================================================
 	// Dependencies
@@ -176,6 +181,11 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	/// </summary>
 	Vector2 _lastKnownMousePos;
 
+	VisualElement _boxSelection;
+	Vector2 _boxSelectionStartPos;
+
+	bool _inBoxSelection;
+
 	// -------------------------------------------------
 
 	ICtrlHoverable _ctrlHoverableElement;
@@ -193,7 +203,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	// ==================================================================================
 
-	public PanZoomManipulator()
+	protected PanZoomManipulator()
 	{
 		activators.Add(new ManipulatorActivationFilter
 		{
@@ -207,6 +217,11 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		_onPointerMove = OnPointerMove;
 		_onPointerUp = OnPointerUp;
 		_onWheel = OnWheel;
+	}
+
+	public void SetBoxSelectionElement(VisualElement boxSelection)
+	{
+		_boxSelection = boxSelection;
 	}
 
 	/// <inheritdoc cref="_moveTarget"/>
@@ -313,6 +328,11 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		{
 			CancelDrag();
 		}
+
+		if (_inBoxSelection)
+		{
+			CancelBoxSelection();
+		}
 	}
 
 	void OnKeyDown(KeyDownEvent e)
@@ -346,6 +366,12 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 				// Abort it, even if the pointer is still held down.
 
 				CancelDrag();
+			}
+			else if (_inBoxSelection)
+			{
+				changeDetected = true;
+
+				CancelBoxSelection();
 			}
 			else if (_isPanning)
 			{
@@ -498,6 +524,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		{
 			_mouseCursorDisplay.style.display = DisplayStyle.None;
 			_pointerDownOnEmptyBackground = true;
+			StartBoxSelection(e);
 			return;
 		}
 
@@ -629,6 +656,13 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	{
 		_lastKnownMousePos = e.position;
 
+		if (_inBoxSelection)
+		{
+			UpdateBoxSelection(e);
+			e.StopPropagation();
+			return;
+		}
+
 		if (_isPanning && !target.HasPointerCapture(e.pointerId))
 		{
 			// This isn't the pointer that initiated the panning, so we're not interested in this pointer-move event.
@@ -648,6 +682,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 				// even though user has released the mouse button.
 				// Treat this as a cancel for the drag-and-drop operation.
 				CancelDrag();
+				CancelBoxSelection();
 				return;
 			}
 
@@ -698,9 +733,10 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	void OnPointerUp(PointerUpEvent e)
 	{
-		if (!CanStopManipulation(e))
+		if (_inBoxSelection)
 		{
-			// Left mouse button wasn't the one released.
+			EndBoxSelection(e);
+			e.StopPropagation();
 			return;
 		}
 
@@ -767,6 +803,93 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		e.StopPropagation();
 	}
 
+	// ==================================================================================================
+
+	void CancelDrag()
+	{
+		OnCanceledDrag();
+		_tooltip?.HideTooltip();
+		if (_isDraggingClonedElement)
+		{
+			_draggedElement.RemoveFromHierarchy();
+		}
+
+		_draggingPointerId = -1;
+		_draggedElement = null;
+		_isDragging = false;
+	}
+
+	// ==================================================================================================
+
+	public void StartBoxSelection(PointerDownEvent e)
+	{
+		_boxSelectionStartPos = _boxSelection.parent.WorldToLocal(e.position);
+		_boxSelection.style.left = _boxSelectionStartPos.x;
+		_boxSelection.style.top = _boxSelectionStartPos.y;
+		_boxSelection.style.width = 0;
+		_boxSelection.style.height = 0;
+		_boxSelection.style.display = DisplayStyle.Flex;
+		_inBoxSelection = true;
+		e.StopPropagation();
+		OnBoxSelectionStart(e);
+	}
+
+	void UpdateBoxSelection(PointerMoveEvent e)
+	{
+		Vector2 pointerLocalPos = _boxSelection.parent.WorldToLocal(e.position);
+		float boxX = _boxSelection.style.left.value.value;
+		float boxY = _boxSelection.style.top.value.value;
+
+		Rect finalRect = new Rect();
+		if (pointerLocalPos.x >= _boxSelectionStartPos.x)
+		{
+			_boxSelection.style.width = pointerLocalPos.x - boxX;
+			finalRect.x = _boxSelectionStartPos.x;
+			finalRect.xMax = pointerLocalPos.x;
+		}
+		else
+		{
+			_boxSelection.style.left = pointerLocalPos.x;
+			_boxSelection.style.width = _boxSelectionStartPos.x - pointerLocalPos.x;
+			finalRect.x = pointerLocalPos.x;
+			finalRect.xMax = _boxSelectionStartPos.x;
+		}
+
+		if (pointerLocalPos.y >= _boxSelectionStartPos.y)
+		{
+			_boxSelection.style.height = pointerLocalPos.y - boxY;
+			finalRect.y = _boxSelectionStartPos.y;
+			finalRect.yMax = pointerLocalPos.y;
+		}
+		else
+		{
+			_boxSelection.style.top = pointerLocalPos.y;
+			_boxSelection.style.height = _boxSelectionStartPos.y - pointerLocalPos.y;
+			finalRect.y = pointerLocalPos.y;
+			finalRect.yMax = _boxSelectionStartPos.y;
+		}
+
+		finalRect.position = _boxSelection.parent.LocalToWorld(finalRect.position);
+		OnBoxSelectionUpdate(e, finalRect);
+	}
+
+	void EndBoxSelection(PointerUpEvent e)
+	{
+		_boxSelection.style.display = DisplayStyle.None;
+		_inBoxSelection = false;
+		OnBoxSelectionEnd();
+	}
+
+	void CancelBoxSelection()
+	{
+		_boxSelection.style.display = DisplayStyle.None;
+		_inBoxSelection = false;
+		OnBoxSelectionCanceled();
+	}
+
+	// ==================================================================================================
+	// Methods that can be overriden by derived classes
+
 	protected virtual void OnClickEmptyBackground()
 	{
 	}
@@ -815,21 +938,27 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	{
 	}
 
-	// ==================================================================================================
-
-	void CancelDrag()
+	protected virtual void OnBoxSelectionStart(PointerDownEvent e)
 	{
-		OnCanceledDrag();
-		_tooltip?.HideTooltip();
-		if (_isDraggingClonedElement)
-		{
-			_draggedElement.RemoveFromHierarchy();
-		}
-
-		_draggingPointerId = -1;
-		_draggedElement = null;
-		_isDragging = false;
 	}
+
+	/// <summary>
+	///    Called when user moves the mouse while in box selection.
+	/// </summary>
+	/// <param name="selectionRect">Values are in world-space.</param>
+	protected virtual void OnBoxSelectionUpdate(PointerMoveEvent e, Rect selectionRect)
+	{
+	}
+
+	protected virtual void OnBoxSelectionEnd()
+	{
+	}
+
+	protected virtual void OnBoxSelectionCanceled()
+	{
+	}
+
+	// ==================================================================================================
 
 	void RefreshMouseCursor(Vector2 mousePos)
 	{
