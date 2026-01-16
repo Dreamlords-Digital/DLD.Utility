@@ -20,7 +20,7 @@ public interface ICtrlLinkRegister
 
 public interface IBoxSelection
 {
-	void StartBoxSelection(PointerDownEvent e);
+	void StartBoxSelection(PointerDownEvent e, VisualElement startElement);
 }
 
 public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
@@ -524,7 +524,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		{
 			_mouseCursorDisplay.style.display = DisplayStyle.None;
 			_pointerDownOnEmptyBackground = true;
-			StartBoxSelection(e);
+			StartBoxSelection(e, null);
 			return;
 		}
 
@@ -608,6 +608,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		_draggedElementHasBeenMoved = false;
 		_isDragging = false;
 		_isDraggingClonedElement = false;
+		_inBoxSelection = false;
 
 		_draggedElementStartLocalPos = localPos;
 
@@ -735,6 +736,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	{
 		if (_inBoxSelection)
 		{
+			_pointerDownOnEmptyBackground = false;
 			EndBoxSelection(e);
 			e.StopPropagation();
 			return;
@@ -743,7 +745,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		if (!_isDragging && !_isPanning && !_spacebarHeld && _pointerDownOnEmptyBackground)
 		{
 			_pointerDownOnEmptyBackground = false;
-			OnClickEmptyBackground();
+			OnClickEmptyBackground(e);
 			RefreshMouseCursor(e.position);
 			return;
 		}
@@ -821,7 +823,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	// ==================================================================================================
 
-	public void StartBoxSelection(PointerDownEvent e)
+	public void StartBoxSelection(PointerDownEvent e, VisualElement startElement)
 	{
 		_boxSelectionStartPos = _boxSelection.parent.WorldToLocal(e.position);
 		_boxSelection.style.left = _boxSelectionStartPos.x;
@@ -831,7 +833,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 		_boxSelection.style.display = DisplayStyle.Flex;
 		_inBoxSelection = true;
 		e.StopPropagation();
-		OnBoxSelectionStart(e);
+		OnBoxSelectionStart(e, startElement);
 	}
 
 	void UpdateBoxSelection(PointerMoveEvent e)
@@ -877,7 +879,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	{
 		_boxSelection.style.display = DisplayStyle.None;
 		_inBoxSelection = false;
-		OnBoxSelectionEnd();
+		OnBoxSelectionEnd(e);
 	}
 
 	void CancelBoxSelection()
@@ -890,7 +892,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	// ==================================================================================================
 	// Methods that can be overriden by derived classes
 
-	protected virtual void OnClickEmptyBackground()
+	protected virtual void OnClickEmptyBackground(PointerUpEvent e)
 	{
 	}
 
@@ -938,7 +940,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	{
 	}
 
-	protected virtual void OnBoxSelectionStart(PointerDownEvent e)
+	protected virtual void OnBoxSelectionStart(PointerDownEvent e, VisualElement startElement)
 	{
 	}
 
@@ -950,7 +952,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 	{
 	}
 
-	protected virtual void OnBoxSelectionEnd()
+	protected virtual void OnBoxSelectionEnd(PointerUpEvent e)
 	{
 	}
 
