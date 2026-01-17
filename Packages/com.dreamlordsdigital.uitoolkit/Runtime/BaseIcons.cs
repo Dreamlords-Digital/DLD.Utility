@@ -21,6 +21,9 @@ public static class BaseIcons
 	public const string OpenUsingAssociated = "dld-icon--open-using-associated";
 	public const string SelectedInDropdown = "dld-icon--selected-in-dropdown";
 
+	public const string AddToSelection = "dld-icon--add-to-selection";
+	public const string RemoveFromSelection = "dld-icon--remove-from-selection";
+
 	public const string ArrowUp = "dld-icon--arrow-up";
 	public const string ArrowDown = "dld-icon--arrow-down";
 	public const string ArrowLeft = "dld-icon--arrow-left";

@@ -151,3 +151,11 @@
     width: 11px;
     height: 10px;
 }
+
+.dld-icon--add-to-selection {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/list-add.png?fileID=2800000&guid=a9b1afbc4dc1b524fa5f2ded0fd6b4f3&type=3#list-add");
+}
+
+.dld-icon--remove-from-selection {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/list-remove.png?fileID=2800000&guid=aed97f4f9c8ff8b418315cef940a39b4&type=3#list-remove");
+}

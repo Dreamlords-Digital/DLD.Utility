@@ -838,6 +838,8 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	void UpdateBoxSelection(PointerMoveEvent e)
 	{
+		RefreshMouseCursor(e.position);
+
 		Vector2 pointerLocalPos = _boxSelection.parent.WorldToLocal(e.position);
 		float boxX = _boxSelection.style.left.value.value;
 		float boxY = _boxSelection.style.top.value.value;
@@ -877,6 +879,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	void EndBoxSelection(PointerUpEvent e)
 	{
+		_tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
 		_boxSelection.style.display = DisplayStyle.None;
 		_inBoxSelection = false;
 		OnBoxSelectionEnd(e);
@@ -884,6 +887,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	void CancelBoxSelection()
 	{
+		_tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
 		_boxSelection.style.display = DisplayStyle.None;
 		_inBoxSelection = false;
 		OnBoxSelectionCanceled();
@@ -973,6 +977,21 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			else
 			{
 				_tooltip?.HideTooltip();
+			}
+		}
+		else if (_inBoxSelection)
+		{
+			if (_shift || _ctrl)
+			{
+				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Add to selection", BaseIcons.AddToSelection, mousePos);
+			}
+			else if (_alt)
+			{
+				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Remove from selection", BaseIcons.RemoveFromSelection, mousePos);
+			}
+			else
+			{
+				_tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
 			}
 		}
 
