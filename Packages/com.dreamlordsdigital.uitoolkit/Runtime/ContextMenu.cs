@@ -8,6 +8,10 @@ using UnityEngine.UIElements;
 namespace DLD.UIToolkit
 {
 
+/// <summary>
+///    Allows setting up the items in the context menu and what happens when the user clicks on them.
+///    Also allows showing that context menu.
+/// </summary>
 public interface IContextMenu
 {
 	VisualElement Root { get; }

@@ -12,12 +12,18 @@ public interface IDragStatus
 	bool IsDragging { get; }
 }
 
+/// <summary>
+///    Allows responding to when user holds ctrl while hovering over a link, to show a special cursor.
+/// </summary>
 public interface ICtrlLinkRegister
 {
 	void OnHoverEnterCtrlLink(PointerEnterEvent e);
 	void OnHoverExitCtrlLink(PointerLeaveEvent e);
 }
 
+/// <summary>
+///    Initiates box selection.
+/// </summary>
 public interface IBoxSelection
 {
 	void StartBoxSelection(PointerDownEvent e, VisualElement startElement);
