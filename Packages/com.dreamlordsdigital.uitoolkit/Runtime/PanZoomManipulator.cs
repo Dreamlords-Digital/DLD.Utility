@@ -586,7 +586,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 			_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, e.localPosition);
 
 			_isPanning = true;
-			_moveTargetInitialPos = _moveTarget.GetPosition2();
+			_moveTargetInitialPos = _moveTarget.GetPositionXY();
 			target.CapturePointer(e.pointerId);
 			e.StopPropagation();
 

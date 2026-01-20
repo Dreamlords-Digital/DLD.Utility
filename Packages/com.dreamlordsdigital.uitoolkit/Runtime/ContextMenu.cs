@@ -635,7 +635,7 @@ public class ContextMenu : VisualElement, IContextMenu
 
 	void OnMouseUpOutside(MouseUpEvent e)
 	{
-		var mouseDelta = e.localMousePosition - _menu.GetPosition2();
+		var mouseDelta = e.localMousePosition - _menu.GetPositionXY();
 		bool mouseMovedFarEnough = mouseDelta.sqrMagnitude > (DefaultMouseMoveDistanceForInstantClose * DefaultMouseMoveDistanceForInstantClose);
 		if (style.display == DisplayStyle.Flex && _mouseMovedDuringMouseDown && mouseMovedFarEnough)
 		{

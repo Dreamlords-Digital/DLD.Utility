@@ -229,8 +229,8 @@ public static class UITkUtil
 		visualElement.style.translate = pos;
 	}
 
-	public static Vector3 GetPosition(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
-	public static Vector2 GetPosition2(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
+	public static Vector3 GetPositionXYZ(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
+	public static Vector2 GetPositionXY(this VisualElement visualElement) => visualElement.resolvedStyle.translate;
 
 	/// <summary>
 	///    Add the specified delta value to the transform's x and y.
