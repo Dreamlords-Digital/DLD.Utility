@@ -22,6 +22,18 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save.png?fileID=2800000&guid=d109f09c2127a684b817cc52bafdaf33&type=3#document-save");
 }
 
+.dld-icon--cut {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-cut.png?fileID=2800000&guid=d1be9d028378d194e9fb7023eb1d1266&type=3#edit-cut");
+}
+
+.dld-icon--copy {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-copy.png?fileID=2800000&guid=1253cf4f733232c419bd6695d4c8fe6a&type=3#edit-copy");
+}
+
+.dld-icon--paste {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-paste.png?fileID=2800000&guid=9ddc71401315c444fbd0cf33135d1af0&type=3#edit-paste");
+}
+
 .dld-icon--reset-view {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-fit.png?fileID=2800000&guid=9d2daa06e31bcc240a42f7b7cfdd7779&type=3#magnifier-zoom-fit");
 }

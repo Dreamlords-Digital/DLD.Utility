@@ -12,7 +12,7 @@ public class TabbedContent
 {
 	const string TabBodyStyleClass = "dld-tab__body";
 
-	public TabbedContent()
+	protected TabbedContent()
 	{
 		// todo: probably need some sort of custom UI for grid (GraphView is in UnityEditor)
 		Body = new VisualElement();
