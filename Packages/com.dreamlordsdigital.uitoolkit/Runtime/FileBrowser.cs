@@ -1117,21 +1117,21 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		e.StopPropagation();
 	}
 
-	public void OnContextMenuChosen(int index, Label label, object itemTooltip, object userArg1, object userArg2)
+	public void OnContextMenuChosen(ContextMenuParams parameters)
 	{
-		switch (userArg1 as string)
+		switch (parameters.UserArg1 as string)
 		{
 			case ContextMenuRemoveFromFavorites:
-				RemoveFromFavorites(userArg2 as string);
+				RemoveFromFavorites(parameters.UserArg2 as string);
 				break;
 			case ContextMenuAddFavorite:
-				AddToFavorites(userArg2 as string);
+				AddToFavorites(parameters.UserArg2 as string);
 				break;
 			case ContextMenuOpenFileExplorer:
-				ExplorerUtil.OpenInFileBrowser(userArg2 as string);
+				ExplorerUtil.OpenInFileBrowser(parameters.UserArg2 as string);
 				break;
 			case ContextMenuOpenUsingAssociated:
-				ExplorerUtil.OpenWithDefaultProgram(userArg2 as string);
+				ExplorerUtil.OpenWithDefaultProgram(parameters.UserArg2 as string);
 				break;
 		}
 	}

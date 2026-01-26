@@ -67,9 +67,19 @@ public interface IContextMenu
 	bool WasLastShownOn(VisualElement ve);
 }
 
+public struct ContextMenuParams
+{
+	public Vector2 ContextMenuPosition;
+	public int MenuItemIndex;
+	public Label MenuItemLabel;
+	public object MenuItemTooltip;
+	public object UserArg1;
+	public object UserArg2;
+}
+
 public interface IContextMenuListener
 {
-	void OnContextMenuChosen(int itemIndex, Label itemLabel, object itemTooltip, object userArg1, object userArg2);
+	void OnContextMenuChosen(ContextMenuParams parameters);
 	void OnContextMenuClosed(bool userCancelled);
 }
 
@@ -286,7 +296,18 @@ public class ContextMenu : VisualElement, IContextMenu
 					targetElement.Focus();
 					var gotIcon = targetElement.Q<VisualElement>(IconName);
 					var gotLabel = targetElement.Q<Label>();
-					gotListener.OnContextMenuChosen(targetElement.parent.IndexOf(targetElement), gotLabel, targetElement.userData, gotIcon.userData, gotLabel.userData);
+					int menuIdx = targetElement.parent.IndexOf(targetElement);
+
+					ContextMenuParams parameters = new()
+					{
+						ContextMenuPosition = me.LocalToWorld(me._menu.GetPositionXY()),
+						MenuItemIndex = menuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = targetElement.userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotListener.OnContextMenuChosen(parameters);
 				}
 
 				e.StopPropagation();
@@ -731,7 +752,16 @@ public class ContextMenu : VisualElement, IContextMenu
 					{
 						var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(IconName);
 						var gotLabel = _menu[focusedMenuIdx].Q<Label>();
-						gotListener.OnContextMenuChosen(focusedMenuIdx, gotLabel, _menu[focusedMenuIdx].userData, gotIcon.userData, gotLabel.userData);
+						ContextMenuParams parameters = new()
+						{
+							ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+							MenuItemIndex = focusedMenuIdx,
+							MenuItemLabel = gotLabel,
+							MenuItemTooltip = _menu[focusedMenuIdx].userData,
+							UserArg1 = gotIcon.userData,
+							UserArg2 = gotLabel.userData
+						};
+						gotListener.OnContextMenuChosen(parameters);
 						Hide();
 						e.StopPropagation();
 					}

@@ -12,7 +12,7 @@ public class TabbedContent
 {
 	const string TabBodyStyleClass = "dld-tab__body";
 
-	public TabbedContent()
+	protected TabbedContent()
 	{
 		// todo: probably need some sort of custom UI for grid (GraphView is in UnityEditor)
 		Body = new VisualElement();
@@ -261,15 +261,15 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		_contextMenu.Show(e);
 	}
 
-	public void OnContextMenuChosen(int index, Label label, object itemTooltip, object userArg1, object userArg2)
+	public void OnContextMenuChosen(ContextMenuParams parameters)
 	{
-		switch (userArg1 as string)
+		switch (parameters.UserArg1 as string)
 		{
 			case ContextMenuCloseTab:
-				CloseTab(userArg2 as T);
+				CloseTab(parameters.UserArg2 as T);
 				break;
 			case ContextMenuCloseOtherTabs:
-				var thisTab = userArg2 as T;
+				var thisTab = parameters.UserArg2 as T;
 				Debug.LogError($"Close Other Tabs for {thisTab?.TabLabel}, not yet implemented");
 				break;
 			case ContextMenuCloseAllTabs:

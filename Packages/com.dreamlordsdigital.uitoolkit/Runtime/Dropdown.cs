@@ -362,19 +362,19 @@ public partial class Dropdown : VisualElement, IContextMenuListener
 
 	// ==================================================================================
 
-	public void OnContextMenuChosen(int index, Label label, object menuTooltip, object newValue, object userArg2)
+	public void OnContextMenuChosen(ContextMenuParams parameters)
 	{
 		switch (_currentMode)
 		{
 			case Mode.Enum:
-				OnDropdownEnumChosen(index, label, (ulong)newValue);
+				OnDropdownEnumChosen(parameters.MenuItemIndex, parameters.MenuItemLabel, (ulong)parameters.UserArg1);
 				break;
 			case Mode.EnumFlag:
-				OnDropdownEnumFlagChosen(index, (ulong)newValue);
+				OnDropdownEnumFlagChosen(parameters.MenuItemIndex, (ulong)parameters.UserArg1);
 				break;
 			case Mode.ByteMask:
 				Debug.Assert(_dropdownItems != null && _dropdownItems.Count > 0);
-				OnDropdownByteMaskChosen((int)newValue);
+				OnDropdownByteMaskChosen((int)parameters.UserArg1);
 				break;
 		}
 	}

@@ -164,9 +164,9 @@ namespace DLD.UIToolkit
 			_contextMenu.Show(this, ElementAnchorPoint.LowerRight, listener: this);
 		}
 
-		public void OnContextMenuChosen(int index, Label itemLabel, object itemTooltip, object userArg1, object userArg2)
+		public void OnContextMenuChosen(ContextMenuParams parameters)
 		{
-			switch (userArg1 as string)
+			switch (parameters.UserArg1 as string)
 			{
 				case SearchTypeSimple:
 					if (_searchType is SearchType.SimpleNotMatchCase or SearchType.SimpleMatchCase)
