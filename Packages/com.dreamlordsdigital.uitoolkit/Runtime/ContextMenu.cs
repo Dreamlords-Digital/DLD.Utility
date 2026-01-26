@@ -24,19 +24,19 @@ public interface IContextMenu
 
 	VisualElement AddMenu(
 		string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null);
 
 	void AddMenu(
 		string label, string tooltip, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null);
 
 	void AddMenu(
 		string label, TooltipMessage[] menuTooltip, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null);
 
 	void AddMenu(
 		string label, List<TooltipMessage> menuTooltip, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null);
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null);
 
 	/// <summary>
 	///    Show the selected indicator only on the specified item.
@@ -81,6 +81,12 @@ public interface IContextMenuListener
 {
 	void OnContextMenuChosen(ContextMenuParams parameters);
 	void OnContextMenuClosed(bool userCancelled);
+}
+
+public interface IContextMenuFocusListener
+{
+	void OnContextMenuFocused(ContextMenuParams parameters);
+	void OnContextMenuLostFocus(ContextMenuParams parameters);
 }
 
 [System.Flags]
@@ -230,7 +236,7 @@ public class ContextMenu : VisualElement, IContextMenu
 
 	public VisualElement AddMenu(
 		string label, string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null)
 	{
 		var createdEntry = _entryAsset.Instantiate();
 
@@ -313,6 +319,81 @@ public class ContextMenu : VisualElement, IContextMenu
 				e.StopPropagation();
 				me.Hide(false);
 			}, this);
+
+
+			if (focusListener != null)
+			{
+				entryContainer.userData = focusListener;
+
+				entryContainer.RegisterCallback<PointerEnterEvent, ContextMenu>((e, me) =>
+				{
+					if (e.currentTarget is not VisualElement targetElement)
+					{
+						return;
+					}
+
+					if (targetElement.userData is not IContextMenuFocusListener gotListener)
+					{
+						return;
+					}
+
+					int menuIdx = targetElement.parent.IndexOf(targetElement);
+					int focusedMenuIdx = me.GetFocusedMenuIdx();
+					if (menuIdx == focusedMenuIdx)
+					{
+						// this menu item is already focused (by keyboard)
+						return;
+					}
+
+					var gotIcon = targetElement.Q<VisualElement>(IconName);
+					var gotLabel = targetElement.Q<Label>();
+
+					ContextMenuParams parameters = new()
+					{
+						ContextMenuPosition = me.LocalToWorld(me._menu.GetPositionXY()),
+						MenuItemIndex = menuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = targetElement.userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotListener.OnContextMenuFocused(parameters);
+				}, this);
+
+				entryContainer.RegisterCallback<PointerLeaveEvent, ContextMenu>((e, me) =>
+				{
+					if (e.currentTarget is not VisualElement targetElement)
+					{
+						return;
+					}
+
+					if (targetElement.userData is not IContextMenuFocusListener gotListener)
+					{
+						return;
+					}
+
+					int menuIdx = targetElement.parent.IndexOf(targetElement);
+					int focusedMenuIdx = me.GetFocusedMenuIdx();
+					if (menuIdx == focusedMenuIdx)
+					{
+						// this menu item is still focused (by keyboard)
+						return;
+					}
+
+					var gotIcon = targetElement.Q<VisualElement>(IconName);
+					var gotLabel = targetElement.Q<Label>();
+					ContextMenuParams parameters = new()
+					{
+						ContextMenuPosition = me.LocalToWorld(me._menu.GetPositionXY()),
+						MenuItemIndex = menuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = targetElement.userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotListener.OnContextMenuLostFocus(parameters);
+				}, this);
+			}
 		}
 
 		_menu.Add(entryContainer);
@@ -333,18 +414,18 @@ public class ContextMenu : VisualElement, IContextMenu
 	public void AddMenu(
 		string label, string menuTooltip = null,
 		string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null)
 	{
-		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
+		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, focusListener, userArg1, userArg2);
 		entryContainer.RegisterTooltipDisplayer(_tooltip, menuTooltip, anchorPoint: ElementAnchorPoint.Right);
 	}
 
 	public void AddMenu(
 		string label, TooltipMessage[] menuTooltip = null,
 		string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null)
 	{
-		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
+		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, focusListener, userArg1, userArg2);
 
 		entryContainer.userData = menuTooltip;
 		entryContainer.RegisterTooltipDisplayer(_tooltip, anchorPoint: ElementAnchorPoint.Right);
@@ -353,9 +434,9 @@ public class ContextMenu : VisualElement, IContextMenu
 	public void AddMenu(
 		string label, List<TooltipMessage> menuTooltip = null,
 		string iconClassStyle = null, ContextMenuItemStyle menuItemStyle = ContextMenuItemStyle.Standard,
-		IContextMenuListener listener = null, object userArg1 = null, object userArg2 = null)
+		IContextMenuListener listener = null, IContextMenuFocusListener focusListener = null, object userArg1 = null, object userArg2 = null)
 	{
-		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, userArg1, userArg2);
+		var entryContainer = AddMenu(label, iconClassStyle, menuItemStyle, listener, focusListener, userArg1, userArg2);
 
 		entryContainer.userData = menuTooltip;
 		entryContainer.RegisterTooltipDisplayer(_tooltip, anchorPoint: ElementAnchorPoint.Right);
@@ -690,60 +771,92 @@ public class ContextMenu : VisualElement, IContextMenu
 			}
 			case KeyCode.DownArrow:
 			{
-				int focusedMenuIdx = GetFocusedMenuIdx(_menu);
-				if (focusedMenuIdx == -1 || focusedMenuIdx == _menu.childCount - 1)
+				int focusedMenuIdx = GetFocusedMenuIdx();
+				int nextMenuIdx = GetNextMenuIdx(focusedMenuIdx);
+
+				// select menu entry below
+				_menu[nextMenuIdx].Focus();
+
+				if (nextMenuIdx >= 0 && nextMenuIdx < _menu.childCount &&
+				    _menu[nextMenuIdx].userData is IContextMenuFocusListener gotListener)
 				{
-					// wrap around and go to first menu entry
-					_menu[0].Focus();
-				}
-				else
-				{
-					// select menu entry below
-					++focusedMenuIdx;
-					while (!_menu[focusedMenuIdx].focusable)
+					var gotIcon = _menu[nextMenuIdx].Q<VisualElement>(IconName);
+					var gotLabel = _menu[nextMenuIdx].Q<Label>();
+					ContextMenuParams parameters = new()
 					{
-						++focusedMenuIdx;
-						if (focusedMenuIdx >= _menu.childCount)
-						{
-							focusedMenuIdx = 0;
-						}
-					}
-
-					_menu[focusedMenuIdx].Focus();
+						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						MenuItemIndex = nextMenuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = _menu[nextMenuIdx].userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotListener.OnContextMenuFocused(parameters);
 				}
-
+				if (focusedMenuIdx >= 0 && focusedMenuIdx < _menu.childCount &&
+				    _menu[focusedMenuIdx].userData is IContextMenuFocusListener gotFormerListener)
+				{
+					var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(IconName);
+					var gotLabel = _menu[focusedMenuIdx].Q<Label>();
+					ContextMenuParams parameters = new()
+					{
+						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						MenuItemIndex = focusedMenuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = _menu[focusedMenuIdx].userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotFormerListener.OnContextMenuLostFocus(parameters);
+				}
 				break;
 			}
 			case KeyCode.UpArrow:
 			{
-				int focusedMenuIdx = GetFocusedMenuIdx(_menu);
-				if (focusedMenuIdx <= 0)
+				int focusedMenuIdx = GetFocusedMenuIdx();
+				int prevMenuIdx = GetPreviousMenuIdx(focusedMenuIdx);
+
+				// select menu entry above
+				_menu[prevMenuIdx].Focus();
+
+				if (prevMenuIdx >= 0 && prevMenuIdx < _menu.childCount &&
+				    _menu[prevMenuIdx].userData is IContextMenuFocusListener gotListener)
 				{
-					// wrap around and go to final menu entry
-					_menu[_menu.childCount - 1].Focus();
-				}
-				else
-				{
-					// select menu entry above
-					--focusedMenuIdx;
-					while (!_menu[focusedMenuIdx].focusable)
+					var gotIcon = _menu[prevMenuIdx].Q<VisualElement>(IconName);
+					var gotLabel = _menu[prevMenuIdx].Q<Label>();
+					ContextMenuParams parameters = new()
 					{
-						--focusedMenuIdx;
-						if (focusedMenuIdx < 0)
-						{
-							focusedMenuIdx = _menu.childCount - 1;
-						}
-					}
-
-					_menu[focusedMenuIdx].Focus();
+						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						MenuItemIndex = prevMenuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = _menu[prevMenuIdx].userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotListener.OnContextMenuFocused(parameters);
 				}
-
+				if (focusedMenuIdx >= 0 && focusedMenuIdx < _menu.childCount &&
+				    _menu[focusedMenuIdx].userData is IContextMenuFocusListener gotFormerListener)
+				{
+					var gotIcon = _menu[focusedMenuIdx].Q<VisualElement>(IconName);
+					var gotLabel = _menu[focusedMenuIdx].Q<Label>();
+					ContextMenuParams parameters = new()
+					{
+						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						MenuItemIndex = focusedMenuIdx,
+						MenuItemLabel = gotLabel,
+						MenuItemTooltip = _menu[focusedMenuIdx].userData,
+						UserArg1 = gotIcon.userData,
+						UserArg2 = gotLabel.userData
+					};
+					gotFormerListener.OnContextMenuLostFocus(parameters);
+				}
 				break;
 			}
 			case KeyCode.Return:
 			case KeyCode.KeypadEnter:
 			{
-				int focusedMenuIdx = GetFocusedMenuIdx(_menu);
+				int focusedMenuIdx = GetFocusedMenuIdx();
 				if (focusedMenuIdx != -1)
 				{
 					// pressing enter will do the same thing that the menu entry's click callback does
@@ -770,22 +883,73 @@ public class ContextMenu : VisualElement, IContextMenu
 				break;
 			}
 		}
+	}
 
-		return;
-
-		// Get index of which child of m is focused
-		int GetFocusedMenuIdx(VisualElement m)
+	/// <summary>
+	/// Get index of which menu item is focused
+	/// </summary>
+	/// <returns></returns>
+	int GetFocusedMenuIdx()
+	{
+		for (int i = 0; i < _menu.childCount; i++)
 		{
-			for (int i = 0; i < m.childCount; i++)
+			if (_menu.panel.focusController.focusedElement == _menu[i])
 			{
-				if (m.panel.focusController.focusedElement == m[i])
-				{
-					return i;
-				}
+				return i;
 			}
-
-			return -1;
 		}
+
+		return -1;
+	}
+
+	int GetPreviousMenuIdx(int menuIdx)
+	{
+		if (menuIdx == -1)
+		{
+			// nothing focused yet
+			menuIdx = _menu.childCount - 1;
+		}
+		else
+		{
+			--menuIdx;
+		}
+
+		while (!_menu[menuIdx].focusable)
+		{
+			--menuIdx;
+			if (menuIdx < 0)
+			{
+				// wrap around and go to final menu entry
+				menuIdx = _menu.childCount - 1;
+			}
+		}
+
+		return menuIdx;
+	}
+
+	int GetNextMenuIdx(int menuIdx)
+	{
+		if (menuIdx == -1)
+		{
+			// nothing focused yet
+			menuIdx = 0;
+		}
+		else
+		{
+			++menuIdx;
+		}
+
+		while (!_menu[menuIdx].focusable)
+		{
+			++menuIdx;
+			if (menuIdx >= _menu.childCount)
+			{
+				// wrap around and go to first menu entry
+				menuIdx = 0;
+			}
+		}
+
+		return menuIdx;
 	}
 
 	// ==================================================================================
