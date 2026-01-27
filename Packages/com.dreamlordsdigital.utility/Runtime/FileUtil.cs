@@ -1010,8 +1010,8 @@ public static class FileUtil
 	///    Note that this does not include a trailing slash.
 	/// </summary>
 	/// <remarks>
-	///    In Editor, this is: C:/path/to/unity/project/Assets/StreamingAssets<br/>
-	///    In runtime, this is: C:/path/to/standalone/build/buildname_Data/StreamingAssets<br/>
+	///    In Editor, this is: <c>C:/path/to/unity/project/Assets/StreamingAssets</c><br/>
+	///    In runtime, this is: <c>C:/path/to/standalone/build/buildname_Data/StreamingAssets</c>
 	/// </remarks>
 	public static string GameInstallFolderPath => Application.streamingAssetsPath;
 
@@ -1056,11 +1056,11 @@ public static class FileUtil
 	///    Note that this does not include a trailing slash.
 	/// </summary>
 	/// <remarks>
-	///    In Windows, this is C:/Users/<i>username</i>/AppData/Local<br/>
+	///    In Windows, this is <c>C:/Users/<i>username</i>/AppData/Local</c><br/>
 	///    <br/>
-	///    In Mac, this is /Users/<i>username</i>/.local/share<br/>
+	///    In Mac, this is <c>/Users/<i>username</i>/.local/share</c><br/>
 	///    <br/>
-	///    In Linux, this is /home/<i>username</i>/.local/share<br/>
+	///    In Linux, this is <c>/home/<i>username</i>/.local/share</c>
 	/// </remarks>
 	public static string UserFolderPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ConvertBackToForwardSlash();
 
@@ -1074,11 +1074,11 @@ public static class FileUtil
 	///       </item>
 	///       <item>
 	///          <term>CommonDataFolder: </term>
-	///          <description>C:/ProgramData or /usr/share</description>
+	///          <description><c>C:/ProgramData</c> or <c>/Users/<i>username</i>/.local/share</c> or <c>/home/<i>username</i>/.local/share</c></description>
 	///       </item>
 	///       <item>
 	///          <term>UserFolder: </term>
-	///          <description>C:/Users/<i>username</i>/AppData/Local or /Users/<i>username</i>/.local/share or /home/<i>username</i>/.local/share</description>
+	///          <description><c>C:/Users/<i>username</i>/AppData/Local</c> or <c>/Users/<i>username</i>/.local/share</c> or <c>/home/<i>username</i>/.local/share</c></description>
 	///       </item>
 	///    </list>
 	/// </summary>
@@ -1108,37 +1108,59 @@ public enum DataSaveLocation : byte
 	None,
 
 	/// <summary>
-	///    This is in the game's StreamingAssets folder.
-	///    This is for "core" mod packages that are expected
-	///    to be bundled alongside the game itself when installed.<br/>
-	///    In Editor, this is: C:/path/to/unity/project/Assets/StreamingAssets/<br/>
-	///    In runtime, this is: C:/path/to/standalone/build/buildname_Data/StreamingAssets/
+	///    <para>
+	///       This is in the game's StreamingAssets folder.
+	///       This is for "core" mod packages that are expected
+	///       to be bundled alongside the game itself when installed.
+	///    </para>
+	///    <para>
+	///       In Editor, this is: <c>C:/path/to/unity/project/Assets/StreamingAssets/</c><br />
+	///       In runtime, this is: <c>C:/path/to/standalone/build/buildname_Data/StreamingAssets/</c>
+	///    </para>
 	/// </summary>
 	GameInstallFolder,
 
 	/// <summary>
-	///    In Windows, this is C:/ProgramData/<br/>
-	///    In Mac and Linux, this is /usr/share/<br/>
-	///    This is the CommonApplicationData folder path,
-	///    ideal location for 3rd-party mod packages.
-	///    Regardless of the OS user logged-in, the files here
-	///    will always be available.
+	///    <para>
+	///       In Windows, this is <c>C:/ProgramData/</c>
+	///    </para>
+	///    <para>
+	///       This is the CommonApplicationData folder path,
+	///       ideal location for 3rd-party mod packages.
+	///       Regardless of the OS user logged-in, the files here
+	///       will always be available.
+	///    </para>
+	///    <para>
+	///       In Mac and Linux, this technically should be <c>/usr/share</c>,
+	///       but instead we resort to using <see cref="UserFolder" />,
+	///       since <c>/usr/share</c> is normally meant for system-wide apps, not user apps like games.
+	///    </para>
+	///    <para>
+	///       That means in Linux, we use <c>/home/<i>username</i>/.local/share</c><br />
+	///       In Mac, this is <c>/Users/<i>username</i>/.local/share</c>
+	///    </para>
 	/// </summary>
 	CommonDataFolder,
 
 	/// <summary>
-	///    In Windows, this is C:/Users/<i>username</i>/AppData/Local/<br/>
-	///    In Mac, this is /Users/<i>username</i>/.local/share/<br/>
-	///    In Linux, this is /home/<i>username</i>/.local/share/<br/>
-	///    This is the ideal location for saved game files,
-	///    user settings/preferences, and game-wide user data (Steam achievement progress).<br/>
-	///    This folder is unique to each OS user, but when running the game in Steam,
-	///    this merely assumes a 1:1 correspondence between OS user and Steam user account.
-	///    For example, if the Steam user for Bob logs in to Steam in a PC whose Windows is
-	///    logged-in to the Windows account of Ted (who also has his own Steam account),
-	///    this will end up overwriting the saved games and user preferences of Ted.
-	///    The proper thing to do would have been to create a new Windows (local) user account
-	///    for Bob in that PC, so that he has his own separate MyDocs folder in that PC.
+	///    <para>
+	///       In Windows, this is <c>C:/Users/<i>username</i>/AppData/Local/</c><br />
+	///       In Mac, this is <c>/Users/<i>username</i>/.local/share/</c><br />
+	///       In Linux, this is <c>/home/<i>username</i>/.local/share/</c>
+	///    </para>
+	///    <para>
+	///       This is the ideal location for saved game files,
+	///       user settings/preferences, and game-wide user data (Steam achievement progress).
+	///    </para>
+	///    <para>
+	///       This folder is unique to each OS user, but when running the game in Steam,
+	///       this merely assumes a 1:1 correspondence between OS user and Steam user account.
+	///       For example, if the Steam user for Bob logs in to Steam in a PC whose Windows is
+	///       logged-in to the Windows account of Ted (who also has his own Steam account),
+	///       this will end up overwriting the saved games and user preferences of Ted.
+	///       The proper thing to do would have been to create a new Windows (local) user account
+	///       for Bob in that PC, so that he has his own separate MyDocs folder in that PC.
+	///    </para>
 	/// </summary>
 	UserFolder,
 
