@@ -1021,11 +1021,34 @@ public static class FileUtil
 	///    Note that this does not include a trailing slash.
 	/// </summary>
 	/// <remarks>
-	///    <para>Ideal location for 3rd-party mod packages.</para>
-	///    In Windows, this is C:/ProgramData<br/>
-	///    In Mac and Linux, this is /usr/share<br/>
+	///    <para>
+	///       Ideal location for 3rd-party mod packages.
+	///    </para>
+	///    <para>
+	///       In Windows, this is <c>C:/ProgramData</c>
+	///    </para>
+	///    <para>
+	///       In Mac and Linux, this technically should be <c>/usr/share</c>,
+	///       but instead we resort to using <see cref="UserFolderPath" />,
+	///       since <c>/usr/share</c> is normally meant for system-wide apps, not user apps like games.
+	///    </para>
+	///    <para>
+	///       That means in Linux, we use <c>/home/<i>username</i>/.local/share</c><br />
+	///       In Mac, this is <c>/Users/<i>username</i>/.local/share</c>
+	///    </para>
 	/// </remarks>
-	public static string CommonDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData).ConvertBackToForwardSlash();
+	public static string CommonDataFolder
+	{
+		get
+		{
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				return UserFolderPath;
+			}
+
+			return Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData).ConvertBackToForwardSlash();
+		}
+	}
 
 	/// <summary>
 	///    This is the ideal location for saved game files
