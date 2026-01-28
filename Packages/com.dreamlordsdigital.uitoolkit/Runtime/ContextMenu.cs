@@ -64,11 +64,14 @@ public interface IContextMenu
 	void Show(PointerDownEvent e, IContextMenuListener listener = null);
 	void Show(VisualElement ve, ElementAnchorPoint anchorPoint = ElementAnchorPoint.Bottom, IContextMenuListener listener = null);
 
-	bool WasLastShownOn(VisualElement ve);
+	bool WasLastAnchoredTo(VisualElement ve);
 }
 
 public struct ContextMenuParams
 {
+	/// <summary>
+	/// Top-left position of the context menu, in world-space.
+	/// </summary>
 	public Vector2 ContextMenuPosition;
 	public int MenuItemIndex;
 	public Label MenuItemLabel;
@@ -134,7 +137,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	readonly VisualTreeAsset _entryAsset;
 	readonly VisualTreeAsset _separatorAsset;
 
-	VisualElement _elementShownOn;
+	VisualElement _elementAnchoredTo;
 	ElementAnchorPoint _elementAnchorPoint;
 
 	bool _doAltBgStyling;
@@ -546,7 +549,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	{
 		UpdateIconVisibility();
 		_listener = listener;
-		_elementShownOn = null;
+		_elementAnchoredTo = null;
 
 		_menu.SetPosition(position);
 		style.display = DisplayStyle.Flex;
@@ -572,7 +575,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	{
 		UpdateIconVisibility();
 		_listener = listener;
-		_elementShownOn = ve;
+		_elementAnchoredTo = ve;
 		_elementAnchorPoint = anchorPoint;
 
 		var veLayout = ve.layout;
@@ -598,7 +601,7 @@ public class ContextMenu : VisualElement, IContextMenu
 		schedule.Execute(_delayedFocus).ExecuteLater(0);
 	}
 
-	public bool WasLastShownOn(VisualElement ve) => ve == _elementShownOn;
+	public bool WasLastAnchoredTo(VisualElement ve) => ve == _elementAnchoredTo;
 
 	public void Hide(bool userCancelled = true)
 	{
@@ -622,14 +625,14 @@ public class ContextMenu : VisualElement, IContextMenu
 
 	void OnMenuResized(GeometryChangedEvent evt)
 	{
-		if (evt.newRect.width == 0 || evt.newRect.height == 0 || _elementShownOn == null)
+		if (evt.newRect.width == 0 || evt.newRect.height == 0 || _elementAnchoredTo == null)
 		{
 			return;
 		}
 
 		float menuWidth = _menu.layout.width - _dropdownButtonFitWidthAdjust;
 		float menuHeight = _menu.layout.height;
-		float elementWidth = _elementShownOn.layout.width;
+		float elementWidth = _elementAnchoredTo.layout.width;
 
 		if (menuWidth <= 0)
 		{

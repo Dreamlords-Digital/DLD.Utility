@@ -1045,7 +1045,6 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		var contentMousePos = ((VisualElement)e.target).ChangeCoordinatesTo(fileSystemEntriesContent, e.localMousePosition);
 		var entryClicked = fileSystemEntriesContent.localBound.Contains(contentMousePos);
 
-		var contextMenuMousePos = ((VisualElement)e.target).ChangeCoordinatesTo(_contextMenu.Root, e.localMousePosition);
 		if (!entryClicked)
 		{
 			_fileSystemEntriesView.ClearSelection();
@@ -1074,7 +1073,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 			_contextMenu.AddMenu("Explore Here", iconClassStyle: BaseIcons.OpenFileExplorer,
 				listener: this, userArg1: ContextMenuOpenFileExplorer, userArg2: _currentPath);
 
-			_contextMenu.Show(contextMenuMousePos);
+			_contextMenu.Show(e);
 		}
 	}
 
