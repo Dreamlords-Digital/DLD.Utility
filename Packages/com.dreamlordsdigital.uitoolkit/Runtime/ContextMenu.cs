@@ -73,6 +73,9 @@ public struct ContextMenuParams
 	/// Top-left position of the context menu, in world-space.
 	/// </summary>
 	public Vector2 ContextMenuPosition;
+
+	public VisualElement ElementThatInitiatedContextMenu;
+
 	public int MenuItemIndex;
 	public Label MenuItemLabel;
 	public object MenuItemTooltip;
@@ -127,6 +130,8 @@ public class ContextMenu : VisualElement, IContextMenu
 	static readonly CustomStyleProperty<float> DropdownButtonFitWidthAdjust = new("--dropdown--button-fit-width-adjust");
 
 	// ==================================================================================
+
+	VisualElement _elementThatInitiatedContextMenu;
 
 	float _dropdownButtonFitWidthAdjust;
 
@@ -310,6 +315,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = me.LocalToWorld(me._menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = me._elementThatInitiatedContextMenu,
 						MenuItemIndex = menuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = targetElement.userData,
@@ -354,6 +360,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = me.LocalToWorld(me._menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = me._elementThatInitiatedContextMenu,
 						MenuItemIndex = menuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = targetElement.userData,
@@ -388,6 +395,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = me.LocalToWorld(me._menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = me._elementThatInitiatedContextMenu,
 						MenuItemIndex = menuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = targetElement.userData,
@@ -561,14 +569,26 @@ public class ContextMenu : VisualElement, IContextMenu
 
 	public void Show(ContextClickEvent e, IContextMenuListener listener = null)
 	{
-		var contextMenuMousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(this, e.localMousePosition);
+		if (e.currentTarget is not VisualElement gotTargetElement)
+		{
+			return;
+		}
+
+		Vector2 contextMenuMousePos = gotTargetElement.ChangeCoordinatesTo(this, e.localMousePosition);
 		Show(contextMenuMousePos, listener);
+		_elementThatInitiatedContextMenu = gotTargetElement;
 	}
 
 	public void Show(PointerDownEvent e, IContextMenuListener listener = null)
 	{
-		var mousePos = ((VisualElement)e.currentTarget).ChangeCoordinatesTo(this, e.localPosition);
+		if (e.currentTarget is not VisualElement gotTargetElement)
+		{
+			return;
+		}
+
+		Vector2 mousePos = gotTargetElement.ChangeCoordinatesTo(this, e.localPosition);
 		Show(mousePos, listener);
+		_elementThatInitiatedContextMenu = gotTargetElement;
 	}
 
 	public void Show(VisualElement ve, ElementAnchorPoint anchorPoint = ElementAnchorPoint.Bottom, IContextMenuListener listener = null)
@@ -788,6 +808,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = _elementThatInitiatedContextMenu,
 						MenuItemIndex = nextMenuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = _menu[nextMenuIdx].userData,
@@ -804,6 +825,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = _elementThatInitiatedContextMenu,
 						MenuItemIndex = focusedMenuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = _menu[focusedMenuIdx].userData,
@@ -830,6 +852,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = _elementThatInitiatedContextMenu,
 						MenuItemIndex = prevMenuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = _menu[prevMenuIdx].userData,
@@ -846,6 +869,7 @@ public class ContextMenu : VisualElement, IContextMenu
 					ContextMenuParams parameters = new()
 					{
 						ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+						ElementThatInitiatedContextMenu = _elementThatInitiatedContextMenu,
 						MenuItemIndex = focusedMenuIdx,
 						MenuItemLabel = gotLabel,
 						MenuItemTooltip = _menu[focusedMenuIdx].userData,
@@ -871,6 +895,7 @@ public class ContextMenu : VisualElement, IContextMenu
 						ContextMenuParams parameters = new()
 						{
 							ContextMenuPosition = this.LocalToWorld(_menu.GetPositionXY()),
+							ElementThatInitiatedContextMenu = _elementThatInitiatedContextMenu,
 							MenuItemIndex = focusedMenuIdx,
 							MenuItemLabel = gotLabel,
 							MenuItemTooltip = _menu[focusedMenuIdx].userData,
