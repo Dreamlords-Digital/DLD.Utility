@@ -116,7 +116,10 @@ public interface ITextDataIO
 	///    Folder where serialized text files of the type is found.
 	///    This folder will be searched through recursively, so sub-folders will also be looked at.
 	/// </param>
-	/// <param name="fileType">File type of serialized text file. This is used so it knows which files to attempt deserialization on.</param>
+	/// <param name="fileType">
+	///    File type of serialized text file. This is used so it knows which files to attempt
+	///    deserialization on.
+	/// </param>
 	/// <param name="outList">Loaded assets will be appended here</param>
 	/// <returns></returns>
 	void LoadAllFromLocal<T>(string folderPath, string fileType, List<T> outList)

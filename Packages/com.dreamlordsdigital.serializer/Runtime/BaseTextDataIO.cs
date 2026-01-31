@@ -200,7 +200,8 @@ public abstract class BaseTextDataIO : ITextDataIO
 #endif
 
 	/// <summary>
-	///    Deserialize text file specified in <see cref="file"/>, into the type <see cref="T"/>, and add it to the <see cref="resultBag"/>.
+	///    Deserialize text file specified in <see cref="file"/>, into the type <see cref="T"/>, and add it to the
+	///    <see cref="resultBag"/>.
 	///    If the file has erroneous data that can't be resolved, it won't be added to the bag.
 	/// </summary>
 	/// <param name="file">Absolute path to the serialized text file.</param>

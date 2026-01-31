@@ -373,7 +373,8 @@ public static partial class ComponentUtil
 	}
 
 	/// <summary>
-	///    Get the scene path that is suitable for use with <see cref="UnityEngine.SceneManagement.SceneManager.GetSceneByName"/>.
+	///    Get the scene path that is suitable for use with
+	///    <see cref="UnityEngine.SceneManagement.SceneManager.GetSceneByName"/>.
 	///    It will remove any "Assets/" in the beginning, and ".unity" at the end.
 	/// </summary>
 	/// <remarks>

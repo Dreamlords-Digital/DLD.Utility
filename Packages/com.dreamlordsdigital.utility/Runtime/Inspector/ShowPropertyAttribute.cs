@@ -44,7 +44,10 @@ public class ShowPropertyAttribute : PropertyAttribute
 	///    Name of the C# property.
 	///    Recommended to use the nameof operator if possible, so wrong spellings will come up as a syntax error.
 	/// </param>
-	/// <param name="hideType">Whether to completely hide the Serialized Field, or still show it but with read-only disabled controls.</param>
+	/// <param name="hideType">
+	///    Whether to completely hide the Serialized Field, or still show it but with read-only disabled
+	///    controls.
+	/// </param>
 	public ShowPropertyAttribute(string propertyName, HideType hideType)
 	{
 		PropertyName = propertyName;

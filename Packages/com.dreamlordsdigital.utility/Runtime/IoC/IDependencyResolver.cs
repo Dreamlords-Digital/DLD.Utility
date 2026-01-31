@@ -82,9 +82,11 @@ public interface IDependencyResolver
 	void Remove<T>(T obj) where T : class;
 
 	/// <summary>
-	///    Unregister the singleton instance identified with string id so that it will no longer be returned, when asked for by other code.
+	///    Unregister the singleton instance identified with string id so that it will no longer be returned, when asked for by
+	///    other code.
 	///    Instead, null will be returned the next time <see cref="Resolve{T}(string)"/> is called,
-	///    until a different instance is registered, either using <see cref="Register{T}(T, string)"/> or <see cref="Get{T}(string)"/>.
+	///    until a different instance is registered, either using <see cref="Register{T}(T, string)"/> or
+	///    <see cref="Get{T}(string)"/>.
 	/// </summary>
 	/// <param name="id">The identifier for the instance to be removed</param>
 	void Remove(string id);

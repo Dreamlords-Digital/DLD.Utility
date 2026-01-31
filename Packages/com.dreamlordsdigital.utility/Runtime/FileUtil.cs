@@ -1029,11 +1029,11 @@ public static class FileUtil
 	///    </para>
 	///    <para>
 	///       In Mac and Linux, this technically should be <c>/usr/share</c>,
-	///       but instead we resort to using <see cref="UserFolderPath" />,
+	///       but instead we resort to using <see cref="UserFolderPath"/>,
 	///       since <c>/usr/share</c> is normally meant for system-wide apps, not user apps like games.
 	///    </para>
 	///    <para>
-	///       That means in Linux, we use <c>/home/<i>username</i>/.local/share</c><br />
+	///       That means in Linux, we use <c>/home/<i>username</i>/.local/share</c><br/>
 	///       In Mac, this is <c>/Users/<i>username</i>/.local/share</c>
 	///    </para>
 	/// </remarks>
@@ -1074,11 +1074,17 @@ public static class FileUtil
 	///       </item>
 	///       <item>
 	///          <term>CommonDataFolder: </term>
-	///          <description><c>C:/ProgramData</c> or <c>/Users/<i>username</i>/.local/share</c> or <c>/home/<i>username</i>/.local/share</c></description>
+	///          <description>
+	///             <c>C:/ProgramData</c> or <c>/Users/<i>username</i>/.local/share</c> or
+	///             <c>/home/<i>username</i>/.local/share</c>
+	///          </description>
 	///       </item>
 	///       <item>
 	///          <term>UserFolder: </term>
-	///          <description><c>C:/Users/<i>username</i>/AppData/Local</c> or <c>/Users/<i>username</i>/.local/share</c> or <c>/home/<i>username</i>/.local/share</c></description>
+	///          <description>
+	///             <c>C:/Users/<i>username</i>/AppData/Local</c> or <c>/Users/<i>username</i>/.local/share</c> or
+	///             <c>/home/<i>username</i>/.local/share</c>
+	///          </description>
 	///       </item>
 	///    </list>
 	/// </summary>
@@ -1114,7 +1120,7 @@ public enum DataSaveLocation : byte
 	///       to be bundled alongside the game itself when installed.
 	///    </para>
 	///    <para>
-	///       In Editor, this is: <c>C:/path/to/unity/project/Assets/StreamingAssets/</c><br />
+	///       In Editor, this is: <c>C:/path/to/unity/project/Assets/StreamingAssets/</c><br/>
 	///       In runtime, this is: <c>C:/path/to/standalone/build/buildname_Data/StreamingAssets/</c>
 	///    </para>
 	/// </summary>
@@ -1132,11 +1138,11 @@ public enum DataSaveLocation : byte
 	///    </para>
 	///    <para>
 	///       In Mac and Linux, this technically should be <c>/usr/share</c>,
-	///       but instead we resort to using <see cref="UserFolder" />,
+	///       but instead we resort to using <see cref="UserFolder"/>,
 	///       since <c>/usr/share</c> is normally meant for system-wide apps, not user apps like games.
 	///    </para>
 	///    <para>
-	///       That means in Linux, we use <c>/home/<i>username</i>/.local/share</c><br />
+	///       That means in Linux, we use <c>/home/<i>username</i>/.local/share</c><br/>
 	///       In Mac, this is <c>/Users/<i>username</i>/.local/share</c>
 	///    </para>
 	/// </summary>
@@ -1144,8 +1150,8 @@ public enum DataSaveLocation : byte
 
 	/// <summary>
 	///    <para>
-	///       In Windows, this is <c>C:/Users/<i>username</i>/AppData/Local/</c><br />
-	///       In Mac, this is <c>/Users/<i>username</i>/.local/share/</c><br />
+	///       In Windows, this is <c>C:/Users/<i>username</i>/AppData/Local/</c><br/>
+	///       In Mac, this is <c>/Users/<i>username</i>/.local/share/</c><br/>
 	///       In Linux, this is <c>/home/<i>username</i>/.local/share/</c>
 	///    </para>
 	///    <para>

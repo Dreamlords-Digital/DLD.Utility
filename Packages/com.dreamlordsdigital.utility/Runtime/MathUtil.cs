@@ -150,7 +150,10 @@ public static class MathUtil
 	/// <param name="xMax"></param>
 	/// <param name="yMin"></param>
 	/// <param name="yMax"></param>
-	/// <remarks>From http://mathproofs.blogspot.com/2005/07/mapping-square-to-circle.html?showComment=1318897124368#c7349449939503611348</remarks>
+	/// <remarks>
+	///    From
+	///    http://mathproofs.blogspot.com/2005/07/mapping-square-to-circle.html?showComment=1318897124368#c7349449939503611348
+	/// </remarks>
 	/// <returns></returns>
 	public static Vector2 RectangularToRadial(float x, float y, float xMin = -1, float xMax = 1, float yMin = -1, float yMax = 1)
 	{

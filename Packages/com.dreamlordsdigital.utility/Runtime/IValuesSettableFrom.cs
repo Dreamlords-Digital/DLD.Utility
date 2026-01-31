@@ -8,7 +8,8 @@ namespace DLD.Utility
 ///    This is a deep copy operation. No references will be shared. Object allocations will be created if necessary.
 /// </summary>
 /// <remarks>
-///    This is different from <see cref="System.ICloneable"/> because ICloneable generates a new copy of the <typeparamref name="T"/> object,
+///    This is different from <see cref="System.ICloneable"/> because ICloneable generates a new copy of the
+///    <typeparamref name="T"/> object,
 ///    whereas the <see cref="SetValuesFrom"/> will not create a new <typeparamref name="T"/> object.
 ///    Instead, it inspects the values of another instance and recreates that data within itself.
 /// </remarks>
@@ -30,7 +31,8 @@ public interface IValuesSettableFrom<in T>
 /// </summary>
 /// <remarks>
 ///    This is different from <see cref="System.ICloneable"/> because ICloneable generates a new copy of the object,
-///    whereas the <see cref="SetValuesFrom"/> just inspects the values of another instance and recreates that data within itself.
+///    whereas the <see cref="SetValuesFrom"/> just inspects the values of another instance and recreates that data within
+///    itself.
 /// </remarks>
 public interface IValuesSettableFromWithUid<in T> : IValuesSettableFrom<T>
 {
@@ -42,8 +44,14 @@ public interface IValuesSettableFromWithUid<in T> : IValuesSettableFrom<T>
 	/// <param name="other">instance to copy from</param>
 	/// <param name="overwriteUid">
 	///    <para>true means we copy the UID of the instance and discard our own, false means we keep our own UID.</para>
-	///    <para>Use true if you want to make a snapshot copy whose sole job is to be compared against the original (saving the duplicate effectively overwrites the original).</para>
-	///    <para>Use false when you want to make a distinct duplicate that can co-exist with the original (saving the duplicate will create its own file and not overwrite the original).</para>
+	///    <para>
+	///       Use true if you want to make a snapshot copy whose sole job is to be compared against the original (saving the
+	///       duplicate effectively overwrites the original).
+	///    </para>
+	///    <para>
+	///       Use false when you want to make a distinct duplicate that can co-exist with the original (saving the duplicate
+	///       will create its own file and not overwrite the original).
+	///    </para>
 	/// </param>
 	void SetValuesFrom(T other, bool overwriteUid);
 }

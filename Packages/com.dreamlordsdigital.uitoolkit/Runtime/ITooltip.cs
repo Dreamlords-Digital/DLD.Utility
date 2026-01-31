@@ -17,9 +17,13 @@ public interface ITooltip
 	/// <param name="context">The thing that caused the tooltip to be shown.</param>
 	/// <param name="text">Text to be shown as the tooltip message.</param>
 	/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
-	/// <param name="mousePos">Initial mouse position. This ensures the tooltip is at the correct position the moment it appears.</param>
+	/// <param name="mousePos">
+	///    Initial mouse position. This ensures the tooltip is at the correct position the moment it
+	///    appears.
+	/// </param>
 	/// <param name="append">
-	///    When set to true, the specified tooltip text will be added below all other currently shown text already on the tooltip.
+	///    When set to true, the specified tooltip text will be added below all other currently shown text already on the
+	///    tooltip.
 	///    When set to false, the specified tooltip text will replace all other currently shown text in the tooltip.
 	/// </param>
 	/// <remarks>
@@ -36,7 +40,8 @@ public interface ITooltip
 	/// <param name="iconClassName">Optional icon drawn before the tooltip text. This is a USS style name.</param>
 	/// <param name="anchorPoint">In what position the tooltip should be in, relative to the anchor.</param>
 	/// <param name="append">
-	///    When set to true, the specified tooltip text will be added below all other currently shown text already on the tooltip.
+	///    When set to true, the specified tooltip text will be added below all other currently shown text already on the
+	///    tooltip.
 	///    When set to false, the specified tooltip text will replace all other currently shown text in the tooltip.
 	/// </param>
 	/// <remarks>

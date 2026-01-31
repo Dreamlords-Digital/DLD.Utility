@@ -7,7 +7,8 @@ namespace DLD.Utility.Inspector
 {
 
 /// <summary>
-///    Show a FloatRange in a compact format (with two input fields in one line), but only if the specified property returns true.
+///    Show a FloatRange in a compact format (with two input fields in one line), but only if the specified property
+///    returns true.
 /// </summary>
 /// <remarks>
 ///    <para>This is referring to a C# property, not a <see cref="UnityEditor.SerializedProperty"/>.</para>

@@ -70,7 +70,7 @@ public interface IContextMenu
 public struct ContextMenuParams
 {
 	/// <summary>
-	/// Top-left position of the context menu, in world-space.
+	///    Top-left position of the context menu, in world-space.
 	/// </summary>
 	public Vector2 ContextMenuPosition;
 
@@ -914,7 +914,7 @@ public class ContextMenu : VisualElement, IContextMenu
 	}
 
 	/// <summary>
-	/// Get index of which menu item is focused
+	///    Get index of which menu item is focused
 	/// </summary>
 	/// <returns></returns>
 	int GetFocusedMenuIdx()
