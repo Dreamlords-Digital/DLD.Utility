@@ -29,7 +29,7 @@ public interface IBoxSelection
 	void StartBoxSelection(PointerDownEvent e, VisualElement startElement);
 }
 
-public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
+public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
 {
 	// ==================================================================================
 	// Dependencies
@@ -209,7 +209,7 @@ public class PanZoomManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegi
 
 	// ==================================================================================
 
-	protected PanZoomManipulator()
+	protected EditorMouseManipulator()
 	{
 		activators.Add(new ManipulatorActivationFilter
 		{
