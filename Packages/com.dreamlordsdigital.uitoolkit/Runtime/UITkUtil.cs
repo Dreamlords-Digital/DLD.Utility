@@ -9,6 +9,9 @@ namespace DLD.UIToolkit
 
 public static class UITkUtil
 {
+	public const int LeftMouseButton = 0;
+	public const int RightMouseButton = 1;
+
 	public const string MouseCursorPanStyleClass = "dld-mouse-cursor--pan";
 	public const string MouseCursorPanDragStyleClass = "dld-mouse-cursor--pan-drag";
 	public const string MouseCursorZoomInStyleClass = "dld-mouse-cursor--zoom-in";

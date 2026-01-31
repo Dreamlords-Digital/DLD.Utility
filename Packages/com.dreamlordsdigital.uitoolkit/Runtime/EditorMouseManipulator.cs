@@ -3,6 +3,7 @@
 using DLD.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static DLD.UIToolkit.UITkUtil;
 
 namespace DLD.UIToolkit
 {
@@ -592,6 +593,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 			RefreshMouseCursor(e.position);
 		}
+
+		if (e.button == RightMouseButton)
+		{
+			OnRightClickEmptySpace(e);
+		}
 	}
 
 	protected void OnStartPotentialDrag(VisualElement draggedElement, PointerDownEvent e, Vector2 localPos)
@@ -967,6 +973,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	}
 
 	protected virtual void OnBoxSelectionCanceled()
+	{
+	}
+
+	protected virtual void OnRightClickEmptySpace(PointerDownEvent e)
 	{
 	}
 
