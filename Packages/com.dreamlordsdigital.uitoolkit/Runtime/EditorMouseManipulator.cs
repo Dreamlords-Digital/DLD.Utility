@@ -210,6 +210,9 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	readonly EventCallback<PointerUpEvent> _onPointerUp;
 	readonly EventCallback<WheelEvent> _onWheel;
 
+	readonly EventCallback<ValidateCommandEvent> _onValidateCommand;
+	readonly EventCallback<ExecuteCommandEvent> _onExecuteCommand;
+
 	// ==================================================================================
 
 	protected EditorMouseManipulator()
@@ -226,6 +229,9 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		_onPointerMove = OnPointerMove;
 		_onPointerUp = OnPointerUp;
 		_onWheel = OnWheel;
+
+		_onValidateCommand = OnValidateCommand;
+		_onExecuteCommand = OnExecuteCommand;
 	}
 
 	public void SetBoxSelectionElement(VisualElement boxSelection)
@@ -296,6 +302,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	{
 		_keyEventTarget.RegisterCallback(_onKeyDown);
 		_keyEventTarget.RegisterCallback(_onKeyUp);
+		_keyEventTarget.RegisterCallback(_onValidateCommand);
+		_keyEventTarget.RegisterCallback(_onExecuteCommand);
 		target.RegisterCallback(_onPointerDown);
 		target.RegisterCallback(_onPointerMove);
 		target.RegisterCallback(_onPointerUp);
@@ -306,6 +314,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	{
 		_keyEventTarget.UnregisterCallback(_onKeyDown);
 		_keyEventTarget.UnregisterCallback(_onKeyUp);
+		_keyEventTarget.UnregisterCallback(_onValidateCommand);
+		_keyEventTarget.UnregisterCallback(_onExecuteCommand);
 		target.UnregisterCallback(_onPointerDown);
 		target.UnregisterCallback(_onPointerMove);
 		target.UnregisterCallback(_onPointerUp);
@@ -1009,6 +1019,14 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	}
 
 	protected virtual void OnRightClickEmptySpace(PointerDownEvent e)
+	{
+	}
+
+	protected virtual void OnValidateCommand(ValidateCommandEvent e)
+	{
+	}
+
+	protected virtual void OnExecuteCommand(ExecuteCommandEvent e)
 	{
 	}
 
