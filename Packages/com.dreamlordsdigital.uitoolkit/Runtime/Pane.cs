@@ -71,6 +71,16 @@ public class TabbedContent
 	public virtual void OnClose()
 	{
 	}
+
+	public void ShowAsFocused()
+	{
+		// todo: remove the unfocused style
+	}
+
+	public void ShowAsUnfocused()
+	{
+		// todo: add the unfocused style
+	}
 }
 
 [UxmlElement]
@@ -96,7 +106,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 	readonly EventCallback<ChangeEvent<bool>> _onPressTab;
 	readonly EventCallback<PointerDownEvent> _onPressTabContext;
 
-	Action<T> _onTabShown;
+	Action<Pane<T>, T> _onTabShown;
 	Action<IContextMenu, T> _onTabContext;
 
 	// =====================================================================
@@ -136,7 +146,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		_contextMenu = contextMenu;
 	}
 
-	public void SetOnTabShown(Action<T> onTabShown)
+	public void SetOnTabShown(Action<Pane<T>, T> onTabShown)
 	{
 		_onTabShown = onTabShown;
 	}
@@ -237,9 +247,21 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		if (!e.previousValue && e.newValue)
 		{
 			_currentTab = clickedTabContent;
-			_onTabShown?.Invoke(clickedTabContent);
+			_onTabShown?.Invoke(this, clickedTabContent);
 		}
 	}
+
+	public void ShowCurrentTabAsUnfocused()
+	{
+		_currentTab?.ShowAsUnfocused();
+	}
+
+	public void ShowCurrentTabAsFocused()
+	{
+		_currentTab?.ShowAsFocused();
+	}
+
+	// =====================================================================
 
 	void OnPressTabContext(PointerDownEvent e)
 	{
