@@ -757,7 +757,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		if (!_isDragging && !_isPanning && !_spacebarHeld && _pointerDownOnEmptyBackground)
 		{
 			_pointerDownOnEmptyBackground = false;
-			OnClickEmptyBackground(e);
+			OnLeftClickEmptySpace(e);
 			RefreshMouseCursor(e.position);
 			return;
 		}
@@ -908,7 +908,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	// ==================================================================================================
 	// Methods that can be overriden by derived classes
 
-	protected virtual void OnClickEmptyBackground(PointerUpEvent e)
+	protected virtual void OnLeftClickEmptySpace(PointerUpEvent e)
 	{
 	}
 
