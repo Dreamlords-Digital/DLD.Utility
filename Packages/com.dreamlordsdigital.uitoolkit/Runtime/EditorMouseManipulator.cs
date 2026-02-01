@@ -188,7 +188,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	///    Last known position of the mouse given by <see cref="OnPointerMove"/>.
 	///    This is used by events that do not have access to the mouse position, like key press events.
 	/// </summary>
-	Vector2 _lastKnownMousePos;
+	protected Vector2 LastKnownMousePos { get; private set; }
 
 	VisualElement _boxSelection;
 	Vector2 _boxSelectionStartPos;
@@ -435,12 +435,12 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 		if (changeDetected)
 		{
-			RefreshMouseCursor(_lastKnownMousePos);
+			RefreshMouseCursor(LastKnownMousePos);
 		}
 
 		if (changeInShift)
 		{
-			OnForceMoveChanged(_lastKnownMousePos);
+			OnForceMoveChanged(LastKnownMousePos);
 		}
 	}
 
@@ -483,10 +483,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 				break;
 		}
 
-		RefreshMouseCursor(_lastKnownMousePos);
+		RefreshMouseCursor(LastKnownMousePos);
 		if (changeInShift)
 		{
-			OnForceMoveChanged(_lastKnownMousePos);
+			OnForceMoveChanged(LastKnownMousePos);
 		}
 	}
 
@@ -689,7 +689,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
-		_lastKnownMousePos = e.position;
+		LastKnownMousePos = e.position;
 
 		if (_inBoxSelection)
 		{
