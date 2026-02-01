@@ -9,15 +9,51 @@ namespace DLD.UIToolkit
 
 public static class CommandName
 {
+	/// <summary>
+	/// Default shortcut: Ctrl + F
+	/// </summary>
 	public const string Find = "Find";
+
+	/// <summary>
+	/// Default shortcut: Ctrl + X
+	/// </summary>
 	public const string Cut = "Cut";
+
+	/// <summary>
+	/// Default shortcut: Ctrl + C
+	/// </summary>
 	public const string Copy = "Copy";
+
+	/// <summary>
+	/// Default shortcut: Ctrl + V
+	/// </summary>
 	public const string Paste = "Paste";
+
+	/// <summary>
+	/// Default shortcut: Ctrl + D
+	/// </summary>
 	public const string Duplicate = "Duplicate";
+
+	/// <summary>
+	/// Default shortcut: Ctrl + A
+	/// </summary>
 	public const string SelectAll = "SelectAll";
+
+	/// <summary>
+	/// Default shortcut: Shift + D
+	/// </summary>
 	public const string DeselectAll = "DeselectAll";
+
+	/// <summary>
+	/// Default shortcut: Shift + Delete
+	/// </summary>
 	public const string Delete = "Delete";
+
+	/// <summary>
+	/// Default shortcut: Delete
+	/// </summary>
 	public const string SoftDelete = "SoftDelete";
+
 	public const string FrameSelected = "FrameSelected";
 	public const string FrameSelectedWithLock = "FrameSelectedWithLock";
 	public const string FocusProjectWindow = "FocusProjectWindow";
