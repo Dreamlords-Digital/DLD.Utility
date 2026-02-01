@@ -40,6 +40,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	/// </summary>
 	protected ITooltip _tooltip;
 
+	bool IsNotInitialized => _tooltip == null;
+
 	// ==================================================================================
 
 	/// <summary>
@@ -349,6 +351,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		// (if multiple keys are held down, all of them will have a key-down event,
 		// but only the latest one pressed has repeated key-down events).
 
+		if (IsNotInitialized)
+		{
+			return;
+		}
+
 		bool changeDetected = false;
 		if (e.keyCode == KeyCode.Space)
 		{
@@ -439,6 +446,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void OnKeyUp(KeyUpEvent e)
 	{
+		if (IsNotInitialized)
+		{
+			return;
+		}
+
 		bool changeInShift = false;
 		switch (e.keyCode)
 		{
@@ -516,6 +528,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void OnPointerDown(PointerDownEvent e)
 	{
+		if (IsNotInitialized)
+		{
+			return;
+		}
+
 		// Note: Unlike key-down event, pointer-down event only happens
 		// in the single frame that the mouse button/finger starts to be pressed.
 
@@ -667,6 +684,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void OnPointerMove(PointerMoveEvent e)
 	{
+		if (IsNotInitialized)
+		{
+			return;
+		}
+
 		_lastKnownMousePos = e.position;
 
 		if (_inBoxSelection)
@@ -746,6 +768,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void OnPointerUp(PointerUpEvent e)
 	{
+		if (IsNotInitialized)
+		{
+			return;
+		}
+
 		if (_inBoxSelection)
 		{
 			_pointerDownOnEmptyBackground = false;
@@ -808,6 +835,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void OnWheel(WheelEvent e)
 	{
+		if (IsNotInitialized)
+		{
+			return;
+		}
+
 		if (!AllowZooming)
 		{
 			return;
