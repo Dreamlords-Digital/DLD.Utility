@@ -10,6 +10,9 @@ public static class BaseIcons
 	public const string GenericInfo = "dld-icon--info";
 	public const string GenericWarning = "dld-icon--warning";
 	public const string GenericError = "dld-icon--error";
+	public const string Cut = "dld-icon--cut";
+	public const string Copy = "dld-icon--copy";
+	public const string Paste = "dld-icon--paste";
 	public const string ForceMove = "dld-icon--force-move";
 	public const string Close = "dld-icon--close";
 	public const string Debug = "dld-icon--debug";

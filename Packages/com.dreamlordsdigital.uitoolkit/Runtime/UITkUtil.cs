@@ -7,6 +7,22 @@ using UnityEngine.UIElements;
 namespace DLD.UIToolkit
 {
 
+public static class CommandName
+{
+	public const string Find = "Find";
+	public const string Cut = "Cut";
+	public const string Copy = "Copy";
+	public const string Paste = "Paste";
+	public const string Duplicate = "Duplicate";
+	public const string SelectAll = "SelectAll";
+	public const string DeselectAll = "DeselectAll";
+	public const string Delete = "Delete";
+	public const string SoftDelete = "SoftDelete";
+	public const string FrameSelected = "FrameSelected";
+	public const string FrameSelectedWithLock = "FrameSelectedWithLock";
+	public const string FocusProjectWindow = "FocusProjectWindow";
+}
+
 public static class UITkUtil
 {
 	public const int LeftMouseButton = 0;
