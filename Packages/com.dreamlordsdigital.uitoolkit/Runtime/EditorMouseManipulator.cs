@@ -130,7 +130,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	///    Where in the dragged element it got clicked on when the dragging started.
 	/// </summary>
 	/// <remarks>
-	///    (0, 0) means the mouse was exactly at the element's pivot point.
+	///    (0, 0) means the mouse was exactly at the element's pivot point (usually its top-left corner).
 	/// </remarks>
 	Vector2 _draggedElementStartLocalPos;
 

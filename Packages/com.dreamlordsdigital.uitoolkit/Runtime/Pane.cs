@@ -156,6 +156,8 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		_onTabContext = onTabContext;
 	}
 
+	// =====================================================================
+
 	public T CreateTab(string tabName) => CreateTab(tabName, new T());
 
 	public T CreateTab(string tabName, T newTabbedContent)
@@ -181,6 +183,8 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 		return newTabbedContent;
 	}
+
+	// =====================================================================
 
 	public T GetTabFromBody(VisualElement body)
 	{
