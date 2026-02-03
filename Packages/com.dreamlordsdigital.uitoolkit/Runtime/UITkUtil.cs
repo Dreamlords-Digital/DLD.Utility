@@ -171,9 +171,13 @@ public static class UITkUtil
 		}
 	}
 
-	public static void RemoveTemplateContainer(this VisualElement me, string childRootName)
+	public static void RemoveTemplateContainer(this VisualElement me, string childRootName = "TemplateContainer")
 	{
 		var clonedRoot = me.Q<VisualElement>(childRootName);
+		if (clonedRoot == null)
+		{
+			return;
+		}
 
 		me.pickingMode = clonedRoot.pickingMode;
 		me.focusable = clonedRoot.focusable;
@@ -215,6 +219,59 @@ public static class UITkUtil
 		}
 
 		return null;
+	}
+
+	public static T Qup<T>(this VisualElement e, string name) where T : VisualElement
+	{
+		if (e is T foundSelf && foundSelf.name == name)
+		{
+			return foundSelf;
+		}
+
+		VisualElement search = e.parent;
+		while (search != null)
+		{
+			if (search is T found && found.name == name)
+			{
+				return found;
+			}
+			search = search.parent;
+		}
+
+		return null;
+	}
+
+	public static T QupStartsWith<T>(this VisualElement e, string name) where T : VisualElement
+	{
+		if (e is T foundSelf && foundSelf.name.StartsWith(name))
+		{
+			return foundSelf;
+		}
+
+		VisualElement search = e.parent;
+		while (search != null)
+		{
+			if (search is T found && found.name.StartsWith(name))
+			{
+				return found;
+			}
+			search = search.parent;
+		}
+
+		return null;
+	}
+
+	public static bool IsAncestorOf(this VisualElement ancestor, VisualElement child)
+	{
+		for (VisualElement parent = child.hierarchy.parent; parent != null; parent = parent.hierarchy.parent)
+		{
+			if (ReferenceEquals(parent, ancestor))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static bool IsOrAncestorOf(this VisualElement ancestor, VisualElement child)
