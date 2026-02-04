@@ -1,14 +1,19 @@
+// COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
+
 using UnityEngine;
 using UnityEngine.UIElements;
+using Toggle = UnityEngine.UIElements.Toggle;
 
 namespace DLD.UIToolkit
 {
 	public enum SearchType : byte
 	{
-		SimpleNotMatchCase,
-		SimpleMatchCase,
+		Simple,
+		SimpleIgnoreCase,
 		Fuzzy,
+		FuzzyIgnoreCase,
 		Regex,
+		RegexIgnoreCase
 	}
 
 	public interface ISearchTextFieldListener
@@ -117,34 +122,9 @@ namespace DLD.UIToolkit
 		{
 			Debug.Assert(_contextMenu != null, "_contextMenu should be assigned");
 
-			bool searchTypeIsSimple = _searchType is SearchType.SimpleNotMatchCase or SearchType.SimpleMatchCase;
-
-			ContextMenuItemStyle matchCaseStyle;
-			string matchCaseTooltip;
-			if (searchTypeIsSimple)
-			{
-				matchCaseTooltip = "Case sensitive or not.";
-				if (_matchCase)
-				{
-					matchCaseStyle = ContextMenuItemStyle.Selected;
-				}
-				else
-				{
-					matchCaseStyle = ContextMenuItemStyle.Standard;
-				}
-			}
-			else
-			{
-				matchCaseTooltip = "Only applies to Simple Search Type.";
-				if (_matchCase)
-				{
-					matchCaseStyle = ContextMenuItemStyle.Selected | ContextMenuItemStyle.Disabled;
-				}
-				else
-				{
-					matchCaseStyle = ContextMenuItemStyle.Standard | ContextMenuItemStyle.Disabled;
-				}
-			}
+			bool searchTypeIsSimple = _searchType is SearchType.Simple or SearchType.SimpleIgnoreCase;
+			bool searchTypeIsFuzzy = _searchType is SearchType.Fuzzy or SearchType.FuzzyIgnoreCase;
+			bool searchTypeIsRegex = _searchType is SearchType.Regex or SearchType.RegexIgnoreCase;
 
 			_contextMenu.ClearMenu();
 			_contextMenu.AddLabel("Search Type:");
@@ -152,14 +132,14 @@ namespace DLD.UIToolkit
 				menuItemStyle: searchTypeIsSimple ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
 				listener: this, userArg1: SearchTypeSimple);
 			_contextMenu.AddMenu("Fuzzy", tooltip: "Use fuzzy search algorithm. Fuzzy search is lenient on wrong spellings.",
-				menuItemStyle: _searchType == SearchType.Fuzzy ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
+				menuItemStyle: searchTypeIsFuzzy ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
 				listener: this, userArg1: SearchTypeFuzzy);
 			_contextMenu.AddMenu("Regex", tooltip: "Use regular expression.",
-				menuItemStyle: _searchType == SearchType.Regex ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
+				menuItemStyle: searchTypeIsRegex ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
 				listener: this, userArg1: SearchTypeRegex);
 			_contextMenu.AddSeparator();
-			_contextMenu.AddMenu("Match Case", tooltip: matchCaseTooltip,
-				menuItemStyle: matchCaseStyle,
+			_contextMenu.AddMenu("Match Case", tooltip: "Case sensitive or not.",
+				menuItemStyle: _matchCase ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
 				listener: this, userArg1: MatchCase);
 			_contextMenu.Show(this, ElementAnchorPoint.LowerRight, listener: this);
 		}
@@ -169,31 +149,39 @@ namespace DLD.UIToolkit
 			switch (parameters.UserArg1 as string)
 			{
 				case SearchTypeSimple:
-					if (_searchType is SearchType.SimpleNotMatchCase or SearchType.SimpleMatchCase)
+					if (_searchType is SearchType.SimpleIgnoreCase or SearchType.Simple)
 					{
 						return;
 					}
-					_searchType = _matchCase ? SearchType.SimpleMatchCase : SearchType.SimpleNotMatchCase;
+					_searchType = _matchCase ? SearchType.Simple : SearchType.SimpleIgnoreCase;
 					break;
 				case SearchTypeFuzzy:
-					if (_searchType == SearchType.Fuzzy)
+					if (_searchType is SearchType.Fuzzy or SearchType.FuzzyIgnoreCase)
 					{
 						return;
 					}
-					_searchType = SearchType.Fuzzy;
+					_searchType = _matchCase ? SearchType.Fuzzy : SearchType.FuzzyIgnoreCase;
 					break;
 				case SearchTypeRegex:
-					if (_searchType == SearchType.Regex)
+					if (_searchType is SearchType.Regex or SearchType.RegexIgnoreCase)
 					{
 						return;
 					}
-					_searchType = SearchType.Regex;
+					_searchType = _matchCase ? SearchType.Regex : SearchType.RegexIgnoreCase;
 					break;
 				case MatchCase:
 					_matchCase = !_matchCase;
-					if (_searchType is SearchType.SimpleNotMatchCase or SearchType.SimpleMatchCase)
+					if (_searchType is SearchType.Simple or SearchType.SimpleIgnoreCase)
 					{
-						_searchType = _matchCase ? SearchType.SimpleMatchCase : SearchType.SimpleNotMatchCase;
+						_searchType = _matchCase ? SearchType.Simple : SearchType.SimpleIgnoreCase;
+					}
+					else if (_searchType is SearchType.Fuzzy or SearchType.FuzzyIgnoreCase)
+					{
+						_searchType = _matchCase ? SearchType.Fuzzy : SearchType.FuzzyIgnoreCase;
+					}
+					else if (_searchType is SearchType.Regex or SearchType.RegexIgnoreCase)
+					{
+						_searchType = _matchCase ? SearchType.Regex : SearchType.RegexIgnoreCase;
 					}
 					break;
 			}
