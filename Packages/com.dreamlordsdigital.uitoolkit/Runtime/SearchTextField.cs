@@ -39,6 +39,7 @@ namespace DLD.UIToolkit
 		float _searchDelayRemaining;
 
 		readonly Toggle _searchButton;
+		readonly Button _clearButton;
 
 		IContextMenu _contextMenu;
 		ISearchTextFieldListener _listener;
@@ -55,8 +56,13 @@ namespace DLD.UIToolkit
 			_searchButton.RegisterCallback<ClickEvent, SearchTextField>((e, me) => me.OnSearchButtonPressed(), this);
 			_searchButton.AddToClassList("dld-search-text-field__search-button");
 
+			_clearButton = new Button();
+			_clearButton.RegisterCallback<ClickEvent, SearchTextField>((e, me) => me.OnClearButtonPressed(), this);
+			_clearButton.AddToClassList("dld-search-text-field__clear-button");
+
 			var textBox = this.Q<VisualElement>("unity-text-input");
-			textBox.Add(_searchButton);
+			textBox.Insert(0, _searchButton);
+			textBox.Add(_clearButton);
 
 			if (isDelayed)
 			{
@@ -161,7 +167,7 @@ namespace DLD.UIToolkit
 			_contextMenu.AddMenu("Match Case", tooltip: "Case sensitive or not.",
 				menuItemStyle: _matchCase ? ContextMenuItemStyle.Selected : ContextMenuItemStyle.Standard,
 				listener: this, userArg1: MatchCase);
-			_contextMenu.Show(this, ElementAnchorPoint.LowerRight, listener: this);
+			_contextMenu.Show(this, ElementAnchorPoint.LowerLeft, listener: this);
 		}
 
 		public void OnContextMenuChosen(ContextMenuParams parameters)
@@ -217,6 +223,13 @@ namespace DLD.UIToolkit
 				Focus();
 				_wasInFocusBeforeClickingOnSearchButton = false;
 			}
+		}
+
+		void OnClearButtonPressed()
+		{
+			SetValueWithoutNotify("");
+			_searchDelayRemaining = 0;
+			_listener?.OnSearchTextChanged(_searchType, value);
 		}
 
 		// =====================================================================

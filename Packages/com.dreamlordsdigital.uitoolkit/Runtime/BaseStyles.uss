@@ -360,6 +360,31 @@ FilenameTextField > #unity-text-input > Label {
     -unity-background-image-tint-color: rgb(58, 121, 187);
 }
 
+.dld-search-text-field__clear-button {
+    width: 16px;
+    background-size: 16px 16px;
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Material/close_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.png?fileID=2800000&guid=2aed69f01d90f047f8c2c7cbc6f3dc69&type=3#close_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20");
+    -unity-background-image-tint-color: rgb(101, 101, 101);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    height: 16px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
 .dld-search-text-field > #unity-text-input {
 }
 
@@ -369,6 +394,18 @@ FilenameTextField > #unity-text-input > Label {
 
 .dld-search-text-field:focus > #unity-text-input > .dld-search-text-field__search-button {
     -unity-background-image-tint-color: rgb(73, 154, 237);
+}
+
+.dld-search-text-field:hover > #unity-text-input > .dld-search-text-field__clear-button {
+    -unity-background-image-tint-color: rgb(142, 142, 142);
+}
+
+.dld-search-text-field:focus > #unity-text-input > .dld-search-text-field__clear-button {
+    -unity-background-image-tint-color: rgb(73, 154, 237);
+}
+
+.dld-search-text-field__clear-button:active {
+    translate: 0 1px;
 }
 
 .dld-search-text-field__search-button > .unity-toggle__input {
