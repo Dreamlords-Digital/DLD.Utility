@@ -38,9 +38,9 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	/// <summary>
 	///    Used for showing tooltips while dragging.
 	/// </summary>
-	protected ITooltip _tooltip;
+	protected ITooltip Tooltip;
 
-	bool IsNotInitialized => _tooltip == null;
+	bool IsNotInitialized => Tooltip == null;
 
 	// ==================================================================================
 
@@ -267,10 +267,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		_mouseCursorDisplay = newMouseCursorDisplay;
 	}
 
-	/// <inheritdoc cref="_tooltip"/>
+	/// <inheritdoc cref="Tooltip"/>
 	public void SetTooltip(ITooltip tooltip)
 	{
-		_tooltip = tooltip;
+		Tooltip = tooltip;
 	}
 
 	// ==================================================================================================
@@ -823,7 +823,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 				OnEndedDrag(e, draggedElementEndLocalPos);
 			}
 
-			_tooltip?.HideTooltip();
+			Tooltip?.HideTooltip();
 
 			_draggingPointerId = -1;
 			_draggedElement = null;
@@ -864,7 +864,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	void CancelDrag()
 	{
 		OnCanceledDrag();
-		_tooltip?.HideTooltip();
+		Tooltip?.HideTooltip();
 		if (_isDraggingClonedElement)
 		{
 			_draggedElement.RemoveFromHierarchy();
@@ -933,7 +933,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void EndBoxSelection(PointerUpEvent e)
 	{
-		_tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
+		Tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
 		_boxSelection.style.display = DisplayStyle.None;
 		_inBoxSelection = false;
 		OnBoxSelectionEnd(e);
@@ -941,7 +941,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	void CancelBoxSelection()
 	{
-		_tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
+		Tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
 		_boxSelection.style.display = DisplayStyle.None;
 		_inBoxSelection = false;
 		OnBoxSelectionCanceled();
@@ -1038,26 +1038,26 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		{
 			if (_shift)
 			{
-				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.ForceMove, mousePos);
+				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.ForceMove, mousePos);
 			}
 			else
 			{
-				_tooltip?.HideTooltip();
+				Tooltip?.HideTooltip();
 			}
 		}
 		else if (_inBoxSelection)
 		{
 			if (_shift || _ctrl)
 			{
-				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Add to selection", BaseIcons.AddToSelection, mousePos);
+				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Add to selection", BaseIcons.AddToSelection, mousePos);
 			}
 			else if (_alt)
 			{
-				_tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Remove from selection", BaseIcons.RemoveFromSelection, mousePos);
+				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Remove from selection", BaseIcons.RemoveFromSelection, mousePos);
 			}
 			else
 			{
-				_tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
+				Tooltip?.HideTooltipIfContextIs(_mouseCursorDisplay);
 			}
 		}
 
