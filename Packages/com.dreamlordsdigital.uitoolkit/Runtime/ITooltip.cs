@@ -153,6 +153,24 @@ public interface ITooltip
 	void RefreshTooltipsOfContext(VisualElement context);
 
 	/// <summary>
+	/// While in a keypress event, it's possible that the mouse is currently under a VisualElement that is providing
+	/// a tooltip, and the keypress event causes that VisualElement to be removed from the panel.
+	/// So we need to forcibly remove the tooltip if the mouse happens to be under such a VisualElement.
+	/// For example, the mouse could be under a search result that shows a tooltip, and typing something different
+	/// in the search text-field causes the search results to change. The tooltip needs to refresh.
+	/// </summary>
+	void HideTooltipIfUnderMouse<T>() where T : VisualElement;
+
+	/// <summary>
+	/// While in a keypress event, it's possible that the mouse is currently under a VisualElement that is providing
+	/// a tooltip, and the keypress event causes that VisualElement to be removed from the panel.
+	/// So we need to forcibly remove the tooltip if the mouse happens to be under such a VisualElement.
+	/// For example, the mouse could be under a search result that shows a tooltip, and typing something different
+	/// in the search text-field causes the search results to change. The tooltip needs to refresh.
+	/// </summary>
+	void RefreshTooltipIfUnderMouse<T>() where T : VisualElement;
+
+	/// <summary>
 	///    Whether the user is currently performing a drag-and-drop operation or not.
 	/// </summary>
 	/// <remarks>

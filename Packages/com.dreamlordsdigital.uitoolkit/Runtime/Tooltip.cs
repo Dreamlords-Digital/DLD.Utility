@@ -37,6 +37,8 @@ public partial class Tooltip : VisualElement
 	VisualElement _lastAnchorElement;
 	ElementAnchorPoint _lastAnchorPoint;
 
+	Vector2 _lastKnownMousePos;
+
 	readonly EventCallback<PointerMoveEvent> _onPointerMove;
 
 	IDragStatus _dragStatus;
@@ -389,6 +391,24 @@ public partial class Tooltip : VisualElement
 		}
 	}
 
+	public void HideTooltipIfUnderMouse<T>() where T : VisualElement
+	{
+		// Note: RuntimePanelUtils only works during runtime, so we can't use RuntimePanelUtils.ScreenToPanel
+		if (panel.Pick(_lastKnownMousePos) is T n)
+		{
+			HideIfContextIs(n);
+		}
+	}
+
+	public void RefreshTooltipIfUnderMouse<T>() where T : VisualElement
+	{
+		// Note: RuntimePanelUtils only works during runtime, so we can't use RuntimePanelUtils.ScreenToPanel
+		if (panel.Pick(_lastKnownMousePos) is T n)
+		{
+			RefreshTooltipsOfContext(n);
+		}
+	}
+
 	// ==================================================================================================
 
 	void OnResized(GeometryChangedEvent e)
@@ -403,6 +423,8 @@ public partial class Tooltip : VisualElement
 
 	void OnPointerMove(PointerMoveEvent e)
 	{
+		_lastKnownMousePos = e.position;
+
 		if (_showType is ShowType.FollowMouseCursor or ShowType.None)
 		{
 			this.SetPosition(e.position);
