@@ -65,6 +65,7 @@ namespace DLD.UIToolkit
 			else
 			{
 				RegisterCallback<ChangeEvent<string>, SearchTextField>((e, me) => me.OnImmediateChange(e), this);
+				RegisterCallback<NavigationSubmitEvent, SearchTextField>((e, me) => me.OnImmediateSubmitText(e), this);
 			}
 		}
 
@@ -99,7 +100,26 @@ namespace DLD.UIToolkit
 
 		void OnImmediateChange(ChangeEvent<string> e)
 		{
-			_searchDelayRemaining = DefaultSearchDelay;
+			if (string.IsNullOrEmpty(e.newValue) && !string.IsNullOrEmpty(e.previousValue))
+			{
+				// just cleared out the text
+				_searchDelayRemaining = 0;
+				_listener?.OnSearchTextChanged(_searchType, value);
+			}
+			else
+			{
+				_searchDelayRemaining = DefaultSearchDelay;
+			}
+		}
+
+		void OnImmediateSubmitText(NavigationSubmitEvent e)
+		{
+			if (_searchDelayRemaining > 0)
+			{
+				_searchDelayRemaining = 0;
+				_listener?.OnSearchTextChanged(_searchType, value);
+				e.StopPropagation();
+			}
 		}
 
 		void OnFocusOut(FocusOutEvent e)
