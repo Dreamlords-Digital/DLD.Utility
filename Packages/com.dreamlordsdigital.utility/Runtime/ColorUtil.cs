@@ -45,10 +45,19 @@ public static class ColorUtil
 	{
 		return $"{color.r.ToString("X2")}{color.g.ToString("X2")}{color.b.ToString("X2")}";
 	}
+	public static string ColorToHashHex(this Color32 color)
+	{
+		return $"#{color.r.ToString("X2")}{color.g.ToString("X2")}{color.b.ToString("X2")}";
+	}
 
 	public static string ColorWithAlphaToHex(this Color32 color)
 	{
 		return $"{color.r.ToString("X2")}{color.g.ToString("X2")}{color.b.ToString("X2")}{color.a.ToString("X2")}";
+	}
+
+	public static string ColorWithAlphaToHashHex(this Color32 color)
+	{
+		return $"#{color.r.ToString("X2")}{color.g.ToString("X2")}{color.b.ToString("X2")}{color.a.ToString("X2")}";
 	}
 
 	public static string ColorToNguiHex(this Color32 color)

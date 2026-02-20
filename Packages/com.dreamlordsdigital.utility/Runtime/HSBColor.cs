@@ -7,46 +7,77 @@ using UnityEngine;
 namespace DLD.Utility
 {
 
+/// <summary>
+/// Color expressed as normalized values of Hue, Saturation, and Brightness.
+/// </summary>
 [Serializable]
 public struct HSBColor
 {
-	public float h;
-	public float s;
-	public float b;
-	public float a;
+	/// <summary>
+	/// Hue
+	/// </summary>
+	/// <remarks>
+	/// The range of hues is basically, think of the colors of the rainbow.
+	/// From 0 to 1:
+	/// Red - Violet - Indigo - Blue - Green - Yellow - Orange - Red
+	/// </remarks>
+	public float H;
+
+	/// <summary>
+	/// Saturation
+	/// </summary>
+	/// <remarks>
+	/// 0 = grayscale<br/>
+	/// 1 = current hue in its "purest"
+	/// </remarks>
+	public float S;
+
+	/// <summary>
+	/// Brightness
+	/// </summary>
+	/// <remarks>
+	/// 0 = black<br/>
+	/// 1 = color at its brightest
+	/// </remarks>
+	public float B;
+
+	/// <summary>
+	/// Alpha/Transparency
+	/// </summary>
+	public float A;
 
 	public HSBColor(float h, float s, float b, float a)
 	{
-		this.h = h;
-		this.s = s;
-		this.b = b;
-		this.a = a;
+		H = h;
+		S = s;
+		B = b;
+		A = a;
 	}
 
 	public HSBColor(float h, float s, float b)
 	{
-		this.h = h;
-		this.s = s;
-		this.b = b;
-		a = 1f;
+		H = h;
+		S = s;
+		B = b;
+		A = 1f;
 	}
 
 	public HSBColor(Color col)
 	{
 		HSBColor temp = FromColor(col);
-		h = temp.h;
-		s = temp.s;
-		b = temp.b;
-		a = temp.a;
+		H = temp.H;
+		S = temp.S;
+		B = temp.B;
+		A = temp.A;
 	}
 
 	public static HSBColor FromColor(Color color)
 	{
 		HSBColor ret;
-		ret.h = 0;
-		ret.s = 0;
-		ret.b = 0;
-		ret.a = color.a;
+		ret.H = 0;
+		ret.S = 0;
+		ret.B = 0;
+		ret.A = color.a;
 
 		float r = color.r;
 		float g = color.g;
@@ -66,112 +97,112 @@ public struct HSBColor
 		{
 			if (Mathf.Approximately(g, max))
 			{
-				ret.h = (b - r) / dif * 60f + 120f;
+				ret.H = (b - r) / dif * 60f + 120f;
 			}
 			else if (Mathf.Approximately(b, max))
 			{
-				ret.h = (r - g) / dif * 60f + 240f;
+				ret.H = (r - g) / dif * 60f + 240f;
 			}
 			else if (b > g)
 			{
-				ret.h = (g - b) / dif * 60f + 360f;
+				ret.H = (g - b) / dif * 60f + 360f;
 			}
 			else
 			{
-				ret.h = (g - b) / dif * 60f;
+				ret.H = (g - b) / dif * 60f;
 			}
 
-			if (ret.h < 0)
+			if (ret.H < 0)
 			{
-				ret.h = ret.h + 360f;
+				ret.H = ret.H + 360f;
 			}
 		}
 		else
 		{
-			ret.h = 0;
+			ret.H = 0;
 		}
 
-		ret.h *= 1f / 360f;
-		ret.s = (dif / max) * 1f;
-		ret.b = max;
+		ret.H *= 1f / 360f;
+		ret.S = (dif / max) * 1f;
+		ret.B = max;
 
 		return ret;
 	}
 
-	public static Color ToColor(HSBColor hsbColor)
+	public Color ToColor()
 	{
-		float r = hsbColor.b;
-		float g = hsbColor.b;
-		float b = hsbColor.b;
-		if (hsbColor.s != 0)
+		float red = B;
+		float grn = B;
+		float blu = B;
+		if (S != 0)
 		{
-			float max = hsbColor.b;
-			float dif = hsbColor.b * hsbColor.s;
-			float min = hsbColor.b - dif;
+			float max = B;
+			float dif = B * S;
+			float min = B - dif;
 
-			float h = hsbColor.h * 360f;
+			float h360 = H * 360f;
 
-			if (h < 60f)
+			if (h360 < 60f)
 			{
-				r = max;
-				g = h * dif / 60f + min;
-				b = min;
+				red = max;
+				grn = h360 * dif / 60f + min;
+				blu = min;
 			}
-			else if (h < 120f)
+			else if (h360 < 120f)
 			{
-				r = -(h - 120f) * dif / 60f + min;
-				g = max;
-				b = min;
+				red = -(h360 - 120f) * dif / 60f + min;
+				grn = max;
+				blu = min;
 			}
-			else if (h < 180f)
+			else if (h360 < 180f)
 			{
-				r = min;
-				g = max;
-				b = (h - 120f) * dif / 60f + min;
+				red = min;
+				grn = max;
+				blu = (h360 - 120f) * dif / 60f + min;
 			}
-			else if (h < 240f)
+			else if (h360 < 240f)
 			{
-				r = min;
-				g = -(h - 240f) * dif / 60f + min;
-				b = max;
+				red = min;
+				grn = -(h360 - 240f) * dif / 60f + min;
+				blu = max;
 			}
-			else if (h < 300f)
+			else if (h360 < 300f)
 			{
-				r = (h - 240f) * dif / 60f + min;
-				g = min;
-				b = max;
+				red = (h360 - 240f) * dif / 60f + min;
+				grn = min;
+				blu = max;
 			}
-			else if (h <= 360f)
+			else if (h360 <= 360f)
 			{
-				r = max;
-				g = min;
-				b = -(h - 360f) * dif / 60 + min;
+				red = max;
+				grn = min;
+				blu = -(h360 - 360f) * dif / 60 + min;
 			}
 			else
 			{
-				r = 0;
-				g = 0;
-				b = 0;
+				red = 0;
+				grn = 0;
+				blu = 0;
 			}
 		}
 
 		Color c;
-		c.r = Mathf.Clamp01(r);
-		c.g = Mathf.Clamp01(g);
-		c.b = Mathf.Clamp01(b);
-		c.a = hsbColor.a;
+		c.r = Mathf.Clamp01(red);
+		c.g = Mathf.Clamp01(grn);
+		c.b = Mathf.Clamp01(blu);
+		c.a = A;
 		return c;
-	}
-
-	public Color ToColor()
-	{
-		return ToColor(this);
 	}
 
 	public override string ToString()
 	{
-		return string.Format("H:{0} S:{1} B:{2}", h.ToString(CultureInfo.InvariantCulture),
-			s.ToString(CultureInfo.InvariantCulture), b.ToString(CultureInfo.InvariantCulture));
+		return ToString("0.000");
+	}
+
+	public string ToString(string format)
+	{
+		return string.Format("HSB({0}, {1}, {2})", H.ToString(format, CultureInfo.InvariantCulture),
+			S.ToString(format, CultureInfo.InvariantCulture), B.ToString(format, CultureInfo.InvariantCulture));
 	}
 
 	public static HSBColor Lerp(HSBColor a, HSBColor b, float t)
@@ -180,30 +211,30 @@ public struct HSBColor
 
 		//check special case black (color.b==0): interpolate neither hue nor saturation!
 		//check special case grey (color.s==0): don't interpolate hue!
-		if (a.b == 0)
+		if (a.B == 0)
 		{
-			h = b.h;
-			s = b.s;
+			h = b.H;
+			s = b.S;
 		}
-		else if (b.b == 0)
+		else if (b.B == 0)
 		{
-			h = a.h;
-			s = a.s;
+			h = a.H;
+			s = a.S;
 		}
 		else
 		{
-			if (a.s == 0)
+			if (a.S == 0)
 			{
-				h = b.h;
+				h = b.H;
 			}
-			else if (b.s == 0)
+			else if (b.S == 0)
 			{
-				h = a.h;
+				h = a.H;
 			}
 			else
 			{
 				// works around bug with LerpAngle
-				float angle = Mathf.LerpAngle(a.h * 360f, b.h * 360f, t);
+				float angle = Mathf.LerpAngle(a.H * 360f, b.H * 360f, t);
 				while (angle < 0f)
 				{
 					angle += 360f;
@@ -217,41 +248,15 @@ public struct HSBColor
 				h = angle / 360f;
 			}
 
-			s = Mathf.Lerp(a.s, b.s, t);
+			s = Mathf.Lerp(a.S, b.S, t);
 		}
 
 		HSBColor ret;
-		ret.h = h;
-		ret.s = s;
-		ret.b = Mathf.Lerp(a.b, b.b, t);
-		ret.a = Mathf.Lerp(a.a, b.a, t);
+		ret.H = h;
+		ret.S = s;
+		ret.B = Mathf.Lerp(a.B, b.B, t);
+		ret.A = Mathf.Lerp(a.A, b.A, t);
 		return ret;
-	}
-
-	public static void Test()
-	{
-		HSBColor color;
-
-		color = new HSBColor(Color.red);
-		Debug.Log("red: " + color);
-
-		color = new HSBColor(Color.green);
-		Debug.Log("green: " + color);
-
-		color = new HSBColor(Color.blue);
-		Debug.Log("blue: " + color);
-
-		color = new HSBColor(Color.grey);
-		Debug.Log("grey: " + color);
-
-		color = new HSBColor(Color.white);
-		Debug.Log("white: " + color);
-
-		color = new HSBColor(new Color(0.4f, 1f, 0.84f, 1f));
-		Debug.Log("0.4, 1f, 0.84: " + color);
-
-		Debug.Log("164,82,84   .... 0.643137f, 0.321568f, 0.329411f  :" +
-		          ToColor(new HSBColor(new Color(0.643137f, 0.321568f, 0.329411f))));
 	}
 }
 
