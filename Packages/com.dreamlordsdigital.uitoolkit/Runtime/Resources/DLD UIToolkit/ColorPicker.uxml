@@ -1,0 +1,26 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseStyles.uss?fileID=7433441132597879392&amp;guid=f7fc98db420be0e418d51a3e79579bf9&amp;type=3#BaseStyles"/>
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BasePanel.uss?fileID=7433441132597879392&amp;guid=73c73881b6bb2764e81c18154d2c5a00&amp;type=3#BasePanel"/>
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ColorDialog.uss?fileID=7433441132597879392&amp;guid=7a2ee3be95eb3269596aee0ffda40262&amp;type=3#ColorDialog"/>
+    <ui:VisualElement name="" class="dld-color-picker--big-color-container">
+        <ui:VisualElement class="dld-color-picker--big-color">
+            <ui:VisualElement class="dld-color-picker--color-cursor"/>
+        </ui:VisualElement>
+        <DLD.UIToolkit.HueSlider direction="Vertical" high-value="255"/>
+    </ui:VisualElement>
+    <ui:VisualElement class="dld-color-picker--controls-container">
+        <ui:VisualElement class="dld-color-picker--slider-container">
+            <ui:SliderInt high-value="255" show-input-field="true" name="SliderR" label="R" class="dld-color-picker--slider"/>
+            <ui:SliderInt high-value="255" show-input-field="true" name="SliderG" label="G" class="dld-color-picker--slider"/>
+            <ui:SliderInt high-value="255" show-input-field="true" name="SliderB" label="B" class="dld-color-picker--slider"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="dld-color-picker--color-swatch-container">
+            <ui:VisualElement class="dld-color-picker--color-swatch"/>
+            <ui:TextField name="HexField" placeholder-text="#000000" class="dld-text-field"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="" class="dld-color-picker--confirmation-container">
+        <ui:Button text="Cancel" name="CancelButton" class="dld-color-picker--confirmation-button"/>
+        <ui:Button text="Ok" name="OkButton" class="dld-color-picker--confirmation-button"/>
+    </ui:VisualElement>
+</ui:UXML>
