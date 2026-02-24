@@ -48,7 +48,7 @@ public static class CommandName
 	///    Default shortcut: Shift + Delete
 	/// </summary>
 	/// <remarks>
-	///    This is meant to be a delete command that bypasses the confirmation dialog box.
+	///    This is meant to be a delete command that bypasses the Recycle Bin/Trash.
 	/// </remarks>
 	public const string Delete = "Delete";
 
@@ -56,7 +56,7 @@ public static class CommandName
 	///    Default shortcut: Delete
 	/// </summary>
 	/// <remarks>
-	///    This is meant to be a delete command that shows the confirmation dialog box.
+	///    This is meant to be a delete command that, in reality, moves whatever was deleted to the Recycle Bin/Trash.
 	/// </remarks>
 	public const string SoftDelete = "SoftDelete";
 
