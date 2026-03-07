@@ -158,9 +158,9 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	// =====================================================================
 
-	public T CreateTab(string tabName) => CreateTab(tabName, new T());
+	public T CreateTab(string tabName, string iconStyleName = null) => CreateTab(tabName, iconStyleName, new T());
 
-	public T CreateTab(string tabName, T newTabbedContent)
+	public T CreateTab(string tabName, string iconStyleName, T newTabbedContent)
 	{
 		const string TabTemplateResourcesPath = "DLD UIToolkit/Tab";
 		var tabTemplate = Resources.Load<VisualTreeAsset>(TabTemplateResourcesPath);
@@ -169,6 +169,18 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		var newTabButton = newTabFromTemplate.Q<RadioButton>(TabElementName);
 		newTabButton.label = tabName;
 		newTabButton.labelElement.pickingMode = PickingMode.Ignore;
+
+		var icon = newTabButton.Q<VisualElement>("Icon");
+		if (!string.IsNullOrEmpty(iconStyleName))
+		{
+			newTabButton.Insert(0, icon);
+			icon.AddToClassList(iconStyleName);
+		}
+		else
+		{
+			icon.style.display = DisplayStyle.None;
+		}
+
 		_tabContainer.Add(newTabButton);
 
 		newTabbedContent.Init(newTabButton);
