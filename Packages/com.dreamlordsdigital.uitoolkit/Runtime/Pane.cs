@@ -12,7 +12,7 @@ public class TabbedContent
 {
 	const string TabBodyStyleClass = "dld-tab__body";
 
-	protected TabbedContent()
+	public TabbedContent()
 	{
 		// todo: probably need some sort of custom UI for grid (GraphView is in UnityEditor)
 		Body = new VisualElement();
@@ -186,13 +186,13 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	// =====================================================================
 
-	public T GetTabFromBody(VisualElement body)
+	public TReturn GetTabFromBody<TReturn>(VisualElement body) where TReturn : TabbedContent, new()
 	{
 		for (int n = 0; n < _tabList.Count; ++n)
 		{
 			if (_tabList[n].Body == body)
 			{
-				return _tabList[n];
+				return _tabList[n] as TReturn;
 			}
 		}
 
