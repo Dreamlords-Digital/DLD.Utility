@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseStyles.uss?fileID=7433441132597879392&amp;guid=f7fc98db420be0e418d51a3e79579bf9&amp;type=3#BaseStyles"/>
     <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BasePanel.uss?fileID=7433441132597879392&amp;guid=73c73881b6bb2764e81c18154d2c5a00&amp;type=3#BasePanel"/>
-    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ColorDialog.uss?fileID=7433441132597879392&amp;guid=7a2ee3be95eb3269596aee0ffda40262&amp;type=3#ColorDialog"/>
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/ColorPicker.uss?fileID=7433441132597879392&amp;guid=7a2ee3be95eb3269596aee0ffda40262&amp;type=3#ColorPicker"/>
     <ui:VisualElement name="" class="dld-color-picker--big-color-container">
         <ui:VisualElement class="dld-color-picker--big-color">
             <ui:VisualElement class="dld-color-picker--color-cursor"/>

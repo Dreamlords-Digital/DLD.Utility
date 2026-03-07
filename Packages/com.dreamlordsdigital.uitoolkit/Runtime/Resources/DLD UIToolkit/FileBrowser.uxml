@@ -8,7 +8,7 @@
         <ui:VisualElement name="Icon" class="dld-icon"/>
         <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" text="Open"/>
     </ui:VisualElement>
-    <ui:VisualElement name="Toolbar">
+    <ui:VisualElement name="Toolbar" class="dld-toolbar-area">
         <ui:Button name="Back" class="dld-toolbar-button">
             <ui:VisualElement class="dld-icon dld-icon--navigate-back"/>
             <ui:Label tabindex="-1" text="Back" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
