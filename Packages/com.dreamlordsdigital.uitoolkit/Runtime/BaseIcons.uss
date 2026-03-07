@@ -34,6 +34,10 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-paste.png?fileID=2800000&guid=9ddc71401315c444fbd0cf33135d1af0&type=3#edit-paste");
 }
 
+.dld-icon--preferences {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/preferences-system.png?fileID=2800000&guid=fe5c8d13a607dfd6a983c77801673f6c&type=3#preferences-system");
+}
+
 .dld-icon--reset-view {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/magnifier-zoom-fit.png?fileID=2800000&guid=9d2daa06e31bcc240a42f7b7cfdd7779&type=3#magnifier-zoom-fit");
 }
