@@ -1,6 +1,7 @@
 // COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using System;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -296,6 +297,31 @@ public static class UITkUtil
 		}
 
 		return false;
+	}
+
+	public static string GetDebugAncestry(this VisualElement me)
+	{
+		var sb = new StringBuilder();
+
+		var parent = me;
+		int i = 0;
+		while (parent != null)
+		{
+			if (i == 0)
+			{
+				sb.Append("(this). ");
+			}
+			else
+			{
+				sb.Append(i).Append(". ");
+			}
+			sb.AppendLine(parent.name);
+
+			parent = parent.parent;
+			++i;
+		}
+
+		return sb.ToString();
 	}
 
 	public static void Set(this Button button, string label = null, string iconClassName = null)

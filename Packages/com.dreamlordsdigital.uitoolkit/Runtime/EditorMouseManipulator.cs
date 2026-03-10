@@ -40,6 +40,16 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	/// </summary>
 	protected ITooltip Tooltip;
 
+	public interface ICustomAllowControls
+	{
+		bool AllowPanning(VisualElement elementPanningOn);
+		bool AllowZooming(VisualElement elementZoomingOn);
+		bool AllowDragAndDrop(VisualElement elementDragAndDroppingOn);
+		bool AllowBoxSelection(VisualElement elementBoxSelectingOn);
+		bool AllowContextMenu(VisualElement elementRightClickedOn);
+	}
+	protected ICustomAllowControls CustomAllowControls;
+
 	bool IsNotInitialized => Tooltip == null;
 
 	// ==================================================================================
@@ -282,6 +292,13 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	public bool AllowPanning { get; set; } = true;
 	public bool AllowZooming { get; set; } = true;
 	public bool AllowDragAndDrop { get; set; } = true;
+	public bool AllowBoxSelection { get; set; } = true;
+	public bool AllowContextMenu { get; set; } = true;
+
+	public void SetCustomAllowControls(ICustomAllowControls newCustomAllowControls)
+	{
+		CustomAllowControls = newCustomAllowControls;
+	}
 
 	public void SetZoom(float zoomLevel)
 	{
@@ -366,8 +383,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
+		bool customAllowPanning = CustomAllowControls == null ||
+		                          CustomAllowControls.AllowPanning(_moveTarget);
+
 		bool changeDetected = false;
-		if (e.keyCode == KeyCode.Space)
+		if (e.keyCode == KeyCode.Space && AllowPanning && customAllowPanning)
 		{
 			changeDetected |= !_spacebarHeld;
 			_spacebarHeld = true;
@@ -554,7 +574,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
-		if (!_spacebarHeld && e.button == 0)
+		bool customAllowBoxSelection = CustomAllowControls == null ||
+		                               CustomAllowControls.AllowBoxSelection(e.target as VisualElement);
+
+		if (AllowBoxSelection && customAllowBoxSelection && !_spacebarHeld && e.button == 0)
 		{
 			_mouseCursorDisplay.style.display = DisplayStyle.None;
 			_pointerDownOnEmptyBackground = true;
@@ -590,7 +613,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			OnForceMoveChanged(e.position);
 		}
 
-		if (AllowZooming)
+		bool customAllowZooming = CustomAllowControls == null ||
+		                          CustomAllowControls.AllowZooming(e.target as VisualElement);
+
+		if (AllowZooming && customAllowZooming)
 		{
 			if (_ctrl && _spacebarHeld)
 			{
@@ -609,7 +635,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 		// ---------------------------------------------------
 
-		if (AllowPanning && ((_spacebarHeld && e.button == 0) || e.button == 2)) // pan: spacebar + left-click, or middle-click
+		bool customAllowPanning = CustomAllowControls == null ||
+		                          CustomAllowControls.AllowPanning(e.target as VisualElement);
+
+		// pan: spacebar + left-click, or middle-click
+		if (AllowPanning && customAllowPanning && ((_spacebarHeld && e.button == 0) || e.button == 2))
 		{
 			_panStartPointerPos = target.ChangeCoordinatesTo(_moveTarget.contentContainer, e.localPosition);
 
@@ -621,7 +651,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			RefreshMouseCursor(e.position);
 		}
 
-		if (e.button == RightMouseButton)
+		bool customAllowContextMenu = CustomAllowControls == null ||
+		                              CustomAllowControls.AllowContextMenu(e.target as VisualElement);
+
+		if (AllowContextMenu && customAllowContextMenu && e.button == RightMouseButton)
 		{
 			OnRightClickEmptySpace(e);
 		}
@@ -850,7 +883,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
-		if (!AllowZooming)
+		bool allowZoomingCustom = CustomAllowControls == null ||
+		                          CustomAllowControls.AllowZooming(e.target as VisualElement);
+
+		if (!AllowZooming || !allowZoomingCustom)
 		{
 			return;
 		}
@@ -879,6 +915,14 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	public void StartBoxSelection(PointerDownEvent e, VisualElement startElement)
 	{
+		bool allowBoxSelectionCustom = CustomAllowControls == null ||
+		                               CustomAllowControls.AllowBoxSelection(e.target as VisualElement);
+
+		if (!AllowBoxSelection || !allowBoxSelectionCustom)
+		{
+			return;
+		}
+
 		_boxSelectionStartPos = _boxSelection.parent.WorldToLocal(e.position);
 		_boxSelection.style.left = _boxSelectionStartPos.x;
 		_boxSelection.style.top = _boxSelectionStartPos.y;
@@ -1005,6 +1049,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	/// <summary>
 	///    Called when user moves the mouse while in box selection.
 	/// </summary>
+	/// <param name="e"></param>
 	/// <param name="selectionRect">Values are in world-space.</param>
 	protected virtual void OnBoxSelectionUpdate(PointerMoveEvent e, Rect selectionRect)
 	{
