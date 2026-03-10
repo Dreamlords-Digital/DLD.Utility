@@ -657,6 +657,21 @@ public static class FileUtil
 		}
 	}
 
+	/// <summary>
+	///    Absolute path to Project's folder (but with the subfolder "UserSettings" instead of "Assets").
+	/// </summary>
+	public static string ProjectUserSettingsPath
+	{
+		get
+		{
+#if UNITY_EDITOR
+			return $"{Application.dataPath[..^6]}UserSettings"; // remove the "Assets" and add "UserSettings"
+#else
+			return Application.dataPath;
+#endif
+		}
+	}
+
 	public static string ProjectPathWithTrailingSlash
 	{
 		get
