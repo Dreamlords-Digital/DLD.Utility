@@ -1066,8 +1066,7 @@ public static class FileUtil
 	}
 
 	/// <summary>
-	///    This is the ideal location for saved game files
-	///    and user settings/preferences.
+	///    This is the ideal location for saved game files, and installed user mods.
 	///    Note that this does not include a trailing slash.
 	/// </summary>
 	/// <remarks>
@@ -1078,6 +1077,19 @@ public static class FileUtil
 	///    In Linux, this is <c>/home/<i>username</i>/.local/share</c>
 	/// </remarks>
 	public static string UserFolderPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ConvertBackToForwardSlash();
+
+	/// <summary>
+	///    This is the ideal location for user settings/preferences.
+	///    Note that this does not include a trailing slash.
+	/// </summary>
+	/// <remarks>
+	///    In Windows, this is <c>C:/Users/<i>username</i>/AppData/Roaming</c><br/>
+	///    <br/>
+	///    In Mac, this is <c>/Users/<i>username</i>/.config</c><br/>
+	///    <br/>
+	///    In Linux, this is <c>/home/<i>username</i>/.config</c>
+	/// </remarks>
+	public static string UserSettingsFolderPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ConvertBackToForwardSlash();
 
 	/// <summary>
 	///    Will return absolute path to the save location specified.
@@ -1115,6 +1127,8 @@ public static class FileUtil
 				return CommonDataFolder;
 			case DataSaveLocation.UserFolder:
 				return UserFolderPath;
+			case DataSaveLocation.UserSettingsFolder:
+				return UserSettingsFolderPath;
 			default:
 				return string.Empty;
 		}
@@ -1184,6 +1198,8 @@ public enum DataSaveLocation : byte
 	///    </para>
 	/// </summary>
 	UserFolder,
+
+	UserSettingsFolder,
 
 	/// <summary>
 	///    In the root path of a drive,
