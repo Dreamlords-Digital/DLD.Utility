@@ -270,6 +270,11 @@ public static class UITkUtil
 
 	public static bool IsAncestorOf(this VisualElement ancestor, VisualElement child)
 	{
+		if (child == null)
+		{
+			return false;
+		}
+
 		for (VisualElement parent = child.hierarchy.parent; parent != null; parent = parent.hierarchy.parent)
 		{
 			if (ReferenceEquals(parent, ancestor))
@@ -283,6 +288,11 @@ public static class UITkUtil
 
 	public static bool IsOrAncestorOf(this VisualElement ancestor, VisualElement child)
 	{
+		if (child == null)
+		{
+			return false;
+		}
+
 		if (ReferenceEquals(ancestor, child))
 		{
 			return true;
