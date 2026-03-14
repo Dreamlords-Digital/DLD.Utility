@@ -9,15 +9,15 @@
         <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" text="Open"/>
     </ui:VisualElement>
     <ui:VisualElement name="Toolbar" class="dld-toolbar-area">
-        <ui:Button name="Back" class="dld-toolbar-button">
+        <ui:Button name="Back" class="dld-toolbar-button dld-toolbar-button--with-label">
             <ui:VisualElement class="dld-icon dld-icon--navigate-back"/>
             <ui:Label tabindex="-1" text="Back" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
-        <ui:Button name="Forward" class="dld-toolbar-button">
+        <ui:Button name="Forward" class="dld-toolbar-button dld-toolbar-button--with-label">
             <ui:VisualElement class="dld-icon dld-icon--navigate-forward"/>
             <ui:Label tabindex="-1" text="Forward" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
-        <ui:Toggle name="Jump" class="dld-toolbar-button">
+        <ui:Toggle name="Jump" class="dld-toolbar-button dld-toolbar-button--with-label">
             <ui:VisualElement class="dld-icon dld-icon--file-navigate-jump"/>
             <ui:Label tabindex="-1" text="Jump"/>
         </ui:Toggle>
@@ -25,7 +25,7 @@
             <ui:VisualElement class="dld-icon dld-icon--edit-file-path"/>
             <ui:Label tabindex="-1" text="Edit Path" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
-        <ui:Button name="Explore" class="dld-toolbar-button" style="display: flex;">
+        <ui:Button name="Explore" class="dld-toolbar-button dld-toolbar-button--with-label" style="display: flex;">
             <ui:VisualElement class="dld-icon dld-icon--open-file-explorer"/>
             <ui:Label tabindex="-1" text="Explore" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
         </ui:Button>
