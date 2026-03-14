@@ -8,6 +8,12 @@ using UnityEngine.UIElements;
 namespace DLD.UIToolkit
 {
 
+public enum SplitDirection : byte
+{
+	Down,
+	Right
+}
+
 public class TabbedContent
 {
 	const string TabBodyStyleClass = "dld-tab__body";
