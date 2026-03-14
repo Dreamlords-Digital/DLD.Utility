@@ -247,6 +247,9 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	public void SetBoxSelectionElement(VisualElement boxSelection)
 	{
 		_boxSelection = boxSelection;
+
+		// hide at first
+		_boxSelection.style.display = DisplayStyle.None;
 	}
 
 	/// <inheritdoc cref="_moveTarget"/>
