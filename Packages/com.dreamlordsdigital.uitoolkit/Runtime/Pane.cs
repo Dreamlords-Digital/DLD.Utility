@@ -83,8 +83,14 @@ public class TabbedContent
 	}
 }
 
+public interface ITabListener
+{
+	void OnTabShown(Pane pane, TabbedContent shownTab);
+	void OnTabContextMenu(IContextMenu contextMenu, TabbedContent tab);
+}
+
 [UxmlElement]
-public partial class Pane<T> : VisualElement, IContextMenuListener where T : TabbedContent, new()
+public partial class Pane : VisualElement, IContextMenuListener
 {
 	const string TemplateResourcesPath = "DLD UIToolkit/Pane";
 
@@ -93,8 +99,8 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 	const string ContextMenuCloseAllTabs = "CloseAllTabs";
 
 	readonly VisualElement _tabContainer;
-	readonly List<T> _tabList = new();
-	T _currentTab;
+	readonly List<TabbedContent> _tabList = new();
+	TabbedContent _currentTab;
 
 	/// <summary>
 	///    Where tab bodies will be shown.
@@ -102,12 +108,10 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 	readonly VisualElement _tabBodyContainer;
 
 	IContextMenu _contextMenu;
+	ITabListener _tabListener;
 
 	readonly EventCallback<ChangeEvent<bool>> _onPressTab;
 	readonly EventCallback<PointerDownEvent> _onPressTabContext;
-
-	Action<Pane<T>, T> _onTabShown;
-	Action<IContextMenu, T> _onTabContext;
 
 	// =====================================================================
 
@@ -133,11 +137,12 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	public VisualElement TabBodyContainer => _tabBodyContainer;
 
-	public T CurrentTab => _currentTab;
+	public TabbedContent CurrentTab => _currentTab;
 
 	public int Count => _tabList.Count;
 
-	public new T this[int idx] => _tabList[idx];
+	public new TabbedContent this[int idx] => _tabList[idx];
+
 
 	// =====================================================================
 
@@ -146,21 +151,16 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		_contextMenu = contextMenu;
 	}
 
-	public void SetOnTabShown(Action<Pane<T>, T> onTabShown)
+	public void SetTabListener(ITabListener newListener)
 	{
-		_onTabShown = onTabShown;
-	}
-
-	public void SetOnTabContext(Action<IContextMenu, T> onTabContext)
-	{
-		_onTabContext = onTabContext;
+		_tabListener = newListener;
 	}
 
 	// =====================================================================
 
-	public T CreateTab(string tabName, string iconStyleName = null) => CreateTab(tabName, iconStyleName, new T());
+	public TabbedContent CreateTab(string tabName, string iconStyleName = null) => CreateTab(tabName, iconStyleName, new TabbedContent());
 
-	public T CreateTab(string tabName, string iconStyleName, T newTabbedContent)
+	public TabbedContent CreateTab(string tabName, string iconStyleName, TabbedContent newTabbedContent)
 	{
 		const string TabTemplateResourcesPath = "DLD UIToolkit/Tab";
 		var tabTemplate = Resources.Load<VisualTreeAsset>(TabTemplateResourcesPath);
@@ -211,7 +211,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		return null;
 	}
 
-	void CloseTab(T tabToClose)
+	void CloseTab(TabbedContent tabToClose)
 	{
 		if (tabToClose.ShowModifiedIndicator)
 		{
@@ -253,7 +253,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	void OnPressTab(ChangeEvent<bool> e)
 	{
-		if (e.target is not RadioButton { userData: T clickedTabContent })
+		if (e.target is not RadioButton { userData: TabbedContent clickedTabContent })
 		{
 			return;
 		}
@@ -263,7 +263,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		if (!e.previousValue && e.newValue)
 		{
 			_currentTab = clickedTabContent;
-			_onTabShown?.Invoke(this, clickedTabContent);
+			_tabListener?.OnTabShown(this, clickedTabContent);
 		}
 	}
 
@@ -281,7 +281,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 
 	void OnPressTabContext(PointerDownEvent e)
 	{
-		if (e.target is not RadioButton { userData: T clickedTabContent })
+		if (e.target is not RadioButton { userData: TabbedContent clickedTabContent })
 		{
 			return;
 		}
@@ -295,7 +295,7 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 			listener: this, userArg1: ContextMenuCloseOtherTabs, userArg2: clickedTabContent);
 		_contextMenu.AddMenu("Close All Tabs", iconClassStyle: BaseIcons.Close,
 			listener: this, userArg1: ContextMenuCloseAllTabs);
-		_onTabContext?.Invoke(_contextMenu, clickedTabContent);
+		_tabListener?.OnTabContextMenu(_contextMenu, clickedTabContent);
 		_contextMenu.Show(e);
 	}
 
@@ -304,10 +304,10 @@ public partial class Pane<T> : VisualElement, IContextMenuListener where T : Tab
 		switch (parameters.UserArg1 as string)
 		{
 			case ContextMenuCloseTab:
-				CloseTab(parameters.UserArg2 as T);
+				CloseTab(parameters.UserArg2 as TabbedContent);
 				break;
 			case ContextMenuCloseOtherTabs:
-				var thisTab = parameters.UserArg2 as T;
+				var thisTab = parameters.UserArg2 as TabbedContent;
 				Debug.LogError($"Close Other Tabs for {thisTab?.TabLabel}, not yet implemented");
 				break;
 			case ContextMenuCloseAllTabs:
