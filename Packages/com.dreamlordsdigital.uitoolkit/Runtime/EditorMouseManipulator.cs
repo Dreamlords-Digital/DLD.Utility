@@ -30,6 +30,12 @@ public interface IBoxSelection
 	void StartBoxSelection(PointerDownEvent e, VisualElement startElement);
 }
 
+public interface IPanZoomListener
+{
+	void OnZoomChanged(VisualElement moveTarget);
+	void OnPanChanged(VisualElement moveTarget);
+}
+
 public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
 {
 	// ==================================================================================
@@ -49,6 +55,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		bool AllowContextMenu(VisualElement elementRightClickedOn);
 	}
 	protected ICustomAllowControls CustomAllowControls;
+
+	IPanZoomListener _panZoomListener;
 
 	bool IsNotInitialized => Tooltip == null;
 
@@ -303,9 +311,19 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		CustomAllowControls = newCustomAllowControls;
 	}
 
-	public void SetZoom(float zoomLevel)
+	public void SetPanZoomListener(IPanZoomListener newListener)
+	{
+		_panZoomListener = newListener;
+	}
+
+	public void SetZoom(float zoomLevel, bool sendNotify = true)
 	{
 		_moveTarget.style.scale = Vector3.one * zoomLevel;
+
+		if (sendNotify && _panZoomListener != null)
+		{
+			_panZoomListener.OnZoomChanged(_moveTarget);
+		}
 	}
 
 	protected void AddToPointerMoveEvent(CallbackEventHandler c)
@@ -625,6 +643,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			{
 				// zoom in
 				_moveTarget.SetScaleByZoom(6, target, e.localPosition);
+				_panZoomListener.OnZoomChanged(_moveTarget);
 				return;
 			}
 
@@ -632,6 +651,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			{
 				// zoom out
 				_moveTarget.SetScaleByZoom(-6, target, e.localPosition);
+				_panZoomListener.OnZoomChanged(_moveTarget);
 				return;
 			}
 		}
@@ -876,6 +896,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 			target.ReleasePointer(e.pointerId);
 			e.StopPropagation();
+
+			_panZoomListener.OnPanChanged(_moveTarget);
 		}
 	}
 
@@ -896,6 +918,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 		_moveTarget.SetScaleByZoom(-e.delta.y, target, e.localMousePosition);
 		e.StopPropagation();
+
+		_panZoomListener.OnZoomChanged(_moveTarget);
 	}
 
 	// ==================================================================================================
