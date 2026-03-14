@@ -1,0 +1,25 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseStyles.uss?fileID=7433441132597879392&amp;guid=f7fc98db420be0e418d51a3e79579bf9&amp;type=3#BaseStyles"/>
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BasePanel.uss?fileID=7433441132597879392&amp;guid=73c73881b6bb2764e81c18154d2c5a00&amp;type=3#BasePanel"/>
+    <Style src="project://database/Packages/com.dreamlordsdigital.uitoolkit/Runtime/BaseIcons.uss?fileID=7433441132597879392&amp;guid=823f1eed85f57214796265fd88417ad2&amp;type=3#BaseIcons"/>
+    <ui:VisualElement name="Root" class="dld-modal-dialog-outside dld-modal-dialog-outside--center-content" style="justify-content: center;">
+        <ui:VisualElement name="DialogBox" class="dld-dialog-box">
+            <ui:Label name="Title" enable-rich-text="true" class="dld-dialog-box__title" style="color: rgb(214, 214, 214); font-size: 14px;"/>
+            <ui:Label name="Description" text="Tab is not saved! Save first before closing?" class="dld-dialog-box__description"/>
+            <ui:VisualElement name="Buttons" class="dld-button-row">
+                <ui:Button name="OK" class="dld-button--operation">
+                    <ui:VisualElement class="dld-icon dld-icon--ok"/>
+                    <ui:Label tabindex="-1" text="Yes" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
+                </ui:Button>
+                <ui:Button name="No" class="dld-button--operation">
+                    <ui:VisualElement class="dld-icon dld-icon--no"/>
+                    <ui:Label tabindex="-1" text="No" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
+                </ui:Button>
+                <ui:Button name="Cancel" class="dld-button--operation">
+                    <ui:VisualElement class="dld-icon dld-icon--cancel"/>
+                    <ui:Label tabindex="-1" text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="false"/>
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

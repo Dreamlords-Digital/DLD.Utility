@@ -12,8 +12,13 @@ public class TabbedContent
 {
 	const string TabBodyStyleClass = "dld-tab__body";
 
-	public TabbedContent()
+	readonly ITooltip _tooltip;
+	DialogBox _dialogBox;
+
+	public TabbedContent(ITooltip tooltip)
 	{
+		_tooltip = tooltip;
+
 		// todo: probably need some sort of custom UI for grid (GraphView is in UnityEditor)
 		Body = new VisualElement();
 
@@ -66,6 +71,8 @@ public class TabbedContent
 
 	public RadioButton Tab { get; private set; }
 
+	public bool IsDialogBoxShown => _dialogBox != null && _dialogBox.IsShown;
+
 	VisualElement _modifiedIndicator;
 
 	public virtual void OnClose()
@@ -80,6 +87,25 @@ public class TabbedContent
 	public void ShowAsUnfocused()
 	{
 		// todo: add the unfocused style
+	}
+
+	public void ShowDialogBox(IDialogBoxListener listener, string title = null, string description = null,
+		bool showNo = false, bool showCancel = false,
+		string okTooltipText = null, string noTooltipText = null, string cancelTooltipText = null,
+		string okTooltipIcon = BaseIcons.GenericInfo, string noTooltipIcon = BaseIcons.GenericError, string cancelTooltipIcon = BaseIcons.GenericInfo,
+		string okArg = DialogBox.GenericOk, string noArg = DialogBox.GenericNo, string cancelArg = DialogBox.GenericCancel, string userArg1 = null)
+	{
+		if (_dialogBox == null)
+		{
+			_dialogBox = new DialogBox();
+			_dialogBox.SetTooltip(_tooltip);
+			Body.Add(_dialogBox);
+		}
+
+		_dialogBox.Show(listener, title, description, showNo, showCancel,
+			okTooltipText, noTooltipText, cancelTooltipText,
+			okTooltipIcon, noTooltipIcon, cancelTooltipIcon,
+			okArg, noArg, cancelArg, userArg1);
 	}
 }
 
@@ -158,8 +184,6 @@ public partial class Pane : VisualElement, IContextMenuListener
 
 	// =====================================================================
 
-	public TabbedContent CreateTab(string tabName, string iconStyleName = null) => CreateTab(tabName, iconStyleName, new TabbedContent());
-
 	public TabbedContent CreateTab(string tabName, string iconStyleName, TabbedContent newTabbedContent)
 	{
 		const string TabTemplateResourcesPath = "DLD UIToolkit/Tab";
@@ -198,7 +222,7 @@ public partial class Pane : VisualElement, IContextMenuListener
 
 	// =====================================================================
 
-	public TReturn GetTabFromBody<TReturn>(VisualElement body) where TReturn : TabbedContent, new()
+	public TReturn GetTabFromBody<TReturn>(VisualElement body) where TReturn : TabbedContent
 	{
 		for (int n = 0; n < _tabList.Count; ++n)
 		{

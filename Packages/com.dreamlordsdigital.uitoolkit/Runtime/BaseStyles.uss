@@ -433,3 +433,46 @@ FilenameTextField > #unity-text-input > Label {
     position: absolute;
     background-color: rgba(0, 108, 255, 0.16);
 }
+
+.dld-dialog-box {
+    min-width: 100px;
+    min-height: 50px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(41, 41, 41);
+    border-right-color: rgb(41, 41, 41);
+    border-top-color: rgb(41, 41, 41);
+    border-bottom-color: rgb(41, 41, 41);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    background-color: rgb(66, 66, 66);
+    max-width: 500px;
+    align-self: center;
+}
+
+.dld-dialog-box__title {
+    margin-bottom: 5px;
+    color: rgb(201, 201, 201);
+    -unity-font-style: bold;
+}
+
+.dld-dialog-box__description {
+    margin-bottom: 20px;
+    white-space: normal;
+}
+
+.dld-modal-dialog-outside--center-content {
+    justify-content: center;
+}
