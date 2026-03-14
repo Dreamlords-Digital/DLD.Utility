@@ -119,6 +119,9 @@ public interface ITabListener
 {
 	void OnTabShown(Pane pane, TabbedContent shownTab);
 	void OnTabContextMenu(IContextMenu contextMenu, TabbedContent tab);
+	void OnTabClosed(TabbedContent closedTab);
+
+	bool NeedToAskConfirmationToClose(TabbedContent tabToClose);
 }
 
 [UxmlElement]
@@ -244,11 +247,18 @@ public partial class Pane : VisualElement, IContextMenuListener
 
 	void CloseTab(TabbedContent tabToClose)
 	{
-		if (tabToClose.ShowModifiedIndicator)
+		// Ask user if they want to save, discard, or cancel.
+		if (_tabListener != null && _tabListener.NeedToAskConfirmationToClose(tabToClose))
 		{
-			// todo: Ask user if they want to save, discard, or cancel
+			// Can't continue, need to wait for user to confirm.
+			return;
 		}
 
+		ProceedToCloseTab(tabToClose);
+	}
+
+	public void ProceedToCloseTab(TabbedContent tabToClose)
+	{
 		// If the tab to close is currently selected,
 		// then switch to a different tab if possible.
 		if (tabToClose.IsTabSelected)
@@ -270,6 +280,7 @@ public partial class Pane : VisualElement, IContextMenuListener
 		}
 
 		tabToClose.OnClose();
+		_tabListener?.OnTabClosed(tabToClose);
 
 		_tabContainer.Remove(tabToClose.Tab);
 		_tabBodyContainer.Remove(tabToClose.Body);
