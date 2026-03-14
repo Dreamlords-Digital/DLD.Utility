@@ -169,6 +169,7 @@ public partial class Pane : VisualElement, IContextMenuListener
 
 	public new TabbedContent this[int idx] => _tabList[idx];
 
+	public int IndexOf(TabbedContent tab) => _tabList.IndexOf(tab);
 
 	// =====================================================================
 
