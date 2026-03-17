@@ -36,6 +36,12 @@ public interface IPanZoomListener
 	void OnPanChanged(VisualElement moveTarget);
 }
 
+public interface ISaveShortcutListener
+{
+	void OnSaveShortcutPressed();
+	void OnSaveAsShortcutPressed();
+}
+
 public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
 {
 	// ==================================================================================
@@ -57,6 +63,8 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	protected ICustomAllowControls CustomAllowControls;
 
 	IPanZoomListener _panZoomListener;
+
+	ISaveShortcutListener _saveShortcutListener;
 
 	bool IsNotInitialized => Tooltip == null;
 
@@ -316,6 +324,11 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		_panZoomListener = newListener;
 	}
 
+	public void SetSaveShortcutListener(ISaveShortcutListener newListener)
+	{
+		_saveShortcutListener = newListener;
+	}
+
 	public void SetZoom(float zoomLevel, bool sendNotify = true)
 	{
 		_moveTarget.style.scale = Vector3.one * zoomLevel;
@@ -531,6 +544,16 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			case KeyCode.RightShift:
 				_shift = false;
 				changeInShift = true;
+				break;
+			case KeyCode.S:
+				if (e.ctrlKey && e.shiftKey)
+				{
+					_saveShortcutListener?.OnSaveAsShortcutPressed();
+				}
+				else if (e.ctrlKey)
+				{
+					_saveShortcutListener?.OnSaveShortcutPressed();
+				}
 				break;
 		}
 
