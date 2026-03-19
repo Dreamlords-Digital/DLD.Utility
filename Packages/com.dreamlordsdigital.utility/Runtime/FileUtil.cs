@@ -640,6 +640,15 @@ public static class FileUtil
 		return path;
 	}
 
+	public static void DeleteAllFilesInFolder(string folderPath)
+	{
+		var directory = new DirectoryInfo(folderPath);
+		foreach (FileInfo file in directory.EnumerateFiles())
+		{
+			file.Delete();
+		}
+	}
+
 	/// <summary>
 	///    Absolute path to Project's folder (without the "/Assets" at the end).
 	/// </summary>
@@ -698,6 +707,88 @@ public static class FileUtil
 			return result;
 		}
 	}
+
+	static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
+	static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
+
+	// Based on https://stackoverflow.com/a/37347881/1377948
+	public static string RemoveWhitespaceAndInvalid(string str, char replacementChar = '\0',
+		bool removeWhitespace = true, bool removeInvalidFileChars = true)
+	{
+		int len = str.Length;
+		char[] src = str.ToCharArray();
+		int dstIdx = 0;
+
+		for (int i = 0; i < len; i++)
+		{
+			char ch = src[i];
+
+			if (removeInvalidFileChars)
+			{
+				if (InvalidFileNameChars.IndexOf(ch) != -1 || InvalidPathChars.IndexOf(ch) != -1)
+				{
+					if (replacementChar != '\0' && src[dstIdx - 1] != replacementChar)
+					{
+						src[dstIdx++] = replacementChar;
+					}
+
+					continue;
+				}
+			}
+
+			if (removeWhitespace)
+			{
+				switch (ch)
+				{
+					case '\u0008': // Backspace
+					case '\u0009': // Horizontal Tab
+					case '\u000A': // Line Feed
+					case '\u000B': // Vertical Tab
+					case '\u000C': // Form Feed
+					case '\u000D': // Carriage Return
+					case '\u0085': // Next Line
+					case '\u0020': // Space
+					case '\u00A0': // No-break Space
+					case '\u1680': // Ogham Space Mark
+					case '\u2000': // En Quad
+					case '\u2001': // Em Quad
+					case '\u2002': // En Space
+					case '\u2003': // Em Space
+					case '\u2004': // Three-Per-Em Space
+					case '\u2005': // Four-Per-Em Space
+					case '\u2006': // Six-Per-Em Space
+					case '\u2007': // Figure Space
+					case '\u2008': // Punctuation Space
+					case '\u2009': // Thin Space
+					case '\u200A': // Hair Space
+					case '\u202F': // Narrow No-Break Space
+					case '\u205F': // Medium Mathematical Space
+					case '\u3000': // Ideographic Space
+					case '\u2028': // Line Separator
+					case '\u2029': // Paragraph Separator
+						if (replacementChar != '\0' && src[dstIdx - 1] != replacementChar)
+						{
+							src[dstIdx++] = replacementChar;
+						}
+						continue;
+				}
+			}
+
+			src[dstIdx++] = ch;
+		}
+
+		return new string(src, 0, dstIdx);
+	}
+
+	public static string ToValidFilename(this string input, char replacementChar = '\0')
+	{
+		input = input.Trim();
+		input = RemoveWhitespaceAndInvalid(input, replacementChar);
+
+		return input;
+	}
+
+	public static string ProductNameValidatedForPath => Application.productName.ToValidFilename('_');
 
 #if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
 
@@ -1199,6 +1290,17 @@ public enum DataSaveLocation : byte
 	/// </summary>
 	UserFolder,
 
+	/// <summary>
+	///    <para>
+	///       In Windows, this is <c>C:/Users/<i>username</i>/AppData/Roaming</c><br/>
+	///       In Mac, this is <c>/Users/<i>username</i>/.config</c><br/>
+	///       In Linux, this is <c>/home/<i>username</i>/.config</c>
+	///    </para>
+	///    <para>
+	///       This is the ideal location for user settings/preferences.
+	///       Note that this does not include a trailing slash.
+	///    </para>
+	/// </summary>
 	UserSettingsFolder,
 
 	/// <summary>

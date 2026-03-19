@@ -493,6 +493,20 @@ public class StringUtilTests
 
 		Assert.AreEqual("Scenes/Others/Scene1", partialScenePath);
 	}
+
+	[Test]
+	public void ToValidFilename_InputHasWhitespace_Works()
+	{
+		const string Input = "  Tes t  \b\t ing  ";
+		Assert.AreEqual("Testing", Input.ToValidFilename());
+	}
+
+	[Test]
+	public void ToValidFilename_InputHasWhitespaceWithReplacementChar_Works()
+	{
+		const string Input = "  Tes t  \b\t ing  ";
+		Assert.AreEqual("Tes_t_ing", Input.ToValidFilename('_'));
+	}
 }
 
 }
