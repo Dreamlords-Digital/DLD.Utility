@@ -30,7 +30,7 @@
 .dld-color-picker--color-cursor {
     width: 16px;
     height: 16px;
-    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/GUI/Dark/ColorPickerCursor.png?fileID=2800000&guid=1c408b8428fe4cede9e39f8d877d6a87&type=3#ColorPickerCursor");
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/MouseCursor/Custom/ColorPickerCursor.png?fileID=2800000&guid=1c408b8428fe4cede9e39f8d877d6a87&type=3#ColorPickerCursor");
     position: absolute;
     background-size: 16px 16px;
 }
