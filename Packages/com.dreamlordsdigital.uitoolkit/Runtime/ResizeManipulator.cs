@@ -8,7 +8,7 @@ namespace DLD.UIToolkit
 
 public interface IResizeManipulatorListener
 {
-	void OnResized(float newWidth);
+	void OnResized(VisualElement resizedElement, float newWidth);
 }
 
 public class ResizeManipulator : PointerManipulator
@@ -164,7 +164,7 @@ public class ResizeManipulator : PointerManipulator
 		target.ReleaseMouse();
 		e.StopPropagation();
 
-		_listener?.OnResized(_moveTarget.style.width.value.value);
+		_listener?.OnResized(_moveTarget, _moveTarget.style.width.value.value);
 	}
 }
 
