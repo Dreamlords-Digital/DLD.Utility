@@ -34,6 +34,18 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-paste.png?fileID=2800000&guid=9ddc71401315c444fbd0cf33135d1af0&type=3#edit-paste");
 }
 
+.dld-icon--undo {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-undo.png?fileID=2800000&guid=3c41c2cc215d111449f2dd587cc982c3&type=3#edit-undo");
+}
+
+.dld-icon--redo {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-redo.png?fileID=2800000&guid=bdd02300e2b9dad428a60b1b8d888d00&type=3#edit-redo");
+}
+
+.dld-icon--undo-history {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/clock-history-frame.png?fileID=2800000&guid=d066c12b8660877478462df311e8160c&type=3#clock-history-frame");
+}
+
 .dld-icon--ok {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/tick.png?fileID=2800000&guid=a8150005769b1ed4cbc62a9d059de829&type=3#tick");
 }
