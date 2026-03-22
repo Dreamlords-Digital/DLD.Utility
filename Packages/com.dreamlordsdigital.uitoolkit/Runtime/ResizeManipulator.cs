@@ -19,6 +19,7 @@ public class ResizeManipulator : PointerManipulator
 	readonly VisualElement _moveTarget;
 	readonly Length _minWidth;
 	readonly Length _maxWidth;
+	readonly bool _reverseDirection;
 
 	readonly EventCallback<PointerDownEvent> _onPointerDown;
 	readonly EventCallback<PointerMoveEvent> _onPointerMove;
@@ -26,11 +27,12 @@ public class ResizeManipulator : PointerManipulator
 
 	IResizeManipulatorListener _listener;
 
-	public ResizeManipulator(VisualElement newMoveTarget, Length minWidth, Length maxWidth, IResizeManipulatorListener newListener = null)
+	public ResizeManipulator(VisualElement newMoveTarget, Length minWidth, Length maxWidth, bool reverseDirection = false, IResizeManipulatorListener newListener = null)
 	{
 		_moveTarget = newMoveTarget;
 		_minWidth = minWidth;
 		_maxWidth = maxWidth;
+		_reverseDirection = reverseDirection;
 
 		_pointerId = -1;
 		activators.Add(new ManipulatorActivationFilter
@@ -98,7 +100,15 @@ public class ResizeManipulator : PointerManipulator
 
 		float delta = e.localPosition.x - _start.x;
 		var currentWidth = _moveTarget.style.width;
-		float newWidth = currentWidth.value.value + delta;
+		float newWidth;
+		if (_reverseDirection)
+		{
+			newWidth = currentWidth.value.value - delta;
+		}
+		else
+		{
+			newWidth = currentWidth.value.value + delta;
+		}
 
 		float minWidth;
 		if (_minWidth.unit == LengthUnit.Percent)
