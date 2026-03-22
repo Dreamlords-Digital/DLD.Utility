@@ -106,6 +106,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	Func<string, (string, string)> _customFileTypeGetter;
 
+	protected ITooltip Tooltip;
+
 	// -----------------------------------------
 
 	string _currentPath;
@@ -548,6 +550,11 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		};
 		sizeColumn.sortable = true;
 		sizeColumn.width = 65;
+	}
+
+	public void SetTooltip(ITooltip newTooltip)
+	{
+		Tooltip = newTooltip;
 	}
 
 	public void SetCustomFileTypeGetter(Func<string, (string, string)> newCallback)
