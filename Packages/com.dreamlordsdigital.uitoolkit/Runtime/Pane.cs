@@ -117,11 +117,36 @@ public class TabbedContent
 
 public interface ITabListener
 {
+	/// <summary>
+	/// Called when user switches to a different tab.
+	/// Also called when a new tab is created
+	/// (since the newly created tab is switched to automatically).
+	/// </summary>
+	/// <param name="pane"></param>
+	/// <param name="shownTab"></param>
 	void OnTabShown(Pane pane, TabbedContent shownTab);
-	void OnTabContextMenu(IContextMenu contextMenu, TabbedContent tab);
-	void OnTabClosed(TabbedContent closedTab);
 
+	/// <summary>
+	/// Called when user right-clicks on a tab and the context menu is about to show up.
+	/// Use this to add further entries into the context menu.
+	/// </summary>
+	/// <param name="contextMenu"></param>
+	/// <param name="tab"></param>
+	void OnTabContextMenu(IContextMenu contextMenu, TabbedContent tab);
+
+	/// <summary>
+	/// Called when user closes a tab. Return true to force the tab to stay open.
+	/// Use this to show a modal dialog box asking the user to confirm the closing.
+	/// </summary>
+	/// <param name="tabToClose"></param>
+	/// <returns></returns>
 	bool NeedToAskConfirmationToClose(TabbedContent tabToClose);
+
+	/// <summary>
+	/// Called a tab is finally closed.
+	/// </summary>
+	/// <param name="closedTab"></param>
+	void OnTabClosed(TabbedContent closedTab);
 }
 
 [UxmlElement]
@@ -138,7 +163,7 @@ public partial class Pane : VisualElement, IContextMenuListener
 	TabbedContent _currentTab;
 
 	/// <summary>
-	///    Where tab bodies will be shown.
+	///    Where tab bodies will be shown. This is where all tab bodies are parented to.
 	/// </summary>
 	readonly VisualElement _tabBodyContainer;
 
@@ -170,6 +195,7 @@ public partial class Pane : VisualElement, IContextMenuListener
 		_onPressTabContext = OnPressTabContext;
 	}
 
+	/// <inheritdoc cref="_tabBodyContainer"/>
 	public VisualElement TabBodyContainer => _tabBodyContainer;
 
 	public TabbedContent CurrentTab => _currentTab;

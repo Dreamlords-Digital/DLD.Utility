@@ -1374,6 +1374,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 				if (!matchedFileFilter)
 				{
+					// we don't show files that do not match the filter
 					continue;
 				}
 
