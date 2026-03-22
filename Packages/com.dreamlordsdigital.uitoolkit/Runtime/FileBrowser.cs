@@ -565,6 +565,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		{
 			_filenameTextField.SetFilename(null, null, null);
 		}
+
+		ReloadCurrentPath();
 	}
 
 	public void SetTitle(string newTitle)
