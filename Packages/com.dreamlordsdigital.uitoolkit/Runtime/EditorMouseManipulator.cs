@@ -30,10 +30,12 @@ public interface IBoxSelection
 	void StartBoxSelection(PointerDownEvent e, VisualElement startElement);
 }
 
-public interface ISaveShortcutListener
+public interface IShortcutListener
 {
 	void OnSaveShortcutPressed();
 	void OnSaveAsShortcutPressed();
+	void OnUndoShortcutPressed();
+	void OnRedoShortcutPressed();
 }
 
 public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLinkRegister, IBoxSelection
@@ -56,7 +58,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	}
 	protected ICustomAllowControls CustomAllowControls;
 
-	ISaveShortcutListener _saveShortcutListener;
+	IShortcutListener _shortcutListener;
 
 	bool IsNotInitialized => Tooltip == null;
 
@@ -311,9 +313,9 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 		CustomAllowControls = newCustomAllowControls;
 	}
 
-	public void SetSaveShortcutListener(ISaveShortcutListener newListener)
+	public void SetSaveShortcutListener(IShortcutListener newListener)
 	{
-		_saveShortcutListener = newListener;
+		_shortcutListener = newListener;
 	}
 
 	public void SetZoom(float zoomLevel, bool sendNotify = true)
@@ -530,11 +532,25 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			case KeyCode.S:
 				if (e.ctrlKey && e.shiftKey)
 				{
-					_saveShortcutListener?.OnSaveAsShortcutPressed();
+					_shortcutListener?.OnSaveAsShortcutPressed();
+					e.StopImmediatePropagation();
 				}
 				else if (e.ctrlKey)
 				{
-					_saveShortcutListener?.OnSaveShortcutPressed();
+					_shortcutListener?.OnSaveShortcutPressed();
+					e.StopImmediatePropagation();
+				}
+				break;
+			case KeyCode.Z:
+				if (e.ctrlKey && e.shiftKey)
+				{
+					_shortcutListener?.OnRedoShortcutPressed();
+					e.StopImmediatePropagation();
+				}
+				else if (e.ctrlKey)
+				{
+					_shortcutListener?.OnUndoShortcutPressed();
+					e.StopImmediatePropagation();
 				}
 				break;
 		}
