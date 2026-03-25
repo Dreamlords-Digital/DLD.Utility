@@ -237,6 +237,8 @@ FilenameTextField > #unity-text-input > Label {
     width: 16px;
     height: 16px;
     align-self: center;
+    min-width: 16px;
+    min-height: 16px;
 }
 
 .dld-modal-dialog-outside {
