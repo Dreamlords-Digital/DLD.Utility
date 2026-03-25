@@ -115,35 +115,38 @@ public class TabbedContent
 	}
 }
 
+/// <summary>
+///    Receives events when the user interacts with a tab.
+/// </summary>
 public interface ITabListener
 {
 	/// <summary>
-	/// Called when user switches to a different tab.
-	/// Also called when a new tab is created
-	/// (since the newly created tab is switched to automatically).
+	///    Called when user switches to a different tab.
+	///    Also called when a new tab is created
+	///    (since the newly created tab is switched to automatically).
 	/// </summary>
 	/// <param name="pane"></param>
 	/// <param name="shownTab"></param>
 	void OnTabShown(Pane pane, TabbedContent shownTab);
 
 	/// <summary>
-	/// Called when user right-clicks on a tab and the context menu is about to show up.
-	/// Use this to add further entries into the context menu.
+	///    Called when user right-clicks on a tab and the context menu is about to show up.
+	///    Use this to add further entries into the context menu.
 	/// </summary>
 	/// <param name="contextMenu"></param>
 	/// <param name="tab"></param>
 	void OnTabContextMenu(IContextMenu contextMenu, TabbedContent tab);
 
 	/// <summary>
-	/// Called when user closes a tab. Return true to force the tab to stay open.
-	/// Use this to show a modal dialog box asking the user to confirm the closing.
+	///    Called when user closes a tab. Return true to force the tab to stay open.
+	///    Use this to show a modal dialog box asking the user to confirm the closing.
 	/// </summary>
 	/// <param name="tabToClose"></param>
 	/// <returns></returns>
 	bool NeedToAskConfirmationToClose(TabbedContent tabToClose);
 
 	/// <summary>
-	/// Called a tab is finally closed.
+	///    Called a tab is finally closed.
 	/// </summary>
 	/// <param name="closedTab"></param>
 	void OnTabClosed(TabbedContent closedTab);
