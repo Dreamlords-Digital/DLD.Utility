@@ -405,6 +405,50 @@ public class StringUtilTests
 	}
 
 	[Test]
+	public void GetWords_WithLeadingIndent_Works()
+	{
+		string text = "Placeholder 2 Test Game ";
+
+		using var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
+		text.GetWords(words, leadingIndent: "   ");
+
+		Assert.AreEqual(3, words.Count);
+
+		Assert.AreEqual("   Placeholder 2", words[0].word);
+		Assert.AreEqual("Test", words[1].word);
+		Assert.AreEqual("Game", words[2].word);
+	}
+
+	[Test]
+	public void GetWords_WithTrailingIndent_Works()
+	{
+		string text = "Placeholder 2 Test Game ";
+
+		using var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
+		text.GetWords(words, trailingIndent: "   ");
+
+		Assert.AreEqual(3, words.Count);
+
+		Assert.AreEqual("Placeholder 2", words[0].word);
+		Assert.AreEqual("Test", words[1].word);
+		Assert.AreEqual("Game   ", words[2].word);
+	}
+
+	[Test]
+	public void GetWords_WithLeadingAndTrailingIndent_Works()
+	{
+		string text = "Set Disturbance Point as Investigation Point";
+
+		using var words = IoC.GetFromPool<PooledList<(string word, byte newlines)>>();
+		text.GetWords(words, trailingIndent: "   ", leadingIndent: "   ");
+
+		Assert.AreEqual(6, words.Count);
+
+		Assert.AreEqual("   Set", words[0].word);
+		Assert.AreEqual("Point   ", words[5].word);
+	}
+
+	[Test]
 	public void GetSceneNameFromPath_Works()
 	{
 		string scenePath = "Assets/Scenes/Others/Scene1.unity";

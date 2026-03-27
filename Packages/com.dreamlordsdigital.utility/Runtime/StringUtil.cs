@@ -489,7 +489,7 @@ public static class StringUtil
 		return newlines;
 	}
 
-	public static void GetWords(this string text, IList<(string word, byte newlines)> outputWords, string leadingIndent = null)
+	public static void GetWords(this string text, IList<(string word, byte newlines)> outputWords, string leadingIndent = null, string trailingIndent = null)
 	{
 		int idx = 0;
 		int startIdx = 0;
@@ -545,6 +545,11 @@ public static class StringUtil
 					newProperNextWord = newProperNextWord.Insert(0, leadingIndent);
 				}
 
+				if (noMoreWordsAfter && !string.IsNullOrEmpty(trailingIndent))
+				{
+					newProperNextWord = $"{newProperNextWord}{trailingIndent}";
+				}
+
 				outputWords.Add((newProperNextWord, newlines));
 				startIdx = nextSpaceIdx + 1;
 				lastWordStartIdx = startIdx;
@@ -558,6 +563,11 @@ public static class StringUtil
 			string finalWord = text.Substring(startIdx).Trim();
 			if (!string.IsNullOrWhiteSpace(finalWord))
 			{
+				if (!string.IsNullOrEmpty(trailingIndent))
+				{
+					finalWord = $"{finalWord}{trailingIndent}";
+				}
+
 				outputWords.Add((finalWord, 0));
 			}
 		}
