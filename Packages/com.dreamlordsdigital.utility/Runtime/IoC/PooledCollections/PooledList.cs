@@ -18,12 +18,12 @@ public class PooledList<T> : List<T>, IPooled
 
 	public void Dispose()
 	{
+		Clear();
 		_used = false;
 	}
 
 	public void OnTakenFromPool()
 	{
-		Clear();
 		_used = true;
 	}
 }
@@ -47,7 +47,6 @@ public class PooledPooledList<T> : List<T>, IPooled where T : IPooled
 
 	public void OnTakenFromPool()
 	{
-		Clear();
 		_used = true;
 	}
 

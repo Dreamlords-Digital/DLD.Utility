@@ -19,12 +19,12 @@ public class PooledDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IPooled
 
 	public void Dispose()
 	{
+		Clear();
 		_used = false;
 	}
 
 	public void OnTakenFromPool()
 	{
-		Clear();
 		_used = true;
 	}
 }

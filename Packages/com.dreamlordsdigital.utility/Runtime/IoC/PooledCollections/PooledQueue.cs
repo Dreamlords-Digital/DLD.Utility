@@ -18,12 +18,12 @@ public class PooledQueue<T> : Queue<T>, IPooled
 
 	public void Dispose()
 	{
+		Clear();
 		_used = false;
 	}
 
 	public void OnTakenFromPool()
 	{
-		Clear();
 		_used = true;
 	}
 }

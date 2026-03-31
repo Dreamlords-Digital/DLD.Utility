@@ -18,12 +18,12 @@ public class PooledStack<T> : Stack<T>, IPooled
 
 	public void Dispose()
 	{
+		Clear();
 		_used = false;
 	}
 
 	public void OnTakenFromPool()
 	{
-		Clear();
 		_used = true;
 	}
 }
