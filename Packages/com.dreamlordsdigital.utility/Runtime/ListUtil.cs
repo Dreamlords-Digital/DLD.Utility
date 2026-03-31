@@ -8,6 +8,32 @@ namespace DLD.Utility
 
 public static class ListUtil
 {
+	public static bool Contains<T>(this IReadOnlyList<T> list, T obj)
+	{
+		for (int i = 0; i < list.Count; ++i)
+		{
+			if (EqualityComparer<T>.Default.Equals(list[i], obj))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static int IndexOf<T>(this IReadOnlyList<T> list, T obj)
+	{
+		for (int i = 0; i < list.Count; ++i)
+		{
+			if (EqualityComparer<T>.Default.Equals(list[i], obj))
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	public static void SetMinCapacity<T>(this List<T> list, int minCapacity)
 	{
 		if (list.Count < minCapacity)
