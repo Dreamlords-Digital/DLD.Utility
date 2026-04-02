@@ -43,6 +43,21 @@ public static class MathUtil
 		return Vector3.Slerp(a, b, 1 - Mathf.Exp(-lambda * dt));
 	}
 
+	public static Vector2 Round(this Vector2 me)
+	{
+		me.x = Mathf.Round(me.x);
+		me.y = Mathf.Round(me.y);
+		return me;
+	}
+
+	public static Vector3 Round(this Vector3 me)
+	{
+		me.x = Mathf.Round(me.x);
+		me.y = Mathf.Round(me.y);
+		me.z = Mathf.Round(me.z);
+		return me;
+	}
+
 	public static Vector3 Predict(Vector3 projectilePos, Vector3 targetPos, Vector3 targetLastPos, float projectileSpeed)
 	{
 		// Target velocity

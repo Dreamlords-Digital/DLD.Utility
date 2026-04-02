@@ -754,7 +754,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			// Since the draggedElement will change parents, its local position doesn't get adjusted automatically.
 			// The moment the parent is changed, the draggedElement's local position value doesn't make sense anymore.
 			// We need to convert it and assign it manually.
-			var newPosition = _draggedElement.ChangeCoordinatesTo(_draggedElementContainer.contentContainer, _draggedElement.resolvedStyle.translate);
+			var newPosition = _draggedElement.ChangeCoordinatesTo(_draggedElementContainer.contentContainer, _draggedElement.resolvedStyle.translate).Round();
 
 			_draggedElementContainer.Add(_draggedElement);
 
@@ -894,7 +894,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			bool dropWasHandledByCustom = HandleCustomDragAndDropEnd(draggedElementEndWorldPos);
 			if (!dropWasHandledByCustom)
 			{
-				Vector2 draggedElementEndLocalPos = _moveTarget.WorldToLocal(draggedElementEndWorldPos);
+				Vector2 draggedElementEndLocalPos = _moveTarget.WorldToLocal(draggedElementEndWorldPos).Round();
 				OnEndedDrag(e, draggedElementEndLocalPos);
 			}
 
