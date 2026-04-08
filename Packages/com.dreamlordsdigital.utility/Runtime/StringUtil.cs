@@ -266,11 +266,21 @@ public static class StringUtil
 		return text[foundIdx..];
 	}
 
-	public static string RemoveFromEnd(this string text, string subStringToSearch)
+	public static string RemoveFromStart(this string text, string subStringAtStart)
 	{
-		if (text.EndsWith(subStringToSearch))
+		if (text.StartsWith(subStringAtStart))
 		{
-			return text[..^subStringToSearch.Length];
+			return text[subStringAtStart.Length..];
+		}
+
+		return text;
+	}
+
+	public static string RemoveFromEnd(this string text, string subStringAtEnd)
+	{
+		if (text.EndsWith(subStringAtEnd))
+		{
+			return text[..^subStringAtEnd.Length];
 		}
 
 		return text;

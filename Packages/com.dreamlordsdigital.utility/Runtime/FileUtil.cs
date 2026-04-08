@@ -548,6 +548,11 @@ public static class FileUtil
 		return string.IsNullOrEmpty(Path.GetDirectoryName(path));
 	}
 
+	public static bool IsRelativePath(this string path)
+	{
+		return !Path.IsPathRooted(path);
+	}
+
 	public static bool IsPathValid(this string path)
 	{
 		if (path.Contains(':') && (path.Length < 2 || path[0] == ':' || path[1] != ':' || path.Count(':') > 1))

@@ -1,6 +1,7 @@
 // COPYRIGHT (C) DREAMLORDS DIGITAL INC. - ALL RIGHTS RESERVED.
 
 using NUnit.Framework;
+using UnityEngine;
 
 namespace DLD.Utility.Tests
 {
@@ -39,6 +40,7 @@ public class StringUtilTests
 		string nullString = null;
 
 		// they're both null
+		// ReSharper disable ExpressionIsAlwaysNull
 		Assert.IsTrue(string.Equals(nullString, null, System.StringComparison.Ordinal));
 		Assert.IsTrue(nullString.IsSameWith(null));
 
@@ -53,6 +55,7 @@ public class StringUtilTests
 
 		// but IsSameWith will treat them as same
 		Assert.IsTrue(nullString.IsSameWith(string.Empty));
+		// ReSharper restore ExpressionIsAlwaysNull
 	}
 
 	// ----------------------------------------------------
@@ -550,6 +553,63 @@ public class StringUtilTests
 	{
 		const string Input = "  Tes t  \b\t ing  ";
 		Assert.AreEqual("Tes_t_ing", Input.ToValidFilename('_'));
+	}
+
+	[Test]
+	public void IsPathRoot_Works()
+	{
+#if UNITY_EDITOR_WIN
+		Assert.AreEqual(true, "C:/".IsPathRoot());
+		Assert.AreEqual(true, "c:/".IsPathRoot());
+		Assert.AreEqual(true, "C:\\".IsPathRoot());
+		Assert.AreEqual(true, "c:\\".IsPathRoot());
+		Assert.AreEqual(false, "AC:/".IsPathRoot());
+#else
+		Assert.AreEqual(true, "/".IsPathRoot());
+		Assert.AreEqual(false, "/folder".IsPathRoot());
+		Assert.AreEqual(false, "/folder/subfolder".IsPathRoot());
+		Assert.AreEqual(false, "\\folder".NormalizePath().IsPathRoot());
+#endif
+	}
+
+	[Test]
+	public void IsRelativePath_Works()
+	{
+#if UNITY_EDITOR_WIN
+		const bool InWindows = true;
+		const bool InLinux = false;
+#else
+		const bool InWindows = false;
+		const bool InLinux = true;
+#endif
+		// test values based on https://stackoverflow.com/a/47569899/1377948
+
+		// these are all considered full paths in Windows
+		Assert.AreNotEqual(InWindows, @"C:\dir\file.ext".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"C:\dir\".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"C:\dir".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"C:\".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"\\unc\share\dir\file.ext".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"\\unc\share".IsRelativePath());
+
+		// these are all considered full paths in Linux
+		Assert.AreNotEqual(InLinux, "/".IsRelativePath());
+		Assert.AreNotEqual(InLinux, "/folder".IsRelativePath());
+		Assert.AreNotEqual(InLinux, "/folder/subfolder".IsRelativePath());
+
+		// these are all considered relative paths in both Windows and Linux
+		Assert.AreEqual(true, @"file.ext".IsRelativePath());
+		Assert.AreEqual(true, @"dir\file.ext".IsRelativePath());
+		Assert.AreEqual(true, @"\dir\file.ext".IsRelativePath());
+		Assert.AreEqual(true, @"C:".IsRelativePath());
+		Assert.AreEqual(true, @"C:dir\file.ext".IsRelativePath());
+		Assert.AreEqual(true, @"\dir".IsRelativePath());
+
+		Assert.AreEqual(true, "dir/file.ext".IsRelativePath());
+		Assert.AreEqual(true, "./dir/file.ext".IsRelativePath());
+		Assert.AreEqual(true, "./dir".IsRelativePath());
+
+		Assert.AreEqual(true, "Assets/Scene.unity".IsRelativePath());
 	}
 }
 
