@@ -657,11 +657,11 @@ public static class FileUtil
 		get
 		{
 #if UNITY_EDITOR
-			string result = Application.dataPath;
+			string result = Application.dataPath.ConvertBackToForwardSlash();
 
 			return result[..^7]; // minus 7 to remove the "/Assets"
 #else
-			return Application.dataPath;
+			return Application.dataPath.ConvertBackToForwardSlash();
 #endif
 		}
 	}
@@ -674,9 +674,9 @@ public static class FileUtil
 		get
 		{
 #if UNITY_EDITOR
-			return $"{Application.dataPath[..^6]}UserSettings"; // remove the "Assets" and add "UserSettings"
+			return $"{Application.dataPath.ConvertBackToForwardSlash()[..^6]}UserSettings"; // remove the "Assets" and add "UserSettings"
 #else
-			return Application.dataPath;
+			return Application.dataPath.ConvertBackToForwardSlash();
 #endif
 		}
 	}
@@ -686,11 +686,11 @@ public static class FileUtil
 		get
 		{
 #if UNITY_EDITOR
-			string result = Application.dataPath;
+			string result = Application.dataPath.ConvertBackToForwardSlash();
 
 			return result[..^6]; // minus 7 to remove the "Assets"
 #else
-			return Application.dataPath;
+			return Application.dataPath.ConvertBackToForwardSlash();
 #endif
 		}
 	}
@@ -699,7 +699,7 @@ public static class FileUtil
 	{
 		get
 		{
-			string result = Application.dataPath;
+			string result = Application.dataPath.ConvertBackToForwardSlash();
 			result = result.Substring(0, result.Length - 7); // minus 6 to remove the "/Assets"
 			int lastSlash = result.LastIndexOf("/", StringComparison.Ordinal);
 			result = result.Substring(lastSlash + 1);
