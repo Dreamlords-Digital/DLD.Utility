@@ -22,6 +22,10 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/document-save.png?fileID=2800000&guid=d109f09c2127a684b817cc52bafdaf33&type=3#document-save");
 }
 
+.dld-icon--save-indicator {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/disk-return-black.png?fileID=2800000&guid=0f7e92b36740feb3f9723b68448c9bcb&type=3#disk-return-black");
+}
+
 .dld-icon--cut {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Tango/edit-cut.png?fileID=2800000&guid=d1be9d028378d194e9fb7023eb1d1266&type=3#edit-cut");
 }

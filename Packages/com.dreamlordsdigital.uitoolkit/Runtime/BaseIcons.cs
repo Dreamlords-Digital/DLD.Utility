@@ -13,6 +13,7 @@ public static class BaseIcons
 	public const string Cut = "dld-icon--cut";
 	public const string Copy = "dld-icon--copy";
 	public const string Paste = "dld-icon--paste";
+	public const string SaveIndicator = "dld-icon--save-indicator";
 	public const string ForceMove = "dld-icon--force-move";
 	public const string Close = "dld-icon--close";
 	public const string Debug = "dld-icon--debug";
