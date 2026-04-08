@@ -249,7 +249,7 @@ public static class StringUtil
 	///    If you specify endTextToRemove.Length, then this will remove the substring as well from the result.
 	/// </param>
 	/// <returns>The new edited string.</returns>
-	public static string RemoveFromStart(this string text, string subStringToSearch, int idxAdjust = 0)
+	public static string SearchAndRemoveFromStart(this string text, string subStringToSearch, int idxAdjust = 0)
 	{
 		int foundIdx = text.IndexOf(subStringToSearch, StringComparison.Ordinal);
 		if (foundIdx < 0)

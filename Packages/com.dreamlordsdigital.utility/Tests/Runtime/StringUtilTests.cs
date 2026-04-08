@@ -111,14 +111,14 @@ public class StringUtilTests
 	public void RemoveFromStart_WithIdxAdjust_Works()
 	{
 		string text = "C:/speech/test/proj/Assets/Scripts/Something.cs";
-		Assert.AreEqual("Assets/Scripts/Something.cs", text.RemoveFromStart("/Assets/", 1));
+		Assert.AreEqual("Assets/Scripts/Something.cs", text.SearchAndRemoveFromStart("/Assets/", 1));
 	}
 
 	[Test]
 	public void RemoveFromStart_SearchTextNotFound_ReturnsSameString()
 	{
 		string text = "C:/speech/test/proj/Assets/Scripts/Something.cs";
-		Assert.AreEqual(text, text.RemoveFromStart("NOT"));
+		Assert.AreEqual(text, text.SearchAndRemoveFromStart("NOT"));
 	}
 
 	[Test]
