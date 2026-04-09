@@ -12,7 +12,7 @@ namespace DLD.UIToolkit
 {
 
 [UxmlElement]
-public partial class FileBrowser : VisualElement, IContextMenuListener
+public partial class FileBrowser : VisualElement, IContextMenuListener, IDialogBoxListener
 {
 	const string TemplateResourcesPath = "DLD UIToolkit/FileBrowser";
 
@@ -41,6 +41,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	const string ContextMenuAddFavorite = "AddFavorite";
 	const string ContextMenuOpenFileExplorer = "OpenFileExplorer";
 	const string ContextMenuOpenUsingAssociated = "OpenUsingAssociated";
+
+	const string DialogChoiceOverwriteFile = "OverwriteFile";
 
 	// -----------------------------------------
 
@@ -104,6 +106,13 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	/// </summary>
 	string _saveFileExtension;
 
+	/// <summary>
+	///    When in <see cref="OperationMode.Save"/>, this is used when doing a "Save as..." to check if user
+	///    is overwriting itself or some other file. Can be null, in which case, the file we're saving hasn't
+	///    been saved yet.
+	/// </summary>
+	string _fileToSaveFor;
+
 	Func<string, (string, string)> _customFileTypeGetter;
 
 	protected ITooltip Tooltip;
@@ -130,6 +139,8 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	readonly Button _confirmButton;
 
 	IContextMenu _contextMenu;
+
+	DialogBox _dialogBox;
 
 	// -----------------------------------------
 
@@ -652,6 +663,11 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 	{
 		_saveFileExtension = newFileExtension;
 		_filenameTextField.Extension = newFileExtension;
+	}
+
+	public void SetFileToSaveFor(string fileFullPath)
+	{
+		_fileToSaveFor = fileFullPath;
 	}
 
 	public bool SetInitialPath(string newPath)
@@ -1256,6 +1272,25 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	// =====================================================================
 
+	void ShowDialogBox(IDialogBoxListener listener, string title = null, string description = null,
+		bool showNo = false, bool showCancel = false,
+		string okTooltipText = null, string noTooltipText = null, string cancelTooltipText = null,
+		string okTooltipIcon = BaseIcons.GenericInfo, string noTooltipIcon = BaseIcons.GenericError, string cancelTooltipIcon = BaseIcons.GenericInfo,
+		string okArg = DialogBox.GenericOk, string noArg = DialogBox.GenericNo, string cancelArg = DialogBox.GenericCancel, string userArg1 = null)
+	{
+		if (_dialogBox == null)
+		{
+			_dialogBox = new DialogBox();
+			_dialogBox.SetTooltip(Tooltip);
+			Add(_dialogBox);
+		}
+
+		_dialogBox.Show(listener, title, description, showNo, showCancel,
+			okTooltipText, noTooltipText, cancelTooltipText,
+			okTooltipIcon, noTooltipIcon, cancelTooltipIcon,
+			okArg, noArg, cancelArg, userArg1);
+	}
+
 	void ShowPathHistoryListPopUp(VisualElement button)
 	{
 		button.AddToClassList(ToolbarButtonPressedStyleClass);
@@ -1541,12 +1576,29 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 
 	protected virtual void ProcessChosenFile(string file)
 	{
-		if (_currentOperationMode == OperationMode.Save && !file.EndsWith(_saveFileExtension, StringComparison.OrdinalIgnoreCase))
+		if (_currentOperationMode == OperationMode.Save)
 		{
 			// ensure the file has proper file type extension
-			file = $"{file}{_saveFileExtension}";
+			if (!file.EndsWith(_saveFileExtension, StringComparison.OrdinalIgnoreCase))
+			{
+				file = $"{file}{_saveFileExtension}";
+			}
+
+			if (File.Exists(file) && (string.IsNullOrEmpty(_fileToSaveFor) || file != _fileToSaveFor))
+			{
+				ShowDialogBox(this, description: "File already exists! Overwrite?",
+					showNo: false, showCancel: true,
+					okArg: DialogChoiceOverwriteFile,
+					userArg1: file);
+				return;
+			}
 		}
 
+		ProceedProcessChosenFile(file);
+	}
+
+	void ProceedProcessChosenFile(string file)
+	{
 		var newRecentEntry = new TreeViewItemData<JumpMenuEntry>(RecentEntriesIDStart + 1 + _recentEntries.Count,
 			new JumpMenuEntry()
 			{
@@ -1559,6 +1611,16 @@ public partial class FileBrowser : VisualElement, IContextMenuListener
 		_jumpMenuTreeView.AddItem(newRecentEntry, RecentEntriesIDStart);
 
 		_fileChosen?.Invoke(file);
+	}
+
+	public void OnDialogBoxChosen(string chosenArg, string userArg1)
+	{
+		switch (chosenArg)
+		{
+			case DialogChoiceOverwriteFile:
+				ProceedProcessChosenFile(userArg1);
+				break;
+		}
 	}
 
 	void RebuildJumpMenuEntries()
