@@ -478,3 +478,8 @@ FilenameTextField > #unity-text-input > Label {
 .dld-modal-dialog-outside--center-content {
     justify-content: center;
 }
+
+.dld-icon-beside-text {
+    margin-right: 4px;
+    margin-bottom: 2px;
+}

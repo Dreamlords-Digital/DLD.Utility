@@ -50,6 +50,10 @@
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/clock-history-frame.png?fileID=2800000&guid=d066c12b8660877478462df311e8160c&type=3#clock-history-frame");
 }
 
+.dld-icon--controls {
+    background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/keyboard-enter.png?fileID=2800000&guid=e3fa2161eb1e406ceab5ec992cf0f379&type=3#keyboard-enter");
+}
+
 .dld-icon--ok {
     background-image: url("project://database/Packages/com.dreamlordsdigital.editor.assets/Icons/Fugue/tick.png?fileID=2800000&guid=a8150005769b1ed4cbc62a9d059de829&type=3#tick");
 }

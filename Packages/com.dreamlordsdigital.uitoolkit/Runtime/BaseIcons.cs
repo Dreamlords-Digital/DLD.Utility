@@ -17,6 +17,9 @@ public static class BaseIcons
 	public const string ForceMove = "dld-icon--force-move";
 	public const string Close = "dld-icon--close";
 	public const string Debug = "dld-icon--debug";
+	public const string Preferences = "dld-icon--preferences";
+	public const string UndoHistory = "dld-icon--undo-history";
+	public const string Controls = "dld-icon--controls";
 	public const string JumpToSourceFile = "dld-icon--jump-to-source-file";
 	public const string OpenLinkInWebBrowser = "dld-icon--open-link-in-web-browser";
 	public const string OpenFileExplorer = "dld-icon--open-file-explorer";
