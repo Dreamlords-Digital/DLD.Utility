@@ -52,6 +52,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	{
 		bool AllowPanning(VisualElement elementPanningOn);
 		bool AllowZooming(VisualElement elementZoomingOn);
+		bool AllowMouseWheelZooming(VisualElement elementZoomingOn);
 		bool AllowDragAndDrop(VisualElement elementDragAndDroppingOn);
 		bool AllowBoxSelection(VisualElement elementBoxSelectingOn);
 		bool AllowContextMenu(VisualElement elementRightClickedOn);
@@ -304,6 +305,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	public bool AllowPanning { get; set; } = true;
 	public bool AllowZooming { get; set; } = true;
+	public bool AllowMouseWheelZooming { get; set; } = true;
 	public bool AllowDragAndDrop { get; set; } = true;
 	public bool AllowBoxSelection { get; set; } = true;
 	public bool AllowContextMenu { get; set; } = true;
@@ -925,10 +927,10 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
-		bool allowZoomingCustom = CustomAllowControls == null ||
-		                          CustomAllowControls.AllowZooming(e.target as VisualElement);
+		bool allowWheelZoomingCustom = CustomAllowControls == null ||
+		                               CustomAllowControls.AllowMouseWheelZooming(e.target as VisualElement);
 
-		if (!AllowZooming || !allowZoomingCustom)
+		if (!AllowMouseWheelZooming || !allowWheelZoomingCustom)
 		{
 			return;
 		}
