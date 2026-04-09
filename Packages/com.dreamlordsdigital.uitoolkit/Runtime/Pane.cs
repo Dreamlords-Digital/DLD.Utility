@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static DLD.UIToolkit.UITkUtil;
 
 namespace DLD.UIToolkit
 {
@@ -138,6 +139,12 @@ public interface ITabListener
 	void OnTabContextMenu(IContextMenu contextMenu, TabbedContent tab);
 
 	/// <summary>
+	///    Called when user double left-clicks on the background where tabs are.
+	///    This is usually as a shortcut for creating a new tab.
+	/// </summary>
+	void OnTabBgDoubleClicked(ClickEvent e);
+
+	/// <summary>
 	///    Called when user closes a tab. Return true to force the tab to stay open.
 	///    Use this to show a modal dialog box asking the user to confirm the closing.
 	/// </summary>
@@ -192,7 +199,11 @@ public partial class Pane : VisualElement, IContextMenuListener
 		const string TabBodyContainerElementName = "TabBodyContainer";
 		_tabBodyContainer = this.Q<VisualElement>(TabBodyContainerElementName);
 
+		var tabContainerBg = this.Q<VisualElement>("TabsBg");
+
 		// -----------------------------------
+
+		tabContainerBg.RegisterCallback<ClickEvent, Pane>((e, me) => me.OnClickTabContainerBg(e), this);
 
 		_onPressTab = OnPressTab;
 		_onPressTabContext = OnPressTabContext;
@@ -335,6 +346,14 @@ public partial class Pane : VisualElement, IContextMenuListener
 		{
 			_currentTab = clickedTabContent;
 			_tabListener?.OnTabShown(this, clickedTabContent);
+		}
+	}
+
+	void OnClickTabContainerBg(ClickEvent e)
+	{
+		if (e.button == LeftMouseButton && e.clickCount >= 2 && _tabListener != null)
+		{
+			_tabListener.OnTabBgDoubleClicked(e);
 		}
 	}
 
