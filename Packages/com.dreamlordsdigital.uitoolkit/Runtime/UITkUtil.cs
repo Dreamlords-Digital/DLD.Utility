@@ -397,6 +397,14 @@ public static class UITkUtil
 		visualElement.style.translate = pos;
 	}
 
+	public static void SubtractFromPosition(this VisualElement visualElement, Vector2 delta)
+	{
+		var pos = visualElement.resolvedStyle.translate;
+		pos.x -= delta.x;
+		pos.y -= delta.y;
+		visualElement.style.translate = pos;
+	}
+
 	public static void ResetPositionAndScale(this VisualElement visualElement)
 	{
 		visualElement.style.translate = Vector3.zero;
