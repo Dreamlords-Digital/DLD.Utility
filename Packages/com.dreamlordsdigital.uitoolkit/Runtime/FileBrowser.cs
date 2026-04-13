@@ -130,6 +130,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener, IDialogB
 	readonly VisualElement _jumpMenu;
 	readonly TreeView _jumpMenuTreeView;
 	protected readonly MultiColumnListView _fileSystemEntriesView;
+	readonly ScrollView _fileSystemEntriesScrollView;
 	readonly Button _backButton;
 	readonly Button _forwardButton;
 	readonly Toggle _jumpButton;
@@ -278,6 +279,7 @@ public partial class FileBrowser : VisualElement, IContextMenuListener, IDialogB
 
 		_fileSystemEntriesView = this.Q<MultiColumnListView>();
 		_fileSystemEntriesView.itemsSource = _fileSystemEntries;
+		_fileSystemEntriesScrollView = _fileSystemEntriesView.Q<ScrollView>(className: BaseVerticalCollectionView.listScrollViewUssClassName);
 
 		_currentPathTextField = this.Q<TextField>("PathTextField");
 		_currentPathTextField.RegisterCallback((KeyDownEvent e, FileBrowser f) => f.OnPathTextFieldKeyDown(e), this);
@@ -1431,16 +1433,14 @@ public partial class FileBrowser : VisualElement, IContextMenuListener, IDialogB
 			}
 
 			_fileSystemEntriesView.horizontalScrollingEnabled = true;
-			var listScrollView = _fileSystemEntriesView.Q<ScrollView>(className: BaseVerticalCollectionView.listScrollViewUssClassName);
-			listScrollView.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
-			listScrollView.horizontalScrollerVisibility = ScrollerVisibility.Auto;
+			_fileSystemEntriesScrollView.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
+			_fileSystemEntriesScrollView.horizontalScrollerVisibility = ScrollerVisibility.Auto;
 		}
 		else
 		{
 			_fileSystemEntriesView.horizontalScrollingEnabled = false;
-			var listScrollView = _fileSystemEntriesView.Q<ScrollView>(className: BaseVerticalCollectionView.listScrollViewUssClassName);
-			listScrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
-			listScrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+			_fileSystemEntriesScrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+			_fileSystemEntriesScrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
 		}
 
 		_fileSystemEntriesView.Rebuild();
