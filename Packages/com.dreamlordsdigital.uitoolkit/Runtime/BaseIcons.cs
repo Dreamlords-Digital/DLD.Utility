@@ -15,6 +15,7 @@ public static class BaseIcons
 	public const string Paste = "dld-icon--paste";
 	public const string SaveIndicator = "dld-icon--save-indicator";
 	public const string ForceMove = "dld-icon--force-move";
+	public const string CopyInto = "dld-icon--copy-into";
 	public const string Close = "dld-icon--close";
 	public const string Debug = "dld-icon--debug";
 	public const string Preferences = "dld-icon--preferences";
