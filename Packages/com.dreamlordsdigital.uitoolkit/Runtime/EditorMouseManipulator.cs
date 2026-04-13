@@ -618,14 +618,17 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
-		bool customAllowBoxSelection = CustomAllowControls == null ||
-		                               CustomAllowControls.AllowBoxSelection(e.target as VisualElement);
-
-		if (AllowBoxSelection && customAllowBoxSelection && !_spacebarHeld && e.button == 0)
+		if (!_spacebarHeld && e.button == 0)
 		{
-			_mouseCursorDisplay.style.display = DisplayStyle.None;
 			_pointerDownOnEmptyBackground = true;
-			StartBoxSelection(e, null);
+			bool customAllowBoxSelection = CustomAllowControls == null ||
+			                               CustomAllowControls.AllowBoxSelection(e.target as VisualElement);
+
+			if (AllowBoxSelection && customAllowBoxSelection)
+			{
+				_mouseCursorDisplay.style.display = DisplayStyle.None;
+				StartBoxSelection(e, null);
+			}
 			return;
 		}
 
@@ -927,10 +930,15 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
+		if (!AllowMouseWheelZooming)
+		{
+			return;
+		}
+
 		bool allowWheelZoomingCustom = CustomAllowControls == null ||
 		                               CustomAllowControls.AllowMouseWheelZooming(e.target as VisualElement);
 
-		if (!AllowMouseWheelZooming || !allowWheelZoomingCustom)
+		if (!allowWheelZoomingCustom)
 		{
 			return;
 		}
@@ -965,10 +973,15 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 			return;
 		}
 
+		if (!AllowBoxSelection)
+		{
+			return;
+		}
+
 		bool allowBoxSelectionCustom = CustomAllowControls == null ||
 		                               CustomAllowControls.AllowBoxSelection(e.target as VisualElement);
 
-		if (!AllowBoxSelection || !allowBoxSelectionCustom)
+		if (!allowBoxSelectionCustom)
 		{
 			return;
 		}
