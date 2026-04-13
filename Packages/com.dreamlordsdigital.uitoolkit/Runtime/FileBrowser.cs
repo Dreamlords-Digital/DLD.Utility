@@ -1446,6 +1446,17 @@ public partial class FileBrowser : VisualElement, IContextMenuListener, IDialogB
 		_fileSystemEntriesView.Rebuild();
 		_fileSystemEntriesView.SetSelection(0);
 		_fileSystemEntriesView.ScrollToItem(0);
+
+		OnChangedPath(_currentPath);
+	}
+
+	/// <summary>
+	/// Gets called whenever the displayed path is changed, whether that is
+	/// the user entering a subfolder, going up the parent folder, using the back/forward history buttons, etc.
+	/// </summary>
+	/// <param name="currentPath"></param>
+	protected virtual void OnChangedPath(string currentPath)
+	{
 	}
 
 	protected virtual void MoveToParentFolder()
