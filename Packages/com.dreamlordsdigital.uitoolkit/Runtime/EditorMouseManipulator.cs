@@ -299,7 +299,25 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	// ==================================================================================================
 
-	public bool IsDoingForceMove => _shift;
+	public DragAndDropMode DragAndDropMode
+	{
+		get
+		{
+			DragAndDropMode returnValue = DragAndDropMode.Normal;
+
+			if (_shift)
+			{
+				returnValue |= DragAndDropMode.ForceMove;
+			}
+
+			if (_ctrl)
+			{
+				returnValue |= DragAndDropMode.CopyInto;
+			}
+
+			return returnValue;
+		}
+	}
 
 	public bool IsDragging => _isDragging;
 
@@ -1144,7 +1162,16 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	{
 		if (_isDragging)
 		{
-			if (_shift)
+			if (_ctrl && _shift)
+			{
+				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Copy into destination", BaseIcons.CopyInto, mousePos);
+				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.ForceMove, mousePos, append: true);
+			}
+			else if (_ctrl)
+			{
+				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Copy into destination", BaseIcons.CopyInto, mousePos);
+			}
+			else if (_shift)
 			{
 				Tooltip?.ShowTooltipAtMouse(_mouseCursorDisplay, "Move without parenting", BaseIcons.ForceMove, mousePos);
 			}
