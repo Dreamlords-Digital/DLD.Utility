@@ -959,6 +959,12 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 
 	public void StartBoxSelection(PointerDownEvent e, VisualElement startElement)
 	{
+		if (_inBoxSelection)
+		{
+			// already in box selection
+			return;
+		}
+
 		bool allowBoxSelectionCustom = CustomAllowControls == null ||
 		                               CustomAllowControls.AllowBoxSelection(e.target as VisualElement);
 
