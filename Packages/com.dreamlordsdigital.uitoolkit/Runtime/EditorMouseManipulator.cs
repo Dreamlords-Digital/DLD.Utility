@@ -27,6 +27,7 @@ public interface ICtrlLinkRegister
 /// </summary>
 public interface IBoxSelection
 {
+	bool CurrentlyInBoxSelection { get; }
 	void StartBoxSelection(PointerDownEvent e, VisualElement startElement);
 }
 
@@ -320,6 +321,7 @@ public class EditorMouseManipulator : PointerManipulator, IDragStatus, ICtrlLink
 	}
 
 	public bool IsDragging => _isDragging;
+	public bool CurrentlyInBoxSelection => _inBoxSelection;
 
 	public bool AllowPanning { get; set; } = true;
 	public bool AllowZooming { get; set; } = true;
