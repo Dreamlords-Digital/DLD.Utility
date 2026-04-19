@@ -251,6 +251,16 @@ public static class StringUtil
 	/// <returns>The new edited string.</returns>
 	public static string SearchAndRemoveFromStart(this string text, string subStringToSearch, int idxAdjust = 0)
 	{
+		if (text == null)
+		{
+			return null;
+		}
+
+		if (text == string.Empty)
+		{
+			return string.Empty;
+		}
+
 		int foundIdx = text.IndexOf(subStringToSearch, StringComparison.Ordinal);
 		if (foundIdx < 0)
 		{
@@ -268,7 +278,7 @@ public static class StringUtil
 
 	public static string RemoveFromStart(this string text, string subStringAtStart)
 	{
-		if (text.StartsWith(subStringAtStart))
+		if (!string.IsNullOrEmpty(text) && text.StartsWith(subStringAtStart))
 		{
 			return text[subStringAtStart.Length..];
 		}
@@ -278,7 +288,7 @@ public static class StringUtil
 
 	public static string RemoveFromEnd(this string text, string subStringAtEnd)
 	{
-		if (text.EndsWith(subStringAtEnd))
+		if (!string.IsNullOrEmpty(text) && text.EndsWith(subStringAtEnd))
 		{
 			return text[..^subStringAtEnd.Length];
 		}
@@ -288,7 +298,7 @@ public static class StringUtil
 
 	public static string ReplaceFromEnd(this string text, string subStringToSearch, string stringToReplace)
 	{
-		if (!text.EndsWith(subStringToSearch))
+		if (!string.IsNullOrEmpty(text) && !text.EndsWith(subStringToSearch))
 		{
 			return text;
 		}
