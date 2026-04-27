@@ -155,18 +155,18 @@ public static class ColorPicker
 	public static void SetColor(Color c)
 	{
 		HSBColor hsb = HSBColor.FromColor(c);
-		_hue = hsb.h;
-		_sat = hsb.s;
-		_brt = hsb.b;
+		_hue = hsb.H;
+		_sat = hsb.S;
+		_brt = hsb.B;
 	}
 
 	public static Color GetColor()
 	{
 		HSBColor theColor;
-		theColor.h = _hue;
-		theColor.s = _sat;
-		theColor.b = _brt;
-		theColor.a = 1;
+		theColor.H = _hue;
+		theColor.S = _sat;
+		theColor.B = _brt;
+		theColor.A = 1;
 
 		return theColor.ToColor();
 	}
@@ -174,10 +174,10 @@ public static class ColorPicker
 	public static Color32 GetColor32()
 	{
 		HSBColor theColor;
-		theColor.h = _hue;
-		theColor.s = _sat;
-		theColor.b = _brt;
-		theColor.a = 1;
+		theColor.H = _hue;
+		theColor.S = _sat;
+		theColor.B = _brt;
+		theColor.A = 1;
 
 		return theColor.ToColor();
 	}
@@ -263,10 +263,10 @@ public static class ColorPicker
 		_brt = brtInt / 255.0f;
 
 		HSBColor producedHSB;
-		producedHSB.h = _hue;
-		producedHSB.s = _sat;
-		producedHSB.b = _brt;
-		producedHSB.a = 1;
+		producedHSB.H = _hue;
+		producedHSB.S = _sat;
+		producedHSB.B = _brt;
+		producedHSB.A = 1;
 
 		Color producedColor = producedHSB.ToColor();
 
@@ -378,10 +378,10 @@ public static class ColorPicker
 		if (Math.Abs(_lastHue - _hue) > CHANGE_THRESHOLD)
 		{
 			HSBColor newHue;
-			newHue.h = _hue;
-			newHue.s = 1;
-			newHue.b = 1;
-			newHue.a = 1;
+			newHue.H = _hue;
+			newHue.S = 1;
+			newHue.B = 1;
+			newHue.A = 1;
 
 			MakeColorMap(_colorMap, _colorMapPixels, newHue.ToColor());
 			_lastHue = _hue;
