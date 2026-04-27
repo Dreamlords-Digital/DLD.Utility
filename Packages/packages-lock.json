@@ -59,9 +59,17 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
+        "com.dreamlordsdigital.uitoolkit.darktheme": "1.0.0",
         "com.dreamlordsdigital.utility": "0.0.1",
         "com.dreamlordsdigital.editor.assets": "0.0.1"
       }
+    },
+    "com.dreamlordsdigital.uitoolkit.darktheme": {
+      "version": "https://github.com/AnomalousUnderdog/Unity-Dark-UITk-Theme.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7a11bbf7a9b5a4d78d6e2a44c82013b5f4229651"
     },
     "com.dreamlordsdigital.utility": {
       "version": "file:com.dreamlordsdigital.utility",

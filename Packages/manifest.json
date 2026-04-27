@@ -7,6 +7,7 @@
     "com.dreamlordsdigital.imgui": "file:./com.dreamlordsdigital.imgui",
     "com.dreamlordsdigital.jsonfx": "https://github.com/AnomalousUnderdog/DLD.JsonFx.git",
     "com.dreamlordsdigital.serializer": "file:./com.dreamlordsdigital.serializer",
+    "com.dreamlordsdigital.uitoolkit.darktheme": "https://github.com/AnomalousUnderdog/Unity-Dark-UITk-Theme.git",
     "com.dreamlordsdigital.utility": "file:./com.dreamlordsdigital.utility",
     "com.unity.feature.development": "1.0.2",
     "com.unity.inputsystem": "1.18.0",
