@@ -180,4 +180,20 @@ public static class ExplorerUtil
 			OpenInLinuxFileBrowser(path);
 		}
 	}
+
+	public static string GetRevealInFileBrowser()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			return "Reveal in Explorer";
+		}
+		else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		{
+			return "Reveal in Finder";
+		}
+		else // assume Linux
+		{
+			return "Reveal in File Browser";
+		}
+	}
 }
