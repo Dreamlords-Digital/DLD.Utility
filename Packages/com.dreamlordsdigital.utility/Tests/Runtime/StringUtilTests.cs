@@ -577,33 +577,31 @@ public class StringUtilTests
 	{
 #if UNITY_EDITOR_WIN
 		const bool InWindows = true;
-		const bool InLinux = false;
 #else
 		const bool InWindows = false;
-		const bool InLinux = true;
 #endif
 		// test values based on https://stackoverflow.com/a/47569899/1377948
 
-		// these are all considered full paths in Windows
+		// these are all considered full paths in Windows, but not in Linux
 		Assert.AreNotEqual(InWindows, @"C:\dir\file.ext".IsRelativePath());
 		Assert.AreNotEqual(InWindows, @"C:\dir\".IsRelativePath());
 		Assert.AreNotEqual(InWindows, @"C:\dir".IsRelativePath());
 		Assert.AreNotEqual(InWindows, @"C:\".IsRelativePath());
 		Assert.AreNotEqual(InWindows, @"\\unc\share\dir\file.ext".IsRelativePath());
 		Assert.AreNotEqual(InWindows, @"\\unc\share".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"\dir".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"\dir\file.ext".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"C:".IsRelativePath());
+		Assert.AreNotEqual(InWindows, @"C:dir\file.ext".IsRelativePath()); // this is an invalid path in Windows
 
-		// these are all considered full paths in Linux
-		Assert.AreNotEqual(InLinux, "/".IsRelativePath());
-		Assert.AreNotEqual(InLinux, "/folder".IsRelativePath());
-		Assert.AreNotEqual(InLinux, "/folder/subfolder".IsRelativePath());
+		// these are all considered full paths in both Windows and Linux
+		Assert.AreEqual(false, "/".IsRelativePath());
+		Assert.AreEqual(false, "/folder".IsRelativePath());
+		Assert.AreEqual(false, "/folder/subfolder".IsRelativePath());
 
 		// these are all considered relative paths in both Windows and Linux
 		Assert.AreEqual(true, @"file.ext".IsRelativePath());
 		Assert.AreEqual(true, @"dir\file.ext".IsRelativePath());
-		Assert.AreEqual(true, @"\dir\file.ext".IsRelativePath());
-		Assert.AreEqual(true, @"C:".IsRelativePath());
-		Assert.AreEqual(true, @"C:dir\file.ext".IsRelativePath());
-		Assert.AreEqual(true, @"\dir".IsRelativePath());
 
 		Assert.AreEqual(true, "dir/file.ext".IsRelativePath());
 		Assert.AreEqual(true, "./dir/file.ext".IsRelativePath());
