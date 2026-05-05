@@ -69,7 +69,7 @@ public static class RandomUtil
 			++count;
 		}
 
-		return result.ToString();
+		return string.Intern(result.ToString());
 	}
 
 	public static string GetNumberString(int length)
