@@ -363,6 +363,24 @@ public static class ListUtil
 		return elementsRemoved;
 	}
 
+	public static T Pop<T>(this IList<T> me)
+	{
+		var lastEntry = me[^1];
+		me.RemoveAt(me.Count - 1);
+		return lastEntry;
+	}
+
+	public static T Push<T>(this IList<T> me, T newEntry)
+	{
+		me.Add(newEntry);
+		return newEntry;
+	}
+
+	public static T Peek<T>(this IList<T> me)
+	{
+		return me[^1];
+	}
+
 	/// <summary>
 	///    Is this List of strings empty or entirely composed of null or empty strings?
 	/// </summary>
