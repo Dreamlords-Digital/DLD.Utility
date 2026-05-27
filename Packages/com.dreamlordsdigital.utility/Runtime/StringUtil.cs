@@ -669,6 +669,11 @@ public static class StringUtil
 
 		return sb.ToString();
 	}
+
+	public static StringBuilder AppendRepeated(this StringBuilder sb, string text, int repeat)
+	{
+		return sb.Insert(sb.Length, text, repeat);
+	}
 }
 
 }
