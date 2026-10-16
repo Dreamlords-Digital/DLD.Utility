@@ -2349,7 +2349,7 @@ public partial class FileBrowser
 				{
 					_prefabPreview = AssetPreview.GetAssetPreview(loadedPrefab);
 
-					if (AssetPreview.IsLoadingAssetPreview(loadedPrefab.GetInstanceID()))
+					if (AssetPreview.IsLoadingAssetPreview(loadedPrefab.GetEntityId()))
 					{
 						_hoveredHasPrefabPreview = HasPreviewStatus.PreviewStillLoading;
 					}
@@ -2398,7 +2398,7 @@ public partial class FileBrowser
 				{
 					_prefabPreview = AssetPreview.GetAssetPreview(loadedPrefab);
 
-					if (!AssetPreview.IsLoadingAssetPreview(loadedPrefab.GetInstanceID()))
+					if (!AssetPreview.IsLoadingAssetPreview(loadedPrefab.GetEntityId()))
 					{
 						_hoveredHasPrefabPreview =
 							_prefabPreview != null ? HasPreviewStatus.HasPreview : HasPreviewStatus.None;
